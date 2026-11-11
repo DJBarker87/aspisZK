@@ -104,7 +104,7 @@ theorem distinct_bound40 (D : LiteralByteProtocol.Decoder) (P : Prover) (H : Byt
   have hv : (eval H (AspisRec40.HitMass.verifier D dV_aspis (eval H P).2)).1.length ≤ 1111 :=
     AspisRec40.CallBudgetAspis.verifier_issued D (input P H).stored H
       (input P H).statement (input P H).proof
-  have hl := VerifierCallBudget.firstReads_le_length emptyTable
+  have hl := AspisRec40.CallBudget.firstReads_le_length emptyTable
     (eval H (AspisRec40.HitMass.original D dV_aspis P)).1
   have hp := hq H
   change firstReads emptyTable (eval H (AspisRec40.HitMass.original D dV_aspis P)).1 ≤ _

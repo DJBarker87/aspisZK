@@ -349,3 +349,73 @@ In order of what they unblock:
    - the account budget `A`;
    - the `E_rec` charge;
    - `PayoutBound` for the owner's form (B).
+
+## 7. Joined: form (P) with one open hypothesis (lead, 2026-11-11)
+
+The three hypotheses of section 0 are now reduced to one.
+
+`AspisRec40.CleanJoin` (the clean-event work, RECORDED-EXPERIMENT-40.md section 8) proves the
+assembly's definitions as stated:
+- `accepted_checks40 : AcceptedChecks40 D P Q`, from the query hypothesis `hq` alone. It uses
+  `AspisOneTx.Checked.fibre_checks40` through R1's `fibre_prover` and the 40-row selection step
+  `CleanA.projected_eq_recorded`.
+- `word_alignment40 : WordAlignment40 D P Q`, from `hq` alone.
+- `hit_in_prefix40 : HitInPrefix40 D P Q`, from `hq` and one further premise, `hfinal`.
+
+`lean/AspisFailureBoundJoined.lean` composes them with `failure_bound40P`:
+
+```lean
+def FinalDecoding40 (D) (P : Prover) (Q : Nat) : Prop :=
+  ∀ H : Bytes → State,
+    firstReads emptyTable (eval H (AspisRec40.ChargePrefix.base D P)).1 ≤ Q+1111 →
+    ¬ hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv
+        BinRawByteCollisionTargets.pred (Q+1111)) emptyTable
+        (eval H (AspisRec40.ChargePrefix.base D P)).1 →
+    RWireCheckedFormat.Format (eval H (AspisRec40.ChargePrefix.base D P)).2.1.2 →
+    (eval H (AspisRec40.ChargePrefix.base D P)).2.1.1.tag = 2 →
+    AspisRec40.CleanStatement.FinalDecodes D H (eval H (AspisRec40.ChargePrefix.charged D P))
+
+theorem failure_bound40P_of_final (D) (P : Prover) (Q : Nat)
+    (hq : ∀ H : Bytes → State, (eval H P).1.length ≤ Q)
+    (hfinal : FinalDecoding40 D P Q) :
+    lazyMean (AspisFailureBound.exp D P) emptyTable failureMass +
+        QueryScanModelFailure.failureProbability (2^18) ≤
+      BinCombinedMerkleCollision.kappa (Q+1111) +
+        ((Q : ℚ) * capMax + verifierCharge40) + 1/(2:ℚ)^126 + 1/(2:ℚ)^454
+```
+
+What the remaining hypothesis says: on the charged run of the 40-row experiment, under R1's four
+premises (first reads at most `Q + 1111`, no collision event, the wire format, statement tag 2),
+the Aspis decoder recovers rows 33 to 39 (`FinalDecodes`: for each of those rows, the decoder
+returns at the row's first cell and following it gives the row's transcript prefix, message and
+challenge). It is a statement about the model. It is to be proved, not assumed; the clean-event
+work estimates 10 to 15 modules (RECORDED-EXPERIMENT-40.md section 8.2). Per the reviewer's
+caveat it cannot come from admission and has to come from the shapes of rows 33 to 39.
+
+Status of form (P): a conditional model theorem with one open hypothesis. Still no figure. The
+arithmetic of section 4 stays conditional. Form (G) is unchanged: it needs the account term and
+the source side.
+
+**No two-transaction module is used.** The clean-event work's audit found one constant from a
+class iii module in this closure: `R1VerifierCallBudget.firstReads_le_length`, used at
+`AspisOneTxRun.lean:107`. It is a generic fact (first reads are at most the trace length) and the
+rows work had already re-proved it as `AspisRec40.CallBudget.firstReads_le_length`. Line 107 now
+uses the re-proved lemma; nothing else in the file changed. `AspisOneTxRun` and the three modules
+above it were recompiled. A constant walk rooted at `failure_bound40P_of_final`
+(`lean/AspisJoinedMeasure.lean`, every non-library constant expanded, proof terms included)
+reaches 1,003 project modules and 11,894 project constants, and no class iii module. Its import
+closure holds 32 class iii modules; none of their constants is used. Module list:
+`joined-measure.tsv`.
+
+| Attempt | Module | Source sha256 | Exit | Wall | Peak RSS (time) | cgroup peak | Axioms |
+|---|---|---|---|---|---|---|---|
+| LDJ-01 | AspisFailureBoundJoined | 05a140378b1c3f9f4537cd67c89b4788628a4c635824c4a4abe18b3b266a6506 | 0 | 2.30 s | 4,248,176 KB | 419,840,000 B | [propext, Classical.choice, Quot.sound] |
+| LDJ-02 | AspisOneTxRun (line 107 changed) | 26cbb3f61f10a5f6a4c14aae485cb90549c482013947d8b5c03591c03d60ec97 | 0 | 3.26 s | 4,271,316 KB | 444,780,544 B | standard three |
+| LDJ-03 | AspisOneTxCheckedAcceptance (source unchanged, recompiled) | cf5d5b2c22d7f49ba6ee02e6a802effffcf54e74ea6929f3fa7f4a220297383b | 0 | 3.01 s | 4,254,480 KB | 429,285,376 B | standard three |
+| LDJ-04 | AspisRec40CleanJoin (source unchanged, recompiled) | 695c79cc89487a90f1b1eef54f19acaa4eaefebc25fde422904ac85a910e8041 | 0 | 2.41 s | 4,249,268 KB | 420,229,120 B | standard three |
+| LDJ-05 | AspisFailureBoundJoined (source unchanged, recompiled) | 05a140378b1c3f9f4537cd67c89b4788628a4c635824c4a4abe18b3b266a6506 | 0 | 2.28 s | 4,253,492 KB | 424,812,544 B | [propext, Classical.choice, Quot.sound] |
+| LDM-03 | AspisJoinedMeasure (measurement only) | 1a626725f12551af75df4f87e7662c42801f3789c086b2209521ea7e9c352ac9 | 0 | 9.00 s | 4,317,316 KB | 446,160,896 B | none (no theorems) |
+
+All `#print axioms` lines of LDJ-02 to LDJ-05 (32 of them) are `[propext, Classical.choice,
+Quot.sound]`. No warnings. These are focused compiles against cached objects, not a coherent
+rebuild of the closure; that rebuild is owed before any claim.

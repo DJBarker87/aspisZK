@@ -708,3 +708,112 @@ files.
 | PSD-38 | AspisRec40CleanStatement (definitions) | 3c3fcfb2…53dd837 | 0 | 2.95 s | 4,218,656 KB | 429,699,072 B |
 
 No theorems in these three files, so no axioms printed.
+
+## 8. The clean event: step 1 compiled, `hchecks` discharged, `hfinal` open
+
+### 8.1 What compiles
+
+| Module | Content (R1 statement copied) |
+|---|---|
+| `AspisRec40Frames` | 40-row replay and frame lemmas: `lift_verifier` (the always-true decision verifier is `Starts.verifier`), `sampler_reads`, `transcript_eq_of_agrees`, `recorded_transcript_eq`, `frameFromView_eq`, `frame_read`, `commitment_cut_eq`, `wordsFromRun_compiled_eq_original`, `output_pair`, `base_lift`, `words_prefix` (copies of `OracleDecisionFeasibilityCore.lift_*`, `OraclePortReplay.*`, `RawCutWordsFromView.*`, `OraclePortWords.*`, `OraclePortSamplerPrefixDraft.*`, 33 → 40) |
+| `AspisRec40CleanRun` | `base_split`/`charged_split` (the Aspis base and charged runs are R1's followed by the chains of rows 33–39, same output); `words_base_eq`; `decodes_r1rows` (R1's `Frozen2StartChargeCompletion.decodes` for rows 0–32, transported to the longer trace and to `decFinal`); `Decodes40`, `decodes40` (rows 0–32 from R1, rows 33–39 from `FinalDecodes`); `chains_read`, `charged_reads`; `hit_in_prefix` (copy of R1's, through the generic `StartChargeHit.hit_implies_chain`) |
+| `AspisRec40CleanA` | `projected_eq_recorded` (the full experiment equals the recorded decision experiment at the run's own stored input: this is the 40-row selection step, R1's `annotated_selected` + `fibre_prover`), `recorded_accepts`, `same_transcript` (copy of R1's), `original_accepts` |
+| `AspisRec40CleanB` | `schedule_of_matching` (copy of `RawChecksConstructorSchedule.checks_force_constructor_schedule` with its two read fields as arguments), `valid_of_checks`, `format_of_checks` (copy of `RWireCheckedFormat.format_of_checks` from `AspisChecks` fields) |
+| `AspisRec40CleanWords` | `extractor_word_alignment` (copy of `OraclePortCleanModel.extractor_word_alignment` with `AspisChecks`) |
+| `AspisRec40CleanTag` | `guard_tag`, `tag_of_admitS`, `accepted_tag`: the public tag from `admitted_aspis` and `accepted_guardS`. Only the guard's first conjunct (the statement's tag, on the first 33 rounds) is used; nothing about rows 33–39 is taken from admission (reviewer's caveat) |
+| `AspisRec40Clean` | `accepted_facts` (copy of R1's, under `hchecks`), `clean40` (copy of R1's `clean`), `hit_in_prefix_of` (the hit step alone) |
+| `AspisRec40CleanJoin` | `checks_of_fibre`: `hchecks` from the game agent's `AspisOneTx.Checked.fibre_checks40` and R1's `Frozen2StartChargePrefix.fibre_prover` (`pairProver s P = prover P`); `accepted_checks40 : AspisFailureBound.AcceptedChecks40 D P Q` and `word_alignment40 : AspisFailureBound.WordAlignment40 D P Q` under R1's query hypothesis only; `hit_in_prefix40 : AspisFailureBound.HitInPrefix40 D P Q` under `hfinal` |
+
+Join shape: option (a) of the coordinator's message. The three definitions
+of `AspisFailureBound` are proved as stated, at `expE D P` (the same program
+as `HitMass.projected D dV_aspis P`, already declared at R1's `Experiment`
+type). No bridge lemma is needed: the decision argument, the prover wrapper
+(`pairProver` to `prover`, by R1's `fibre_prover`) and the carrier type
+agree. `AcceptedChecks40` and `WordAlignment40` are proved outright.
+`HitInPrefix40` has one hypothesis left, `hfinal`.
+
+The lift from the fixed-proof statement to the full experiment (the
+reviewer's question) is `AspisRec40.CleanA.projected_eq_recorded`, used in
+`AspisRec40.Clean.accepted_facts`. R1's own selection step goes through
+`OraclePortStoredReductionC7.annotated_selected`; this proof computes the
+evaluations directly.
+
+Constant-level audit (`AspisRec40Measure6.lean`, PSD-70; 597 modules,
+3,523 constants, roots `accepted_checks40`, `word_alignment40`,
+`hit_in_prefix40`, `clean40`, `ChargePrefix.starts`, `verifier_starts`):
+one class (iii) module is used, `R1VerifierCallBudget`
+(`firstReads_le_length`). It enters through the game agent's
+`AspisOneTxRun` (line 107), reached via `fibre_checks40`. The same generic
+lemma is re-proved in `AspisRec40.CallBudget.firstReads_le_length`, and
+switching to it removes the use. `OraclePortFrozen2Resource`,
+`Frozen2StartChargeCompletion` and `Frozen2StartChargePrefix` (class ii)
+are also reached.
+
+### 8.2 `hfinal`: the three sub-results, each next to the R1 row-32 analogue
+
+Let `tr` be the Addr-level trace of the actual 40-row run, `c_n` the absorb
+frame of row n (33 ≤ n < 40), `T_n = tableBefore emptyTable tr c_n`, and
+no collision on `tr`.
+
+1. **Context recovery at the later table.**
+   `Context.parse p pub.pubBytes pub.tag n c_n T_n = some ⟨jc, a32, tail, x, m⟩`,
+   with `jc` the actual row-32 context.
+   R1 analogue: `UnifiedRhoInjection.decodes_and_follows`'s
+   `hcontext : JointContext.parse … c T_32 = some ctx`, built from
+   `QueryFirstRead.recover_query_before_endpoint` and
+   `OpeningQueryTrace.recover_and_follow`.
+   The typed prefix walk `OpeningPrefixAnchor.walk_before_anchor` takes the
+   anchor as a parameter, so it applies at anchor `c_n` (`T_n`) unchanged.
+   The seeks (the query chain from row 32's endpoint, and one advance step
+   for each of rows 32..n−1) come from the generic
+   `DuplexSeek.seek_of_noColl` at `T_n`.
+2. **Selection at the later table.** `FinalByte.select n c_n T_n = some pub`.
+   R1 analogue: `RWireRawFullPublicRun.select_actual_run` at row 32, through
+   `RawLatePublicSelector.select_of_joint_context` and
+   `RawPublicOpeningAnchor.walk_before_anchor` (anchor-parametric).
+3. **Follow.**
+   `bfollow (Final.output …) (traceFrom tr c_n) (QueryNextLaw.own p c_n) ((Final.missing p T_n ctx).map …) T_n = some (transcript n, msg n, chal n)`.
+   R1 analogue: `JointNextTrace.follows_after_prefix_query` (row 32, pending
+   = R1's joint missing cells). New content: the pending squeeze cells of
+   rows 32..n−1 and the completed later rounds.
+
+Also needed: the byte-to-Addr bridge for the 40-row run. R1's
+`RWireRawLiteralDecoderRestore.decodes_and_follows` /
+`RWireLiteralLegacyDecoderCompletion` / `UnifiedPrefixedReads` cover 33 rows,
+and the byte-level collision event has to be translated to `badColl` and
+`ParsedStateCollision`. None of these needs a two-transaction module, a
+weaker event or an extra premise. The premises are R1's four (`hQ`, `hout`,
+`format`, `tag`). This is the remaining work: an estimated 10–15 modules,
+the follow (3) being the main new proof.
+
+### 8.3 Lessons (heartbeat and kernel timeouts)
+
+Several attempts timed out (PSD-44, 47, 49–53, 58, 60, 63). Each time the
+cause was a reduction of `.statement` of a concrete 40-round transcript,
+through a `show`/`change`, a `dsimp` of `erasePrefix`, or the kernel's eager
+projection reduction (PSD-63: `(kernel) deterministic timeout`, 7.05 GB).
+The fix is to keep the transcript abstract:
+- a lemma stated for an arbitrary erased prefix (`guard_tag`);
+- R1's own `InitialTagDecision.erased_transcript_tag` after
+  `Protocol.transcript_eq`;
+- `generalize` before any projection.
+
+No limit was raised.
+
+### 8.4 Validation
+
+| Attempt | Module | Source sha256 | Exit | Wall | Peak RSS (time) | cgroup peak | Axioms |
+|---|---|---|---|---|---|---|---|
+| PSD-40 | AspisRec40Frames | 9da2706650d0817553b1e4d195c3677fbb0788f0036e2d2638e123430960a778 | 0 | 4.20 s | 4,216,572 KB | 437,661,696 B | 11× [propext, Classical.choice, Quot.sound] |
+| PSD-43 | AspisRec40CleanRun | 2f43921b16c52acd995ce8cca130334a2846f14ef2446755f7bee7f2b71dcb2a | 0 | 4.94 s | 4,241,396 KB | 438,890,496 B | 8× standard three |
+| PSD-62 | AspisRec40CleanA | 148bf2dea5843a7d94a4d883f602c60f1f0a8b28f2421e5aada5c30c9063f499 | 0 | 1.81 s | 4,227,688 KB | 430,227,456 B | 4× standard three |
+| PSD-46 | AspisRec40CleanB | e9a1fa0f7a0d026e5bb5f666cb3033496faec6bcd175a9fa3b598e7212c481dc | 0 | 5.74 s | 4,254,968 KB | 458,522,624 B | 3× standard three |
+| PSD-48 | AspisRec40CleanWords | 85ce93da9cb35896926f6bea8d6a55e52e1087f0e9ef79551aa668c8dc16a5ef | 0 | 3.62 s | 4,231,364 KB | 425,971,712 B | 1× standard three |
+| PSD-65 | AspisRec40CleanTag | 8973ca6b3b933ad62282691f6ece44a99ca255c5e47d180015fe8b0dcf5fdbd4 | 0 | 1.68 s | 4,249,796 KB | 431,435,776 B | 3× standard three |
+| PSD-68 | AspisRec40Clean | b33eb6b5988b4b1eb3b74018ade126048760ff0ae322605865b2f77f2cfc97fe | 0 | 2.00 s | 4,263,720 KB | 436,998,144 B | 3× standard three |
+| PSD-69 | AspisRec40CleanJoin | 695c79cc89487a90f1b1eef54f19acaa4eaefebc25fde422904ac85a910e8041 | 0 | 1.83 s | 4,257,968 KB | 430,977,024 B | 4× standard three |
+| PSD-70 | AspisRec40Measure6 (measurement) | 8738c9f8211477e9d00d1a7176c2a5678888ff68be58c8c0cd2301440d281fc7 | 0 | 2.22 s | 4,299,160 KB | 446,128,128 B | none (no theorems) |
+
+All hashes were copied from the receipts' stdout.log and checked against
+the masters. `AspisRec40CleanStatement` (PSD-38) is unchanged. No `sorry`,
+no new axioms.
