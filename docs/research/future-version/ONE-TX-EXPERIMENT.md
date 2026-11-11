@@ -900,3 +900,50 @@ that uploads the summed proof and sends the single settlement transaction to
 a network, and the programs deployed for it (a new verifier address needs a
 registry entry, and the devnet registry in use is frozen, so a network run
 needs a fresh deployment decision).
+
+## Round 6: client and devnet (owner go-ahead, 11 November)
+
+Full record, predictions and receipts: `evidence/future-version-20261111/devnet/README.md`.
+This section is the summary.
+
+**Built.** The devnet client's planner takes `"one_tx": true`: it re-packs the prover's proof
+with `to_summed_format`, checks the result with `verify_summed_format`, and writes the summed
+proof for upload. The run script `FV_spend.py` pays in 18 transactions: an open that funds a
+fresh session key and creates the proof account and the checkpoint account (carrying the last 58
+proof bytes), 15 writes of 3,763 bytes, the one verification-and-settlement transaction, and a
+close that returns everything the session key holds. The payer signs the open only. A variant of
+the adapter without the stage 1 entry (`future-one-tx-lean`, ELF `85568738…6c02c`, 967,384 bytes)
+is the deployed verifier; the replay of the recorded PIN2 settlements gives the same compute units
+with it as with the earlier adapter ELF.
+
+**Deployed.** Verifier `CmxQHrAx4qno6WRPMpWdRVp7MbyQiG7PhcfsVhuJaW92` on devnet, upgrade
+authority revoked (the registry requires it), 4,915,189,560 lamports of rent locked. Pool,
+registry and upload program are the deployed PIN2 ones, unchanged.
+
+**Measured on devnet** (fixture measurements; predictions registered before each run):
+
+| Run | Payment | Settlement, one transaction | Margin to 1,400,000 |
+|---|---|---:|---:|
+| registered | transfer | 1,308,068 | 91,932 |
+| registered | withdrawal | 1,321,318 | 78,682 |
+| timing | transfer | 1,312,109 | 87,891 |
+| timing | withdrawal | 1,321,189 | 78,811 |
+
+In the registered run a changed certificate byte and a changed Merkle node byte were each rejected
+with no state change (after about 1.29M and 0.66M compute units), replays were rejected, and the
+payer's balance change per payment equalled fees plus the nullifier marker rent. One prediction
+missed: the transfer's compute band was centred too high, by 932.
+
+In the timing run a payment was sent the way a wallet would send it (all 18 transactions signed
+first, four phases, confirmation only, each transaction broadcast to two endpoints): the open
+confirmed at 1.5 s, the 15 writes at 3.1 s (all in one slot), the settlement at 4.5 s and the close
+at 6.0 s, for both payments.
+
+**Proving.** 26.7 s and 26.8 s per proof natively on an Apple M3, one thread, 0.61 GB peak. No
+phone or browser measurement exists.
+
+**Still not established.** As before: an all-input compute bound (rollover and a long-history
+Pool are unmeasured), the soundness rows of the changed verifier, the source correspondence of the
+changed kernels. The release target is unchanged and not yet established. A separate agent is
+working through the soundness argument; its note will be
+`docs/research/future-version/SOUNDNESS-ARGUMENT.md`.
