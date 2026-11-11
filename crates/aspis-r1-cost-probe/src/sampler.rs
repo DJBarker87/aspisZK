@@ -53,23 +53,40 @@ pub fn qm31_sample(block: &[u8; 32]) -> QM31 {
 /// Return the low eight base-P digits of the 256-bit little-endian block and
 /// the remaining quotient. This uses eight long divisions by P rather than
 /// first reducing the full block with 256 binary steps.
+///
+/// Index loops only (Aspis, 2026-11-11). The body is the indexed form that the
+/// R1 proof already models (research evidence `prover-commit25-20261021`,
+/// `harness/lowdigits25.rs`, module `reference`): the limbs are read with a
+/// `while` loop and each of the eight passes is `qm31_div_pass`. The earlier
+/// form read the limbs with `core::array::from_fn` and divided through
+/// `quotient.iter_mut().rev()` inside a second `from_fn` closure; the
+/// Rust-to-Lean translator in use drops a write made through a reversed mutable
+/// iterator without reporting an error. Same limbs, same eight division passes
+/// from the high limb down, same digits and quotient:
+/// `low_digits_index_tests` keeps the earlier form as an oracle.
 fn low_base_p_digits(block: &[u8; 32]) -> ([u32; 8], u32) {
-    let mut quotient: [u32; 8] =
-        core::array::from_fn(|i| u32::from_le_bytes(block[4 * i..4 * i + 4].try_into().unwrap()));
-    let digits = core::array::from_fn(|_| {
-        let mut remainder = 0u64;
-        for limb in quotient.iter_mut().rev() {
-            let dividend = (remainder << 32) | u64::from(*limb);
-            *limb = (dividend / u64::from(P)) as u32;
-            remainder = dividend % u64::from(P);
-        }
-        remainder as u32
-    });
+    let mut rank = [0u32; 8];
+    let mut i = 0usize;
+    while i < 8 {
+        let start = 4 * i;
+        rank[i] = u32::from_le_bytes([
+            block[start],
+            block[start + 1],
+            block[start + 2],
+            block[start + 3],
+        ]);
+        i += 1;
+    }
 
-    // After eight divisions, the quotient is at most 256 and fits in u32.
-    debug_assert!(quotient[1..].iter().all(|&limb| limb == 0));
-    debug_assert!(quotient[0] <= 256);
-    (digits, quotient[0])
+    let mut digits = [0u32; 8];
+    let mut i = 0usize;
+    while i < 8 {
+        let (quotient, digit) = qm31_div_pass(rank);
+        rank = quotient;
+        digits[i] = digit;
+        i += 1;
+    }
+    (digits, rank[0])
 }
 
 fn decode8(digits: [u32; 8]) -> WideExact {
@@ -87,11 +104,17 @@ fn decode8(digits: [u32; 8]) -> WideExact {
 
 /// Add a small integer to a base-P digit vector. Returns the carry beyond
 /// the final digit, which is at most one for the values used by the sampler.
+///
+/// Index loop (Aspis, 2026-11-11): the indexed form the R1 proof already models
+/// (`harness/addsmall25.rs`, module `reference`). The earlier form iterated
+/// `for digit in digits`; `low_digits_index_tests` keeps it as an oracle.
 fn add_small_base_p(digits: &mut [u32; 8], mut addend: u32) -> bool {
-    for digit in digits {
-        let sum = u64::from(*digit) + u64::from(addend);
-        *digit = (sum % u64::from(P)) as u32;
+    let mut i: usize = 0;
+    while i < 8 {
+        let sum = u64::from(digits[i]) + u64::from(addend);
+        digits[i] = (sum % u64::from(P)) as u32;
         addend = (sum / u64::from(P)) as u32;
+        i += 1;
     }
     debug_assert!(addend <= 1);
     addend != 0
@@ -223,6 +246,105 @@ mod qm31_index_tests {
                 z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
                 z ^= z >> 31;
                 chunk.copy_from_slice(&z.to_le_bytes());
+            }
+            check(&block);
+        }
+    }
+}
+
+#[cfg(test)]
+mod low_digits_index_tests {
+    use super::*;
+
+    // The complete pre-rewrite implementation, kept verbatim as a differential oracle.
+    fn old_low_base_p_digits(block: &[u8; 32]) -> ([u32; 8], u32) {
+        let mut quotient: [u32; 8] =
+            core::array::from_fn(|i| u32::from_le_bytes(block[4 * i..4 * i + 4].try_into().unwrap()));
+        let digits = core::array::from_fn(|_| {
+            let mut remainder = 0u64;
+            for limb in quotient.iter_mut().rev() {
+                let dividend = (remainder << 32) | u64::from(*limb);
+                *limb = (dividend / u64::from(P)) as u32;
+                remainder = dividend % u64::from(P);
+            }
+            remainder as u32
+        });
+        assert!(quotient[1..].iter().all(|&limb| limb == 0));
+        assert!(quotient[0] <= 256);
+        (digits, quotient[0])
+    }
+
+    // The pre-rewrite `add_small_base_p`, kept verbatim as a differential oracle.
+    fn old_add_small_base_p(digits: &mut [u32; 8], mut addend: u32) -> bool {
+        for digit in digits {
+            let sum = u64::from(*digit) + u64::from(addend);
+            *digit = (sum % u64::from(P)) as u32;
+            addend = (sum / u64::from(P)) as u32;
+        }
+        addend != 0
+    }
+
+    fn check(block: &[u8; 32]) {
+        let new = low_base_p_digits(block);
+        assert_eq!(new, old_low_base_p_digits(block));
+        // `add_small_base_p` on the digits this block gives, with the addends the sampler uses
+        // (quotient + 1, then 1) and with values at the ends of its range.
+        for addend in [0u32, 1, new.1 + 1, 257, P - 1, P, u32::MAX] {
+            let (mut a, mut b) = (new.0, new.0);
+            // The sampler's digits are below P; the largest addend can overflow a digit sum only
+            // beyond u64, which cannot happen for u32 inputs.
+            let (ca, cb) = (add_small_base_p(&mut a, addend), old_add_small_base_p(&mut b, addend));
+            assert_eq!((a, ca), (b, cb));
+        }
+        assert_eq!(
+            ordinary_sample(block).to_le_bytes(),
+            decode8(old_low_base_p_digits(block).0).to_le_bytes()
+        );
+    }
+
+    fn splitmix(state: &mut u64) -> u64 {
+        *state = state.wrapping_add(0x9E37_79B9_7F4A_7C15);
+        let mut z = *state;
+        z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
+        z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
+        z ^ (z >> 31)
+    }
+
+    #[test]
+    fn index_form_matches_iterator_form_at_boundaries() {
+        check(&[0u8; 32]);
+        check(&[0xFFu8; 32]);
+        // Every single bit, and every block with the bits below one position set.
+        for bit in 0..256usize {
+            let mut one = [0u8; 32];
+            one[bit / 8] = 1 << (bit % 8);
+            check(&one);
+            let mut below = [0u8; 32];
+            for b in 0..bit {
+                below[b / 8] |= 1 << (b % 8);
+            }
+            check(&below);
+        }
+        // Every limb set to values around the modulus and the word boundary, alone and in all limbs.
+        for value in [0u32, 1, P - 1, P, P + 1, u32::MAX - 1, u32::MAX, 1 << 31, (1 << 31) + 1] {
+            let mut all = [0u8; 32];
+            for limb in 0..8usize {
+                all[4 * limb..4 * limb + 4].copy_from_slice(&value.to_le_bytes());
+                let mut single = [0u8; 32];
+                single[4 * limb..4 * limb + 4].copy_from_slice(&value.to_le_bytes());
+                check(&single);
+            }
+            check(&all);
+        }
+    }
+
+    #[test]
+    fn index_form_matches_iterator_form_on_deterministic_blocks() {
+        let mut state = 0x4153_5049_5300_0001u64;
+        for _ in 0..200_000 {
+            let mut block = [0u8; 32];
+            for chunk in block.chunks_exact_mut(8) {
+                chunk.copy_from_slice(&splitmix(&mut state).to_le_bytes());
             }
             check(&block);
         }

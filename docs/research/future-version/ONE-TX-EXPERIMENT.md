@@ -1106,3 +1106,38 @@ once, at deployment.
   identical verdicts on the mutation campaign, measured at the rollover worst case, two rounds at
   most, nothing adopted without the owner. Its note is OPTIMISATION-ROUNDS.md. The freeze waits
   for it.
+
+## Round 8: the sampler's digit function in index-loop form (owner: "ok rewrite it now")
+
+`sampler::low_base_p_digits` turns a 32-byte hash output into the base-P digits that become the
+verifier's challenges; the prover runs the same code. Its shipped form divided through
+`quotient.iter_mut().rev()` inside a `from_fn` closure. The translator in use drops a write made
+through a reversed mutable iterator and reports success (EXTRACTION-PROBE.md section 11), so the
+function could not be carried into a proof of the Rust. R1's proof does not use an emission of it:
+it models the samplers by an emission of a rewritten crate with indexed loops, and the link from
+that crate to the shipped source is an open item there (soundness lead, 2026-11-11).
+
+Two forms were gated against the head (build X1):
+- S1: the eight division passes written in place with index loops.
+- S2: the text of the rewritten crate that R1's model was emitted from (research evidence
+  `prover-commit25-20261021`, `harness/lowdigits25.rs` and `addsmall25.rs`, module `reference`):
+  `low_base_p_digits` through `qm31_div_pass`, and `add_small_base_p` as an index loop.
+
+| Gate | S1 | S2 |
+|---|---|---|
+| Differential test against the shipped form kept as an oracle (boundary blocks, 200,000 pseudo-random blocks) | pass | pass, also for `add_small_base_p` |
+| Integration tests with the deployed feature set | pass | pass |
+| Program ELF | `be0ecb65032406107f6380e3e12f34359935ef3bd533dc30db6d4f24bc46dea3` | the same ELF, byte for byte |
+| Mutation campaign, 156,704 corrupted proofs, verdict file against the head | identical | identical |
+| Replay of the recorded payments, changed certificate, redirect attempts | as the head | as the head |
+| Prover byte identity: fixture proofs from the tool built in the changed tree against the unchanged tree, six scenarios, pinned and re-packed hashes | identical | identical |
+| Compute against X1, every payment and marker state measured | +137 | +137 |
+
+The two forms compile to the same program. S2 is adopted because its text is the one R1's proof
+already models. Cost: 137 CU on every payment (1,306,837 and 1,313,325 on the recorded payments;
+1,354,239 at the heaviest measured case). Not predicted beforehand in writing: I told the owner I
+expected it to be negligible. Evidence: `evidence/future-version-20261111/sampler-rewrite/`, host
+script `fv_sampler_gate.sh`, verdict reader `fv_gate_compare.py`.
+
+Tested, not proved. The prover check covers accepted fixture proofs only; the privacy lead runs
+its own harness with failing attempts on the integrated candidate before the freeze.
