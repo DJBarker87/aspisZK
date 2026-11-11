@@ -386,6 +386,82 @@ pub fn input_evaluation_probe(proof: &[u8], obs: Observer) -> Result<K, Error> {
     Ok(total.finish())
 }
 
+/// MEASUREMENT PROBE ONLY: unit costs of the field kernels, 512 chained
+/// operations each, on operands read from the proof. Verifies nothing.
+#[inline(never)]
+pub fn unit_cost_probe(proof: &[u8], obs: Observer) -> Result<K, Error> {
+    parse_shape(proof)?;
+    canonical_scan(proof)?;
+    let openings = &proof[compact::OFF_OPENINGS..compact::OFF_NODES];
+    let final_message = &proof[compact::OFF_FINAL..compact::OFF_OPENINGS];
+    let b = K::from_le_bytes(&openings[104..120]).ok_or(Error::Parse)?;
+    let c = M31::from_le_bytes(openings[0..4].try_into().unwrap()).ok_or(Error::Parse)?;
+    let e2 = field(final_message, 1);
+    const N: usize = 512;
+    mark(obs, Phase::QueryPart(2, 0));
+    let mut x = K::from_le_bytes(&openings[480..496]).ok_or(Error::Parse)?;
+    for _ in 0..N {
+        x = x.mul(b);
+    }
+    mark(obs, Phase::QueryPart(2, 1)); // QM31::mul
+    for _ in 0..N {
+        x = crate::fast_pairing::k_mul_sixteen(x, b).map_err(|_| Error::Parse)?;
+    }
+    mark(obs, Phase::QueryPart(2, 2)); // 16-product QM31 multiplication
+    let mut e = field(final_message, 0);
+    for _ in 0..N {
+        e = e.mul(e2);
+    }
+    mark(obs, Phase::QueryPart(2, 3)); // WideExact::mul
+    for _ in 0..N {
+        e = e.mul_qm31(b);
+    }
+    mark(obs, Phase::QueryPart(2, 4)); // WideExact::mul_qm31
+    let mut m = c;
+    for _ in 0..N {
+        m = m.mul(c);
+    }
+    mark(obs, Phase::QueryPart(2, 5)); // M31::mul
+    let mut dot = EbyKDot::new();
+    for _ in 0..N {
+        dot.push(e, x).map_err(|_| Error::Parse)?;
+    }
+    let pushed = dot.finish();
+    mark(obs, Phase::QueryPart(2, 6)); // EbyKDot::push (same operands each time)
+    let mut kdot = KbyKDot::new();
+    for _ in 0..N {
+        kdot.push(b, x).map_err(|_| Error::Parse)?;
+    }
+    let kpushed = kdot.finish();
+    mark(obs, Phase::QueryPart(2, 7)); // KbyKDot::push
+    Ok(x.add(pushed.c0()).add(e.c1()).add(kpushed).mul_m31(m))
+}
+
+/// MEASUREMENT PROBE ONLY (profiling builds): the pinned relation phase of an
+/// accepting proof with a mark after each stage. It repeats the pinned
+/// semantic layer and preparation to obtain the real challenges.
+#[cfg(feature = "detail-phases")]
+#[inline(never)]
+pub fn relation_probe<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, obs: Observer) -> Result<(), Error> {
+    parse_shape(proof)?;
+    canonical_scan(proof)?;
+    let mut g = [E::ZERO; 29];
+    let p = prepare(public, proof, hash, None, &mut g)?;
+    let v = relation_view(proof)?;
+    mark(obs, Phase::QueryPart(3, 0));
+    let mut claim = finish_relation_round(v.round0, p.alpha[0], p.claim, 0)?;
+    claim = finish_relation_round(v.round1, p.alpha[1], claim, 1)?;
+    mark(obs, Phase::QueryPart(3, 1)); // two round checks
+    let weights = Weights::new(p.variant, &p.semantic_alpha, &p.z)?;
+    mark(obs, Phase::QueryPart(3, 2)); // Weights::new
+    let pair = weights.pair_marked(&p.alpha[..2], v.final_message, p.kappa, &|i| mark(obs, Phase::QueryPart(4, i)))?;
+    if pair != claim {
+        return Err(Error::Relation);
+    }
+    mark(obs, Phase::QueryPart(3, 3));
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -679,5 +755,27 @@ mod tests {
             expected = expected.add(w[j].mul(lambda[31]).mul(e.c0())).add(w[j].mul(lambda[32]).mul(e.c1()));
         }
         assert_eq!(input_evaluation_probe(proof, None).unwrap(), expected);
+    }
+
+    #[cfg(feature = "detail-phases")]
+    #[test]
+    fn marked_pairing_equals_the_pinned_pairing_and_the_relation_probe_accepts() {
+        for (name, proof, public) in FIXTURES {
+            let (p, _) = prepared(proof, public);
+            let weights = Weights::new(p.variant, &p.semantic_alpha, &p.z).unwrap();
+            let f = &proof[compact::OFF_FINAL..compact::OFF_OPENINGS];
+            assert_eq!(weights.pair_marked(&p.alpha[..2], f, p.kappa, &|_| ()).unwrap(), weights.pair(&p.alpha[..2], f, p.kappa).unwrap(), "{name}");
+            relation_probe(decode(public).semantic_public(), proof, Sha, None).unwrap();
+        }
+    }
+
+    #[test]
+    fn sixteen_product_multiplication_is_the_field_product() {
+        let mut state = 99;
+        for case in 0..200 {
+            let (a, b) = (random_k(&mut state, case % 5), random_k(&mut state, (case / 5) % 5));
+            assert_eq!(crate::fast_pairing::k_mul_sixteen(a, b).unwrap(), a.mul(b));
+        }
+        unit_cost_probe(FIXTURES[0].1, None).unwrap();
     }
 }

@@ -355,6 +355,44 @@ impl Weights {
     }
 }
 
+/// FUTURE-VERSION EXPERIMENT (profiling builds only): `Weights::pair` on the
+/// S2 two-fold path with a mark after each stage. Same operations in the same
+/// order as `pair`; the equality is tested on the saved fixtures.
+#[cfg(feature="detail-phases")]
+impl Weights {
+    #[inline(never)]
+    pub fn pair_marked(&self,alpha:&[E],f:&[u8],kappa:E,mark:&dyn Fn(u8))->Result<E,Error> {
+        let n=f.len()/32; let folds=alpha.len();
+        if self.variant!=Variant::S2||folds!=2||n!=64 {return Err(Error::Parse);}
+        let ap0=powers::<4>(alpha[0]);
+        let ap1=powers::<4>(alpha[1]);
+        let mut scratch=match aspis_core::r0::heap::filled(n,K::ZERO) { Ok(v) => v, Err(_) => return Err(Error::Allocation) };
+        let mut parts=[E::ZERO;7];
+        let shared_two_point=shared_two_point_guard(self,folds);
+        mark(0);
+        process_regular_kinds(self,shared_two_point,alpha,f,folds,n,&ap0,&ap1,&mut scratch,&mut parts)?;
+        mark(1);
+        if shared_two_point {
+            let mut common=[K::ZERO;16];
+            for j in 0..16 { common[j]=self.factors[0][2][j&3].mul(self.factors[0][3][j>>2u32]); }
+            let partials=shared_partials(f,&common)?;
+            shared_high(&partials,self,&ap0,&ap1,&mut parts)?;
+        }
+        mark(2);
+        let mut low=[E::ZERO;16];
+        for s in 0..16 { low[s]=ap0[PERM[s%4]].mul(ap1[PERM[s/4]]).mul_m31(QUARTER.mul(QUARTER)); }
+        parts[0]=grouped_inactive_pair(self,f,&low);
+        mark(3);
+        let libra=factored_s2_libra_weights(&ap0,&ap1,self.extra);
+        for j in 0..4 {parts[4]=parts[4].add(field(f,j).mul(libra[j]));}
+        mark(4);
+        let k=powers::<7>(kappa);let mut sum=E::ZERO;
+        for kind in 0..7 {sum=sum.add(k[kind].mul(parts[kind]));}
+        mark(5);
+        Ok(sum)
+    }
+}
+
 #[cfg(test)]
 mod s2_inactive_table_tests {
     use super::*;

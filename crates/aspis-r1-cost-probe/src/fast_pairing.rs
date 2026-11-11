@@ -251,3 +251,11 @@ impl KbyKDot {
         qm31_of(self.dot.finish())
     }
 }
+
+/// FUTURE-VERSION EXPERIMENT (unit-cost probe only): the 16-product QM31
+/// multiplication of the private canonical representation, with both operands
+/// checked canonical. Same field product as `QM31::mul`.
+#[inline(always)]
+pub fn k_mul_sixteen(left: QM31, right: QM31) -> Result<QM31, ()> {
+    Ok(qm31_of(checked_q(left)?.mul(checked_q(right)?)))
+}

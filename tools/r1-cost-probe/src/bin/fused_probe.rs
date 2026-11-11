@@ -81,6 +81,12 @@ fn main()->Result<()> {
     // Cost probe for binding the opening inputs to one QM31 value (verifies nothing).
     let probe=send(vec![10],zero.clone(),false)?;ensure!(probe.error.is_none(),"input probe failed: {:?}",probe.error);
     summary["input_evaluation_probe_cu"]=json!(probe.program_cu);runs.push(record("input-evaluation-probe",&probe,false));
+    // Unit-cost and relation-phase probes (the second exists in detail-phases builds only).
+    for (name,tag) in [("unit-cost-probe",11u8),("relation-probe",12u8)] {
+        let run=send(vec![tag],zero.clone(),false)?;
+        summary[format!("{}_cu",name.replace('-',"_"))]=json!(if run.error.is_none() {run.program_cu} else {None});
+        runs.push(record(name,&run,false));
+    }
     std::println!("{label} pinned: stage 1 {:?}, stage 2 {:?}; input probe {:?}",tx1.program_cu,tx2.program_cu,probe.program_cu);
     let value=json!({"label":"FUTURE-VERSION EXPERIMENT — UNPROVED, local LiteSVM, verifier core without the Pool adapter","fixture":label,"source_revision":env::var("ASPIS_SOURCE_REVISION")?,"elf_sha256":sha(&elf),"proof_sha256":sha(&proof),"public_sha256":sha(&public),"runtime":{"litesvm":"0.16.0","agave":"4.2.1","heap_bytes":262144},"summary":summary,"runs":runs});
     fs::write(out,serde_json::to_string_pretty(&value)?+"\n")?;Ok(())
