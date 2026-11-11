@@ -230,3 +230,12 @@ transcript); the module `fused` and its `*_summed_format` functions; the `future
 the crate and program names ending in `cost-probe`; the transcript domain, which should be decided
 together with version separation. Directory and script names under `future-version` and `FV_`
 stay as labels of this evidence.
+
+**One exception, decided by the owner on 2026-11-11 ("ok keep it"):** the transcript's internal
+domain strings (`UNPROVED:R1:…` in transcript.rs and the prover) are NOT renamed. They are hash
+inputs, never shown to a user. Changing them would change the prover (the privacy baseline would
+have to be regenerated), would break the byte-for-byte identity of transcript rows 0 to 32 with
+R1 on which the reuse of R1's proof by delegation rests, and would add no security: a proof is
+already bound to its pool and deployment, and the proof format carries the Aspis name and
+version. The open item "version separation of the transcript domain" is closed with this answer:
+no separation at the transcript level.
