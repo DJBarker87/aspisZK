@@ -47,6 +47,34 @@ both theorems re-checked on the rebuilt objects; both release ELFs have been
 rebuilt byte for byte from the frozen source; and an axiom audit of the rebuilt
 closure finds only the three standard axioms reachable from either theorem.
 
+The pin moved on 11 November 2026 to the source that the current devnet
+verifier was built from. In that source the public input is longer and the
+verifier has an instruction that closes a payment's checkpoint. Of the 14,101 modules in the dependency closure of the two
+theorems, the 10,808 that depend on the changed public input were recompiled
+from source at the new pin, together with 62 new modules, which makes 10,870
+in all. Of these, 10,293 compile from the same text as before and 577 were
+restated or regenerated for the longer public input. Every one was compiled in
+a memory-capped job of its own, none failed, and none contains `sorry`. The
+remaining 3,293 modules do not depend on the change. Their objects are those
+of the cold rebuild of 9 November and were verified unchanged by hash. The
+text of both theorems is byte for byte the text they had before the pin moved.
+An independent walk of their dependencies, over 146,875 constants for
+`deployed_splitB` and 147,057 for `deployed_charge`, finds only `propext`,
+`Classical.choice` and `Quot.sound`. Every statement or definition that
+changed is listed with its reason in `CHANGES.tsv`, in the replay's evidence
+at `docs/research/100bit-spend-path-20261013/evidence/pin2-replay-20261111`
+on the `research` branch.
+
+Some of what this page describes was done for the pin before and has not been
+repeated. Both programs deployed on 11 November were rebuilt byte for byte
+from the new pin, and the Lean that states the public input, with its
+serializer and the bridges to the verifier model, was restated for it. The
+table of 197 definitions that execute checked arithmetic was not regenerated.
+The source change was reviewed against it and adds one subtraction, in the
+instruction that closes a checkpoint, which is guarded by a length test. The
+ledger of 599 statements was not walked again row by row. The Lean modules the
+change affects were restated, and each such change is in `CHANGES.tsv`.
+
 The non-vacuity item is partial, now with executable evidence, and the
 remaining release items of section 6 are open. The provenance of the Lean
 translations is still a release blocker.

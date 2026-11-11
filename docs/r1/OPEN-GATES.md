@@ -12,8 +12,13 @@ standard axioms. The whole closure, 14,101 modules, has been rebuilt cold from
 committed sources and both theorems re-checked on the rebuilt objects alone.
 Both release ELFs have been rebuilt byte for byte from the frozen source. An
 axiom audit of the rebuilt closure finds 105 nonstandard axiom declarations in
-it, none of them reachable from either theorem. What follows is what is not
-done.
+it, none of them reachable from either theorem. After the pin moved on
+11 November 2026, the 10,808 of those modules that depend on the changed
+public input were recompiled from source at the new pin together with 62 new
+modules, 10,870 in all, with no failure and with the text of both theorems
+unchanged. The remaining 3,293 do not depend on the change and were taken from
+the earlier rebuild, whose objects were verified unchanged by hash. What
+follows is what is not done.
 
 ## Provenance of the Lean translations
 
@@ -234,6 +239,34 @@ make a false spend accepted, so this is a question of liveness, and no credit
 is taken for it either way. The item is finished with a proof that the path is
 unreachable, a record that it is reachable, or the liveness caveat stated in
 the claim.
+
+## Other open items
+
+Four further items are open and belong to none of the sections above.
+
+The translator cannot handle 21 kinds of construct that occur in the
+verifier's source, among them loops that return or break early, parameters of
+function-pointer type and folds over iterators. A function written with one of
+them has no extracted model. Such functions are named in the claim and are not
+counted as proved.
+
+The Lean copy of the new public-input structure was produced by running the
+translator over a copy of the pinned statement source placed in a separate
+crate, and the pinned crate itself was not the input. The constructor that
+fills the new fields was not extracted, so the value used in the proof
+is tied to the extracted constructor on the nine fields that existed before
+and not yet on the new ones.
+
+The compiled theorems bound the failure probability at each oracle and bound
+the mean of the recorded event by total(Q). The step from there to "the
+probability of failure is at most total(Q)" for an arbitrary indicator that
+depends on the whole execution is written out in the proof text and has not
+been compiled.
+
+The bound reaches the recovery of the three Merkle trees through one theorem
+about authenticated recovery, and that theorem is instantiated at tree kind 2.
+Whether tree kinds 0 and 1 are covered by another route has not been
+established.
 
 ## Where this comes from
 

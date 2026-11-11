@@ -167,8 +167,8 @@ altered proof. The run of 11 November shows in addition that a payment's rent
 comes back when its accounts are closed. That is evidence that the deployed
 programs work, and the soundness argument stands on the Lean proofs and does
 not depend on it. The function-level proofs were completed for the verifier
-of 10 November and are being recompiled against the build of 11 November,
-with the theorem statements unchanged. The proofs submitted in all three runs
+of 10 November and have since been recompiled against the source of the
+build of 11 November, with the text of the two theorems unchanged. The proofs submitted in all three runs
 were made from public test fixtures,
 so the runs demonstrate verification and settlement and are not a test of
 privacy. The current version has not been deployed to mainnet.

@@ -80,9 +80,10 @@ Two things remain. For soundness, the last checks connect the proofs to the
 exact deployed bytes; they are listed in
 [`docs/r1/OPEN-GATES.md`](docs/r1/OPEN-GATES.md). The verifier deployed on
 11 November is a new build with a longer public statement and an instruction
-for closing a payment's accounts. The function-level proofs were completed
-for the build before it and are being recompiled against the new one, with
-the theorem statements unchanged. For privacy, the prover's
+for closing a payment's accounts. Every Lean module that the two soundness theorems depend on
+and that the change touches, 10,870 of them, has since been recompiled from
+source against the source of that build, with no failure and with the text of
+both theorems unchanged. For privacy, the prover's
 Rust is being matched to the privacy theorem in the same way the verifier's
 was matched to the soundness theorem.
 
