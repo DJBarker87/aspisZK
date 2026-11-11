@@ -35,6 +35,16 @@ def programdata(program):
     return pd, d, w['context']['slot'], w['value']['lamports']
 
 
+# `solana program deploy --final` revokes the authority in a transaction after the deployment. Both are read
+# here at finalized commitment, so wait (bounded) until the finalized view shows the verifier without an authority.
+import time
+for _ in range(45):
+    try:
+        if programdata(C['programs']['verifier'])[1][12] == 0:
+            break
+    except AssertionError:
+        pass
+    time.sleep(2)
 art = C['release_artifacts']; deps = {}
 for role, program in [('devnet_verifier', C['programs']['verifier']), ('pool', C['programs']['pool']),
                       ('registry', C['programs']['registry']), ('upload', C['upload_program'])]:
