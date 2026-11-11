@@ -191,6 +191,13 @@ fn main() -> Result<()> {
     let run_with = |verifier_elf: &[u8], proof_buffer: Option<Vec<u8>>, marker_prefund: Option<(Address, u64)>| -> Result<Outcome> {
         let mut svm = LiteSVM::new().with_sigverify(false);
         svm.warp_to_slot(slot);
+        // Devnet's rent: every recorded account holds (128 + space) * 5,080 lamports. LiteSVM's default
+        // differs, which would change the lamports the Pool moves into the marker it creates.
+        let mut rent = Vec::with_capacity(17);
+        rent.extend_from_slice(&2_540u64.to_le_bytes());
+        rent.extend_from_slice(&2.0f64.to_le_bytes());
+        rent.push(50);
+        svm.set_account(address("SysvarRent111111111111111111111111111111111")?, Account { lamports: 1_009_200, data: rent, owner: address("Sysvar1111111111111111111111111111111111111")?, executable: false, rent_epoch: u64::MAX }).map_err(|e| anyhow!("rent sysvar: {e:?}"))?;
         svm.add_program(address(&pool_id)?, &pool_elf).map_err(|e| anyhow!("load pool: {e:?}"))?;
         svm.add_program(verifier, verifier_elf).map_err(|e| anyhow!("load verifier: {e:?}"))?;
         for a in &accounts2 {
@@ -245,10 +252,10 @@ fn main() -> Result<()> {
     // design, and not written by either run), including the payer's balance.
     let one_vs_control = differing(&one.post, &control.post, &[proof_key.as_str()], &[]);
     let one_proof_untouched = one.post.iter().find(|(k, _)| *k == proof_key).and_then(|(_, v)| v.as_ref()).map(|v| v.2 == buffer) == Some(true);
-    // Rejected runs leave every account as it was before the transaction (the failed
-    // transaction is not committed, so the payer is unchanged too), apart from the proof buffer we installed.
-    let changed_vs_pre = differing(&changed.post, &pre_state, &[proof_key.as_str()], &[]);
-    let stale_vs_pre = differing(&stale.post, &pre_state, &[], &[]);
+    // Rejected runs leave every account as it was before the transaction, apart from the fee
+    // the payer is charged for a failed transaction and the proof buffer we installed.
+    let changed_vs_pre = differing(&changed.post, &pre_state, &[proof_key.as_str()], &[payer_key.as_str()]);
+    let stale_vs_pre = differing(&stale.post, &pre_state, &[], &[payer_key.as_str()]);
     // Marker funding states of the Pool (one, three and two System calls): the marker is the
     // account absent before and Pool-owned after the recorded settlement.
     let marker = recorded_post.iter().find(|(k, v)| v.as_ref().map(|v| v.1 == pool_id) == Some(true) && pre_state.iter().any(|(pk, pv)| pk == k && pv.is_none())).context("marker")?;
@@ -271,7 +278,7 @@ fn main() -> Result<()> {
         "pinned_format_buffer_rejected": stale.error.is_some(),
         "control_final_state_equals_recorded_except_payer_fee": control_vs_recorded.is_empty(),
         "one_tx_final_state_equals_control": one_vs_control.is_empty() && one_proof_untouched,
-        "rejected_runs_leave_state_unchanged": changed_vs_pre.is_empty() && stale_vs_pre.is_empty(),
+        "rejected_runs_leave_state_unchanged_except_payer_fee": changed_vs_pre.is_empty() && stale_vs_pre.is_empty(),
         "state_differences": {"control_vs_recorded": control_vs_recorded, "one_tx_vs_control": one_vs_control, "changed_vs_pre": changed_vs_pre, "pinned_vs_pre": stale_vs_pre},
         "marker_prefunded_one_lamport": {"error": partial.error, "transaction_cu": partial.transaction_cu, "pool_cu": consumed(&partial.logs, &pool_id), "final_state_equals_control_except_payer": variant_state_ok(&partial)},
         "marker_prefunded_full_rent": {"error": funded.error, "transaction_cu": funded.transaction_cu, "pool_cu": consumed(&funded.logs, &pool_id), "final_state_equals_control_except_payer": variant_state_ok(&funded)},
