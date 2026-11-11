@@ -73,6 +73,53 @@ must be zero, reserved header bytes must be zero, certificate limbs must be cano
 tests change padding and certificate bytes and expect rejection). The soundness agent is asked to
 confirm this independently.
 
+## Finding 3: the withdrawal destination cannot be redirected (owner request, 2026-11-11)
+
+The owner: "make sure we have the withdrawal address locked, that was a major oversight on r1".
+R1 before the PIN2 pin let anyone copy an uploaded proof and submit it with a different
+destination. Checked for Aspis at three levels.
+
+**The code path, link by link** (read, not proved):
+
+1. The Pool pays the amount to the destination named in the REQUEST, and refuses unless the token
+   account passed in is that destination (`vault.rs`, `destination_account.key != destination`).
+2. The Pool hands the same request bytes to the verifier.
+3. The one-transaction entry rebuilds the statement from that request and the authenticated
+   accounts, in the same call that verifies the proof. No separately uploaded statement exists.
+4. The statement's public bytes end with the pool, the deployment domain and, for a withdrawal,
+   the destination; those bytes seed the transcript, so a proof verifies only against the
+   destination it was made for.
+
+**The verifier function** (`aspis_one_tx_statement_binding.rs`, finding 2): a proof is rejected
+against a statement with a different destination, amount, pool or deployment domain.
+
+**End to end with the deployed programs** (`tools/r1-cost-probe/src/bin/one_tx_redirect.rs`,
+result `evidence/future-version-20261111/replays-redirect/A5-withdrawal.json`): the recorded
+devnet withdrawal replayed in LiteSVM with the deployed Pool ELF (`e0e49c34…`) and the deployed
+one-transaction verifier ELF (`85568738…`), a second token account of the same mint standing for
+the attacker's.
+
+| Attempt | Outcome | Compute units | Tokens moved |
+|---|---|---:|---|
+| Nothing changed | settles | 1,320,977 | 250 to the recorded destination |
+| Destination replaced in the request and in the accounts (the R1 attack) | rejected by the verifier, InvalidInstructionData | 181,562 | none |
+| Destination replaced in the accounts only | rejected by the Pool, error 0x41532032 | 71,323 | none |
+| Destination replaced in the request only | rejected by the Pool, error 0x41532032 | 71,323 | none |
+| A third party submits the unchanged settlement and pays for it | settles | 1,320,977 | 250 to the recorded destination |
+| That third party also redirects | rejected by the verifier | 181,562 | none |
+
+Every rejected attempt left every account unchanged apart from the fee. The fifth line is by
+design: the proof authorises the payment, not the submitter, so anyone can relay a settlement and
+nobody can move where it pays.
+
+**Limits of this.** It is a test on one recorded withdrawal with the devnet build (the format
+before the transcript change of commit a63f0dfc35c); the same test has to be rerun on the frozen
+Aspis build, and the devnet run script should make the same attempts on chain before each
+settlement (not added yet). It is not a proof. In the formal argument the destination is bound
+through the public-statement bytes, which belong to the source-refinement layer at the PIN2 pin;
+the Aspis statement has to carry that conjunct, and the soundness lead has been asked where the
+PIN2 statement carries it.
+
 ## V8 soundness failures and Aspis
 
 | V8 failure | Where it could recur in Aspis | Status |
