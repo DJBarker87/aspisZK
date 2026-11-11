@@ -1,0 +1,89 @@
+R1SpendRelationMap.lean:82:6: warning: This simp argument is unused:
+  SpendDataMap.pair
+
+Hint: Omit it from the simp argument list.
+  simp [PairLeaf.SelectedSlotIsSpendable, PairLeaf.selectedOccupied,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵S̵p̵e̵n̵d̵D̵a̵t̵a̵M̵a̵p̵.̵p̵a̵i̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+R1SpendRelationMap.lean:93:20: error: unsolved goals
+case privateTransfer.some.none
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+hf : Function.Injective ⇑f
+pub : Public K
+hv : pub.variant = Variant.privateTransfer
+val✝ : R0P.Digest K
+hr : pub.recipient = some val✝
+ha : pub.withdrawalAmount = none
+⊢ pub.destination = none →
+    (PublicOptionShape.bindingLengths
+        { variant := Variant.privateTransfer, anchor := SpendDataMap.digest (⇑f) pub.anchor,
+          nullifier := SpendDataMap.digest (⇑f) pub.nullifier, assetId := f pub.assetId,
+          recipient := some (SpendDataMap.digest (⇑f) val✝), change := SpendDataMap.digest (⇑f) pub.change,
+          withdrawalAmount := none, nextPairIndex := pub.nextPairIndex,
+          snapshotFrontier := fun i => SpendDataMap.digest (⇑f) (pub.snapshotFrontier i),
+          nextRoot := SpendDataMap.digest (⇑f) pub.nextRoot,
+          nextFrontier := fun i => SpendDataMap.digest (⇑f) (pub.nextFrontier i), pool := pub.pool,
+          deploymentDomain := pub.deploymentDomain, destination := pub.destination } ↔
+      PublicOptionShape.bindingLengths pub)
+R1SpendRelationMap.lean:97:15: error: unsolved goals
+case withdrawal.none.some
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+hf : Function.Injective ⇑f
+pub : Public K
+hv : pub.variant = Variant.withdrawal
+hr : pub.recipient = none
+val✝ : K
+ha : pub.withdrawalAmount = some val✝
+⊢ ¬val✝ = 0 →
+    pub.destination.isSome = true →
+      (PublicOptionShape.bindingLengths
+          { variant := Variant.withdrawal, anchor := SpendDataMap.digest (⇑f) pub.anchor,
+            nullifier := SpendDataMap.digest (⇑f) pub.nullifier, assetId := f pub.assetId, recipient := none,
+            change := SpendDataMap.digest (⇑f) pub.change, withdrawalAmount := some (f val✝),
+            nextPairIndex := pub.nextPairIndex,
+            snapshotFrontier := fun i => SpendDataMap.digest (⇑f) (pub.snapshotFrontier i),
+            nextRoot := SpendDataMap.digest (⇑f) pub.nextRoot,
+            nextFrontier := fun i => SpendDataMap.digest (⇑f) (pub.nextFrontier i), pool := pub.pool,
+            deploymentDomain := pub.deploymentDomain, destination := pub.destination } ↔
+        PublicOptionShape.bindingLengths pub)
+R1SpendRelationMap.lean:96:10: warning: This simp argument is unused:
+  map_zero_iff f hf
+
+Hint: Omit it from the simp argument list.
+  simp [PublicOptionShape.canonical, SpendDataMap.mapPublic, hv, hr, ha,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵m̵a̵p̵_̵z̵e̵r̵o̵_̵i̵f̵f̵ ̵f̵ ̵h̵f̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+R1SpendRelationMap.lean:230:2: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+R1SpendRelationMap.lean:239:2: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+'AspisR1.SpendRelationMap.canonical_map_iff' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.SpendRelationMap.rspend_map_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        2.42 real         1.78 user         0.63 sys
+          2834939904  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              225604  page reclaims
+                   3  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                 725  involuntary context switches
+         27562969816  instructions retired
+          8938796773  cycles elapsed
+           460575792  peak memory footprint

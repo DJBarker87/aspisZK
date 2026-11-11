@@ -1,0 +1,65 @@
+RPv_FIz_WideCoefficientsOnRun.lean:26:91: error: Application type mismatch: The argument
+  p
+has type
+  Public
+but is expected to have type
+  FIw_PublicModel.Public
+in the application
+  FIw_PublicModel.ofPublic p
+RPv_FIz_WideCoefficientsOnRun.lean:30:36: error: Application type mismatch: The argument
+  p
+has type
+  Public
+but is expected to have type
+  FIw_PublicModel.Public
+in the application
+  FIz_Retained24.value p
+RPv_FIz_WideCoefficientsOnRun.lean:27:58: error: unsolved goals
+p : Public
+o : Openings
+s : Selectors
+out : Std.Array NQ 24#usize
+hz : canonical o.z
+hs : canonical o.succ_z
+hx : canonical o.xor12_z
+hh : canonical s.high
+hl : canonical s.low
+ha : ∀ x ∈ ↑p.anchor, ↑x < FIw_ScalarArithmetic.P
+hn : ∀ x ∈ ↑p.nullifier, ↑x < FIw_ScalarArithmetic.P
+hr :
+  ∀ (recipient : Std.Array field.M31 8#usize),
+    p.recipient = some recipient → ∀ x ∈ ↑recipient, ↑x < FIw_ScalarArithmetic.P
+hc : ∀ x ∈ ↑p.change, ↑x < FIw_ScalarArithmetic.P
+hf : ∀ row ∈ ↑p.transition.live_snapshot.frontier, ∀ x ∈ ↑row, ↑x < FIw_ScalarArithmetic.P
+hnr : ∀ x ∈ ↑p.transition.candidate_afterstate.next_root, ↑x < FIw_ScalarArithmetic.P
+hnf : ∀ row ∈ ↑p.transition.candidate_afterstate.next_frontier, ∀ x ∈ ↑row, ↑x < FIw_ScalarArithmetic.P
+hab : ↑p.asset_id < FIw_ScalarArithmetic.P
+haw : ↑(p.withdrawal_amount.getD 0#u32) < FIw_ScalarArithmetic.P
+hm : ∑ h, FIv_NativeArray.value s.high ↑h = 1
+lm : ∑ l, FIv_NativeArray.value s.low ↑l = 1
+success : pool_v1.pair_forest_semantic_terminal.semantic_packed p o s = ok out
+native : canonical out ∧ decoded out = FIy_NativeCoefficients.model p o s
+⊢ (fun j => FIz_ConcretePack.embed (FIy_NativeCoefficients.model p o s j)) = fun j =>
+    R0P.pack4 ConcretePackBasis.basis fun i =>
+      FIz_ConcretePack.embed
+        (R0P.SemSource.scalarLaneAt (FIw_PublicModel.ofPublic sorry) (FIw_PublicModel.openings o)
+          (FIw_PublicModel.selector s) (4 * ↑j + ↑i))
+'AspisR1.FIz_WideCoefficientsOnRun.on_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        2.06 real         1.25 user         0.80 sys
+          3401728000  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              270044  page reclaims
+                  10  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   2  voluntary context switches
+                 248  involuntary context switches
+         22781636246  instructions retired
+          7540274647  cycles elapsed
+           529433360  peak memory footprint

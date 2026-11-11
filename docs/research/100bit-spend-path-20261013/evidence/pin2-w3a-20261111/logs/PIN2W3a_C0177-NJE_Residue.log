@@ -1,0 +1,41 @@
+theorem NJE_Residue.value : ∀ (n : ℕ), ↑(word n) = n % 2147483647 :=
+fun n =>
+  id
+    (Nat.mod_eq_of_lt
+      (have this :=
+        Nat.mod_lt n
+          (have this := of_decide_eq_true (id (Eq.refl true));
+          this);
+      Decidable.byContradiction fun a => value._proof_1 n this a))
+'NJE_Residue.value' depends on axioms: [propext, Quot.sound]
+theorem NJE_Residue.canonical : ∀ (n : ℕ), ↑(word n) < 2147483647 :=
+fun n =>
+  Eq.mpr (id (congrArg (fun _a => _a < 2147483647) (value n))) (Nat.mod_lt n (of_decide_eq_true (id (Eq.refl true))))
+'NJE_Residue.canonical' depends on axioms: [propext, Quot.sound]
+theorem NJE_Residue.multiply : ∀ (x y : U32),
+  AspisR1SemanticCallExtraction.aspis_core.field.M31.mul x y = ok (word (↑x * ↑y)) :=
+fun x y =>
+  let ⟨z, h✝⟩ := NJA_FieldLaws.generated_mul x y
+  let ⟨hz, right✝⟩ := h✝
+  let ⟨vz, cz⟩ := right✝
+  have eq := UScalar.eq_of_val_eq (Eq.trans vz (Eq.symm (value (↑x * ↑y))));
+  Eq.mp (congrArg (Eq (AspisR1SemanticCallExtraction.aspis_core.field.M31.mul x y)) (congrArg ok eq)) hz
+'NJE_Residue.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]
+        1.99 real         1.22 user         0.77 sys
+          3270541312  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              260272  page reclaims
+                  24  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   2  voluntary context switches
+                 252  involuntary context switches
+         21609571256  instructions retired
+          7222747981  cycles elapsed
+           518078256  peak memory footprint
