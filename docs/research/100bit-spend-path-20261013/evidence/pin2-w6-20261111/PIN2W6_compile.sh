@@ -28,9 +28,15 @@ if [ $EXIT = 0 ]; then mv $OV/$M.olean.tmp $OV/$M.olean; elif [ -f $OV/$M.olean.
 AFTER=$( [ -f $OV/$M.olean ] && shasum -a 256 $OV/$M.olean | cut -c1-16 || echo absent )
 WALL=$(grep -E ' real ' $LOG | tail -1 | awk '{print $1}')
 RSS=$(grep 'maximum resident set size' $LOG | awk '{print $1}')
-AX=$(grep -c "depends on axioms\|does not depend on any axioms" $LOG)
-BAD=$(grep "depends on axioms" $LOG | sed 's/.*depends on axioms: *//' | tr -d '[]' | tr ',' '\n' | sed 's/^ *//;s/ *$//' | grep -v -x -e propext -e Classical.choice -e Quot.sound -e '' | wc -l | tr -d ' ')
-SORRY=$(grep -c "declaration uses 'sorry'" $LOG)
+# Whole-log check (2026-11-11 audit fix): each '#print axioms' list is parsed across
+# continuation lines up to its closing bracket; BAD counts every non-standard axiom name
+# (sorryAx included); SORRY counts sorryAx anywhere plus "declaration uses 'sorry'".
+read AX BAD SORRY <<< $(python3 -I -c '
+import re,sys
+t=open(sys.argv[1],errors="replace").read()
+b=re.findall(r"depends on axioms: \[(.*?)\]",t,re.S)
+n={x.strip() for y in b for x in y.replace("\n"," ").split(",") if x.strip()}
+print(len(b)+t.count("does not depend on any axioms"), len(n-{"propext","Classical.choice","Quot.sound"}), t.count("sorryAx")+t.count("declaration uses '"'"'sorry'"'"'"))' $LOG)
 [ $EXIT = 0 ] && [ "$BAD$SORRY" != "00" ] && EXIT=99
 [ -s $TSV ] || printf 'id\ttarget\texit\twall_s\tmax_rss_bytes\tsource_sha256\trevision\taxioms\tolean_before16\tolean_after16\tnote\n' > $TSV
 printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s #print axioms lines; %s non-standard; %s sorry\t%s\t%s\t%s\n' $ID $M $EXIT "$WALL" "$RSS" $SHA $REV $AX $BAD $SORRY $BEFORE $AFTER "$NOTE" >> $TSV
