@@ -1154,6 +1154,40 @@ gives, for 32 ≤ j < n < 40 on the 40-row run under R1's `badColl` premise,
 and the table before row n's frame at those two cells (`absorbed j`,
 `previous (j+1)`).
 
+### 11.7 The literal constructor at rows 33 to 39 (reviewer's check of `LatePayload`)
+
+The reviewer found no payload-shaped counterexample: on the charged run, a
+`.payload b` at rows 33 to 39 passes every message-dependent gate of `decFinal`,
+whatever its length or bytes. What remains are table and oracle conditions,
+which rest on `hout` and `hQ`. `latePayload_of_checks` is genuine and not
+circular. The qualification is that `LatePayload` is stated on the erased
+message, and `.c2 b w` and `.second b w` also erase to `.payload b`. A literal
+`.c2` at a late row is restored by the decoder as `.payload b`, so the
+byte-level bridge W4 is false with `LatePayload pf` alone. W4's late-row premise
+is therefore on the literal constructor, `∀ i, 33 ≤ i → i < 40 → ∃ b, pf i =
+.payload b`, as in the second worker's `DecodesAndFollows40`. Neither
+`FinalDecoding40` nor `LatePayload` changes. The literal form is derived for
+the run that `final_decoding40` uses, in `lean/AspisRec40FinalLiteral.lean`
+(PSD-80):
+
+- `LateLiteral pf` is the literal form.
+- `canon_message_payload`: R16's canonical message at a row other than 2 and 30
+  is `.payload b` when the erased message is `.payload b`.
+- `lateLiteral_of_canon`: `LatePayload (R16CanonReduction.proof pf) →
+  LateLiteral (R16CanonReduction.proof pf)`.
+- `lateLiteral_enrich`: word enrichment keeps the literal form.
+- `base_proof`: the base run's proof is `R16CanonReduction.proof` of the
+  prover's proof (`ChargePrefix.prover_eval`).
+- `base_literal` and `charged_literal`: `LatePayload` on the base run gives
+  `LateLiteral` on the base run and on the charged run.
+
+The "weakest form" of 11.2 therefore holds only through canonicalisation. The
+reviewer's second counterexample, `finalDecodes_fails_c2` (a literal `.c2` at
+row 35), was not compiled. Refuting `FinalDecodes` there needs the shape of the
+decoder's output at row 36 through R1's own decoder branch of `decAspis`, which
+is not cheap. The reason the literal premise is needed is recorded above in
+words only.
+
 ## 12. Second worker: W3 and W1
 
 (Numbered 12 because section 11 was already present when this was appended.)
@@ -1329,3 +1363,99 @@ Hashes are copied from the first line of each receipt's stdout.log and match
 the repository files. No `sorry`, `axiom`, `opaque` or `native_decide`, and no
 limit was raised. PSG-06 prints one linter note (a `change` that does nothing).
 The files from round one are unchanged.
+
+## 13. The follow for rows 33 to 39, proved for every n
+
+`AspisRec40.FollowProof.follow p hD extract decision :
+AspisRec40.FollowStatement.FollowClaim p hD extract decision` compiled
+(PSD-87). Axioms: propext, Classical.choice, Quot.sound. The statement is the
+one compiled in 10.1 (PSD-74), unchanged. Its premises are R1's premises of
+`UnifiedRhoInjection.decodes_and_follows`: prior reads consistent with the
+oracle, the public length, the row-0 codec, the first-read budget `Qtot`, and
+R1's two collision exclusions on the 40-row address-level trace. The
+conclusion holds for every n with 33 ≤ n < 40. Row 33 is not a separate case.
+Under the prover-first ordering, nothing in the statement failed.
+
+### 13.1 Files
+
+- `lean/AspisRec40FollowLists.lean` (PSD-82): list lemmas.
+  - `zip_map_same` and `laterRows_range`.
+  - `challenge_plain`: the challenge of a plain row i ≥ 32 is `liftChallenge
+    (σ i (H (squeeze (absorbed i))), H (advance (absorbed i)))`.
+  - `message_payload`.
+  - `frames_eq`, `messages_eq` and `nexts_eq`: the actual context's rows 32 to
+    n−1 as maps over `List.range (n − 32)`.
+- `lean/AspisRec40FollowPrefix.lean` (PSD-84): `prefix_part`. The final
+  component's prefix on `actualCtx n`, at the answers `missing.map H`, is row
+  n's actual transcript. Its hypotheses are a table consistent with the oracle,
+  R1's query recovery at that table, and the frames of rows 32 to n−1 in the
+  table with their absorbed states. It is algebra only and uses no trace and no
+  collision premise. Rows 0 to 31 come from R1's `fromAnswers_map` and
+  `UnifiedQueryRun.prefix32`. Rows 32 to n−1 come from `laterRows_range`, the
+  table-or-pending answer of each squeeze cell (`getter_correct` and
+  `accFrom_map`, with every absent squeeze cell pending), `challenge_plain` and
+  `final_state_step`.
+- `lean/AspisRec40FollowProof.lean` (PSD-87):
+  - Generic lemmas, with no 40-row run: `squeeze_facts`, `new_facts`,
+    `new_disjoint`, `joint_facts`, `recover_at`, and `own_follow`, which is the
+    body of R1's `JointNextTrace.follows_after_prefix_query` for an arbitrary
+    pending list.
+  - `follow`. Its setup is a copy of `FinalContext.joint_at`.
+    - R1's anchor-parametric `OpeningAnchorCells.cells_before_anchor`, at
+      anchor row n's frame `cn`, gives the prefix records at `T_n`. R1's
+      `PrefixPendingFacts.pending_facts` at `cn` then gives their pending
+      facts.
+    - The query states are pending by the seek at `T_n`. Each differs from
+      `H cn` by `known_ne_endpoint`, using cells carried from row 32's table by
+      `table_mono`. R1's query recovery holds at `T_n` because the query
+      completion at the oracle's answers does not depend on the table
+      (`complete_states` at both tables).
+    - The squeeze cells of rows 32 to n−1 absent from `T_n` are read
+      (`final_reads`). Each differs from `cn` (a squeeze frame does not
+      parse), from `cn`'s squeeze (`known_ne_endpoint` with row j's frame in
+      `T_n`, `run_cells`) and from `cn`'s advance.
+    - R1's `QueryOwnFollow.follow` gives the output at the oracle's answers.
+      `prefix_part`, `message_payload` and `challenge_plain` give the
+      conclusion.
+
+### 13.2 What this does and does not close
+
+This closes the follow half of W4 at the address level, on the run model of
+10.1. It does not close the byte-to-address bridge
+`FinalBridgeStatement.DecodesAndFollows40`, which still has to be proved from:
+
+- this follow;
+- W1 (`context_at`);
+- W2 (`select_at`, with `pub.tag = 2`);
+- W3 (`constructed_components40`);
+- R1's byte-level restore.
+
+After that come `final_decoding40`, `AspisFailureBoundModel` and the constant
+walk.
+
+### 13.3 Validation
+
+| Attempt | Module | Source sha256 | Exit | Wall | Peak RSS (time) | cgroup peak | Axioms |
+|---|---|---|---|---|---|---|---|
+| PSD-80 | AspisRec40FinalLiteral | 1b26dc0726091481dc70c06a0681b18f636a9b0bcfc2f159bc873d6029775220 | 0 | 2.37 s | 4,249,156 KB | 425,574,400 B | propext, Classical.choice, Quot.sound (all six) |
+| PSD-82 | AspisRec40FollowLists | aad99e8bc3029196306b9ce26d62fb45b9e135aa553a38fd671b9f2556984db6 | 0 | 2.35 s | 3,519,016 KB | 365,420,544 B | `zip_map_same`: propext; the others: propext, Quot.sound |
+| PSD-84 | AspisRec40FollowPrefix | 96cb77d2894d337b1c9f8f64bc4b75e5ce4e7831d5218e449ebaf0cedcf739fb | 0 | 2.09 s | 3,517,544 KB | 364,023,808 B | propext, Classical.choice, Quot.sound |
+| PSD-87 | AspisRec40FollowProof | c639c53c420bee8ebd089a86611e8c81073cd7e088307dc31dda95f725c740b4 | 0 | 2.73 s | 3,537,088 KB | 382,058,496 B | `follow`: propext, Classical.choice, Quot.sound; helpers: subsets of these |
+
+Failed attempts:
+
+- PSD-79 (78b1ebcee6657e4e1255ef00dc11bfa312777437e22e261aaf0704284fc60b14) and
+  PSD-81 (8731cee875f16196ffc50e86a51606b521255db94cfe2854d92d3657bf347801):
+  `rfl` on `33 + j` against `32 + (j + 1)`.
+- PSD-83 (96832c5078efbeafa3445b6eccb63ba902b4d73365e47c6bd9a2948969966532):
+  a `rw` with `laterRows_range` did not match the beta-reduced list.
+- PSD-85 (a8ab3841694225f56f85935bf3f4d4d2a9b25a264c2e375025bbd3cb5985b898):
+  a wrong namespace for `missing_mem_states`, and a heartbeat timeout at
+  `contradiction`, which put the 40-row trace into whnf. It was restructured
+  into generic lemmas, with no limit raised.
+- PSD-86 (d794347993c5b04e30774392b0a7387b4cb6aa685396b68a70d0a3b3b18e9e82): a
+  `headD` goal left open.
+
+Hashes are copied from the first line of each receipt's stdout.log and match
+the repository files. No `sorry`, `axiom`, `opaque` or `native_decide`, and no
+limit was raised.
