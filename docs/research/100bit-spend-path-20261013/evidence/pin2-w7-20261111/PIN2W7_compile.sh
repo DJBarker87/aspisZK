@@ -29,7 +29,8 @@ AFTER=$( [ -f $OV/$M.olean ] && shasum -a 256 $OV/$M.olean | cut -c1-16 || echo 
 WALL=$(grep -E ' real ' $LOG | tail -1 | awk '{print $1}')
 RSS=$(grep 'maximum resident set size' $LOG | awk '{print $1}')
 AX=$(grep -c "depends on axioms\|does not depend on any axioms" $LOG)
-BAD=$(grep "depends on axioms" $LOG | sed 's/.*depends on axioms: *//' | tr -d '[]' | tr ',' '\n' | sed 's/^ *//;s/ *$//' | grep -v -x -e propext -e Classical.choice -e Quot.sound -e '' | wc -l | tr -d ' ')
+# axiom lists may wrap over several lines: join each list up to its closing bracket first
+BAD=$(python3 -c 'import re,sys; t=open(sys.argv[1]).read(); L=re.findall(r"depends on axioms: \[([^\]]*)\]", t); print(sum(1 for l in L for a in l.split(",") if a.strip() not in ("propext","Classical.choice","Quot.sound")))' $LOG)
 SORRY=$(grep -c "declaration uses 'sorry'" $LOG)
 [ $EXIT = 0 ] && [ "$BAD$SORRY" != "00" ] && EXIT=99
 [ -s $TSV ] || printf 'id\ttarget\texit\twall_s\tmax_rss_bytes\tsource_sha256\trevision\taxioms\tolean_before16\tolean_after16\tnote\n' > $TSV
