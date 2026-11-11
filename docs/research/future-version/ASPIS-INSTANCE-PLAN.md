@@ -446,3 +446,56 @@ Plan changes taken from the other agents' notes:
   one start per new row in an honest run" is not needed; the reseed frame
   (row 26) parses as a frame of any row 0 to 39 for some state values and is
   charged the largest cap over all 40 rows.
+
+## 5. Items 8, 9, 10 and the weighted charged count: COMPILED
+
+Statement (`AspisChargedWeight40.lean`, `AspisPerStep.ChargedWeight40`):
+
+    theorem charged_weight40 (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
+        (hq : ∀ H : Bytes → State, (eval H P).1.length ≤ Q) (H : Bytes → State) :
+        decoderFirstWeight AspisRows40.FinalStarts.decFinal charge40 emptyTable
+          (eval H (AspisRec40.ChargePrefix.charged D P)).1 ≤
+          (Q : ℚ) * capMax + verifierCharge40
+
+with `verifierCharge40 = verifierCharge + capLambda + 6 * capRound`
+(`AspisRowStarts40.verifierCharge40_eq`). This is a deterministic counting
+theorem for every oracle `H`; it is not a hit-mass or probability bound.
+
+- Item 8 (`AspisClassifier40.lean`): `budget40` (R1's budget below 32,
+  `capPair` at 32, `capLambda` at 33, `capRound` at 34 to 39); density of
+  the classifier on the literal prefix (rows 0 to 32) and its erased copy;
+  rows 33 to 39 in the row-densities shape (`read33`/`S33`, `readR`/`SR`,
+  sizes at most 1 and 2, `finalEvent_iff33`, `finalEvent_iffR`).
+- Item 9 (`AspisCharge40.lean`): `charge40 a T` is `finalCap n` when
+  `finalRow a = some n` (rows 33 to 39) and R1's `charge` with
+  `RawFullPublicSelection.select` otherwise; `decFinal_le_charge40` bounds
+  the classifier's first-read law by `charge40` at every decoded start.
+  Deviation from the plan text: the charge at rows 33 to 39 is the constant
+  cap `finalCap n` (an upper bound), not a value computed through
+  `FinalByte.select`; the density is taken through `FinalByte.fin_bound`.
+- Item 10 (`AspisRowStarts40.lean`): `sampler_weight40`, `rows_weight40`,
+  `verifier_weight40` (verifier's 41 starts, upper bounds only; the reseed
+  frame at row 26 is charged `classCap 26 + capMax`, `capMax` the largest
+  cap over all 40 rows), `verifierCharge40_eq`.
+
+Receipts (build host, L187 objects, `fv_lean.sh`):
+
+| Attempt | Module | sha256 | Exit | Wall | RSS (time) | cgroup |
+|---|---|---|---|---|---|---|
+| PSA-e-02 | AspisClassifier40 | 3a7ffd96…f048ea | 0 | 7.07 s | 3,587,172 KB | 398,946,304 |
+| PSA-e-07 | AspisCharge40 | 0b0bf570…e4eb | 0 | 2.50 s | 4,221,984 KB | 442,785,792 |
+| PSA-e-10 | AspisRowStarts40 | e7a37a8b…c948 | 0 | 4.80 s | 4,230,920 KB | 458,129,408 |
+| PSA-e-12 | AspisChargedWeight40 | 934045c8…f404 | 0 | 3.63 s | 4,215,396 KB | 431,779,840 |
+
+All axiom lines `[propext, Classical.choice, Quot.sound]`. Failed attempts:
+PSA-e-01 (rewrite under a binder), e-03 to e-06 (reserved identifier, a
+`let`-bound read not unfolded, a matcher mismatch), e-08 (10 errors: the
+decoder name `decFinal` was not unfolded so the row lemmas did not fire, an
+`omega`/recursion failure in the reseed branch, and kernel excessive memory
+in a broad `simp` over `List.range`; 68.7 s, 7.19 GB RSS, cgroup 3.55 GB;
+restructured, not rerun), e-09 (one kernel excessive-memory error left in
+`verifierCharge40_eq`'s broad `simp`; replaced by explicit row lemmas),
+e-11 (missing `open`).
+
+Not done here: item 14 (the composed hit-mass bound for Aspis). Nothing in
+this section is a security figure.
