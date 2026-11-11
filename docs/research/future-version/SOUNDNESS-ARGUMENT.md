@@ -122,6 +122,32 @@ UnifiedLabels.label n` and concludes with `maxErr rb.ε 33`; `UnifiedSampler`
 special-cases row 26 (reseed) and row 31 (queries). The 40-row transcript needs
 its own protocol instance, decoder, classifier (D1/D2/D3) and start count.
 
+### Independent review of findings 1 and 3 (soundness lead's reviewer, 2026-11-11)
+
+A reviewer working for the soundness lead read the R1 Lean separately. Result, with its references:
+
+- Finding 1 is confirmed. `F3T_Numeric.total` is `(Q+34)*B + collisionLoss + accountLoss + 2^-126
+  + 2^-454`; `restricted_union_bound` (lean/Frozen2StartChargeProbability.lean:29-36) goes through
+  `shared_hit_mass_le_starts` (RawAdaptiveClassifierStartBound.lean:18-36) to
+  `decoded_first_read_bound` (DecodedFirstReadUnionBound.lean:29-35), which takes one scalar and
+  concludes `N * eps`. The per-row budgets exist as definitions and are replaced by `B` at
+  `LiteralBudgetEnvelope.row_le` (LiteralBudgetEnvelope.lean:40). `theorem43` and
+  `combined_fiat_shamirZ` charge `Qtot * maxErr`, a maximum over rows (FS/Statement.lean:232).
+- CORRECTION to finding 3. `verifier_starts` is not fixed at 33: it concludes at most 34
+  (BinHonestQueryBudget.lean:104-111; row 26 is counted twice by `sampler_starts`).
+  `UnifiedFiatShamir.soundness_bound` (UnifiedFiatShamir.lean:23-48) does carry the 33-row premise,
+  but the headline `total` does not use it. The conclusion of finding 3 stands in this form: the
+  headline's start count and its single density are both specific to R1's 33 rows.
+- A per-kind accounting is new proof in three pieces: a weighted `decoded_first_read_bound` (a cap
+  per start by decoded row, with a weighted start budget); a per-row density lemma that stops
+  before `row_le`, which needs the decoded row fixed at each start because
+  `RawUnifiedDecoder.decoded_bound` quantifies over all 33 rows; and a per-row replacement for the
+  `Q+34` starts theorem. The adversary's `Q` starts still cost `B` each.
+  `mean_firstHit_union_le` (CausalFirstHitUnionBound.lean:48) is a static union bound over a fixed
+  index set and cannot stand in.
+- Arithmetic from the definitions: row 31 alone is `0.967*B` (it sets `B`); the 33 R1 caps sum to
+  about `1.58*B`, in line with the "roughly 1.6*B" above.
+
 ### Finding 4: the final sumcheck's fresh transcript start reuses the R1 frame
 
 `H(domain ‖ tag ‖ p.state)` is byte-for-byte the form of the R1 reseed

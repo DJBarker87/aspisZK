@@ -19,9 +19,11 @@ with `B = 15/2^109`. `B` is a common envelope charged to every transcript start,
 rows. At `Q = 0` the R1 bound is `34·B = 510/2^109`, and the contract's criterion (A),
 `total(0) < 2^-100`, holds with a margin of about `2^-108`, which is `2/2^109`.
 
-Aspis adds seven transcript rows (the combining challenge and six sumcheck rounds). One more start
-at the common envelope already exceeds the margin. With 41 starts the same accounting gives
-`41·B = 615/2^109`, about `1.2 · 2^-100`. No common envelope repairs this, because the query row
+Aspis adds seven transcript rows (the combining challenge and six sumcheck rounds) and one fresh
+transcript start for the final sumcheck. One more start at the common envelope already exceeds
+the margin. With 42 starts the same accounting gives `42·B = 630/2^109`, about `1.23 · 2^-100`
+(first written here as 41 starts and `1.2`; the soundness agent found the extra start, and the
+soundness lead's reviewer confirmed the accounting from the Lean source). No common envelope repairs this, because the query row
 alone is about `14.5/2^109` and `40 · 2^-105.14 > 2^-100`.
 
 Consequences:
@@ -58,6 +60,13 @@ Two statement fields are outside the transcript bytes, as in R1:
   the authenticated lane account (`r1_pool_adapter_owned.rs`, the snapshot built before
   `reconstruct_asq8_statement`). No use of the proof for that field was found. It is recorded here
   because an unbound field is how the withdrawal-destination problem arose.
+  Reviewed for R1 as well by the soundness lead's reviewer (2026-11-11): no exposure found on the
+  two-transaction path either. There the binding goes through a hash check, not the transcript:
+  the first transaction stores the hash of the uploaded statement bytes in the checkpoint, the
+  second rebuilds the statement with the root from the Pool-owned lane account and rejects if the
+  hashes differ. Two caveats carry over to Aspis: the proof model has to carry this binding at the
+  entry, not in the transcript, and the match between root and frontier rests on the Pool's write
+  invariant; it is not recomputed by the verifier.
 
 Bytes of the proof that are neither absorbed nor checked: none found. Unused multiproof slot bytes
 must be zero, reserved header bytes must be zero, certificate limbs must be canonical (existing
