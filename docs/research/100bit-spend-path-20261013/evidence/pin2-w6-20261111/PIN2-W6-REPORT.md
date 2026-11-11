@@ -195,6 +195,8 @@ No regenerated module source lives anywhere else. Three locations hold files tha
 
 `RPz8_JFx_DataProof14` is not regenerated. Its PIN2 text is identical to the release (`KEEP-RELEASE.tsv`).
 
+Two objects in overlay-PIN2-W4 come from unchanged release sources: `NDO_JFu_Q26Aggregate` (W5 C0097, research blob `cce65c76`) and `NDO_JFr_HornerTrace` (W5 C0076, research blob `30958560`). W5 compiled them because their imports changed. Neither is in objs, since both are outside the release closure, so there is no release object to compare them against. Copies of their research sources are now in `pin2-w6-20261111/sources/` and are listed in the manifest with status "unchanged release source". The manifest therefore has 493 entries.
+
 ## 10. Next concrete deliverable
 
 The host compiles the 137 uncompiled regenerated sources (83 from W5 and 54 from W6) and the rest of the fixture-downstream closure from the sources in §9.
