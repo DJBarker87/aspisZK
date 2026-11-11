@@ -768,3 +768,64 @@ have to come from the proof format, not from the arithmetic:
 Together with the 384-byte certificate that would leave the proof about 3 KB
 smaller than today, which is one upload transaction fewer. Both need the
 prover; neither has been built or measured.
+
+## Round 5: proof format and prover (owner direction, 11 November)
+
+The soundness rows for the changed verifier are written out in
+`SOUNDNESS-ROWS.md` (committed with this section, before the code).
+
+### The summed format (design and pre-registration)
+
+**Dropped: the shallower folded tree.** The folded tree is padded from `2^16`
+to `2^18` leaves at the top, where all 22 paths have already merged, so depth
+16 would save two parent hashes and 64 bytes, not the forty hashes estimated
+earlier. It is not worth a change to a commitment.
+
+**Layout.** Identical to the pinned compact format up to the end of the 22
+openings (offsets unchanged, so the pinned parsing, scan and preparation code
+applies as it is), with a new magic. Then:
+
+| Section | Bytes |
+|---|---:|
+| Header, semantic, `y1`, inactive, round 0, folded root, round 1, final message, 22 openings (as pinned) | 28,359 |
+| C1 multiproof over the 22 queries, zero-padded to 296 nodes | 9,472 |
+| C2 multiproof, the same indices, 296 nodes | 9,472 |
+| Folded multiproof over the distinct `u / 4`, 254 nodes | 8,128 |
+| Stage D certificate | 384 |
+| Total | 55,815 |
+
+The pinned format is 57,607 bytes. With the 688-byte candidate prefix the
+proof account is 56,503 bytes: 58 bytes more than 15 uploads carry at today's
+chunk size (3,763), and within 15 uploads if the client fills each upload
+transaction to the 4,096-byte limit (it leaves 67 bytes unused today). The
+upload count is therefore not claimed either way.
+
+**Transcript.** Unchanged for rows 0 to 32. A pinned proof can be re-packed
+into the summed format from public data alone: the merged multiproof's nodes
+are a subset of the two batches' nodes, and the certificate is a function of
+the proof. The prover's publish step is that re-packing of its own pinned
+output; a native emission from the trees would produce the same bytes. Version
+separation of the transcript is listed as an open decision in the soundness
+note.
+
+**Verifier.** `verify_summed_format`: shape check for the new length and
+magic, the pinned scan and preparation, three merged multiproofs (C1 and C2
+share one sorted index schedule), stage C, the relation round checks and
+stage D with the certificate read from the proof.
+
+**Pre-registration.**
+
+- Baseline: the kept set W20 (1,206,081 to 1,209,165, certificate in a
+  separate account) and the replay figures 1,328,287 and 1,337,700.
+- Prediction: about 46 fewer parent hashes than the two-batch form on these
+  fixtures, at about 172 CU each, less the cost of sorting 22 keys in place of
+  10 and 12: a saving of about 6k. Proof bytes 55,815 (fixed by the layout).
+- Tests required: the six fixtures re-packed and accepted; a pinned proof
+  rejected by the summed verifier and a summed proof by the pinned one; every
+  region mutated and rejected, including certificate bytes, multiproof nodes
+  and slot padding; the merged node count equal to the pinned count function
+  on the fixtures' index sets and within the slot bounds; the bit-reversed
+  index sets attaining 296 and 254.
+- Measurement: W22 = W20 with the summed-format path, plain build, six
+  fixtures; and the replay of the two devnet settlements with the proof
+  buffer re-packed into the summed format and the certificate inside it.
