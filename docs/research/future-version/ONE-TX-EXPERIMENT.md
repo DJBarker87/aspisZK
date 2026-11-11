@@ -399,3 +399,88 @@ is above the 1,275,000 line, so the predicted outcome is "not supported by
 exact changes plus batching". E5, E6 and E7 change only this branch's own
 stage C kernels; the others change pinned source behind default-off features.
 Candidates are measured in the order E1, E2, E3, E4a, E5, E6, E7, E8, E9, E4b.
+
+### Round 2: results
+
+**Outcome, in the wording fixed beforehand: one transaction is not supported
+by exact changes plus batching.** The final cumulative build is 1,438,749 to
+1,442,350 CU on the six fixtures, 163,749 to 167,350 above the 1,275,000 line.
+
+Cumulative program CU of the batched verifier (builds without profiling or
+debug information; source `f764b9f3167` for W1 to W3 and `b6dfdb9d58b` after):
+
+| Build | transfer-13 | transfer-255 | transfer-1023 | withdrawal-13 | withdrawal-255 | withdrawal-1023 | Saving on the previous build |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| W0 (B6) | 1,602,695 | 1,606,608 | 1,604,063 | 1,602,820 | 1,604,268 | 1,604,178 | |
+| W1 = W0 + E1 | 1,542,489 | 1,546,726 | 1,544,310 | 1,543,133 | 1,544,721 | 1,544,765 | 59,413 to 60,206 |
+| W2 = W1 + E2 | 1,523,799 | 1,528,045 | 1,525,633 | 1,524,421 | 1,526,025 | 1,526,056 | 18,677 to 18,712 |
+| W3 = W2 + E3 | 1,507,796 | 1,512,042 | 1,509,630 | 1,508,418 | 1,510,022 | 1,510,053 | 16,003 |
+| W4 = W3 + E4a | 1,470,304 | 1,473,877 | 1,471,864 | 1,470,658 | 1,471,980 | 1,472,037 | 37,492 to 38,165 |
+| W5 = W4 + E5 | 1,462,716 | 1,466,289 | 1,464,290 | 1,463,080 | 1,464,390 | 1,464,451 | 7,574 to 7,590 |
+| W6 = W5 + E6 | 1,467,684 | 1,471,220 | 1,469,252 | 1,468,015 | 1,469,358 | 1,469,366 | regression of 4,915 to 4,968 |
+| W7 = W6 + E7 | 1,451,851 | 1,455,387 | 1,453,419 | 1,452,182 | 1,453,525 | 1,453,533 | 15,833 |
+| W8 = W7 + E8 | 1,443,717 | 1,447,281 | 1,445,305 | 1,444,050 | 1,445,390 | 1,445,395 | 8,106 to 8,138 |
+| W9 = W8 without E6 | 1,438,749 | 1,442,350 | 1,440,343 | 1,439,115 | 1,440,422 | 1,440,480 | |
+
+| Candidate | Predicted | Measured | Decision |
+|---|---:|---:|---|
+| E1 prepared multiply | 30k | 59.4k to 60.2k | kept |
+| E2 square | 16k | 18.7k | kept |
+| E3 validated decode | 5k | 16.0k | kept |
+| E4a Merkle single traversal | 36k | 37.5k to 38.2k | kept |
+| E5 base-lane kernel | 50k | 7.6k | kept |
+| E6 QM31-lane kernel | 30k | regression of 4.9k | dropped |
+| E7 final-weight accumulation | 40k | 15.8k | kept |
+| E8 boundary sum | 9k | 8.1k | kept |
+| E9 final message decoded once | 9k | not implemented | not measured |
+| E4b Merkle parent loop | 20k | not implemented | not measured |
+
+The predictions for the pinned-source candidates were low or close; the
+predictions for this branch's own kernels (E5, E6, E7) were high by a factor
+of two to six. A limb product with its accumulator in memory costs about six
+instructions on SBF whatever the loop shape, which the predictions for E5 and
+E7 did not allow for. E7 was measured on top of E6 and W9 confirms that
+removing E6 returns exactly its regression. E9 and E4b were not built; their
+predictions sum to 29k, which would not change the outcome.
+
+W9 is ELF `52b05716…c229e19`. Every build accepted all six fixtures in the
+pinned, fused and batched modes. Host tests with every kept feature on: 30
+verifier library tests and 281 `aspis-core` library tests pass, including one
+equivalence test per candidate against the form it replaces (60,000 operand
+pairs for E1 and E2; every validated semantic value of every fixture for E3;
+every slot of every fixture under a changed node, changed padding, both, a
+short slot and a malformed index set for E4a, with the error kind compared;
+30 random and edge cases plus maximal limbs for E5; all fixtures for E7;
+2,000 polynomials for E8). `aspis-statement` has 258 passing tests and one
+failure, `format_binding_pins_existing_primitives`, which fails identically at
+the pin without any feature of this branch.
+
+**The same build on the pinned mathematics** (E1 to E3, E4a and E8 apply to
+it; E5 and E7 do not):
+
+| | Stage 1 | Stage 2 | Sum | Fused, pinned mathematics |
+|---|---:|---:|---:|---:|
+| Deployed (B1) | 1,204k to 1,209k | 1,025k to 1,031k | 2,234k to 2,238k | 2,091k to 2,094k |
+| All kept exact changes (W9) | 931k to 935k | 804k to 808k | 1,738k to 1,742k | 1,610k to 1,614k |
+
+So the exact changes alone take about 496k (22%) off the two-transaction
+verifier with no change to what it accepts.
+
+**Inventory of W9** (debug-line build of the same features, transfer-13,
+1,278,574 instructions and 159,365 CU of syscall charges). Inclusive
+instructions: semantic layer 354,633 (terminal 254,444, of which the copy
+terminal 116,953 and Poseidon 49,032; ten rounds 57,583); batched folds
+326,236 (base lanes 123,266); relation 262,545; Merkle 111,046 plus 21,960 in
+the SHA wrapper; final-weight accumulation 85,972; preparation 84,833. By
+source file, `field.rs` is still 448,976 instructions: canonical addition
+about 103k, subtraction about 32k, reductions about 119k. What remains is
+spread over many small kernels; no single exact change of the size of E1 or
+E4a is visible in it.
+
+**Reading.** After this round the verifier is 1.44M, or about 1.56M with the
+Pool and adapter, against 1.40M. Closing the remaining 165k with further exact
+changes would mean rewriting the terminal's arithmetic to carry unreduced
+sums, which is a change to about 2,500 lines of pinned statement code, with
+no measured basis yet for its yield. The one non-exact candidate with a
+budget of the right size is the terminal-relation sumcheck (the relation is
+262k instructions). Neither has been measured, so neither is counted.
