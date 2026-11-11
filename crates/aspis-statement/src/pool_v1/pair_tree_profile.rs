@@ -526,88 +526,7 @@ pub fn decode_pool_v1_pair_live_snapshot_v1(
         bytes[128..160].try_into(),
     ))
     .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?;
-    let frontier = [
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[160..192].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[192..224].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[224..256].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[256..288].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[288..320].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[320..352].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[352..384].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[384..416].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[416..448].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[448..480].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[480..512].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[512..544].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[544..576].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[576..608].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[608..640].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[640..672].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[672..704].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[704..736].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[736..768].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
-            bytes[768..800].try_into(),
-        ))
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-    ];
+    let frontier = decode_live_snapshot_frontier_v1(bytes)?;
     let snapshot = PoolV1PairLiveSnapshotV1 {
         pool: crate::atomic_statement::unwrap_fixed_slice(bytes[48..80].try_into()),
         deployment_domain: crate::atomic_statement::unwrap_fixed_slice(bytes[80..112].try_into()),
@@ -765,6 +684,26 @@ pub fn absorb_pool_v1_pair_public_statement_before_c1_root_v1(
         bytes,
     );
     Ok(statement)
+}
+
+/// The twenty frontier digests of a live snapshot, read in level order from
+/// `160 + 32 * level`; the first non-canonical digest is reported.
+/// Translator-shaped (Aspis translatability pass): one index loop, nothing
+/// after it but the result. The caller has checked the length.
+fn decode_live_snapshot_frontier_v1(
+    bytes: &[u8],
+) -> Result<[Digest; POOL_V1_PAIR_TREE_DEPTH], PoolV1PairLiveSnapshotErrorV1> {
+    let mut frontier = [[aspis_core::field::M31::ZERO; 8]; POOL_V1_PAIR_TREE_DEPTH];
+    let mut level = 0;
+    while level < POOL_V1_PAIR_TREE_DEPTH {
+        let start = 160 + 32 * level;
+        frontier[level] = decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+            bytes[start..start + 32].try_into(),
+        ))
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?;
+        level += 1;
+    }
+    Ok(frontier)
 }
 
 #[cfg(test)]
@@ -980,5 +919,243 @@ mod tests {
             decode_pool_v1_pair_late_public_statement_v1(&afterstate_envelope),
             Err(PoolV1PairLatePublicStatementErrorV1::Afterstate(_))
         ));
+    }
+}
+
+/// Differential oracle for the translatability rewrite of the frontier read:
+/// the pre-rewrite text of `decode_pool_v1_pair_live_snapshot_v1`, kept
+/// verbatim and compared with the shipped form in both directions.
+#[cfg(test)]
+mod translatability_oracle {
+    use super::*;
+    use aspis_core::field::{M31, P};
+
+    fn decode_pool_v1_pair_live_snapshot_v1_old(
+        bytes: &[u8],
+    ) -> Result<PoolV1PairLiveSnapshotV1, PoolV1PairLiveSnapshotErrorV1> {
+        if bytes.len() != POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES {
+            return Err(PoolV1PairLiveSnapshotErrorV1::WrongLength);
+        }
+        if bytes[..8] != POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC[0..8] {
+            return Err(PoolV1PairLiveSnapshotErrorV1::WrongMagic);
+        }
+        if bytes[8] != POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION {
+            return Err(PoolV1PairLiveSnapshotErrorV1::WrongVersion);
+        }
+        if bytes[9] != 0
+            || bytes[10] != 0
+            || bytes[11] != 0
+            || bytes[12] != 0
+            || bytes[13] != 0
+            || bytes[14] != 0
+            || bytes[15] != 0
+        {
+            return Err(PoolV1PairLiveSnapshotErrorV1::NonZeroReserved);
+        }
+        if bytes[16..48] != POOL_V1_PAIR_TREE_FORMAT_BINDING[0..32] {
+            return Err(PoolV1PairLiveSnapshotErrorV1::WrongFormatBinding);
+        }
+        let current_root = decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+            bytes[128..160].try_into(),
+        ))
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?;
+        let frontier = [
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[160..192].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[192..224].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[224..256].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[256..288].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[288..320].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[320..352].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[352..384].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[384..416].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[416..448].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[448..480].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[480..512].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[512..544].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[544..576].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[576..608].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[608..640].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[640..672].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[672..704].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[704..736].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[736..768].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+            decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[768..800].try_into(),
+            ))
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        ];
+        let snapshot = PoolV1PairLiveSnapshotV1 {
+            pool: crate::atomic_statement::unwrap_fixed_slice(bytes[48..80].try_into()),
+            deployment_domain: crate::atomic_statement::unwrap_fixed_slice(bytes[80..112].try_into()),
+            sequence: u64::from_le_bytes(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[112..120].try_into(),
+            )),
+            next_pair_index: u64::from_le_bytes(crate::atomic_statement::unwrap_fixed_slice(
+                bytes[120..128].try_into(),
+            )),
+            current_root,
+            frontier,
+        };
+        validate_pool_v1_pair_live_snapshot_v1(&snapshot)?;
+        Ok(snapshot)
+    }
+
+    struct Rng(u64);
+    impl Rng {
+        fn next(&mut self) -> u64 {
+            self.0 ^= self.0 << 13;
+            self.0 ^= self.0 >> 7;
+            self.0 ^= self.0 << 17;
+            self.0
+        }
+        fn byte(&mut self) -> u8 {
+            self.next() as u8
+        }
+        /// A digest word: canonical, the boundary values, or arbitrary.
+        fn word(&mut self) -> u32 {
+            match self.next() % 5 {
+                0 => P - 1,
+                1 => P,
+                2 => u32::MAX,
+                3 => self.next() as u32,
+                _ => (self.next() % u64::from(P)) as u32,
+            }
+        }
+        fn digest(&mut self) -> Digest {
+            core::array::from_fn(|_| M31((self.next() % u64::from(P)) as u32))
+        }
+    }
+
+    fn valid(rng: &mut Rng) -> PoolV1PairLiveSnapshotV1 {
+        let index = rng.next() % POOL_V1_PAIR_CAPACITY;
+        PoolV1PairLiveSnapshotV1 {
+            pool: [rng.byte() | 1; 32],
+            deployment_domain: [rng.byte() | 1; 32],
+            sequence: index,
+            next_pair_index: index,
+            current_root: rng.digest(),
+            frontier: core::array::from_fn(|_| rng.digest()),
+        }
+    }
+
+    fn encode(value: &PoolV1PairLiveSnapshotV1) -> [u8; POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES] {
+        let mut image = [0u8; POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES];
+        encode_pool_v1_pair_live_snapshot_v1(value, &mut image).unwrap();
+        image
+    }
+
+    fn compare(bytes: &[u8]) -> bool {
+        let new = decode_pool_v1_pair_live_snapshot_v1(bytes);
+        assert_eq!(new, decode_pool_v1_pair_live_snapshot_v1_old(bytes), "{bytes:?}");
+        if let Ok(value) = new {
+            assert_eq!(encode(&value).as_ref(), bytes);
+        }
+        new.is_ok()
+    }
+
+    #[test]
+    fn live_snapshot_decoder_equals_the_old_text_on_every_single_byte_corruption() {
+        let mut rng = Rng(0x5a95_0000_0000_0001);
+        let mut cases = 0usize;
+        for _ in 0..3 {
+            let value = valid(&mut rng);
+            let image = encode(&value);
+            assert_eq!(decode_pool_v1_pair_live_snapshot_v1(&image), Ok(value));
+            for position in 0..image.len() {
+                for byte in 0..=255u8 {
+                    let mut corrupted = image;
+                    corrupted[position] = byte;
+                    compare(&corrupted);
+                    cases += 1;
+                }
+            }
+            let mut long = image.to_vec();
+            long.extend_from_slice(&[0u8; 8]);
+            for length in 0..long.len() {
+                compare(&long[..length]);
+                cases += 1;
+            }
+        }
+        assert!(cases > 600_000, "{cases}");
+    }
+
+    #[test]
+    fn live_snapshot_decoder_equals_the_old_text_on_random_images() {
+        let mut rng = Rng(0x5a95_0000_0000_0002);
+        let mut accepted = 0usize;
+        for case in 0..150_000usize {
+            let value = valid(&mut rng);
+            let mut image = encode(&value);
+            for _ in 0..(rng.next() % 4) {
+                let word = (rng.next() % 168) as usize;
+                let start = 128 + 4 * word;
+                image[start..start + 4].copy_from_slice(&rng.word().to_le_bytes());
+            }
+            if case % 13 == 0 {
+                image[112 + 8 * (rng.next() % 2) as usize] ^= 1;
+            }
+            if case % 17 == 0 {
+                image[(rng.next() % 16) as usize] = rng.byte();
+            }
+            accepted += usize::from(compare(&image));
+        }
+        assert!(accepted > 10_000, "{accepted}");
     }
 }

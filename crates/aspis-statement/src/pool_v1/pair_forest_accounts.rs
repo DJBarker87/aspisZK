@@ -213,11 +213,7 @@ fn validate_master(
     }
     validate_verifier_policy_v1(&master.verifier_policy)
         .map_err(|_| PoolV1PairForestAccountErrorV1::Policy)?;
-    if master
-        .last_checkpoint_lane_sequences
-        .iter()
-        .any(|sequence| *sequence > POOL_V1_PAIR_CAPACITY)
-    {
+    if any_lane_sequence_above_capacity(&master.last_checkpoint_lane_sequences) {
         return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);
     }
     if (!master.has_checkpoint
@@ -276,7 +272,7 @@ pub fn decode_pool_v1_pair_forest_master_v1(
     if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
         return Err(PoolV1PairForestAccountErrorV1::WrongDigestEncoding);
     }
-    if bytes[50..64].iter().any(|byte| *byte != 0) || bytes[312..320] != [0u8; 8] {
+    if any_nonzero_byte(&bytes[50..64]) || bytes[312..320] != [0u8; 8] {
         return Err(PoolV1PairForestAccountErrorV1::NonZeroReserved);
     }
     if bytes[8..40] != POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING {
@@ -291,11 +287,7 @@ pub fn decode_pool_v1_pair_forest_master_v1(
         .map_err(|_| PoolV1PairForestAccountErrorV1::Identity)?;
     let verifier_policy = decode_verifier_policy_v1(&bytes[MASTER_POLICY_OFFSET..312])
         .map_err(|_| PoolV1PairForestAccountErrorV1::Policy)?;
-    let mut last_checkpoint_lane_sequences = [0u64; POOL_V1_PAIR_FOREST_LANE_COUNT];
-    for (lane, sequence) in last_checkpoint_lane_sequences.iter_mut().enumerate() {
-        let start = MASTER_LAST_SEQUENCES_OFFSET + 8 * lane;
-        *sequence = u64::from_le_bytes(bytes[start..start + 8].try_into().unwrap());
-    }
+    let last_checkpoint_lane_sequences = lane_sequences_at(bytes, MASTER_LAST_SEQUENCES_OFFSET);
     let master = PoolV1PairForestMasterV1 {
         bump: bytes[7],
         identity,
@@ -441,7 +433,7 @@ pub fn decode_pool_v1_pair_forest_checkpoint_v1(
     if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
         return Err(PoolV1PairForestAccountErrorV1::WrongDigestEncoding);
     }
-    if bytes[176..].iter().any(|byte| *byte != 0) {
+    if any_nonzero_byte(&bytes[176..]) {
         return Err(PoolV1PairForestAccountErrorV1::NonZeroReserved);
     }
     let master: [u8; 32] = bytes[CHECKPOINT_MASTER_OFFSET..CHECKPOINT_DOMAIN_OFFSET]
@@ -459,13 +451,9 @@ pub fn decode_pool_v1_pair_forest_checkpoint_v1(
             .unwrap(),
     )
     .map_err(|_| PoolV1PairForestAccountErrorV1::NonCanonicalDigest)?;
-    let mut lane_sequences = [0u64; POOL_V1_PAIR_FOREST_LANE_COUNT];
-    for (lane, sequence) in lane_sequences.iter_mut().enumerate() {
-        let start = CHECKPOINT_LANE_SEQUENCES_OFFSET + 8 * lane;
-        *sequence = u64::from_le_bytes(bytes[start..start + 8].try_into().unwrap());
-        if *sequence > POOL_V1_PAIR_CAPACITY {
-            return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);
-        }
+    let lane_sequences = lane_sequences_at(bytes, CHECKPOINT_LANE_SEQUENCES_OFFSET);
+    if any_lane_sequence_above_capacity(&lane_sequences) {
+        return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);
     }
     Ok(PoolV1PairForestCheckpointV1 {
         bump: bytes[7],
@@ -546,6 +534,50 @@ pub fn plan_pool_v1_pair_forest_checkpoint_v1(
         next_master,
         checkpoint,
     })
+}
+
+/// Translator-shaped helpers (Aspis translatability pass): one index loop
+/// each, a straight-line body and nothing after the loop but the result.
+/// They replace slice iterators (`iter().any`, `iter_mut().enumerate()`)
+/// with the same reads in the same order.
+#[inline(always)]
+fn any_nonzero_byte(bytes: &[u8]) -> bool {
+    let mut index = 0;
+    while index < bytes.len() {
+        if bytes[index] != 0 {
+            return true;
+        }
+        index += 1;
+    }
+    false
+}
+
+#[inline(always)]
+fn any_lane_sequence_above_capacity(
+    sequences: &[u64; POOL_V1_PAIR_FOREST_LANE_COUNT],
+) -> bool {
+    let mut lane = 0;
+    while lane < POOL_V1_PAIR_FOREST_LANE_COUNT {
+        if sequences[lane] > POOL_V1_PAIR_CAPACITY {
+            return true;
+        }
+        lane += 1;
+    }
+    false
+}
+
+/// The eight little-endian lane sequences starting at `offset`. Callers have
+/// checked the account length, so every read is in bounds.
+#[inline(always)]
+fn lane_sequences_at(bytes: &[u8], offset: usize) -> [u64; POOL_V1_PAIR_FOREST_LANE_COUNT] {
+    let mut sequences = [0u64; POOL_V1_PAIR_FOREST_LANE_COUNT];
+    let mut lane = 0;
+    while lane < POOL_V1_PAIR_FOREST_LANE_COUNT {
+        let start = offset + 8 * lane;
+        sequences[lane] = u64::from_le_bytes(bytes[start..start + 8].try_into().unwrap());
+        lane += 1;
+    }
+    sequences
 }
 
 #[cfg(test)]
@@ -817,5 +849,386 @@ mod tests {
             decode_pool_v1_pair_forest_checkpoint_v1(&image),
             Err(PoolV1PairForestAccountErrorV1::NonCanonicalDigest)
         );
+    }
+}
+
+/// Differential oracle for the translatability rewrite: the pre-rewrite text
+/// of `validate_master`, `decode_pool_v1_pair_forest_master_v1` and
+/// `decode_pool_v1_pair_forest_checkpoint_v1`, kept verbatim and compared with
+/// the shipped forms.
+#[cfg(test)]
+mod translatability_oracle {
+    use super::*;
+
+    fn validate_master_old(
+        master: &PoolV1PairForestMasterV1,
+    ) -> Result<(), PoolV1PairForestAccountErrorV1> {
+        if master.identity.pool == [0u8; 32]
+            || master.identity.asset_mint == [0u8; 32]
+            || master.identity.token_program == [0u8; 32]
+            || master.identity.deployment_domain == [0u8; 32]
+        {
+            return Err(PoolV1PairForestAccountErrorV1::ZeroRequiredBinding);
+        }
+        validate_verifier_policy_v1(&master.verifier_policy)
+            .map_err(|_| PoolV1PairForestAccountErrorV1::Policy)?;
+        if master
+            .last_checkpoint_lane_sequences
+            .iter()
+            .any(|sequence| *sequence > POOL_V1_PAIR_CAPACITY)
+        {
+            return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);
+        }
+        if (!master.has_checkpoint
+            && (master.next_checkpoint_sequence != 0
+                || master.last_checkpoint_lane_sequences != [0u64; 8]))
+            || (master.has_checkpoint && master.next_checkpoint_sequence == 0)
+        {
+            return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);
+        }
+        Ok(())
+    }
+
+    fn decode_pool_v1_pair_forest_master_v1_old(
+        bytes: &[u8],
+    ) -> Result<PoolV1PairForestMasterV1, PoolV1PairForestAccountErrorV1> {
+        if bytes.len() != POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES {
+            return Err(PoolV1PairForestAccountErrorV1::WrongLength);
+        }
+        if bytes[..4] != POOL_V1_PAIR_FOREST_MASTER_MAGIC {
+            return Err(PoolV1PairForestAccountErrorV1::WrongMagic);
+        }
+        if bytes[4] != POOL_V1_PAIR_FOREST_MASTER_VERSION {
+            return Err(PoolV1PairForestAccountErrorV1::WrongVersion);
+        }
+        if bytes[5] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8 {
+            return Err(PoolV1PairForestAccountErrorV1::WrongLaneCount);
+        }
+        if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
+            return Err(PoolV1PairForestAccountErrorV1::WrongDigestEncoding);
+        }
+        if bytes[50..64].iter().any(|byte| *byte != 0) || bytes[312..320] != [0u8; 8] {
+            return Err(PoolV1PairForestAccountErrorV1::NonZeroReserved);
+        }
+        if bytes[8..40] != POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING {
+            return Err(PoolV1PairForestAccountErrorV1::WrongFormatBinding);
+        }
+        let has_checkpoint = match bytes[MASTER_HAS_CHECKPOINT_OFFSET] {
+            0 => false,
+            1 => true,
+            _ => return Err(PoolV1PairForestAccountErrorV1::InvalidBoolean),
+        };
+        let identity = decode_pool_identity_v1(&bytes[MASTER_IDENTITY_OFFSET..MASTER_POLICY_OFFSET])
+            .map_err(|_| PoolV1PairForestAccountErrorV1::Identity)?;
+        let verifier_policy = decode_verifier_policy_v1(&bytes[MASTER_POLICY_OFFSET..312])
+            .map_err(|_| PoolV1PairForestAccountErrorV1::Policy)?;
+        let mut last_checkpoint_lane_sequences = [0u64; POOL_V1_PAIR_FOREST_LANE_COUNT];
+        for (lane, sequence) in last_checkpoint_lane_sequences.iter_mut().enumerate() {
+            let start = MASTER_LAST_SEQUENCES_OFFSET + 8 * lane;
+            *sequence = u64::from_le_bytes(bytes[start..start + 8].try_into().unwrap());
+        }
+        let master = PoolV1PairForestMasterV1 {
+            bump: bytes[7],
+            identity,
+            verifier_policy,
+            initialized_lane_mask: bytes[MASTER_INITIALIZED_MASK_OFFSET],
+            has_checkpoint,
+            next_checkpoint_sequence: u64::from_le_bytes(
+                bytes[MASTER_NEXT_CHECKPOINT_OFFSET..MASTER_INITIALIZED_MASK_OFFSET]
+                    .try_into()
+                    .unwrap(),
+            ),
+            last_checkpoint_lane_sequences,
+        };
+        validate_master_old(&master)?;
+        Ok(master)
+    }
+
+    fn decode_pool_v1_pair_forest_checkpoint_v1_old(
+        bytes: &[u8],
+    ) -> Result<PoolV1PairForestCheckpointV1, PoolV1PairForestAccountErrorV1> {
+        if bytes.len() != POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES {
+            return Err(PoolV1PairForestAccountErrorV1::WrongLength);
+        }
+        if bytes[..4] != POOL_V1_PAIR_FOREST_CHECKPOINT_MAGIC {
+            return Err(PoolV1PairForestAccountErrorV1::WrongMagic);
+        }
+        if bytes[4] != POOL_V1_PAIR_FOREST_CHECKPOINT_VERSION {
+            return Err(PoolV1PairForestAccountErrorV1::WrongVersion);
+        }
+        if bytes[5] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8 {
+            return Err(PoolV1PairForestAccountErrorV1::WrongLaneCount);
+        }
+        if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
+            return Err(PoolV1PairForestAccountErrorV1::WrongDigestEncoding);
+        }
+        if bytes[176..].iter().any(|byte| *byte != 0) {
+            return Err(PoolV1PairForestAccountErrorV1::NonZeroReserved);
+        }
+        let master: [u8; 32] = bytes[CHECKPOINT_MASTER_OFFSET..CHECKPOINT_DOMAIN_OFFSET]
+            .try_into()
+            .unwrap();
+        let deployment_domain: [u8; 32] = bytes[CHECKPOINT_DOMAIN_OFFSET..CHECKPOINT_SEQUENCE_OFFSET]
+            .try_into()
+            .unwrap();
+        if master == [0u8; 32] || deployment_domain == [0u8; 32] {
+            return Err(PoolV1PairForestAccountErrorV1::ZeroRequiredBinding);
+        }
+        let global_root = decode_digest_canonical(
+            bytes[CHECKPOINT_GLOBAL_ROOT_OFFSET..CHECKPOINT_LANE_SEQUENCES_OFFSET]
+                .try_into()
+                .unwrap(),
+        )
+        .map_err(|_| PoolV1PairForestAccountErrorV1::NonCanonicalDigest)?;
+        let mut lane_sequences = [0u64; POOL_V1_PAIR_FOREST_LANE_COUNT];
+        for (lane, sequence) in lane_sequences.iter_mut().enumerate() {
+            let start = CHECKPOINT_LANE_SEQUENCES_OFFSET + 8 * lane;
+            *sequence = u64::from_le_bytes(bytes[start..start + 8].try_into().unwrap());
+            if *sequence > POOL_V1_PAIR_CAPACITY {
+                return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);
+            }
+        }
+        Ok(PoolV1PairForestCheckpointV1 {
+            bump: bytes[7],
+            master,
+            deployment_domain,
+            checkpoint_sequence: u64::from_le_bytes(
+                bytes[CHECKPOINT_SEQUENCE_OFFSET..CHECKPOINT_GLOBAL_ROOT_OFFSET]
+                    .try_into()
+                    .unwrap(),
+            ),
+            global_root,
+            lane_sequences,
+        })
+    }
+
+    struct Rng(u64);
+    impl Rng {
+        fn next(&mut self) -> u64 {
+            self.0 ^= self.0 << 13;
+            self.0 ^= self.0 >> 7;
+            self.0 ^= self.0 << 17;
+            self.0
+        }
+        fn byte(&mut self) -> u8 {
+            self.next() as u8
+        }
+    }
+
+    const EDGE_SEQUENCES: [u64; 7] = [
+        0,
+        1,
+        POOL_V1_PAIR_CAPACITY - 1,
+        POOL_V1_PAIR_CAPACITY,
+        POOL_V1_PAIR_CAPACITY + 1,
+        u64::MAX - 1,
+        u64::MAX,
+    ];
+
+    fn sequence(rng: &mut Rng) -> u64 {
+        match rng.next() % 4 {
+            0 => EDGE_SEQUENCES[(rng.next() % 7) as usize],
+            1 => rng.next() % (POOL_V1_PAIR_CAPACITY + 2),
+            2 => rng.next(),
+            _ => 0,
+        }
+    }
+
+    fn digest_word(rng: &mut Rng) -> u32 {
+        match rng.next() % 4 {
+            0 => P - 1,
+            1 => P,
+            2 => rng.next() as u32,
+            _ => (rng.next() % u64::from(P)) as u32,
+        }
+    }
+
+    fn valid_master(rng: &mut Rng) -> [u8; POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES] {
+        loop {
+            let has_checkpoint = rng.next() % 2 == 0;
+            let mut sequences = [0u64; 8];
+            if has_checkpoint {
+                for s in sequences.iter_mut() {
+                    *s = rng.next() % (POOL_V1_PAIR_CAPACITY + 1);
+                }
+            }
+            let immutable = rng.next() % 2 == 0;
+            let master = PoolV1PairForestMasterV1 {
+                bump: rng.byte(),
+                identity: PoolIdentityV1 {
+                    pool: [rng.byte() | 1; 32],
+                    asset_mint: [rng.byte() | 1; 32],
+                    token_program: [rng.byte() | 1; 32],
+                    asset_id: aspis_core::field::M31((rng.next() % u64::from(P)) as u32),
+                    deployment_domain: [rng.byte() | 1; 32],
+                },
+                verifier_policy: VerifierPolicyV1 {
+                    flags: if immutable { 1 | (rng.byte() & 2) } else { 0 },
+                    registry_program: [rng.byte() | 1; 32],
+                    registry_authority: if immutable { [0u8; 32] } else { [rng.byte() | 1; 32] },
+                    policy_binding: [rng.byte() | 1; 32],
+                },
+                initialized_lane_mask: rng.byte(),
+                has_checkpoint,
+                next_checkpoint_sequence: if has_checkpoint { 1 + rng.next() % 1000 } else { 0 },
+                last_checkpoint_lane_sequences: sequences,
+            };
+            if let Ok(image) = encode_pool_v1_pair_forest_master_v1(&master) {
+                assert_eq!(decode_pool_v1_pair_forest_master_v1(&image), Ok(master));
+                return image;
+            }
+        }
+    }
+
+    fn valid_checkpoint(rng: &mut Rng) -> [u8; POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES] {
+        let checkpoint = PoolV1PairForestCheckpointV1 {
+            bump: rng.byte(),
+            master: [rng.byte() | 1; 32],
+            deployment_domain: [rng.byte() | 1; 32],
+            checkpoint_sequence: rng.next(),
+            global_root: core::array::from_fn(|_| {
+                aspis_core::field::M31((rng.next() % u64::from(P)) as u32)
+            }),
+            lane_sequences: core::array::from_fn(|_| rng.next() % (POOL_V1_PAIR_CAPACITY + 1)),
+        };
+        let image = encode_pool_v1_pair_forest_checkpoint_v1(&checkpoint).unwrap();
+        assert_eq!(decode_pool_v1_pair_forest_checkpoint_v1(&image), Ok(checkpoint));
+        image
+    }
+
+    fn compare_master(bytes: &[u8]) -> bool {
+        let new = decode_pool_v1_pair_forest_master_v1(bytes);
+        assert_eq!(new, decode_pool_v1_pair_forest_master_v1_old(bytes), "{bytes:?}");
+        new.is_ok()
+    }
+
+    fn compare_checkpoint(bytes: &[u8]) -> bool {
+        let new = decode_pool_v1_pair_forest_checkpoint_v1(bytes);
+        assert_eq!(new, decode_pool_v1_pair_forest_checkpoint_v1_old(bytes), "{bytes:?}");
+        new.is_ok()
+    }
+
+    /// Every single-byte corruption (every position, every value) of valid
+    /// master and checkpoint images, and every length from 0 to the image
+    /// length plus 8.
+    #[test]
+    fn decoders_equal_the_old_text_on_every_single_byte_corruption() {
+        let mut rng = Rng(0x5eed_a5b1_7c3d_0001);
+        let mut accepted = 0usize;
+        let mut cases = 0usize;
+        for _ in 0..4 {
+            let image = valid_master(&mut rng);
+            for position in 0..image.len() {
+                for value in 0..=255u8 {
+                    let mut corrupted = image;
+                    corrupted[position] = value;
+                    accepted += usize::from(compare_master(&corrupted));
+                    cases += 1;
+                }
+            }
+            let mut long = image.to_vec();
+            long.extend_from_slice(&[0u8; 8]);
+            for length in 0..long.len() {
+                compare_master(&long[..length]);
+                cases += 1;
+            }
+            let image = valid_checkpoint(&mut rng);
+            for position in 0..image.len() {
+                for value in 0..=255u8 {
+                    let mut corrupted = image;
+                    corrupted[position] = value;
+                    accepted += usize::from(compare_checkpoint(&corrupted));
+                    cases += 1;
+                }
+            }
+            let mut long = image.to_vec();
+            long.extend_from_slice(&[0u8; 8]);
+            for length in 0..long.len() {
+                compare_checkpoint(&long[..length]);
+                cases += 1;
+            }
+        }
+        assert!(cases > 590_000 && accepted > 1000, "{cases} {accepted}");
+    }
+
+    /// Random images that keep the fixed header (so the lane and reserved
+    /// checks are reached), with lane sequences drawn around the capacity.
+    #[test]
+    fn decoders_equal_the_old_text_on_random_images() {
+        let mut rng = Rng(0x0dd5_eed0_0000_0002);
+        let mut accepted = [0usize; 2];
+        for case in 0..150_000usize {
+            let mut master = valid_master(&mut rng);
+            let edits = rng.next() % 4;
+            for _ in 0..edits {
+                let lane = (rng.next() % 8) as usize;
+                let start = MASTER_LAST_SEQUENCES_OFFSET + 8 * lane;
+                master[start..start + 8].copy_from_slice(&sequence(&mut rng).to_le_bytes());
+            }
+            if case % 5 == 0 {
+                master[50 + (rng.next() % 14) as usize] = rng.byte();
+            }
+            if case % 7 == 0 {
+                master[MASTER_HAS_CHECKPOINT_OFFSET] = rng.byte() % 3;
+            }
+            accepted[0] += usize::from(compare_master(&master));
+
+            let mut checkpoint = valid_checkpoint(&mut rng);
+            for _ in 0..(rng.next() % 4) {
+                let lane = (rng.next() % 8) as usize;
+                let start = CHECKPOINT_LANE_SEQUENCES_OFFSET + 8 * lane;
+                checkpoint[start..start + 8].copy_from_slice(&sequence(&mut rng).to_le_bytes());
+            }
+            if case % 5 == 0 {
+                checkpoint[176 + (rng.next() % 16) as usize] = rng.byte();
+            }
+            if case % 3 == 0 {
+                let word = (rng.next() % 8) as usize;
+                let start = CHECKPOINT_GLOBAL_ROOT_OFFSET + 4 * word;
+                checkpoint[start..start + 4].copy_from_slice(&digest_word(&mut rng).to_le_bytes());
+            }
+            if case % 11 == 0 {
+                checkpoint[CHECKPOINT_MASTER_OFFSET..CHECKPOINT_DOMAIN_OFFSET].fill(0);
+            }
+            accepted[1] += usize::from(compare_checkpoint(&checkpoint));
+        }
+        assert!(accepted[0] > 10_000 && accepted[1] > 10_000, "{accepted:?}");
+    }
+
+    /// `validate_master` directly, on random masters with sequences around
+    /// the capacity, including masters no encoder would produce.
+    #[test]
+    fn validate_master_equals_the_old_text() {
+        let mut rng = Rng(0x7a11_da7e_0000_0003);
+        for _ in 0..200_000usize {
+            let bytes = valid_master(&mut rng);
+            let mut master = decode_pool_v1_pair_forest_master_v1(&bytes).unwrap();
+            for lane in 0..8 {
+                if rng.next() % 3 == 0 {
+                    master.last_checkpoint_lane_sequences[lane] = sequence(&mut rng);
+                }
+            }
+            if rng.next() % 4 == 0 {
+                master.has_checkpoint = !master.has_checkpoint;
+            }
+            if rng.next() % 4 == 0 {
+                master.next_checkpoint_sequence = sequence(&mut rng);
+            }
+            if rng.next() % 9 == 0 {
+                master.identity.pool = [0u8; 32];
+            }
+            if rng.next() % 9 == 0 {
+                master.verifier_policy.flags = rng.byte();
+            }
+            assert_eq!(validate_master(&master), validate_master_old(&master), "{master:?}");
+        }
+        for edge in EDGE_SEQUENCES {
+            assert_eq!(
+                any_lane_sequence_above_capacity(&[edge; 8]),
+                edge > POOL_V1_PAIR_CAPACITY
+            );
+        }
+        assert!(!any_nonzero_byte(&[]));
+        assert!(any_nonzero_byte(&[0, 0, 1]));
     }
 }
