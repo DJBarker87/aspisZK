@@ -95,7 +95,9 @@ Three R0P sources had two blobs each: `LogUpAssembly`, `LogUpChain` and `SemRoun
 
 **Overlay problem, reported to the coordinator.** At 00:37:56, 36 symlinks appeared in `overlay-PIN2/R0P/`, pointing into `l187-closure/objs/R0P/`. They are not mine, and they look like a work-around for the `R0P/` directory shadowing. 33 of them (SemDecision, SemD2, SemD3, SemRounds, SemClosed, LogUpChain, LogUpAssembly, SemAssembly, Extraction, CopyInputLinks, CircleSampler, the Mask* family and others) are pre-PIN2 objects of modules that depend on R0P.Core. So any compile that imports them is not coherent. This tainted my C025 (`R1SelectedChallengeMapCore`) and C026 (`R1SelectedTranscriptParams`): I deleted both objects and do not credit them. None of my other compiles import a symlinked module; I checked each one's transitive imports.
 
-The symlinks are also a hazard. Compiling one of those modules with `-o` into the overlay writes through the link and overwrites the shared closure object. My wrapper now refuses a symlinked target, and my order tool treats a symlink as not built. I did not remove the symlinks.
+The symlinks are also a hazard. Compiling one of those modules with `-o` into the overlay writes through the link and overwrites the shared closure object. My wrapper (`PIN2W3b_compile.sh`) now refuses to write to a symlink target (exit 4). `chain.sh` stops on a symlinked object, and `tools/order.py` treats a symlink as not built.
+
+The coordinator has since resolved this. All 36 symlinks are deleted, `l187-closure/objs` and `base` are now read-only, and an mtime check showed no release object was modified. W3a rebuilds the R0P.Core-dependent chain as real objects. I do not build that chain, and C025/C026 are re-run only once W3a's objects exist.
 
 Overlay record: 30 files before, 83 regular files after. My objects, by sha256 prefix:
 
@@ -162,11 +164,13 @@ Wall time is in seconds and peak RSS in GiB. Host swap during these runs was 7.1
 **Lead (decision):**
 
 - The M10 budget: raise 110260 → 110542 in `PublicParserAllocationM10.spec`, `ActualExtractorStagesM10.work` and `CostedExtractorStagesM10.workConstant`, or choose another remedy. Once decided, `PublicParserAllocationM10` (cell model for `bytes32`/`readDestination`, 11-field `decodeAfter`, `erase`) is a focused edit that I can do.
-- The overlay symlinks: replace them with real rebuilds, or with copies for the non-dependent LogUpFrac, MessageDescent and SemBadSets. Then `R1SelectedChallengeMapCore` and `R1SelectedTranscriptParams` (unchanged sources) need one coherent rebuild.
+
 
 **Stream C:** extraction of the PIN2 `public_bytes` body, then the Whole431 refinement with a raw-32 step. That discharges the `refines` hypothesis of `PIN2_SerializerLengths` and lets the NHG_* edits in section 1 land: `returned`, `digest_domain` and `same_execution` to ≤ 1524, and the rest unchanged if the tail is appended after `sourceSteps`.
 
-**W3a:** the first-layer and builder modules, and the R0P chain it is rebuilding. NHG_* also waits on `ExtractedDecoderPublicBinding` and `ExtractedPreparationSerializerWhole` being coherent.
+**W3a:** the first-layer and builder modules, and the R0P.Core-dependent R0P chain (rebuilt as real objects after the symlink removal). Blocked on that chain:
+
+- `R1SelectedChallengeMapCore` and `R1SelectedTranscriptParams`, both unchanged sources. I re-run them (C025/C026) once W3a's objects for SemDecision through SemD2 exist. NHG_* also waits on `ExtractedDecoderPublicBinding` and `ExtractedPreparationSerializerWhole` being coherent.
 
 **Build host (replay):**
 
