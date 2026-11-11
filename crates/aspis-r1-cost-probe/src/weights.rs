@@ -355,6 +355,58 @@ impl Weights {
     }
 }
 
+/// FUTURE-VERSION EXPERIMENT, stage D. The relation weight vector of the S2
+/// two-fold path is `W_j = sum_kind kappa^kind * w_{kind,j}` with `w_{kind,j}`
+/// the folded weights `pair` contracts the final message with (so
+/// `pair(alpha, f, kappa) = sum_j f_j W_j`).
+impl Weights {
+    /// The multilinear extension of `W` over the six index bits, at the point
+    /// whose equality table is `eq` (`eq[j] = prod_b (r_b if bit b of j else
+    /// 1 - r_b)`) and whose per-digit tables are `digits` (`digits[d][m]` is
+    /// the same product over bits `2d` and `2d + 1`).
+    ///
+    /// Rows 1, 2, 3, 5, 6 are products over the three remaining base-four
+    /// digits, so their extension is the product of three four-term sums. The
+    /// inactive row is constant on twelve groups of positions. The Libra row
+    /// is supported on positions 0..4.
+    #[inline(never)]
+    pub fn mle_at(&self,alpha:&[E],kappa:E,eq:&[K;64],digits:&[[K;4];3])->Result<E,Error> {
+        if self.variant!=Variant::S2||alpha.len()!=2 {return Err(Error::Parse);}
+        let ap0=powers::<4>(alpha[0]);
+        let ap1=powers::<4>(alpha[1]);
+        let mut parts=[E::ZERO;7];
+        for (kind,k) in [(1usize,0usize),(2,1),(3,2),(5,3),(6,4)] {
+            let mut product=K::ONE;
+            for d in 0..3 {
+                let mut dot=crate::fast_pairing::KbyKDot::new();
+                for m in 0..4 { match dot.push(digits[d][m],self.factors[k][d+2][m]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) } }
+                let value=dot.finish();
+                product=if d==0 {value} else {product.mul(value)};
+            }
+            let scale=Self::scalar_factor(&self.factors[k][0],&ap0).mul(Self::scalar_factor(&self.factors[k][1],&ap1));
+            parts[kind]=scale.mul_qm31(product);
+        }
+        let mut low=[E::ZERO;16];
+        for s in 0..16 { low[s]=ap0[PERM[s%4]].mul(ap1[PERM[s/4]]).mul_m31(QUARTER.mul(QUARTER)); }
+        let mut groups=[K::ZERO;12];
+        for j in 0..64 { let g=S2_INACTIVE_GROUPS[j] as usize; groups[g]=groups[g].add(eq[j]); }
+        let mut inactive=crate::fast_pairing::EbyKDot::new();
+        for g in 0..12 {
+            let mut weight=E::ZERO;
+            for bit in 0..16 { if S2_INACTIVE_MASKS[g]&(1<<bit)!=0 {weight=weight.add(low[bit]);} }
+            match inactive.push(weight,groups[g]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) }
+        }
+        parts[0]=inactive.finish();
+        let libra=factored_s2_libra_weights(&ap0,&ap1,self.extra);
+        let mut libra_dot=crate::fast_pairing::EbyKDot::new();
+        for j in 0..4 { match libra_dot.push(libra[j],eq[j]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) } }
+        parts[4]=libra_dot.finish();
+        let k=powers::<7>(kappa);let mut sum=E::ZERO;
+        for kind in 0..7 {sum=sum.add(k[kind].mul(parts[kind]));}
+        Ok(sum)
+    }
+}
+
 /// FUTURE-VERSION EXPERIMENT (profiling builds only): `Weights::pair` on the
 /// S2 two-fold path with a mark after each stage. Same operations in the same
 /// order as `pair`; the equality is tested on the saved fixtures.

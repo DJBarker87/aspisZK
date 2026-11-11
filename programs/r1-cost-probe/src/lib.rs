@@ -66,7 +66,7 @@ pub fn process_r1_cost_probe_instruction(program_id:&Pubkey,accounts:&[AccountIn
 
     #[cfg(not(feature="pool-adapter"))]
     {
-    if accounts.len()!=3||!matches!(data,[1,0..=22]|[2]|[8]|[9]|[10]|[11]|[12]) {return Err(ProgramError::InvalidInstructionData);}
+    if accounts.len()!=3||!matches!(data,[1,0..=22]|[2]|[8]|[9]|[10]|[11]|[12]|[13]) {return Err(ProgramError::InvalidInstructionData);}
     for (i,a) in accounts.iter().enumerate(){if a.owner!=program_id||a.executable||a.is_writable!=(i==2){return Err(ProgramError::InvalidAccountData);}}
     let proof=accounts[0].try_borrow_data()?;let public=accounts[1].try_borrow_data()?;let mut checkpoint=accounts[2].try_borrow_mut_data()?;
     msg!("UNPROVED R1 COST PROBE");msg!("r1:begin");sol_log_compute_units();
@@ -75,6 +75,13 @@ pub fn process_r1_cost_probe_instruction(program_id:&Pubkey,accounts:&[AccountIn
         let bytes=first(&public,&proof,data[1]as usize)?;
         if checkpoint.len()!=bytes.len(){return Err(ProgramError::InvalidAccountData);}
         checkpoint.copy_from_slice(&bytes);
+    } else if data[0]==13 {
+        // FUTURE-VERSION EXPERIMENT, stage D: one invocation with the final-message
+        // sumcheck. The certificate is read from the first bytes of the third account.
+        let statement=decode_pool_v1_pair_forest_terminal_statement_v1(&public).map_err(|_|ProgramError::InvalidAccountData)?;
+        let bytes=verifier::candidate::fused::CERTIFICATE_BYTES;
+        if checkpoint.len()<bytes {return Err(ProgramError::InvalidAccountData);}
+        verifier::candidate::fused::verify_summed(statement.semantic_public(),&proof,&checkpoint[..bytes],SolanaDigest,observer()).map_err(error)?;
     } else if data[0]==11 {
         // FUTURE-VERSION EXPERIMENT: unit-cost probe only, verifies nothing.
         let value=verifier::candidate::fused::unit_cost_probe(&proof,observer()).map_err(error)?;

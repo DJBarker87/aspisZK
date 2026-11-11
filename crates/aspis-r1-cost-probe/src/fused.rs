@@ -21,6 +21,7 @@
 use super::*;
 use crate::compact::QUERIES;
 use crate::fast_pairing::{EbyKDot, KbyKDot};
+use crate::transcript::Transcript;
 
 const P64: u64 = 0x7fff_ffff;
 
@@ -454,6 +455,199 @@ fn accumulate_weights_tight(p: &Prepared, a: &mut Accumulator, geometry: &QueryG
         a.next += 1;
     }
     Ok(())
+}
+
+/// Stage D certificate: six rounds of two WideExact values.
+pub const CERTIFICATE_BYTES: usize = 6 * 2 * 32;
+const ROW_CLAIMS: u8 = 33;
+const ROW_ROUND: u8 = 34;
+
+/// Stage D. Stage C with the relation pairing and the query check replaced by
+/// one six-round sumcheck over the final message (design and status in the
+/// note; UNPROVED PROTOCOL ADDITION).
+#[inline(never)]
+pub fn verify_summed<H: Digest32>(public: Public<'_>, proof: &[u8], certificate: &[u8], hash: H, obs: Observer) -> Result<(), Error> {
+    if certificate.len() != CERTIFICATE_BYTES {
+        return Err(Error::Parse);
+    }
+    parse_shape(proof)?;
+    canonical_scan(proof)?;
+    mark(obs, Phase::Parsed);
+    let mut g = [E::ZERO; 29];
+    let p = prepare(public, proof, hash, obs, &mut g)?;
+    mark(obs, Phase::Prepare);
+    let folded_root: [u8; 32] = proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();
+    batch_merkle(proof, &p, &folded_root, 0, hash)?;
+    mark(obs, Phase::Merkle(0));
+    batch_merkle(proof, &p, &folded_root, 1, hash)?;
+    mark(obs, Phase::Merkle(SPLIT));
+    let geometry = QueryGeometry::for_range(&p.queries, 0, QUERIES)?;
+    let openings = &proof[compact::OFF_OPENINGS..compact::OFF_NODES];
+    let sums = fold_sums(openings, &p.queries, p.rho, &p.alpha, &g, &geometry, obs)?;
+    if sums.lhs1 != sums.rhs1 {
+        return Err(Error::Query);
+    }
+    let v = relation_view(proof)?;
+    let mut claim = finish_relation_round(v.round0, p.alpha[0], p.claim, 0)?;
+    claim = finish_relation_round(v.round1, p.alpha[1], claim, 1)?;
+    mark(obs, Phase::QueryPart(5, 0));
+    summed_final_checks(&p, v.final_message, claim, sums.rhs2, &geometry, certificate, hash, obs)?;
+    mark(obs, Phase::Final);
+    Ok(())
+}
+
+/// The two claims `sum_j f_j W_j = claim` and `sum_j f_j w_j = rhs2`, checked
+/// through the certificate.
+#[inline(never)]
+fn summed_final_checks<H: Digest32>(p: &Prepared, final_message: &[u8], claim: E, rhs2: E, geometry: &QueryGeometry, certificate: &[u8], hash: H, obs: Observer) -> Result<(), Error> {
+    let mut t = Transcript::new(hash, p.state, Variant::S2);
+    let lambda = t.scalar_k(ROW_CLAIMS, &claims_bytes(claim, rhs2));
+    let mut current = claim.add(rhs2.mul_qm31(lambda));
+    let mut r = [K::ZERO; 6];
+    for b in 0..6 {
+        let bytes = &certificate[64 * b..64 * b + 64];
+        let c0 = E::from_le_bytes(&bytes[..32]).ok_or(Error::Parse)?;
+        let c2 = E::from_le_bytes(&bytes[32..]).ok_or(Error::Parse)?;
+        r[b] = t.scalar_k(ROW_ROUND + b as u8, bytes);
+        // s(0) + s(1) = 2 c0 + c1 + c2 is the running claim.
+        let c1 = current.sub(c0).sub(c0).sub(c2);
+        current = c0.add(c1.add(c2.mul_qm31(r[b])).mul_qm31(r[b]));
+    }
+    mark(obs, Phase::QueryPart(5, 1));
+    let (eq, digits) = equality_tables(&r);
+    mark(obs, Phase::QueryPart(5, 2));
+    let mut f_dot = EbyKDot::new();
+    for j in 0..64 {
+        f_dot.push(field(final_message, j), eq[j]).map_err(|_| Error::Parse)?;
+    }
+    let f_at = f_dot.finish();
+    mark(obs, Phase::QueryPart(5, 3));
+    let weights = Weights::new(p.variant, &p.semantic_alpha, &p.z)?;
+    let w_at = weights.mle_at(&p.alpha[..2], p.kappa, &eq, &digits)?;
+    mark(obs, Phase::QueryPart(5, 4));
+    let q_at = query_weight_mle(p, geometry, &r)?;
+    mark(obs, Phase::QueryPart(5, 5));
+    let combined = w_at.add(E::from_qm31(q_at.mul(lambda)));
+    if f_at.mul(combined) != current {
+        return Err(Error::Relation);
+    }
+    Ok(())
+}
+
+fn claims_bytes(claim: E, rhs2: E) -> [u8; 64] {
+    let mut out = [0u8; 64];
+    out[..32].copy_from_slice(&claim.to_le_bytes());
+    out[32..].copy_from_slice(&rhs2.to_le_bytes());
+    out
+}
+
+/// `eq[j] = prod_b (r_b if bit b of j else 1 - r_b)` for the 64 positions, and
+/// the same products over the bit pairs (0,1), (2,3), (4,5).
+#[inline(never)]
+fn equality_tables(r: &[K; 6]) -> ([K; 64], [[K; 4]; 3]) {
+    let mut eq = [K::ZERO; 64];
+    eq[0] = K::ONE;
+    let mut n = 1;
+    for b in 0..6 {
+        for j in 0..n {
+            let high = eq[j].mul(r[b]);
+            eq[j + n] = high;
+            eq[j] = eq[j].sub(high);
+        }
+        n *= 2;
+    }
+    let digits = core::array::from_fn(|d| {
+        let (a, b) = (r[2 * d], r[2 * d + 1]);
+        let ab = a.mul(b);
+        [K::ONE.sub(a).sub(b).add(ab), a.sub(ab), b.sub(ab), ab]
+    });
+    (eq, digits)
+}
+
+/// Extension at `r` of the query weight vector `w_j = sum_i rho^i b_j(x_i)`:
+/// `b_j(x)` is the product over the set bits `b` of `j` of `t_b(x)`, with
+/// `t_0` the query's node and `t_{b+1} = 2 t_b^2 - 1`, so the extension is
+/// `sum_i rho^i prod_b (1 + r_b (t_b(x_i) - 1))`.
+#[inline(never)]
+fn query_weight_mle(p: &Prepared, geometry: &QueryGeometry, r: &[K; 6]) -> Result<K, Error> {
+    let mut dot = KbyKDot::new();
+    let mut power = K::ONE;
+    for i in 0..QUERIES {
+        let z = geometry.line_z[i - geometry.start];
+        let mut node = z.mul(z).double().sub(M31::ONE);
+        let mut product = K::ONE;
+        for b in 0..6 {
+            let factor = K::ONE.add(r[b].mul_m31(node.sub(M31::ONE)));
+            product = if b == 0 { factor } else { product.mul(factor) };
+            node = node.mul(node).double().sub(M31::ONE);
+        }
+        dot.push(power, product).map_err(|_| Error::Parse)?;
+        power = power.mul(p.rho);
+    }
+    Ok(dot.finish())
+}
+
+/// The explicit 64-entry vectors of stage D for an accepting-shape proof:
+/// `(claim, rhs2, f, W, w)`. Host and test use only.
+#[cfg(any(test, feature = "prover"))]
+#[allow(clippy::type_complexity)]
+fn stage_d_vectors<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H) -> Result<(Box<Prepared>, E, E, Vec<E>, Vec<E>, Vec<K>), Error> {
+    parse_shape(proof)?;
+    canonical_scan(proof)?;
+    let mut g = [E::ZERO; 29];
+    let p = prepare(public, proof, hash, None, &mut g)?;
+    let geometry = QueryGeometry::for_range(&p.queries, 0, QUERIES)?;
+    let openings = &proof[compact::OFF_OPENINGS..compact::OFF_NODES];
+    let sums = fold_sums(openings, &p.queries, p.rho, &p.alpha, &g, &geometry, None)?;
+    let v = relation_view(proof)?;
+    let mut claim = finish_relation_round(v.round0, p.alpha[0], p.claim, 0)?;
+    claim = finish_relation_round(v.round1, p.alpha[1], claim, 1)?;
+    let weights = Weights::new(p.variant, &p.semantic_alpha, &p.z)?;
+    let kp = powers::<7>(p.kappa);
+    let f: Vec<E> = (0..64).map(|j| field(v.final_message, j)).collect();
+    let relation: Vec<E> = (0..64)
+        .map(|j| (0..7).fold(E::ZERO, |w, kind| w.add(kp[kind].mul(weights.dual_raw(kind, j, &p.alpha[..2])))))
+        .collect();
+    let mut a = Accumulator::new(Variant::S2)?;
+    let mut pending = BatchedWeights::new(&a.weights)?;
+    accumulate_weights(&p, &mut a, &geometry, &mut pending);
+    pending.finish(&mut a.weights);
+    Ok((p, claim, sums.rhs2, f, relation, a.weights))
+}
+
+/// Honest sumcheck prover for `sum_j f_j u_j` with `u = W + lambda w`, on the
+/// transcript the verifier uses, given the claims the verifier will bind.
+#[cfg(any(test, feature = "prover"))]
+fn stage_d_rounds<H: Digest32>(p: &Prepared, claim: E, rhs2: E, mut f: Vec<E>, relation: &[E], query: &[K], hash: H) -> Vec<u8> {
+    let mut t = Transcript::new(hash, p.state, Variant::S2);
+    let lambda = t.scalar_k(ROW_CLAIMS, &claims_bytes(claim, rhs2));
+    let mut u: Vec<E> = (0..64).map(|j| relation[j].add(E::from_qm31(query[j].mul(lambda)))).collect();
+    let half = M31(1 << 30);
+    let mut out = Vec::new();
+    for b in 0..6 {
+        let n = f.len() / 2;
+        let (mut s0, mut s1, mut s2) = (E::ZERO, E::ZERO, E::ZERO);
+        for m in 0..n {
+            s0 = s0.add(f[2 * m].mul(u[2 * m]));
+            s1 = s1.add(f[2 * m + 1].mul(u[2 * m + 1]));
+            s2 = s2.add(f[2 * m + 1].add(f[2 * m + 1]).sub(f[2 * m]).mul(u[2 * m + 1].add(u[2 * m + 1]).sub(u[2 * m])));
+        }
+        let c2 = s2.sub(s1).sub(s1).add(s0).mul_m31(half);
+        out.extend_from_slice(&s0.to_le_bytes());
+        out.extend_from_slice(&c2.to_le_bytes());
+        let r = t.scalar_k(ROW_ROUND + b as u8, &out[64 * b..64 * b + 64]);
+        f = (0..n).map(|m| f[2 * m].add(f[2 * m + 1].sub(f[2 * m]).mul_qm31(r))).collect();
+        u = (0..n).map(|m| u[2 * m].add(u[2 * m + 1].sub(u[2 * m]).mul_qm31(r))).collect();
+    }
+    out
+}
+
+/// The honest stage D certificate of a proof. It is a function of public
+/// proof data only (no witness).
+#[cfg(any(test, feature = "prover"))]
+pub fn final_message_certificate<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H) -> Result<Vec<u8>, Error> {
+    let (p, claim, rhs2, f, relation, query) = stage_d_vectors(public, proof, hash)?;
+    Ok(stage_d_rounds(&p, claim, rhs2, f, &relation, &query, hash))
 }
 
 /// MEASUREMENT PROBE ONLY: it verifies nothing and its result has no meaning.
@@ -1083,5 +1277,115 @@ mod tests {
             assert_eq!(merkle_tail_single_pass(Sha, &roots[0], &mut i2, &mut v2, 2, nodes), merkle_tail_two_pass(Sha, &roots[0], &mut idx, &mut v1, 2, nodes));
         }
         assert!(compared >= 6 * 6 * 5);
+    }
+
+    fn eq_of(r: &[K; 6]) -> ([K; 64], [[K; 4]; 3]) {
+        equality_tables(r)
+    }
+
+    #[test]
+    fn stage_d_extensions_equal_the_direct_sums_over_the_explicit_vectors() {
+        let mut state = 0x1357_9bdf_0246_8aceu64;
+        for (name, proof, public) in FIXTURES {
+            let statement = decode(public);
+            let (p, claim, rhs2, f, relation, query) = stage_d_vectors(statement.semantic_public(), proof, Sha).unwrap();
+            let weights = Weights::new(p.variant, &p.semantic_alpha, &p.z).unwrap();
+            let final_message = &proof[compact::OFF_FINAL..compact::OFF_OPENINGS];
+            // The explicit vectors reproduce the two pinned inner products.
+            let pair = weights.pair(&p.alpha[..2], final_message, p.kappa).unwrap();
+            assert_eq!((0..64).fold(E::ZERO, |a, j| a.add(f[j].mul(relation[j]))), pair, "{name}");
+            assert_eq!(pair, claim, "{name}");
+            assert_eq!((0..64).fold(E::ZERO, |a, j| a.add(f[j].mul_qm31(query[j]))), rhs2, "{name}");
+            let geometry = QueryGeometry::for_range(&p.queries, 0, 22).unwrap();
+            for case in 0..8 {
+                let r: [K; 6] = core::array::from_fn(|b| match case {
+                    0 => K::ZERO,
+                    1 => K::ONE,
+                    2 => if b % 2 == 0 { K::ONE } else { K::ZERO },
+                    _ => random_k(&mut state, 3),
+                });
+                let (eq, digits) = eq_of(&r);
+                // The table is the equality polynomial: on Boolean points it selects one index.
+                if case < 3 {
+                    let index: usize = (0..6).map(|b| if r[b] == K::ONE { 1 << b } else { 0 }).sum();
+                    for j in 0..64 {
+                        assert_eq!(eq[j], if j == index { K::ONE } else { K::ZERO });
+                    }
+                }
+                let direct = (0..64).fold(E::ZERO, |a, j| a.add(relation[j].mul_qm31(eq[j])));
+                assert_eq!(weights.mle_at(&p.alpha[..2], p.kappa, &eq, &digits).unwrap(), direct, "{name} case {case}");
+                let direct = (0..64).fold(K::ZERO, |a, j| a.add(query[j].mul(eq[j])));
+                assert_eq!(query_weight_mle(&p, &geometry, &r).unwrap(), direct, "{name} case {case}");
+            }
+        }
+    }
+
+    #[test]
+    fn stage_d_accepts_the_six_fixtures_and_rejects_every_certificate_byte_change() {
+        for (index, (name, proof, public)) in FIXTURES.into_iter().enumerate() {
+            let statement = decode(public);
+            let certificate = final_message_certificate(statement.semantic_public(), proof, Sha).unwrap();
+            assert_eq!(certificate.len(), CERTIFICATE_BYTES);
+            verify_summed(statement.semantic_public(), proof, &certificate, Sha, None).unwrap_or_else(|e| panic!("{name} summed {e:?}"));
+            // Another proof's certificate, and wrong lengths.
+            let (_, other_proof, other_public) = FIXTURES[(index + 1) % 6];
+            let other = final_message_certificate(decode(other_public).semantic_public(), other_proof, Sha).unwrap();
+            assert!(verify_summed(statement.semantic_public(), proof, &other, Sha, None).is_err());
+            assert!(verify_summed(statement.semantic_public(), proof, &certificate[..CERTIFICATE_BYTES - 1], Sha, None).is_err());
+            assert!(verify_summed(statement.semantic_public(), proof, &[], Sha, None).is_err());
+            if index == 0 {
+                // The final checks alone, so that all 384 positions are cheap to try.
+                let (p, claim, rhs2, _, _, _) = stage_d_vectors(statement.semantic_public(), proof, Sha).unwrap();
+                let geometry = QueryGeometry::for_range(&p.queries, 0, 22).unwrap();
+                let final_message = &proof[compact::OFF_FINAL..compact::OFF_OPENINGS];
+                summed_final_checks(&p, final_message, claim, rhs2, &geometry, &certificate, Sha, None).unwrap();
+                for at in 0..CERTIFICATE_BYTES {
+                    for bit in [1u8, 0x80] {
+                        let mut bad = certificate.clone();
+                        bad[at] ^= bit;
+                        assert!(summed_final_checks(&p, final_message, claim, rhs2, &geometry, &bad, Sha, None).is_err(), "byte {at} bit {bit}");
+                    }
+                }
+            }
+            // The 20 proof mutations are still rejected with the honest certificate of the unmutated proof.
+            if index == 0 {
+                for at in mutation_offsets() {
+                    let mut bad = proof.to_vec();
+                    bad[at] ^= 1;
+                    assert!(verify_summed(statement.semantic_public(), &bad, &certificate, Sha, None).is_err(), "mutation at {at}");
+                }
+            }
+        }
+    }
+
+    /// TEETH: a prover who follows the protocol honestly but for a false
+    /// claim is rejected, whichever of the two claims is false and whether
+    /// the false claim or the true sum is what it binds in the transcript.
+    #[test]
+    fn stage_d_rejects_honest_rounds_for_a_false_relation_or_query_claim() {
+        let (_, proof, public) = FIXTURES[4];
+        let statement = decode(public);
+        let (p, claim, rhs2, f, relation, query) = stage_d_vectors(statement.semantic_public(), proof, Sha).unwrap();
+        let geometry = QueryGeometry::for_range(&p.queries, 0, 22).unwrap();
+        let final_message = &proof[compact::OFF_FINAL..compact::OFF_OPENINGS];
+        let one = E::from_qm31(K::ONE);
+        for (false_claim, false_rhs2) in [(claim.add(one), rhs2), (claim, rhs2.add(one)), (claim.add(one), rhs2.sub(one))] {
+            // Rounds computed for the true vectors on the transcript of the false claims.
+            let adaptive = stage_d_rounds(&p, false_claim, false_rhs2, f.clone(), &relation, &query, Sha);
+            assert!(summed_final_checks(&p, final_message, false_claim, false_rhs2, &geometry, &adaptive, Sha, None).is_err());
+            // Rounds computed for the true claims, presented against the false ones.
+            let honest = stage_d_rounds(&p, claim, rhs2, f.clone(), &relation, &query, Sha);
+            assert!(summed_final_checks(&p, final_message, false_claim, false_rhs2, &geometry, &honest, Sha, None).is_err());
+        }
+        // A false weight vector with a true-looking claim: the rounds are honest for
+        // a perturbed relation vector whose sum the prover claims.
+        let mut wrong = relation.clone();
+        wrong[17] = wrong[17].add(one);
+        let wrong_claim = (0..64).fold(E::ZERO, |a, j| a.add(f[j].mul(wrong[j])));
+        let rounds = stage_d_rounds(&p, wrong_claim, rhs2, f.clone(), &wrong, &query, Sha);
+        assert!(summed_final_checks(&p, final_message, wrong_claim, rhs2, &geometry, &rounds, Sha, None).is_err());
+        // Control: the true claims with honest rounds are accepted.
+        let honest = stage_d_rounds(&p, claim, rhs2, f, &relation, &query, Sha);
+        summed_final_checks(&p, final_message, claim, rhs2, &geometry, &honest, Sha, None).unwrap();
     }
 }

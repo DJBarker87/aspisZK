@@ -81,6 +81,31 @@ fn main()->Result<()> {
     // Cost probe for binding the opening inputs to one QM31 value (verifies nothing).
     let probe=send(vec![10],zero.clone(),false)?;ensure!(probe.error.is_none(),"input probe failed: {:?}",probe.error);
     summary["input_evaluation_probe_cu"]=json!(probe.program_cu);runs.push(record("input-evaluation-probe",&probe,false));
+    // Stage D: the honest certificate is a function of the public proof data; it is
+    // computed here on the host and placed at the start of the third account.
+    {
+        #[derive(Clone,Copy)] struct Sha;
+        impl aspis_core::Digest32 for Sha { fn digest(&self,parts:&[&[u8]])->[u8;32]{let mut d=Sha256::new();for p in parts {d.update(p);}d.finalize().into()} }
+        let statement=aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1(&public).map_err(|e|anyhow!("statement: {e:?}"))?;
+        let certificate=aspis_r1_cost_probe::verifier::candidate::fused::final_message_certificate(statement.semantic_public(),&proof,Sha).map_err(|e|anyhow!("certificate: {e:?}"))?;
+        let mut account=zero.clone();account[..certificate.len()].copy_from_slice(&certificate);
+        let diagnostic=send(vec![13],account.clone(),true)?;
+        if diagnostic.error.is_none() {
+            ensure!(diagnostic.checkpoint==account,"summed wrote the certificate account");
+            let acceptance=send(vec![13],account.clone(),false)?;
+            // Negative control on chain: one flipped certificate byte must be rejected.
+            let mut bad=account.clone();bad[100]^=1;
+            let rejected=send(vec![13],bad,true)?;ensure!(rejected.error.is_some(),"summed accepted a changed certificate");
+            summary["summed_cu"]=json!(diagnostic.program_cu);
+            summary["summed_completes_at_1400000"]=json!(acceptance.error.is_none());
+            summary["summed_acceptance_cu"]=json!(if acceptance.error.is_none() {acceptance.program_cu} else {None});
+            summary["certificate_sha256"]=json!(sha(&certificate));
+            runs.push(record("summed-diagnostic",&diagnostic,true));runs.push(record("summed-acceptance",&acceptance,false));
+            std::println!("{label} summed: program CU {:?}; completes inside 1,400,000: {}",diagnostic.program_cu,acceptance.error.is_none());
+        } else {
+            summary["summed_cu"]=json!(null);runs.push(record("summed-diagnostic",&diagnostic,true));
+        }
+    }
     // Unit-cost and relation-phase probes (the second exists in detail-phases builds only).
     for (name,tag) in [("unit-cost-probe",11u8),("relation-probe",12u8)] {
         let run=send(vec![tag],zero.clone(),false)?;
