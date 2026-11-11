@@ -139,6 +139,24 @@ fn extension_from_raw_limbs(limbs: [u64; 4]) -> QM31 {
     }
 }
 
+#[inline(always)]
+fn external_linear_lazy_row(input: [[u32; 4]; 4], output: usize) -> QM31 {
+            let raw = crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                match output {
+                    0 => 2 * a + 3 * b + c + d,
+                    1 => a + 2 * b + 3 * c + d,
+                    2 => a + b + 2 * c + 3 * d,
+                    3 => 3 * a + b + c + 2 * d,
+                    _ => unreachable!(),
+                }
+            });
+    extension_from_raw_limbs(raw)
+}
+
 /// Addition-only Poseidon external layer with one reduction per output limb.
 #[inline(never)]
 fn external_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
@@ -152,28 +170,14 @@ fn external_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
             state[start + 3],
         ];
         let input = input.map(extension_limbs);
-        let mut output = 0usize;
-        while output < 4 {
-            let raw = core::array::from_fn(|limb| {
-                let a = u64::from(input[0][limb]);
-                let b = u64::from(input[1][limb]);
-                let c = u64::from(input[2][limb]);
-                let d = u64::from(input[3][limb]);
-                match output {
-                    0 => 2 * a + 3 * b + c + d,
-                    1 => a + 2 * b + 3 * c + d,
-                    2 => a + b + 2 * c + 3 * d,
-                    3 => 3 * a + b + c + 2 * d,
-                    _ => unreachable!(),
-                }
-            });
-            state[start + output] = extension_from_raw_limbs(raw);
-            output += 1;
-        }
+        state[start] = external_linear_lazy_row(input, 0);
+        state[start + 1] = external_linear_lazy_row(input, 1);
+        state[start + 2] = external_linear_lazy_row(input, 2);
+        state[start + 3] = external_linear_lazy_row(input, 3);
         group += 1;
     }
-    let sums: [[u64; 4]; 4] = core::array::from_fn(|column| {
-        core::array::from_fn(|limb| {
+    let sums: [[u64; 4]; 4] = crate::array_from_fn_copy::<_, 4>([0u64; 4], |column| {
+        crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
             u64::from(extension_limbs(state[column])[limb])
                 + u64::from(extension_limbs(state[4 + column])[limb])
                 + u64::from(extension_limbs(state[8 + column])[limb])
@@ -183,7 +187,7 @@ fn external_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
     let mut index = 0usize;
     while index < POSEIDON2_WIDTH {
         let limbs = extension_limbs(state[index]);
-        state[index] = extension_from_raw_limbs(core::array::from_fn(|limb| {
+        state[index] = extension_from_raw_limbs(crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
             u64::from(limbs[limb]) + sums[index & 3][limb]
         }));
         index += 1;
@@ -1237,5 +1241,120 @@ mod tests {
             STATE_ONLY_POSEIDON_ORACLE_INDIVIDUAL_DEGREE
                 <= STATE_ONLY_POSEIDON_ZEROCHECK_INDIVIDUAL_DEGREE
         );
+    }
+}
+
+/// Translatability pass (2026-11-11): the pinned form of `external_linear_lazy`, kept verbatim as a
+/// differential oracle for the rewritten form above (probe-crate text of R1's RPu_FIq_Native06).
+#[cfg(test)]
+mod tp2_external_linear_lazy_oracle {
+    use super::*;
+
+    fn external_linear_lazy_old(state: &mut [QM31; POSEIDON2_WIDTH]) {
+        let mut group = 0usize;
+        while group < 4 {
+            let start = 4 * group;
+            let input = [
+                state[start],
+                state[start + 1],
+                state[start + 2],
+                state[start + 3],
+            ];
+            let input = input.map(extension_limbs);
+            let mut output = 0usize;
+            while output < 4 {
+                let raw = core::array::from_fn(|limb| {
+                    let a = u64::from(input[0][limb]);
+                    let b = u64::from(input[1][limb]);
+                    let c = u64::from(input[2][limb]);
+                    let d = u64::from(input[3][limb]);
+                    match output {
+                        0 => 2 * a + 3 * b + c + d,
+                        1 => a + 2 * b + 3 * c + d,
+                        2 => a + b + 2 * c + 3 * d,
+                        3 => 3 * a + b + c + 2 * d,
+                        _ => unreachable!(),
+                    }
+                });
+                state[start + output] = extension_from_raw_limbs(raw);
+                output += 1;
+            }
+            group += 1;
+        }
+        let sums: [[u64; 4]; 4] = core::array::from_fn(|column| {
+            core::array::from_fn(|limb| {
+                u64::from(extension_limbs(state[column])[limb])
+                    + u64::from(extension_limbs(state[4 + column])[limb])
+                    + u64::from(extension_limbs(state[8 + column])[limb])
+                    + u64::from(extension_limbs(state[12 + column])[limb])
+            })
+        });
+        let mut index = 0usize;
+        while index < POSEIDON2_WIDTH {
+            let limbs = extension_limbs(state[index]);
+            state[index] = extension_from_raw_limbs(core::array::from_fn(|limb| {
+                u64::from(limbs[limb]) + sums[index & 3][limb]
+            }));
+            index += 1;
+        }
+    }
+
+    fn next(state: &mut u64) -> u64 {
+        // splitmix64
+        *state = state.wrapping_add(0x9e37_79b9_7f4a_7c15);
+        let mut z = *state;
+        z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
+        z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
+        z ^ (z >> 31)
+    }
+
+    fn canonical(state: &mut u64, edge: bool) -> M31 {
+        let r = next(state);
+        if edge {
+            let choices = [0u32, 1, 2, P - 1, P - 2, P / 2, P / 2 + 1, P, P + 1, u32::MAX];
+            M31(choices[(r % choices.len() as u64) as usize])
+        } else {
+            M31((r % u64::from(P)) as u32)
+        }
+    }
+
+    fn sample(state: &mut u64, edge: bool) -> [QM31; POSEIDON2_WIDTH] {
+        let mut out = [QM31::ZERO; POSEIDON2_WIDTH];
+        let mut lane = 0usize;
+        while lane < POSEIDON2_WIDTH {
+            out[lane] = QM31 {
+                c0: CM31::new(canonical(state, edge), canonical(state, edge)),
+                c1: CM31::new(canonical(state, edge), canonical(state, edge)),
+            };
+            lane += 1;
+        }
+        out
+    }
+
+    #[test]
+    fn rewritten_external_linear_lazy_equals_pinned_form() {
+        let mut seed = 0x5450_325f_454c_4cu64;
+        let mut fixed = [
+            [QM31::ZERO; POSEIDON2_WIDTH],
+            [QM31::ONE; POSEIDON2_WIDTH],
+            [QM31 { c0: CM31::new(M31(P - 1), M31(P - 1)), c1: CM31::new(M31(P - 1), M31(P - 1)) }; POSEIDON2_WIDTH],
+        ];
+        for state in fixed.iter_mut() {
+            let mut a = *state;
+            let mut b = *state;
+            external_linear_lazy(&mut a);
+            external_linear_lazy_old(&mut b);
+            assert!(a == b);
+        }
+        let mut case = 0u32;
+        while case < 200_000 {
+            let input = sample(&mut seed, case % 4 == 0);
+            let mut a = input;
+            let mut b = input;
+            external_linear_lazy(&mut a);
+            external_linear_lazy_old(&mut b);
+            assert!(a == b, "case {case}");
+            case += 1;
+        }
     }
 }

@@ -1229,6 +1229,16 @@ fn equality_value(left: &[QM31; 10], right: &[QM31; 10]) -> QM31 {
     product
 }
 
+/// The public withdrawal amount guard of `composition_parts`, unchanged, in
+/// its own `bool` function so that the emitted Lean has a known result type.
+#[inline(always)]
+fn invalid_withdrawal_amount(withdrawal_amount: Option<u32>) -> bool {
+    match withdrawal_amount {
+        None => false,
+        Some(amount) => amount == 0 || amount >= (1 << 30u32),
+    }
+}
+
 #[allow(clippy::type_complexity)]
 fn composition_parts(
     public: SemanticPublic<'_>,
@@ -1248,10 +1258,7 @@ fn composition_parts(
     ),
     PoolV1PairForestSemanticTerminalErrorV1,
 > {
-    let invalid_amount = match public.withdrawal_amount {
-        None => false,
-        Some(amount) => amount == 0 || amount >= (1 << 30u32),
-    };
+    let invalid_amount = invalid_withdrawal_amount(public.withdrawal_amount);
     if invalid_amount {
         return Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount);
     }
@@ -1284,11 +1291,11 @@ fn composition_parts(
     );
     let prepared_theta = PreparedQm31Multiplier::new(theta);
     let mut composition = copy.residual;
-    for lane in semantic.into_iter().rev() {
-        composition = prepared_theta.mul(composition).add(lane);
+    for index in (0..semantic.len()).rev() {
+        composition = prepared_theta.mul(composition).add(semantic[index]);
     }
-    for lane in poseidon.into_iter().rev() {
-        composition = prepared_theta.mul(composition).add(lane);
+    for index in (0..poseidon.len()).rev() {
+        composition = prepared_theta.mul(composition).add(poseidon[index]);
     }
     Ok((
         composition,
@@ -1983,6 +1990,154 @@ mod tests {
             ),
             Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition)
         );
+    }
+
+    /// Translatability pass (2026-11-11): pinned form of `composition_parts`, kept
+    /// verbatim as a differential oracle for the rewritten form.
+    mod tp2_oracle {
+        use super::*;
+
+        #[allow(clippy::type_complexity)]
+        fn composition_parts_old(
+            public: SemanticPublic<'_>,
+            claims: &[QM31; POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_CLAIMS_V1],
+            point: &[QM31; 10],
+            lambda: QM31,
+            chi: QM31,
+            theta: QM31,
+        ) -> Result<
+            (
+                QM31,
+                [QM31; 16],
+                [QM31; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS],
+                QM31,
+                QM31,
+                QM31,
+            ),
+            PoolV1PairForestSemanticTerminalErrorV1,
+        > {
+            let invalid_amount = match public.withdrawal_amount {
+                None => false,
+                Some(amount) => amount == 0 || amount >= (1 << 30u32),
+            };
+            if invalid_amount {
+                return Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount);
+            }
+            validate_transition(public)?;
+            let openings = StateOnlyPoseidonOpenings {
+                z: core::array::from_fn(|column| selected_claim(claims, 0, column)),
+                succ_z: core::array::from_fn(|column| selected_claim(claims, 1, column)),
+                xor12_z: core::array::from_fn(|column| selected_claim(claims, 2, column)),
+            };
+            let mask_only = core::array::from_fn(|column| {
+                selected_claim(
+                    claims,
+                    0,
+                    POOL_V1_PAIR_FOREST_TERMINAL_C1_COLUMNS_V1 + column,
+                )
+            });
+            let selectors = Selectors::boxed_at_point(point);
+            let poseidon =
+                evaluate_state_only_poseidon_oracle_projected(&openings, &poseidon_selectors(&selectors));
+            let semantic = semantic_packed(public, &openings, &selectors);
+            let h1_z = selected_claim(claims, 0, SELECTED_H1_COLUMN);
+            let copy = evaluate_with_selectors(
+                &openings.z,
+                h1_z,
+                &selectors,
+                lambda,
+                chi,
+                public.transition.live_snapshot.next_pair_index,
+                copy_variant(public.variant),
+            );
+            let prepared_theta = PreparedQm31Multiplier::new(theta);
+            let mut composition = copy.residual;
+            for lane in semantic.into_iter().rev() {
+                composition = prepared_theta.mul(composition).add(lane);
+            }
+            for lane in poseidon.into_iter().rev() {
+                composition = prepared_theta.mul(composition).add(lane);
+            }
+            Ok((
+                composition,
+                openings.z,
+                mask_only,
+                selected_claim(claims, 0, SELECTED_G_COLUMN),
+                h1_z,
+                copy.active,
+            ))
+        }
+
+        fn invalid_withdrawal_amount_old(withdrawal_amount: Option<u32>) -> bool {
+            match withdrawal_amount {
+                None => false,
+                Some(amount) => amount == 0 || amount >= (1 << 30u32),
+            }
+        }
+
+        #[test]
+        fn amount_guard_helper_equals_pinned_expression() {
+            let edges = [0u32, 1, 2, (1 << 30) - 2, (1 << 30) - 1, 1 << 30, (1 << 30) + 1, u32::MAX - 1, u32::MAX];
+            assert_eq!(invalid_withdrawal_amount(None), invalid_withdrawal_amount_old(None));
+            for amount in edges {
+                assert_eq!(invalid_withdrawal_amount(Some(amount)), invalid_withdrawal_amount_old(Some(amount)));
+            }
+            let mut state = 0x5450_325f_414d_5400u64;
+            for _ in 0..200_000 {
+                state = state.wrapping_mul(6_364_136_223_846_793_005).wrapping_add(1_442_695_040_888_963_407);
+                let amount = (state >> 32) as u32 >> ((state >> 8) & 3);
+                assert_eq!(invalid_withdrawal_amount(Some(amount)), invalid_withdrawal_amount_old(Some(amount)));
+            }
+        }
+
+        fn compare_at(public: SemanticPublic<'_>, state: &mut u64, cases: u32, boolean: bool) {
+            for case in 0..cases {
+                let mut claims = [QM31::ZERO; POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_CLAIMS_V1];
+                for claim in claims.iter_mut() {
+                    *claim = next_test_qm31(state);
+                }
+                let point = if boolean {
+                    boolean_point((case as usize * 37) & 1023)
+                } else {
+                    core::array::from_fn(|_| next_test_qm31(state))
+                };
+                let lambda = next_test_qm31(state);
+                let chi = next_test_qm31(state);
+                let theta = if case == 0 { QM31::ZERO } else { next_test_qm31(state) };
+                assert_eq!(
+                    composition_parts(public, &claims, &point, lambda, chi, theta),
+                    composition_parts_old(public, &claims, &point, lambda, chi, theta),
+                    "case {case}"
+                );
+            }
+        }
+
+        #[test]
+        fn rewritten_composition_parts_equals_pinned_form() {
+            let mut state = 0x5450_325f_4350_0000u64;
+            let (tpub, transfer) = transfer_at(13);
+            let (wpub, withdrawal) = withdrawal_at(13);
+            let mut bad = transfer.public_statement;
+            bad.candidate_afterstate.next_frontier[0][0] =
+                bad.candidate_afterstate.next_frontier[0][0].add(M31::ONE);
+            // Valid transitions: 2 x 50,000 pseudo-random claim sets, half at Boolean points.
+            compare_at(private_public(&tpub, &transfer.public_statement), &mut state, 25_000, false);
+            compare_at(private_public(&tpub, &transfer.public_statement), &mut state, 25_000, true);
+            compare_at(withdrawal_public(&wpub, &withdrawal.public_statement), &mut state, 25_000, false);
+            compare_at(withdrawal_public(&wpub, &withdrawal.public_statement), &mut state, 25_000, true);
+            // Failing transition, and every amount edge, alone and together with the failing
+            // transition (error precedence).
+            compare_at(private_public(&tpub, &bad), &mut state, 100, false);
+            let mut wbad = withdrawal.public_statement;
+            wbad.candidate_afterstate.next_frontier[0][0] =
+                wbad.candidate_afterstate.next_frontier[0][0].add(M31::ONE);
+            for amount in [0u32, 1, (1 << 30) - 1, 1 << 30, u32::MAX] {
+                let mut p = wpub;
+                p.amount = amount;
+                compare_at(withdrawal_public(&p, &withdrawal.public_statement), &mut state, 50, false);
+                compare_at(withdrawal_public(&p, &wbad), &mut state, 50, false);
+            }
+        }
     }
 }
 

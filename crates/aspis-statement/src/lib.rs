@@ -11,6 +11,22 @@ extern crate alloc;
 #[cfg(test)]
 extern crate std;
 
+/// Extraction-only safe fixed-array constructor for Copy outputs.
+/// Calls f in increasing index order and threads the FnMut state normally.
+#[inline(always)]
+pub(crate) fn array_from_fn_copy<T: Copy, const N: usize>(
+    init: T,
+    mut f: impl FnMut(usize) -> T,
+) -> [T; N] {
+    let mut out = [init; N];
+    let mut i = 0usize;
+    while i < N {
+        out[i] = f(i);
+        i += 1;
+    }
+    out
+}
+
 #[cfg(not(target_os = "solana"))]
 pub mod atomic_state_only_registry;
 pub mod atomic_state_only_terminal;

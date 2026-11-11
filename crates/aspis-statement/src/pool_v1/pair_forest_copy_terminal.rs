@@ -276,6 +276,24 @@ fn pattern_values_literal(
     result
 }
 
+/// One eight-limb window of `pattern_values_windowed`: the former local
+/// closure `window`, as a function of the values it read (translatability).
+#[cfg(any(test, feature = "pool-v1-pair-forest-pattern-window-audit"))]
+#[inline(always)]
+fn pattern_window(
+    prepared: &[PreparedQm31Multiplier; 8],
+    openings: &[QM31; POSEIDON2_WIDTH],
+    start: usize,
+) -> QM31 {
+    let mut value = QM31::ZERO;
+    let mut slot = 0usize;
+    while slot < 8 {
+        value = value.add(prepared[slot].mul(openings[start + slot]));
+        slot += 1;
+    }
+    value
+}
+
 /// Exact CSE for the frozen fourteen-pattern table. Pattern 0 is the two
 /// adjacent eight-limb windows, patterns 2 and 3 are exact six-limb prefixes,
 /// and pattern 10 differs from pattern 13 only by its final public offset.
@@ -293,19 +311,10 @@ fn pattern_values_windowed(
         slot += 1;
     }
     let prepared: [PreparedQm31Multiplier; 8] = powers.map(PreparedQm31Multiplier::new);
-    let window = |start: usize| {
-        let mut value = QM31::ZERO;
-        let mut slot = 0usize;
-        while slot < 8 {
-            value = value.add(prepared[slot].mul(openings[start + slot]));
-            slot += 1;
-        }
-        value
-    };
-    let window_0 = window(0);
-    let window_1 = window(1);
-    let window_2 = window(2);
-    let window_8 = window(8);
+    let window_0 = pattern_window(&prepared, openings, 0);
+    let window_1 = pattern_window(&prepared, openings, 1);
+    let window_2 = pattern_window(&prepared, openings, 2);
+    let window_8 = pattern_window(&prepared, openings, 8);
     let mut result = [QM31::ZERO; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1];
     result[0] = window_0.add(prepared[7].mul(window_8));
     result[1] = window_0;
@@ -1539,5 +1548,118 @@ mod tests {
             ),
             None,
         );
+    }
+}
+
+/// Translatability pass (2026-11-11): the pinned form of `pattern_values_windowed`, kept verbatim
+/// as a differential oracle for the form with the named `pattern_window` helper.
+#[cfg(test)]
+mod tp2_pattern_values_windowed_oracle {
+    use super::*;
+
+    fn pattern_values_windowed_old(
+        openings: &[QM31; POSEIDON2_WIDTH],
+        lambda: QM31,
+    ) -> [QM31; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1] {
+        let mut powers = [QM31::ZERO; 8];
+        let mut power = lambda;
+        let mut slot = 0usize;
+        while slot < powers.len() {
+            powers[slot] = power;
+            power = power.mul(lambda);
+            slot += 1;
+        }
+        let prepared: [PreparedQm31Multiplier; 8] = powers.map(PreparedQm31Multiplier::new);
+        let window = |start: usize| {
+            let mut value = QM31::ZERO;
+            let mut slot = 0usize;
+            while slot < 8 {
+                value = value.add(prepared[slot].mul(openings[start + slot]));
+                slot += 1;
+            }
+            value
+        };
+        let window_0 = window(0);
+        let window_1 = window(1);
+        let window_2 = window(2);
+        let window_8 = window(8);
+        let mut result = [QM31::ZERO; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1];
+        result[0] = window_0.add(prepared[7].mul(window_8));
+        result[1] = window_0;
+        result[2] = window_2
+            .sub(prepared[6].mul(openings[8]))
+            .sub(prepared[7].mul(openings[9]));
+        result[3] = window_0
+            .sub(prepared[6].mul(openings[6]))
+            .sub(prepared[7].mul(openings[7]));
+        result[4] = prepared[0]
+            .mul(openings[0])
+            .add(prepared[1].mul(openings[1]));
+        result[5] = prepared[0]
+            .mul(openings[6])
+            .add(prepared[1].mul(openings[7]));
+        result[6] = prepared[0].mul(openings[0]);
+        result[7] = prepared[0].mul(openings[10]);
+        result[8] = prepared[0].mul(openings[1]);
+        result[9] = prepared[0].mul(openings[2]);
+        result[10] = window_8.add(prepared[7].mul(lift_m31(M31(1_051_521_018))));
+        result[11] = window_2;
+        result[12] = window_1;
+        result[13] = window_8;
+        result
+    }
+
+    fn next(state: &mut u64) -> u64 {
+        *state = state.wrapping_add(0x9e37_79b9_7f4a_7c15);
+        let mut z = *state;
+        z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
+        z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
+        z ^ (z >> 31)
+    }
+
+    fn element(state: &mut u64, edge: bool) -> QM31 {
+        let p = aspis_core::field::P;
+        let mut limbs = [0u32; 4];
+        let mut k = 0usize;
+        while k < 4 {
+            let r = next(state);
+            limbs[k] = if edge {
+                let choices = [0u32, 1, 2, p - 1, p - 2, p / 2];
+                choices[(r % choices.len() as u64) as usize]
+            } else {
+                (r % u64::from(p)) as u32
+            };
+            k += 1;
+        }
+        QM31 {
+            c0: CM31::new(M31(limbs[0]), M31(limbs[1])),
+            c1: CM31::new(M31(limbs[2]), M31(limbs[3])),
+        }
+    }
+
+    #[test]
+    fn rewritten_pattern_values_windowed_equals_pinned_form() {
+        let mut seed = 0x5450_325f_5057_494eu64;
+        let mut case = 0u32;
+        while case < 120_000 {
+            let edge = case % 4 == 0;
+            let mut openings = [QM31::ZERO; POSEIDON2_WIDTH];
+            let mut lane = 0usize;
+            while lane < POSEIDON2_WIDTH {
+                openings[lane] = element(&mut seed, edge);
+                lane += 1;
+            }
+            let lambda = match case {
+                0 => QM31::ZERO,
+                1 => QM31::ONE,
+                _ => element(&mut seed, edge),
+            };
+            assert!(
+                pattern_values_windowed(&openings, lambda)
+                    == pattern_values_windowed_old(&openings, lambda),
+                "case {case}"
+            );
+            case += 1;
+        }
     }
 }
