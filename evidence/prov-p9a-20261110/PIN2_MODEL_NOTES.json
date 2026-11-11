@@ -1,0 +1,19 @@
+{
+ "schema": "PIN2_MODEL_NOTES/1",
+ "notes": [
+  {
+   "fn": "close_checkpoint",
+   "behaviour": "The handler writes account state through shared references: checkpoint.try_borrow_mut_data()?.fill(0); **checkpoint.try_borrow_mut_lamports()? = 0; **base.try_borrow_mut_lamports()? = total (RefCell writes behind &AccountInfo). Aeneas drops such writes (PCXP_REPORT.md, prov-p8a), so even a successful emission would not model the zeroing or the lamport move. The tool never reached emission (see PIN2_CANNOT_EXTRACT.json). The hand account-state model and its proof item belong to the Stream A lead.",
+   "reads_for_model": [
+    "is_close_checkpoint guard (extracted)",
+    "owner/writable/executable/signer checks",
+    "Pubkey::create_with_seed(base, seed, program_id) == checkpoint.key",
+    "checked_add of lamports before any write"
+   ]
+  },
+  {
+   "fn": "process",
+   "behaviour": "tag 7 dispatches to close_checkpoint as an opaque child with the same program_id, accounts, data arguments as stage children; tags 4,5,6 still route to lifecycle_* (unreachable under admitted)"
+  }
+ ]
+}

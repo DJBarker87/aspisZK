@@ -1,0 +1,65 @@
+{
+ "schema": "PIN2_ADAPTER_REPORT/1",
+ "target_established": false,
+ "source": "271869c946d4286db6ee5be784f136599fa8707e",
+ "tool": "ORIGINAL: Charon daad69be (XRa_bin) + Aeneas 959659a6 (p4c rebuild, sha256 959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3), -abort-on-error",
+ "extraction": {
+  "run": "PCXQ_E002",
+  "exit": 0,
+  "wall_seconds": 33.65,
+  "peak_rss_kib": 576396,
+  "swaps": 0,
+  "caps": "3G/4G swap0 tasks64 timeout 180",
+  "cargo_jobs": "--jobs 4 + CARGO_BUILD_JOBS=4, -Zthreads=1",
+  "identity": "by class receipt PCWE_E003",
+  "features": "pool-adapter,private-leaf-salts",
+  "opaque": "stage1, stage2, lifecycle_init/write/finalize, close_checkpoint, solana_account_info::AccountInfo (same set as NMW_process_emitted plus close_checkpoint)",
+  "configuration": "release default (overflow checks OFF for the program crate); is_close_checkpoint emits Usize.wrapping_sub for data.len()-2, guarded by data.len()>=3 so never wraps; tag OFF_EMISSION_WRAPPING, not an ON-gate model"
+ },
+ "emission_sha256": {
+  "Funs.lean": "e5d6c8024ef1138dbecc672e32f28b87c23947262e86750fea4a7a1d46ead6db",
+  "Types.lean": "7d66c3c1bd56ac83b00bc30ec99ae2470382ee5bf102183009505ae289b7f3eb",
+  "FunsExternal_Template.lean": "d79482d7d32b1b73b2c14cf315c289e6e13bdfe72f2e046f9b91a615d9eab75f",
+  "TypesExternal_Template.lean": "fbd49a3cf841564f1d9446532d0070a8ea67c206893b3f515513b896b1376127"
+ },
+ "new_gate_files": {
+  "PIN2_NEWGATE_adapter_route_Funs.lean": "e5d6c8024ef1138dbecc672e32f28b87c23947262e86750fea4a7a1d46ead6db",
+  "PIN2_NEWGATE_adapter_route_Types.lean": "7d66c3c1bd56ac83b00bc30ec99ae2470382ee5bf102183009505ae289b7f3eb",
+  "note": "verbatim Aeneas emission; NOT compiled here: it depends on the SDK/Pubkey/ProgramError/AccountInfo and slice library models (trust rows HM-A, HM-B/HM-D) provided by the gate externals, as NMW_process_emitted does"
+ },
+ "functions": [
+  {
+   "fn": "pool_route::CLOSE_CHECKPOINT_TAG",
+   "verdict": "changed-new-gate (added)"
+  },
+  {
+   "fn": "pool_route::is_close_checkpoint",
+   "verdict": "changed-new-gate (added)"
+  },
+  {
+   "fn": "pool_route::admitted",
+   "verdict": "changed-new-gate",
+   "note": "extra final arm: ... else is_close_checkpoint data; the old gate (Hiq_DispatchSource.pool_route.admitted, hand model) and the old emission are superseded"
+  },
+  {
+   "fn": "r1_pool_adapter::process",
+   "verdict": "changed-new-gate",
+   "note": "new arm 7 => close_checkpoint (opaque child); all other arms text-identical to NMW_process_emitted"
+  },
+  {
+   "fn": "r1_pool_adapter::close_checkpoint",
+   "verdict": "cannot-extract",
+   "note": "see PIN2_CANNOT_EXTRACT.json"
+  }
+ ],
+ "unchanged_functions_in_modules": "none reached: stage1/stage2/lifecycle_* are opaque children, unchanged text, not emitted",
+ "new_gate_compile": {
+  "status": "NOT COMPILED: library environment lacks the models the emission needs; none added",
+  "missing": [
+   "solana_pubkey.Pubkey and solana_account_info.AccountInfo (TypesExternal template axioms; the old gate has AdapterRw.solana_pubkey.Pubkey / ProgramError models but no AccountInfo)",
+   "core.slice.Slice.first, core.option.OptionShared0T.copied, core.slice.Slice.starts_with, core.ops.range.RangeInclusive.contains, Slice.Insts.CoreCmpPartialEqArray.eq, Shared0Slice.Insts.CoreCmpPartialEqArray.eq (FunsExternal template axioms; the old Hiq_DispatchSource gate replaced them by hand models eqU8/firstByte/copied/starts)",
+   "the six opaque children stage1, stage2, lifecycle_init/write/finalize, close_checkpoint"
+  ],
+  "rule": "HM-A/HM-B/HM-D rows would supply the first group; adding models is not mine to do"
+ }
+}

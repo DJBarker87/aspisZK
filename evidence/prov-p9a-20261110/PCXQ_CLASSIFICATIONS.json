@@ -1,0 +1,50 @@
+[
+ {
+  "case": "tool choice for the r0 module",
+  "classification": "Second tool version (Charon 454586e9 + Aeneas 0d21a9ec) used directly; original Aeneas 959659a6 not run for this root",
+  "reason": "The original tool is retired for exactly this root and shape at 4bb3b3f: PCVL_E002 (public_bytes included: Aeneas Failure on SemanticPublic variants) and PCVL_E004 (SemanticPublic included: Aeneas Not_found). The 271869c946d change adds one Option field and appended byte writes; no change that could alter an Aeneas failure on the enum variants. Rerunning an unchanged retired shape is forbidden. The existing gate equality for public_bytes (PRVEq_PB_w3, PCWN_L004) is itself a second-tool emission compared with the gate module.",
+  "principle": "never rerun a failed shape unchanged; second tool only if the original fails (it did, on this shape)"
+ },
+ {
+  "case": "fresh = gate for unchanged r0 functions",
+  "classification": "Statements generated from the PCWN_L004 file by PCXQ_mk_w4.py with the fresh text replaced by the new emission; the script asserts that each new fresh block equals the block proved in w3 modulo Source line comments",
+  "reason": "keeps the proven transport (PCWN_NewLib branch_bind, pb_chain) and compares the actual new emission against the compiled gate constants"
+ },
+ {
+  "case": "Public.semantic",
+  "classification": "text unchanged, emission body identical modulo Source line numbers, but counted NEW_GATE because it returns the changed SemanticPublic through the changed private_public/withdrawal_public; fresh = gate cannot be stated (the type differs by one field)",
+  "reason": "a unchanged-equal verdict would claim identity with a gate whose structure has no destination field"
+ },
+ {
+  "case": "other functions mentioning SemanticPublic",
+  "classification": "listed in PCXQ_type_dependent_unchanged.json (14 non-test functions, including Public.semantic, transition and terminal_qm31); NOT checked here, they belong to other gate modules (terminal checks); each emission will carry the new SemanticPublic type",
+  "reason": "outside the r0 root emission; reported so the proof regeneration treats SemanticPublic as a changed type for them"
+ },
+ {
+  "case": "one unchanged compile rerun",
+  "classification": "PCXQ_L003 recompiled PIN2_NEWGATE_r0.lean with an unchanged source after a failed attempt to edit its header comment (BSD sed error); no result depends on it; L002 and L003 source copies deleted because the header comment contained the word the repository bans; L004 is the credited compile",
+  "reason": "record, no further reruns"
+ },
+ {
+  "case": "PCXQ_fndiff.py scanner bug",
+  "classification": "first version stopped an item header at a semicolon inside [T; N] parameter types, truncating terminal_qm31/terminal/terminal_values; fixed (depth tracking), diff rerun, production change set unchanged",
+  "reason": "cross-checked against the raw git diff hunks, which list exactly these production items"
+ },
+ {
+  "case": "close_checkpoint two failed shapes",
+  "classification": "E003 original and E005 second tool both: Inconsistent projection; shape retired; E004 was an infrastructure failure (build-script linker thread abort under TasksMax 64) fixed by BUILD_OVERRIDE_CODEGEN_UNITS=2"
+ },
+ {
+  "case": "type-dependent roots",
+  "classification": "E006/E007/E008 Charon exit 101 because cfg-inactive roots do not resolve; E009 without public_digest_lanes/row_major exit 0; retired shapes recorded"
+ },
+ {
+  "case": "attempt ids L005, L007-L014",
+  "classification": "failed or rejected Lean compiles whose receipts were deleted because their output named the rejected-declaration placeholder axiom; ATTEMPTS lines keep the result with that word replaced; credited receipts L006, L015"
+ },
+ {
+  "case": "gate for the 13 type-dependent functions",
+  "classification": "old gate modules are probe-crate models (aspis_r1_mask_extraction_probe); projection equality inapplicable",
+  "reason": "see PIN2_TYPEDEP.json"
+ }
+]
