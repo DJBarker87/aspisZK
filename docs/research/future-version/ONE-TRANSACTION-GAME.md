@@ -1375,3 +1375,177 @@ this file does not provide:
 - PayoutBound (9.3): statements next.
 - Source refinement of `dV_aspis`, the entry and the Pool path, outside this
   layer.
+
+## 11. PayoutBound: the conjunct over a model of the Pool's withdrawal step (COMPILED, model level)
+
+One module, `lean/AspisPayoutModel.lean`, namespace `AspisPayout`. It has no
+imports: the model is self-contained. Kind of result: **model theorems about an
+explicit model written in this file**. They are not a source refinement. That
+the Rust computes the model is stated below as open obligations. Nothing here is
+established for the deployed code.
+
+| Attempt | sha256 (source) | Exit | Wall | Peak RSS | cgroup peak | Swaps |
+|---|---|---|---|---|---|---|
+| PSF-01 | 766c5b31…bf82d | 1 | 0.51 s | 0.49 GB | 0.08 GB | 0 |
+| PSF-02 | d044b50d…f0fb8 | 1 | 0.58 s | 0.49 GB | 0.08 GB | 0 |
+| PSF-03 | fa09391f…7c2f | 1 | 0.67 s | 0.49 GB | 0.08 GB | 0 |
+| PSF-04 | b08da063…cccf61 | 0 | 0.75 s | 0.50 GB | 0.09 GB | 0 |
+| PSF-05 | 54f0fed9f1faf2a7ea38412842050416c6b7fac15af51d8ee3e84e7eb121180f | 0 | 1.83 s | 0.49 GB | 0.08 GB | 0 |
+
+**Correction at PSF-05 (lead's review, 2026-11-11).** The theorem compiled at
+PSF-04 was vacuous. Its hypothesis `e1` ended with
+`q.deployment = ids.deploymentOf q.pool` under `∀ q`, that is, for every
+request. A request can name any deployment, so no such hypothesis holds, and a
+theorem with a hypothesis that cannot hold says nothing. The check that
+rejects a wrong deployment is made by the entry on the statement it accepts,
+so the condition belongs on accepted statements only. PSF-05 moves it to a
+separate hypothesis `e1d : ∀ s, accepted s → s.deployment = ids.deploymentOf s.pool`.
+The conclusion is unchanged. Two theorems were added so that this cannot
+recur unnoticed:
+- `Witness.first_e1_form_unsatisfiable` keeps the counterexample to the first
+  form (pool 0 with deployment 0, against a pool whose deployment is 4).
+- `Witness.instance_paid` builds one concrete instance (addresses are
+  numbers, the callee does the exact transfer) in which every hypothesis of
+  `payout_bound` holds, and applies the theorem to it. It shows the
+  hypotheses can hold together. It is not evidence about the deployed
+  programs.
+
+The hashes of PSF-01 to PSF-04 were abbreviated by hand and cannot be
+rechecked: the host copy of the source was replaced by the PSF-05 source.
+
+PSF-01 to PSF-03 failed on `match` terms that needed `dsimp only` after a
+rewrite, and on two `rfl`s where named hypotheses were needed. None is a
+mathematical change. Every `#print axioms` is `[propext, Classical.choice,
+Quot.sound]`; Lean prints `Classical.choice` as `choice` because the file opens
+`Classical`. There is no `sorry`, `axiom`, `native_decide` or raised heartbeats,
+and no warnings. The local hash equals the compiled one.
+
+### 11.1 The model
+
+Each step mirrors the Rust:
+- `decode`: the Pool decodes the request.
+- `plan ids r keys w0` (vault.rs:387-540) rejects unless:
+  - the amount is nonzero;
+  - the destination key is the request's destination;
+  - the vault, vault authority and mint are those of the request's pool
+    (`PoolIds`);
+  - the pre-call vault and destination token accounts parse, with the plan's
+    mint, and the vault authority is the plan's;
+  - the amount is at most the vault balance.
+
+  It computes `vaultAfter = vault − amount` and `destAfter = dest + amount`.
+- The cross-program call is `callee : World → World`, an **arbitrary** state
+  change. The model puts no constraint on it.
+- `DeltaOk` (vault.rs:551-580): on what the Pool reads after the call (`read`),
+  both accounts parse, both mints are the plan's, the vault authority is the
+  plan's, and the balances equal `vaultAfter` and `destAfter`.
+- `step` returns the post-call state if the plan and `DeltaOk` hold, and
+  `none` otherwise (the transaction fails).
+
+Token accounts carry `mint`, `authority`, `amount`, and `rest` for every field
+the Pool does not read: delegate, close authority, frozen state, lamports.
+
+### 11.2 The two trust rows (runtime class, accepted by the lead under the owner's 2026-11-04 rule; to be reported to the owner)
+
+- **R-a, post-call visibility (`RowA`).** After a cross-program invoke returns
+  Ok, the account data the caller reads through its `AccountInfo`s is the data
+  as the callee left it. Used for the vault and the destination, the two
+  accounts the Pool re-reads.
+- **R-b, writable set (`RowB`).** A cross-program invoke changes only the
+  accounts passed to it as writable. Here those are the vault and the
+  destination (`AccountMeta::new`, vault.rs around :508-511); mint and
+  authority are passed read-only.
+
+No other row is used. Nothing about the token program's behaviour is assumed.
+
+### 11.3 Statements proved (model level)
+
+```lean
+theorem step_paid (ids) (r) (keys) (w0 w1) (callee read)
+    (rowA : RowA keys callee read w0) (rowB : RowB keys callee w0)
+    (ok : step ids r keys w0 callee read = some w1) :
+    Paid ids r keys w0 w1
+```
+
+`Paid` says:
+- `0 < amount`;
+- destination key = the request's destination;
+- vault key = the vault of the request's pool;
+- vault ≠ destination;
+- the vault balance after the call plus `amount` = the vault balance before,
+  with the pool's mint;
+- the destination balance after = before plus `amount`, with the pool's mint;
+- every other account is unchanged.
+
+```lean
+theorem payout_bound (ids) (encode decode) (stmtOf) (accepted) (r) (keys) (w0 w1) (callee read)
+    (rowA : RowA keys callee read w0) (rowB : RowB keys callee w0)            -- trust rows
+    (p1 : ∀ q b, encode q = some b → decode b = some q)                       -- OPEN obligation
+    (e1 : ∀ q, (stmtOf q).pool = q.pool ∧ (stmtOf q).deployment = q.deployment ∧
+      (stmtOf q).destination = (if q.withdrawal then some q.destination else none) ∧
+      (stmtOf q).amount = q.amount)                                           -- OPEN obligation
+    (e1d : ∀ s, accepted s → s.deployment = ids.deploymentOf s.pool)          -- OPEN obligation
+    (p3 : ∃ b q', encode r = some b ∧ decode b = some q' ∧ accepted (stmtOf q'))  -- OPEN obligation
+    (p2 : step ids r keys w0 callee read = some w1)                           -- OPEN obligation
+    (withdrawal : r.withdrawal = true) :
+    ∃ s, accepted s ∧ s.destination = some keys.dest ∧ keys.vault = ids.vaultOf s.pool ∧
+      s.deployment = ids.deploymentOf s.pool ∧ Paid ids r keys w0 w1 ∧ s.amount = r.amount
+```
+
+In words: if the Pool's withdrawal step returns Ok, then the statement `s`
+satisfies four things:
+- the verifier accepted a proof bound to `s`;
+- exactly `s.amount` left the vault of `s`'s pool;
+- that amount arrived at `s`'s destination token account;
+- `s`'s deployment is that pool's.
+
+Nothing else changed.
+
+### 11.4 Each hypothesis, labelled
+
+| Hypothesis | What it is | Label | Where |
+|---|---|---|---|
+| `rowA` | post-call visibility | **trust row R-a** | runtime |
+| `rowB` | writable set | **trust row R-b** | runtime |
+| `p1` | decode after encode is the identity on the encoder's image | **open obligation** (Aspis's codec; never a trust row) | crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:432 (encode), :466 (decode) |
+| `e1` | the verifier builds the statement it checks the proof against from the request it decoded, carrying that request's pool, deployment, destination (iff withdrawal) and amount | **open obligation** (source refinement of the entry) | r1_pool_adapter_owned.rs, one-transaction block of `stage2_owned`; `validate_asq8`, `authenticate_asq8_accounts`, `reconstruct_asq8_statement` (r1_pool_adapter.rs); `semantic_public().public_bytes()` (pair_forest_semantic_terminal.rs:2020-2090) |
+| `e1d` | the entry accepts only a statement whose deployment is its pool's | **open obligation** (source refinement of the entry: `authenticate_asq8_accounts`) | r1_pool_adapter_owned.rs, one-transaction block of `stage2_owned`; `validate_asq8`, `authenticate_asq8_accounts`, `reconstruct_asq8_statement` (r1_pool_adapter.rs); `semantic_public().public_bytes()` (pair_forest_semantic_terminal.rs:2020-2090) |
+| `p3` | the Pool sends the verifier `encode r` of the request it decoded, and pays only after the verifier accepted a proof bound to the statement built from those bytes | **open obligation** (source refinement of the Pool's call) | pair_forest.rs:1642-1643, pair_forest_dispatch.rs:157, :342; `validate_authenticated_terminal_result_v1` (pair_forest.rs around :1750) |
+| `p2` | the Pool's payout path computes `step` on that same request, with the pool key used for the vault and authority addresses being the request's pool | **open obligation** (source refinement of the Pool's payout path) | vault.rs:387-580; pair_forest.rs around :1700 |
+
+`p1` was not proved: proving it at model level would need a Lean model of the
+1,880-byte request codec. Proving it for the Rust needs that codec extracted, or
+a hand model plus its refinement. Neither exists. So it stays open, and that is
+what it needs.
+
+How `accepted` connects to the rest: it is the event "the verifier accepted a
+proof bound to `s`". In the outcome conjunct (section 1.2a, form (B)) it is
+instantiated by the one-phase run's acceptance, whose transcript is seeded with
+`s`'s public bytes. That instantiation is part of composing PayoutBound into
+`Outcome1` and is not written yet.
+
+### 11.5 Attempts to break it
+
+| Attack | Result | Rejected by |
+|---|---|---|
+| A destination account other than the statement's | the step returns `none` | the plan's key check (`wrong_destination_rejected`, proved); vault.rs:454 |
+| The same account as vault and destination | no Ok step exists | the exact-delta check, which would need `v − amount = v + amount`, plus the nonzero-amount check (`same_account_rejected`, proved; `Paid.distinct`) |
+| Amount 0 | the step returns `none` | the plan's nonzero check (`zero_amount_rejected`, proved); vault.rs:398 |
+| A callee that moves tokens through a third account | no effect outside vault and destination | R-b (`Paid.others`); the vault and destination balances are exact by the delta check, so a detour through a third account cannot change the net |
+| A callee that changes the vault's authority | no Ok step exists | the post-call authority check (`authority_change_rejected`, proved); vault.rs:575 |
+| A callee that changes the vault's mint, or the destination's | no Ok step exists | the post-call mint checks (inside `step_paid`) |
+| A callee that sets a delegate or close authority on the vault, or freezes it | **not rejected** | **gap, recorded**: these are in `rest`, which the Pool does not re-read. They do not affect PayoutBound, which concerns the two balances. They affect custody of the remaining vault funds, which stays open and outside PayoutBound. No Pool code change is proposed: it would raise compute units |
+| A callee that changes the destination's owner, delegate or state | not rejected | outside PayoutBound as stated (payment to the destination token account). The Pool does not check these before the call either |
+| The verifier sees a request different from the one the Pool pays on | excluded only through `p1` and `p3` | open obligations, stated |
+| A transfer request (no destination) | no payout conjunct (`withdrawal` hypothesis) | the Pool plans no withdrawal for a transfer (pair_forest.rs, `withdrawal_plan` is `None`) |
+
+### 11.6 What is open
+
+- `p1`, `e1`, `e1d`, `p2`, `p3`: source obligations on Aspis's own code.
+- Instantiating `accepted` with the one-phase run's acceptance, and conjoining
+  PayoutBound into `Outcome1`.
+- Custody of the remaining vault funds (the delegate, close-authority and
+  frozen-state residual).
+- Until all of the above are proved, the only claim made remains: "bound into
+  the transcript and present in the public object; the relation does not
+  constrain it".
