@@ -50,21 +50,28 @@ mod r1 {
     pub fn coefficients<T: Copy>(rows: &[T; 1024]) -> [T; 1024] {
         core::array::from_fn(|j| rows[row(j)])
     }
+    // pv-rw-d: index loops (from_fn calls its closure for index 0, 1, ... in order).
     pub fn powers<const N: usize>(x: E) -> [E; N] {
+        let mut out = [E::ZERO; N];
         let mut p = E::ONE;
-        core::array::from_fn(|_| {
-            let a = p;
+        let mut i = 0;
+        while i < N {
+            out[i] = p;
             p = p.mul(x);
-            a
-        })
+            i += 1;
+        }
+        out
     }
     pub fn kpowers<const N: usize>(x: K) -> [K; N] {
+        let mut out = [K::ZERO; N];
         let mut p = K::ONE;
-        core::array::from_fn(|_| {
-            let a = p;
+        let mut i = 0;
+        while i < N {
+            out[i] = p;
             p = p.mul(x);
-            a
-        })
+            i += 1;
+        }
+        out
     }
     pub fn double(x: K) -> K {
         x.mul(x).add(x.mul(x)).sub(K::ONE)
@@ -78,36 +85,77 @@ mod r1 {
         pub extra: [K; 2],
     }
     impl Weights {
+        /// pv-rw-d: loop-free (the nested index loops crashed Aeneas at
+        /// InterpReduceCollapse.ml:1991).  Same entries, same products.
         pub fn new(alpha: &[K; 10], z: &[[K; 2]; 2]) -> Self {
             let points = aspis_core::state_only_prefix::r0::statement_points(alpha);
-            let mut factors = [[[K::ZERO; 4]; 5]; 5];
-            for k in 0..3 {
-                for d in 0..5 {
-                    let a = points[k][9 - 2 * TAU[d]];
-                    let b = points[k][8 - 2 * TAU[d]];
-                    factors[k][d] = [K::ONE.sub(a).mul(K::ONE.sub(b)), a.mul(K::ONE.sub(b)), K::ONE.sub(a).mul(b), a.mul(b)];
-                }
-            }
-            for k in 0..2 {
-                let (zx, zy) = (z[k][0], z[k][1]);
-                factors[3 + k][0] = [K::ONE, zy, zx, zx.mul(zy)];
-                let mut x = double(zx);
-                for d in 1..5 {
-                    let y = double(x);
-                    factors[3 + k][d] = [K::ONE, x, y, x.mul(y)];
-                    x = double(y);
-                }
-            }
+            let factors = [
+                Self::point_factors(points[0]),
+                Self::point_factors(points[1]),
+                Self::point_factors(points[2]),
+                Self::ood_factors(z[0][0], z[0][1]),
+                Self::ood_factors(z[1][0], z[1][1]),
+            ];
             Self { factors, points, extra: [alpha[8], alpha[9]] }
         }
+        /// factors[k][d] for k < 3: the (a, b) = points[k][9 - 2 TAU d], points[k][8 - 2 TAU d] tensor row.
+        fn point_factor(p: [K; 10], d: usize) -> [K; 4] {
+            let a = p[9 - 2 * TAU[d]];
+            let b = p[8 - 2 * TAU[d]];
+            [K::ONE.sub(a).mul(K::ONE.sub(b)), a.mul(K::ONE.sub(b)), K::ONE.sub(a).mul(b), a.mul(b)]
+        }
+        fn point_factors(p: [K; 10]) -> [[K; 4]; 5] {
+            [Self::point_factor(p, 0), Self::point_factor(p, 1), Self::point_factor(p, 2), Self::point_factor(p, 3), Self::point_factor(p, 4)]
+        }
+        /// factors[3 + k] for the OOD point (zx, zy): the former `for d in 1..5` doubling chain, unrolled.
+        fn ood_factors(zx: K, zy: K) -> [[K; 4]; 5] {
+            let x1 = double(zx);
+            let y1 = double(x1);
+            let x2 = double(y1);
+            let y2 = double(x2);
+            let x3 = double(y2);
+            let y3 = double(x3);
+            let x4 = double(y3);
+            let y4 = double(x4);
+            [[K::ONE, zy, zx, zx.mul(zy)], [K::ONE, x1, y1, x1.mul(y1)], [K::ONE, x2, y2, x2.mul(y2)], [K::ONE, x3, y3, x3.mul(y3)], [K::ONE, x4, y4, x4.mul(y4)]]
+        }
         pub fn raw(&self, kind: usize, j: usize, inactive: impl Fn(usize) -> bool) -> K {
+            // pv-rw-d: the predicate is evaluated only for kind 0, as before.
+            self.raw_flag(kind, j, kind == 0 && inactive(row(j)))
+        }
+        /// pv-rw-d: `materialize(kappa, inactive_fn)` without a function-item
+        /// argument (Aeneas rejects arrow types): the row predicate is the
+        /// crate's `inactive`, called directly.
+        pub fn materialize_inactive(&self, kappa: E) -> Vec<E> {
+            let kp = powers::<7>(kappa);
+            self.materialize_kp(&kp)
+        }
+        fn materialize_kp(&self, kp: &[E; 7]) -> Vec<E> {
+            let mut out: Vec<E> = Vec::with_capacity(1024);
+            let mut j = 0;
+            while j < 1024 {
+                out.push(self.materialized_at(kp, j, super::inactive(row(j))));
+                j += 1;
+            }
+            out
+        }
+        /// sum_kind kp[kind] * raw(kind, j); `inact` = inactive(row(j)) (pure
+        /// and total, so evaluating it once per j equals evaluating it for kind 0 only).
+        fn materialized_at(&self, kp: &[E; 7], j: usize, inact: bool) -> E {
+            let mut v = E::ZERO;
+            let mut kind = 0;
+            while kind < 7 {
+                v = v.add(kp[kind].mul_qm31(self.raw_flag(kind, j, inact)));
+                kind += 1;
+            }
+            v
+        }
+        /// `raw` with the kind-0 predicate value passed in (`inact`).
+        fn raw_flag(&self, kind: usize, j: usize, inact: bool) -> K {
             match kind {
-                0 => if inactive(row(j)) { K::ONE } else { K::ZERO },
+                0 => if inact { K::ONE } else { K::ZERO },
                 4 => if j < 56 { self.extra[j / 28].pow((j % 28) as u64) } else { K::ZERO },
-                _ => {
-                    let k = if kind < 4 { kind - 1 } else { kind - 2 };
-                    (0..5).fold(K::ONE, |v, d| v.mul(self.factors[k][d][(j >> (2 * d)) & 3]))
-                }
+                _ => tensor_entry(&self.factors[if kind < 4 { kind - 1 } else { kind - 2 }], j),
             }
         }
         fn scalar_factor(f: &[K; 4], p: &[E; 4]) -> E {
@@ -210,35 +258,73 @@ mod r1 {
         }
         pub fn materialize(&self, kappa: E, inactive: impl Fn(usize) -> bool + Copy) -> Vec<E> {
             let kp = powers::<7>(kappa);
-            (0..1024)
-                .map(|j| (0..7).fold(E::ZERO, |v, kind| v.add(kp[kind].mul_qm31(self.raw(kind, j, inactive)))))
-                .collect()
+            let mut out: Vec<E> = Vec::with_capacity(1024);
+            let mut j = 0;
+            while j < 1024 {
+                let mut v = E::ZERO;
+                let mut kind = 0;
+                while kind < 7 {
+                    v = v.add(kp[kind].mul_qm31(self.raw(kind, j, inactive)));
+                    kind += 1;
+                }
+                out.push(v);
+                j += 1;
+            }
+            out
         }
+    }
+    /// pv-rw-d: prod_d f[d][(j >> 2d) & 3] (the former fold closure in `raw`).
+    fn tensor_entry(f: &[[K; 4]; 5], j: usize) -> K {
+        let mut v = K::ONE;
+        let mut d = 0;
+        while d < 5 {
+            v = v.mul(f[d][(j >> (2 * d)) & 3]);
+            d += 1;
+        }
+        v
     }
     /// prover.rs `round`.
     pub fn round(q: &[E], w: &[E]) -> [E; 7] {
         assert_eq!(q.len(), w.len());
         let mut c = [E::ZERO; 7];
-        for d in 0..q.len() / 4 {
-            for s in 0..4 {
-                for t in 0..4 {
-                    c[s + PERM[t]] = c[s + PERM[t]].add(q[4 * d + s].mul(w[4 * d + t]));
+        let nd = q.len() / 4;
+        let mut d = 0;
+        while d < nd {
+            let mut s = 0;
+            while s < 4 {
+                let mut t = 0;
+                while t < 4 {
+                    let ix = s + PERM[t];
+                    c[ix] = c[ix].add(q[4 * d + s].mul(w[4 * d + t]));
+                    t += 1;
                 }
+                s += 1;
             }
+            d += 1;
         }
-        c.map(|x| x.mul_m31(QUARTER))
+        let mut i = 0;
+        while i < 7 {
+            c[i] = c[i].mul_m31(QUARTER);
+            i += 1;
+        }
+        c
     }
     /// prover.rs `fold`.
     pub fn fold(q: &[E], alpha: E, dual: bool) -> Vec<E> {
-        q.chunks_exact(4)
-            .map(|h| {
-                if dual {
-                    h[0].add(alpha.mul(h[3].add(alpha.mul(h[2].add(alpha.mul(h[1])))))).mul_m31(QUARTER)
-                } else {
-                    h[0].add(alpha.mul(h[1].add(alpha.mul(h[2].add(alpha.mul(h[3]))))))
-                }
-            })
-            .collect()
+        // pv-rw-d: chunks_exact(4) as an index loop (a short tail is ignored, as before).
+        let n = q.len() / 4;
+        let mut out: Vec<E> = Vec::with_capacity(n);
+        let mut i = 0;
+        while i < n {
+            let b = 4 * i;
+            out.push(if dual {
+                q[b].add(alpha.mul(q[b + 3].add(alpha.mul(q[b + 2].add(alpha.mul(q[b + 1])))))).mul_m31(QUARTER)
+            } else {
+                q[b].add(alpha.mul(q[b + 1].add(alpha.mul(q[b + 2].add(alpha.mul(q[b + 3]))))))
+            });
+            i += 1;
+        }
+        out
     }
     pub fn poly(c: &[E], x: E) -> E {
         c.iter().rev().fold(E::ZERO, |a, v| a.mul(x).add(*v))
@@ -253,21 +339,36 @@ struct Geo {
 }
 impl Geo {
     fn new() -> Self {
-        let n = aspis_core::r0::FIBRE_COUNT;
-        let first: Vec<M31> = (0..n)
-            .map(|u| {
-                let z = fibre_point::<M31>(FI::new(u).unwrap());
-                z.x.mul(z.x).double().sub(M31::ONE)
-            })
-            .collect();
-        let mut levels = vec![first];
-        for depth in 0..8 {
-            let next: Vec<M31> = (0..levels[depth].len() / 2)
-                .map(|j| levels[depth][2 * j].mul(levels[depth][2 * j]).double().sub(M31::ONE))
-                .collect();
+        // pv-rw-d: loops in helpers; the list literal vec![first] as a push.
+        let mut levels: Vec<Vec<M31>> = Vec::with_capacity(9);
+        levels.push(Self::first_level(aspis_core::r0::FIBRE_COUNT));
+        let mut depth = 0;
+        while depth < 8 {
+            let next = Self::next_level(&levels[depth]);
             levels.push(next);
+            depth += 1;
         }
         Geo { levels }
+    }
+    fn first_level(n: usize) -> Vec<M31> {
+        let mut out: Vec<M31> = Vec::with_capacity(n);
+        let mut u = 0;
+        while u < n {
+            let z = fibre_point::<M31>(FI::new(u).unwrap());
+            out.push(z.x.mul(z.x).double().sub(M31::ONE));
+            u += 1;
+        }
+        out
+    }
+    fn next_level(prev: &[M31]) -> Vec<M31> {
+        let n = prev.len() / 2;
+        let mut out: Vec<M31> = Vec::with_capacity(n);
+        let mut j = 0;
+        while j < n {
+            out.push(prev[2 * j].mul(prev[2 * j]).double().sub(M31::ONE));
+            j += 1;
+        }
+        out
     }
     /// host_commitment.rs EncodingDomain::evaluate (verbatim recursion).
     fn evaluate(&self, coefficients: &[W], depth: usize) -> Vec<W> {
@@ -284,7 +385,7 @@ impl Geo {
     /// Closed form of `evaluate(q1, 0)[i]` for the unit q1 = e_d (256 coefficients):
     /// prod over set bits b of d of levels[b][i >> b].
     fn unit_eval(&self, d: usize, i: usize) -> M31 {
-        (0..8).filter(|b| d >> b & 1 == 1).fold(M31::ONE, |v, b| v.mul(self.levels[b][i >> b]))
+        unit_eval_on(&self.levels, d, i)
     }
 }
 fn line_node(u: usize) -> M31 {
@@ -389,7 +490,16 @@ fn l4(x: QM31) -> [u32; 4] {
     limbs(x).map(|v| v.0)
 }
 fn unflat(v: &[M31]) -> Vec<QM31> {
-    v.chunks(4).map(|c| QM31 { c0: CM31::new(c[0], c[1]), c1: CM31::new(c[2], c[3]) }).collect()
+    // pv-rw-d: chunks(4) as an index loop; a short last chunk panics on its
+    // missing limb exactly as c[k] did.
+    let mut out: Vec<QM31> = Vec::with_capacity(v.len() / 4 + 1);
+    let mut i = 0;
+    while i < v.len() {
+        let rest = &v[i..];
+        out.push(QM31 { c0: CM31::new(rest[0], rest[1]), c1: CM31::new(rest[2], rest[3]) });
+        i += 4;
+    }
+    out
 }
 fn half() -> QM31 {
     QM31::from_m31(M31(2).inv())
@@ -493,16 +603,38 @@ fn wq(x: QM31) -> W {
     W::from_qm31(x)
 }
 fn wlimbs(x: W) -> [M31; 8] {
-    x.to_limbs().map(M31)
+    // pv-rw-d: array literal (former `.map(M31)`, a function item argument).
+    let l = x.to_limbs();
+    [M31(l[0]), M31(l[1]), M31(l[2]), M31(l[3]), M31(l[4]), M31(l[5]), M31(l[6]), M31(l[7])]
 }
 fn w_uniform(rng: &mut Rng) -> W {
     W::new(rng.q(), rng.q())
 }
 fn wflat(v: &[W]) -> Vec<M31> {
-    v.iter().flat_map(|x| wlimbs(*x)).collect()
+    // pv-rw-d: index loop (former flat_map closure).
+    let mut out: Vec<M31> = Vec::with_capacity(8 * v.len());
+    let mut i = 0;
+    while i < v.len() {
+        out = push_wlimbs(out, v[i]);
+        i += 1;
+    }
+    out
 }
 fn wvals(limbs: &[M31]) -> Vec<W> {
     limbs.chunks(8).map(|c| W::from_limbs(std::array::from_fn(|i| c[i].0)).unwrap()).collect()
+}
+/// pv-rw-d: the 8 limbs of x pushed in order (unrolled).
+fn push_wlimbs(mut out: Vec<M31>, x: W) -> Vec<M31> {
+    let l = wlimbs(x);
+    out.push(l[0]);
+    out.push(l[1]);
+    out.push(l[2]);
+    out.push(l[3]);
+    out.push(l[4]);
+    out.push(l[5]);
+    out.push(l[6]);
+    out.push(l[7]);
+    out
 }
 fn wunit(m: usize) -> W {
     let mut l = [0u32; 8];
@@ -513,7 +645,55 @@ fn sub_vec<T: Copy>(a: &[T], b: &[T], f: impl Fn(T, T) -> T) -> Vec<T> {
     a.iter().zip(b).map(|(x, y)| f(*x, *y)).collect()
 }
 fn scale(v: &[QM31], x: QM31) -> Vec<QM31> {
-    v.iter().map(|y| y.mul(x)).collect()
+    let mut out: Vec<QM31> = Vec::with_capacity(v.len());
+    let mut i = 0;
+    while i < v.len() {
+        out.push(v[i].mul(x));
+        i += 1;
+    }
+    out
+}
+/// pv-rw-d: g * row[i] for every i (the former map closure in Ctx::batched).
+fn scaled_ws(row: &[W], g: W) -> Vec<W> {
+    let mut out: Vec<W> = Vec::with_capacity(row.len());
+    let mut i = 0;
+    while i < row.len() {
+        out.push(g.mul(row[i]));
+        i += 1;
+    }
+    out
+}
+/// pv-rw-d: `sub_vec(a, b, |x, y| x.sub(y))` per field type, as loops
+/// (zip semantics: the shorter length).
+fn sub_m31s(a: &[M31], b: &[M31]) -> Vec<M31> {
+    let n = if a.len() < b.len() { a.len() } else { b.len() };
+    let mut out: Vec<M31> = Vec::with_capacity(n);
+    let mut i = 0;
+    while i < n {
+        out.push(a[i].sub(b[i]));
+        i += 1;
+    }
+    out
+}
+fn sub_qm31s(a: &[QM31], b: &[QM31]) -> Vec<QM31> {
+    let n = if a.len() < b.len() { a.len() } else { b.len() };
+    let mut out: Vec<QM31> = Vec::with_capacity(n);
+    let mut i = 0;
+    while i < n {
+        out.push(a[i].sub(b[i]));
+        i += 1;
+    }
+    out
+}
+fn sub_ws(a: &[W], b: &[W]) -> Vec<W> {
+    let n = if a.len() < b.len() { a.len() } else { b.len() };
+    let mut out: Vec<W> = Vec::with_capacity(n);
+    let mut i = 0;
+    while i < n {
+        out.push(a[i].sub(b[i]));
+        i += 1;
+    }
+    out
 }
 fn sigma(x: W) -> W {
     W::new(x.c0(), QM31::ZERO.sub(x.c1()))
@@ -547,10 +727,17 @@ fn opening_challenges(v: usize, gi: usize) -> Opening {
 }
 /// D18 row -> coefficient (privacy-wide/probe.rs d18_transport), checked against r1::row.
 fn d18_transport() -> [u16; N] {
-    std::array::from_fn(|r| {
-        let digit = |d: usize| (r >> (2 * d)) & 3;
-        (digit(3) + 4 * digit(4) + 16 * digit(2) + 64 * digit(0) + 256 * digit(1)) as u16
-    })
+    // pv-rw-d: index loop (former from_fn with a nested closure), same entries.
+    let mut out = [0u16; N];
+    let mut r = 0;
+    while r < N {
+        out[r] = d18_entry(r);
+        r += 1;
+    }
+    out
+}
+fn d18_entry(r: usize) -> u16 {
+    ((r >> 6 & 3) + 4 * (r >> 8 & 3) + 16 * (r >> 4 & 3) + 64 * (r & 3) + 256 * (r >> 2 & 3)) as u16
 }
 
 // ------------------------------------------------------- batched layout
@@ -565,7 +752,17 @@ struct Lay {
 }
 impl Lay {
     fn new(qs: &[usize]) -> Self {
-        let mut fpos: Vec<usize> = qs.iter().flat_map(|&u| (0..4).map(move |s| 4 * (u / 4) + s)).collect();
+        // pv-rw-d: index loop (former flat_map with a move closure), same order.
+        let mut fpos: Vec<usize> = Vec::with_capacity(4 * qs.len());
+        let mut i = 0;
+        while i < qs.len() {
+            let b = 4 * (qs[i] / 4);
+            fpos.push(b);
+            fpos.push(b + 1);
+            fpos.push(b + 2);
+            fpos.push(b + 3);
+            i += 1;
+        }
         fpos.sort();
         fpos.dedup();
         let nf = fpos.len();
@@ -573,7 +770,9 @@ impl Lay {
         Lay { fpos, nf, nb, bw: 8 * nb, tw: 8 * nb + RW }
     }
     fn fw(&self, pos: usize) -> usize {
-        15 + self.fpos.binary_search(&pos).expect("folded position")
+        // pv-rw-d: linear search (fpos is sorted and deduplicated, so the found
+        // index equals binary_search's Ok index; absent -> panic, as expect did).
+        15 + position_of(&self.fpos, pos)
     }
     fn fin(&self, e: usize) -> usize {
         15 + self.nf + e
@@ -588,6 +787,22 @@ impl Lay {
         }
     }
 }
+/// pv-rw-d: index of the first x in v (flag loop, no early exit); absent -> panic.
+fn position_of(v: &[usize], x: usize) -> usize {
+    let n = v.len();
+    let mut found = n;
+    let mut i = 0;
+    while i < n {
+        if found == n && v[i] == x {
+            found = i;
+        }
+        i += 1;
+    }
+    if found == n {
+        panic!("folded position");
+    }
+    found
+}
 struct Ctx {
     a: [QM31; 10],
     br: Vec<Vec<M31>>,
@@ -599,8 +814,7 @@ struct Ctx {
 }
 impl Ctx {
     fn batched(&self, lane: usize, x: W, r: usize) -> Vec<W> {
-        let g = self.gpow[lane].mul(x);
-        self.beta[r].iter().map(|b| g.mul(*b)).collect()
+        scaled_ws(&self.beta[r], self.gpow[lane].mul(x))
     }
 }
 fn inactive_fn(r: usize) -> bool {
@@ -608,40 +822,91 @@ fn inactive_fn(r: usize) -> bool {
 }
 /// phi[k] = batched payload of the unit natural coefficient e_k (gamma^lane omitted):
 /// [inactive, round(e_k, w), round(fold(e_k), w1), folded word at fpos, fold(fold(e_k))].
+/// pv-rw-d: phi[k] for one k (the former per-thread closure body, as loops).
+fn unit_functional(geo: &Geo, w: &[W], w1: &[W], op: &Opening, lay: &Lay, k: usize) -> Vec<W> {
+    let mut e = vec![W::ZERO; 1024];
+    e[k] = W::ONE;
+    let mut out = vec![W::ZERO; lay.nb];
+    out[0] = if inactive(r1::row(k)) { W::ONE } else { W::ZERO };
+    out = put_ws(out, 1, &r1::round(&e, w), 7);
+    let q1 = r1::fold(&e, op.alpha0, false);
+    out = put_ws(out, 8, &r1::round(&q1, w1), 7);
+    out = put_folded_words(out, geo, &q1, &lay.fpos);
+    let f = r1::fold(&q1, op.alpha1, false);
+    // lay.fin(e2) = 15 + nf + e2
+    put_ws(out, lay.fin(0), &f, 64)
+}
+/// pv-rw-d: out[off + t] = src[t], t < n (by value; loops over locals in the caller crashed 1991).
+fn put_ws(mut out: Vec<W>, off: usize, src: &[W], n: usize) -> Vec<W> {
+    let mut t = 0;
+    while t < n {
+        out[off + t] = src[t];
+        t += 1;
+    }
+    out
+}
+/// pv-rw-d: out[15 + n] = folded word of q1 at fpos[n] (loop on slices, by value).
+fn put_folded_words(mut out: Vec<W>, geo: &Geo, q1: &[W], fpos: &[usize]) -> Vec<W> {
+    let mut n = 0;
+    while n < fpos.len() {
+        out[15 + n] = folded_word(geo, q1, fpos[n]);
+        n += 1;
+    }
+    out
+}
+fn folded_word(geo: &Geo, q1: &[W], i: usize) -> W {
+    folded_word_on(&geo.levels, q1, i)
+}
+fn folded_word_on(levels: &[Vec<M31>], q1: &[W], i: usize) -> W {
+    let mut acc = W::ZERO;
+    let mut d = 0;
+    while d < 256 {
+        acc = folded_word_step(levels, q1, i, d, acc);
+        d += 1;
+    }
+    acc
+}
+/// One coordinate d of the folded word (pv-rw-d: the loop body crashed 1991).
+fn folded_word_step(levels: &[Vec<M31>], q1: &[W], i: usize, d: usize, acc: W) -> W {
+    if q1[d] != W::ZERO {
+        acc.add(q1[d].mul_m31(unit_eval_on(levels, d, i)))
+    } else {
+        acc
+    }
+}
+/// Geo::unit_eval on the level table: prod over set bits b of d of levels[b][i >> b].
+fn unit_eval_on(levels: &[Vec<M31>], d: usize, i: usize) -> M31 {
+    let mut v = M31::ONE;
+    let mut b = 0;
+    while b < 8 {
+        v = unit_eval_step(levels, d, i, b, v);
+        b += 1;
+    }
+    v
+}
+fn unit_eval_step(levels: &[Vec<M31>], d: usize, i: usize, b: usize, v: M31) -> M31 {
+    if d >> b & 1 == 1 {
+        v.mul(levels[b][i >> b])
+    } else {
+        v
+    }
+}
+/// phi[k], k = 0..1024 in order.  pv-rw-d: sequential (the former version ran
+/// `THREADS` chunks of the same per-k computation under std::thread::scope and
+/// concatenated them in chunk order, i.e. the same vector).
 fn unit_functionals(geo: &Geo, w: &[W], op: &Opening, lay: &Lay) -> Vec<Vec<W>> {
     let w1 = r1::fold(w, op.alpha0, true);
-    let ks: Vec<usize> = (0..1024).collect();
-    let chunk = ks.len().div_ceil(THREADS);
-    std::thread::scope(|s| {
-        let hs: Vec<_> = ks
-            .chunks(chunk)
-            .map(|part| {
-                let w1 = &w1;
-                s.spawn(move || {
-                    part.iter()
-                        .map(|&k| {
-                            let mut e = vec![W::ZERO; 1024];
-                            e[k] = W::ONE;
-                            let mut out = vec![W::ZERO; lay.nb];
-                            out[0] = if inactive(r1::row(k)) { W::ONE } else { W::ZERO };
-                            out[1..8].copy_from_slice(&r1::round(&e, w));
-                            let q1 = r1::fold(&e, op.alpha0, false);
-                            out[8..15].copy_from_slice(&r1::round(&q1, w1));
-                            for (n, &i) in lay.fpos.iter().enumerate() {
-                                out[15 + n] = (0..256).filter(|&d| q1[d] != W::ZERO).fold(W::ZERO, |acc, d| acc.add(q1[d].mul_m31(geo.unit_eval(d, i))));
-                            }
-                            let f = r1::fold(&q1, op.alpha1, false);
-                            for e2 in 0..64 {
-                                out[lay.fin(e2)] = f[e2];
-                            }
-                            out
-                        })
-                        .collect::<Vec<_>>()
-                })
-            })
-            .collect();
-        hs.into_iter().flat_map(|h| h.join().unwrap()).collect()
-    })
+    unit_functionals_with(geo, w, &w1, op, lay)
+}
+/// pv-rw-d: the k loop, borrowed inputs only.
+fn unit_functionals_with(geo: &Geo, w: &[W], w1: &[W], op: &Opening, lay: &Lay) -> Vec<Vec<W>> {
+    let mut out: Vec<Vec<W>> = Vec::with_capacity(1024);
+    let mut k = 0;
+    while k < 1024 {
+        out.push(unit_functional(geo, w, w1, op, lay, k));
+        k += 1;
+    }
+    out
 }
 
 /// Whole-column R1 pipeline (prover.rs prove_from_semantics, from q on) on
@@ -733,18 +998,38 @@ impl Rel {
         self.c.iter().fold(W::ZERO, |s, (i, c)| s.add(c.mul(y[*i])))
     }
     fn limb_functionals(&self, bw: usize) -> Vec<Vec<M31>> {
-        (0..8)
-            .map(|k| {
-                let mut v = vec![M31::ZERO; bw];
-                for (i, c) in &self.c {
-                    for m in 0..8 {
-                        v[8 * i + m] = v[8 * i + m].add(M31(c.mul(wunit(m)).to_limbs()[k]));
-                    }
-                }
-                v
-            })
-            .collect()
+        limb_functionals_of(&self.c, bw)
     }
+}
+/// pv-rw-d: `Rel::limb_functionals` on a coefficient list (index loops; the
+/// former map closure over &self.c).
+fn limb_functionals_of(cs: &[(usize, W)], bw: usize) -> Vec<Vec<M31>> {
+    let mut out: Vec<Vec<M31>> = Vec::with_capacity(8);
+    let mut k = 0;
+    while k < 8 {
+        out.push(limb_functional_k(cs, bw, k));
+        k += 1;
+    }
+    out
+}
+/// Limb k of the functional (pv-rw-d: per-k / per-coefficient helpers, the
+/// coefficient passed by value, v threaded by value; the nested loops crashed 1991).
+fn limb_functional_k(cs: &[(usize, W)], bw: usize, k: usize) -> Vec<M31> {
+    let mut v = vec![M31::ZERO; bw];
+    let mut j = 0;
+    while j < cs.len() {
+        v = add_coeff_limbs(v, cs[j].0, cs[j].1, k);
+        j += 1;
+    }
+    v
+}
+fn add_coeff_limbs(mut v: Vec<M31>, i: usize, c: W, k: usize) -> Vec<M31> {
+    let mut m = 0;
+    while m < 8 {
+        v[8 * i + m] = v[8 * i + m].add(M31(c.mul(wunit(m)).to_limbs()[k]));
+        m += 1;
+    }
+    v
 }
 /// The R1 verifier relations on own-silent tapes (verifier.rs finish_relation,
 /// query_with_geometry, accumulate; own observations zero).
@@ -979,6 +1264,26 @@ fn d_own(cx: &Ctx, r: usize, x: QM31) -> Vec<M31> {
     flatten(&scale(&cx.gr[r][1..], x))
 }
 type Src = (Vec<M31>, Vec<W>, Vec<QM31>);
+/// pv-rw-d: rr[li] for every lane, in lane order.
+fn all_lane_rows(a: &[QM31; 10], tr: &[u16; N]) -> Vec<Vec<Vec<QM31>>> {
+    let mut rr: Vec<Vec<Vec<QM31>>> = Vec::with_capacity(LANES);
+    let mut li = 0;
+    while li < LANES {
+        rr.push(lane_rows(a, li, tr));
+        li += 1;
+    }
+    rr
+}
+/// pv-rw-d: the rows of lane `li` (the former per-thread closure of `Lanes::new`).
+fn lane_rows(a: &[QM31; 10], li: usize, tr: &[u16; N]) -> Vec<Vec<QM31>> {
+    let mut out: Vec<Vec<QM31>> = Vec::with_capacity(N);
+    let mut r = 0;
+    while r < N {
+        out.push(if li == 11 { tail_row_with(a, r, tr) } else { round_row(a, r, li) });
+        r += 1;
+    }
+    out
+}
 /// z8c `Lanes` (balanced sources: e_r active, e_r - e_0 inactive).
 struct Lanes<'a> {
     cx: &'a Ctx,
@@ -987,16 +1292,35 @@ struct Lanes<'a> {
 }
 impl<'a> Lanes<'a> {
     fn new(cx: &'a Ctx) -> Self {
-        let a = cx.a;
-        let rr: Vec<Vec<Vec<QM31>>> = std::thread::scope(|s| {
-            let hs: Vec<_> = (0..LANES)
-                .map(|li| s.spawn(move || (0..N).map(|r| if li == 11 { tail_row(&a, r) } else { round_row(&a, r, li) }).collect::<Vec<_>>()))
-                .collect();
-            hs.into_iter().map(|h| h.join().unwrap()).collect()
-        });
-        let mut l = Lanes { cx, rr, zero: vec![] };
-        l.zero = (0..LANES).map(|li| (0..per_row(li)).map(|k| l.raw(li, 0, k)).collect()).collect();
+        Self::new_with(cx, z5::transport())
+    }
+    /// pv-rw-d: sequential, with the transport passed in (the former version ran
+    /// one std::thread per lane over the same per-lane computation, collected
+    /// in lane order).
+    fn new_with(cx: &'a Ctx, tr: &[u16; N]) -> Self {
+        let rr = all_lane_rows(&cx.a, tr);
+        let mut l = Lanes { cx, rr, zero: Vec::new() };
+        l.zero = l.zero_sources();
         l
+    }
+    /// zero[li][k] = raw(li, 0, k).
+    fn zero_sources(&self) -> Vec<Vec<Src>> {
+        let mut zero: Vec<Vec<Src>> = Vec::with_capacity(LANES);
+        let mut li = 0;
+        while li < LANES {
+            zero.push(self.zero_lane(li));
+            li += 1;
+        }
+        zero
+    }
+    fn zero_lane(&self, li: usize) -> Vec<Src> {
+        let mut zk: Vec<Src> = Vec::new();
+        let mut k = 0;
+        while k < per_row(li) {
+            zk.push(self.raw(li, 0, k));
+            k += 1;
+        }
+        zk
     }
     fn raw(&self, li: usize, r: usize, k: usize) -> Src {
         let cx = self.cx;
@@ -1020,7 +1344,7 @@ impl<'a> Lanes<'a> {
             return s;
         }
         let z = &self.zero[li][k];
-        (sub_vec(&s.0, &z.0, |x, y| x.sub(y)), sub_vec(&s.1, &z.1, |x, y| x.sub(y)), sub_vec(&s.2, &z.2, |x, y| x.sub(y)))
+        (sub_m31s(&s.0, &z.0), sub_ws(&s.1, &z.1), sub_qm31s(&s.2, &z.2))
     }
 }
 /// z8c `conditioned_sources` (semantic eligible noise balanced vs row 1023, H1

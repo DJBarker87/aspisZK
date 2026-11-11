@@ -10,17 +10,47 @@ use crate::{transport::Variant,verifier::{Error},weights::{Weights,QUARTER,PERM}
 pub struct Backend {pub hash:HashFn,pub variant:Variant,pub domain:EncodingDomain,pub messages:Vec<Message<E>>,pub c1:Option<Commitment>,pub c2:Option<Commitment>,c1_salts:Option<crate::host_commitment::PrivateSalts>,c2_salts:Option<crate::host_commitment::PrivateSalts>}
 impl Commitments for Backend {
     fn c1(&mut self,columns:[Column<'_>;27])->Result<[u8;32],SError>{
-        for (i,c) in columns.into_iter().enumerate(){self.messages[if i<26{i}else{28}]=match c {Column::Base(v)=>v.map(E::from_m31),Column::Extension(v)=>v.map(E::from_qm31)};}
+        // pv-rw-e: the 27 columns written by a counted helper (was `into_iter().enumerate()`
+        // with an inline `match` on the borrowed column). Same lanes, same values, same order.
+        write_c1_columns(&mut self.messages,&columns);
         let salts=self.c1_salts.take().ok_or(SError::Public)?;
         let c=Commitment::new_salted(self.hash,&self.domain,CommitmentTime::C1,&self.messages,self.variant,salts).map_err(|_|SError::Public)?;
         let root=c.root();self.c1=Some(c);Ok(root)
     }
     fn c2(&mut self,columns:[&[K;1024];2])->Result<[u8;32],SError>{
-        for (i,c) in columns.into_iter().enumerate(){self.messages[26+i]=c.map(E::from_qm31);}
+        // pv-rw-e: the two columns written by a counted helper (was `into_iter().enumerate()`).
+        write_extension(&mut self.messages[26],columns[0]);
+        write_extension(&mut self.messages[27],columns[1]);
         let salts=self.c2_salts.take().ok_or(SError::Public)?;
         let c=Commitment::new_salted(self.hash,&self.domain,CommitmentTime::C2,&self.messages,self.variant,salts).map_err(|_|SError::Public)?;
         let root=c.root();self.c2=Some(c);Ok(root)
     }
+}
+/// pv-rw-e: column i goes to message lane i (i < 26) or 28 (i = 26), in increasing i.
+fn write_c1_columns(messages:&mut [Message<E>],columns:&[Column<'_>;27]) {
+    let mut i=0;
+    while i<27 {
+        let lane=if i<26 {i} else {28};
+        write_column(&mut messages[lane],columns[i]);
+        i+=1;
+    }
+}
+/// pv-rw-e: `*out = v.map(E::from_m31)` / `v.map(E::from_qm31)` by column kind.
+fn write_column(out:&mut Message<E>,column:Column<'_>) {
+    match column {
+        Column::Base(v)=>write_base(out,v),
+        Column::Extension(v)=>write_extension(out,v),
+    }
+}
+/// pv-rw-e: `*out = v.map(E::from_m31)` as a counted loop.
+fn write_base(out:&mut Message<E>,v:&[M31;1024]) {
+    let mut row=0;
+    while row<1024 {out[row]=E::from_m31(v[row]);row+=1;}
+}
+/// pv-rw-e: `*out = v.map(E::from_qm31)` as a counted loop.
+fn write_extension(out:&mut Message<E>,v:&[K;1024]) {
+    let mut row=0;
+    while row<1024 {out[row]=E::from_qm31(v[row]);row+=1;}
 }
 pub fn round(q:&[E],w:&[E])->[E;7] {
     assert_eq!(q.len(),w.len());let mut c=[E::ZERO;7];
@@ -207,73 +237,234 @@ fn derive_private_salts(reserved:&ReservedStateOnlyAttemptSecrets,context:StateO
 /// the roots (binary trees) and the stored encoding differ. R1 is variant S2.
 fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics<LegacyHashFn>,salts:(&ReservedStateOnlyAttemptSecrets,StateOnlyHidingContext))->Result<Vec<u8>,Error> {
     use crate::{compact,multiproof};
+    // pv-rw-e: same statements in the same order; every iterator chain, closure,
+    // fold and range loop moved into a counted-loop helper below. The locals that
+    // own secrets (`folded_salts`, and the parameters `backend`/`salts`) stay in
+    // this frame, so drop (zeroise) order is unchanged on every path.
     let _=public;
     if variant!=Variant::S2 { return Err(Error::Semantic); }
-    let coefficients:Vec<Message<E>>=backend.messages.iter().map(|m|variant.coefficients(m)).collect();
+    let coefficients:Vec<Message<E>>=opening_coefficients(variant,&backend.messages);
     let z1=Point{x:E::from_qm31(sem.z[1].x),y:E::from_qm31(sem.z[1].y)};
-    let y1=encoded(coefficients.iter().map(|m|r0::encoder::eval_message(m,z1)));
+    let y1=opening_claim_bytes(&coefficients,z1);
     let mut t=Transcript::new(LegacyHashFn(hash),sem.transcript.state(),variant);
     let gamma=t.scalar(27,&y1,true);let gp=crate::weights::powers::<29>(gamma);
-    let q:Vec<E>=(0..1024).map(|j|(0..29).fold(E::ZERO,|s,l|s.add(gp[l].mul(coefficients[l][j])))).collect();
+    let q:Vec<E>=opening_batch(&coefficients,&gp);
     let w=Weights::new(variant,&sem.alpha,&sem.z)?;
-    let inactive=(0..1024).fold(E::ZERO,|s,j|s.add(q[j].mul_qm31(w.raw(0,j))));
+    let inactive=opening_inactive(&q,&w);
     let kappa=t.scalar(28,&inactive.to_le_bytes(),false);
     let weights=w.materialize(kappa)?;
-    let c0=round(&q,&weights);let c0bytes=encoded(c0);
+    let c0=round(&q,&weights);let c0bytes=encoded_slice(&c0);
     let alpha0=t.scalar(29,&c0bytes,false);let q1=fold(&q,alpha0,false);let w1=fold(&weights,alpha0,true);
     let folded_word=backend.domain.evaluate(&q1,0).map_err(|_|Error::Allocation)?;
     let (reserved,context)=salts;
     let folded_salts=derive_private_salts(reserved,context,hash,0x72)?;
-    let mut leaves=Vec::with_capacity(1<<18);
-    for u in 0..1<<18 {
-        let values=if u<1<<16 {encoded(folded_word[4*u..4*u+4].iter().copied())}else{vec![0;128]};
-        leaves.push(aspis_core::state_only_private_merkle::private_leaf_hash(hash,0x72,&values,folded_salts.get(u)));
-    }
+    let leaves=folded_leaves(hash,&folded_word,&folded_salts);
     let tree=multiproof::BinaryTree::new(LegacyHashFn(hash),leaves).ok_or(Error::Allocation)?;
     let root=tree.root();
-    let c1=round(&q1,&w1);let c1bytes=encoded(c1);
+    let c1=round(&q1,&w1);let c1bytes=encoded_slice(&c1);
     let mut payload=root.to_vec();payload.extend_from_slice(&c1bytes);
     let alpha1=t.scalar(30,&payload,false);
     let final_message=fold(&q1,alpha1,false);
-    let fbytes=encoded(final_message.iter().copied());
+    let fbytes=encoded_slice(&final_message);
     let queries=t.queries(31,&fbytes)?;let _rho=t.scalar_k(32,&[]);
     #[cfg(feature="r1p-check")]
     public_check(variant,&R1PublicChallenges{
         alpha:sem.alpha,z:[[sem.z[0].x,sem.z[0].y],[sem.z[1].x,sem.z[1].y]],
         gamma,kappa,alpha0,alpha1,queries:queries.to_vec(),
     },sem.roots[0])?;
+    publish_compact(&LogicalProof{
+        variant,semantic:&sem.bytes,y1:&y1,inactive,c0bytes:&c0bytes,root,c1bytes:&c1bytes,fbytes:&fbytes,
+        queries:&queries,c1:&backend.c1,c2:&backend.c2,folded_word:&folded_word,folded_salts:&folded_salts,tree:&tree,
+    })
+}
+
+/// pv-rw-e (lead request R6): the logical messages of one proof, as computed by
+/// `prove_from_semantics`. Every field borrows from that frame, so ownership
+/// and drop (zeroise) order of the secret-bearing values stay where they were.
+struct LogicalProof<'a> {
+    variant:Variant,
+    semantic:&'a [u8],
+    y1:&'a [u8],
+    inactive:E,
+    c0bytes:&'a [u8],
+    root:[u8;32],
+    c1bytes:&'a [u8],
+    fbytes:&'a [u8],
+    queries:&'a [u32;22],
+    c1:&'a Option<Commitment>,
+    c2:&'a Option<Commitment>,
+    folded_word:&'a [E],
+    folded_salts:&'a PrivateSalts,
+    tree:&'a crate::multiproof::BinaryTree,
+}
+
+/// pv-rw-e (lead request R6): the compact stored layout, exactly the former tail
+/// of `prove_from_semantics` (from `Vec::with_capacity(compact::PROOF_BYTES)` on):
+/// same appends, same error order (`compact_semantic`, `compact_values`, then the
+/// `unwrap`s of the two commitments, then the six multiproof slots), same asserts.
+/// No hash call, no randomness, no thread-local state.
+fn publish_compact(l:&LogicalProof<'_>)->Result<Vec<u8>,Error> {
+    use crate::compact;
     let mut out=Vec::with_capacity(compact::PROOF_BYTES);
     out.extend_from_slice(compact::MAGIC);
-    out.extend_from_slice(&[variant.tag(),0,0,0,0,0,0,0]);
-    compact::compact_semantic(&sem.bytes,&mut out).map_err(|_|Error::Semantic)?;
-    compact::compact_values(&y1,&mut out).map_err(|_|Error::Semantic)?;
-    out.extend_from_slice(&inactive.to_le_bytes());out.extend_from_slice(&c0bytes);
-    out.extend_from_slice(&root);out.extend_from_slice(&c1bytes);out.extend_from_slice(&fbytes);
+    out.extend_from_slice(&[l.variant.tag(),0,0,0,0,0,0,0]);
+    compact::compact_semantic(l.semantic,&mut out).map_err(|_|Error::Semantic)?;
+    compact::compact_values(l.y1,&mut out).map_err(|_|Error::Semantic)?;
+    out.extend_from_slice(&l.inactive.to_le_bytes());out.extend_from_slice(l.c0bytes);
+    out.extend_from_slice(&l.root);out.extend_from_slice(l.c1bytes);out.extend_from_slice(l.fbytes);
     assert_eq!(out.len(),compact::OFF_OPENINGS);
-    let (cc1,cc2)=(backend.c1.as_ref().unwrap(),backend.c2.as_ref().unwrap());
-    for &u in &queries {
-        let u=FibreIndex::new(u as usize).unwrap();
+    let (cc1,cc2)=(l.c1.as_ref().unwrap(),l.c2.as_ref().unwrap());
+    let out=append_query_openings(out,cc1,cc2,l.queries,l.folded_word,l.folded_salts);
+    assert_eq!(out.len(),compact::OFF_NODES);
+    let out=append_node_slots(out,cc1,cc2,l.tree,l.queries)?;
+    assert_eq!(out.len(),compact::PROOF_BYTES);Ok(out)
+}
+
+/// pv-rw-e: `messages.iter().map(|m|variant.coefficients(m)).collect()`.
+fn opening_coefficients(variant:Variant,messages:&[Message<E>])->Vec<Message<E>> {
+    let mut coefficients=Vec::with_capacity(messages.len());
+    let mut lane=0;
+    while lane<messages.len() {coefficients.push(variant.coefficients(&messages[lane]));lane+=1;}
+    coefficients
+}
+/// pv-rw-e: `encoded(coefficients.iter().map(|m|eval_message(m,z1)))`, lane order.
+fn opening_claim_bytes(coefficients:&[Message<E>],z1:Point<E>)->Vec<u8> {
+    let mut bytes=Vec::with_capacity(E::BYTE_LEN*coefficients.len());
+    let mut lane=0;
+    while lane<coefficients.len() {
+        let value=r0::encoder::eval_message(&coefficients[lane],z1);
+        bytes.extend_from_slice(&value.to_le_bytes());lane+=1;
+    }
+    bytes
+}
+/// pv-rw-e: `(0..1024).map(|j|(0..29).fold(ZERO,|s,l|s.add(gp[l].mul(c[l][j])))).collect()`.
+fn opening_batch(coefficients:&[Message<E>],gp:&[E;29])->Vec<E> {
+    let mut q=Vec::with_capacity(1024);
+    let mut row=0;
+    while row<1024 {q.push(opening_row(coefficients,gp,row));row+=1;}
+    q
+}
+/// pv-rw-e: one row of `opening_batch`, lanes summed from 0 to 28 in order.
+#[inline(always)]
+fn opening_row(coefficients:&[Message<E>],gp:&[E;29],row:usize)->E {
+    let mut value=E::ZERO;
+    let mut lane=0;
+    while lane<29 {value=value.add(gp[lane].mul(coefficients[lane][row]));lane+=1;}
+    value
+}
+/// pv-rw-e: `(0..1024).fold(ZERO,|s,j|s.add(q[j].mul_qm31(w.raw(0,j))))`.
+fn opening_inactive(q:&[E],w:&Weights)->E {
+    let mut inactive=E::ZERO;
+    let mut row=0;
+    while row<1024 {inactive=inactive.add(q[row].mul_qm31(w.raw(0,row)));row+=1;}
+    inactive
+}
+/// pv-rw-e: `encoded(values.iter().copied())` on a slice: each element's
+/// `to_le_bytes`, concatenated in index order.
+fn encoded_slice(values:&[E])->Vec<u8> {
+    let mut out=Vec::with_capacity(E::BYTE_LEN*values.len());
+    let mut i=0;
+    while i<values.len() {out.extend_from_slice(&values[i].to_le_bytes());i+=1;}
+    out
+}
+/// pv-rw-e: the 2^18 folded leaves. Leaf u hashes the 128-byte value
+/// `encoded(word[4u..4u+4])` for u < 2^16 and 128 zero bytes otherwise, with
+/// salt u, in increasing u (the same hash calls in the same order). The value
+/// is a stack buffer instead of one heap `Vec` per leaf; the bytes are equal.
+fn folded_leaves(hash:HashFn,word:&[E],salts:&PrivateSalts)->Vec<[u8;32]> {
+    let mut leaves=Vec::with_capacity(1<<18);
+    let mut u=0usize;
+    while u<1<<18 {
+        let mut values=[0u8;128];
+        if u<1<<16 {
+            let mut s=0;
+            while s<4 {values[32*s..32*(s+1)].copy_from_slice(&word[4*u+s].to_le_bytes());s+=1;}
+        }
+        leaves.push(aspis_core::state_only_private_merkle::private_leaf_hash(hash,0x72,&values,salts.get(u)));
+        u+=1;
+    }
+    leaves
+}
+/// pv-rw-e: the per-query opening loop (`for &u in &queries`), 22 queries in order.
+fn append_query_openings(mut out:Vec<u8>,cc1:&Commitment,cc2:&Commitment,queries:&[u32;22],folded_word:&[E],folded_salts:&PrivateSalts)->Vec<u8> {
+    let mut i=0;
+    while i<22 {
+        let u=FibreIndex::new(queries[i] as usize).unwrap();
         let mut opening=FibreOpening{values:[[E::ZERO;29];4],paths:[[[[0;32];7];6];2]};
         cc1.fill_opening(u,&mut opening);cc2.fill_opening(u,&mut opening);
-        for s in 0..4 {for l in (0..26).chain(core::iter::once(28)){out.extend_from_slice(&opening.values[s][l].to_le_bytes()[..if l<26 {4}else{16}]);}}
-        for s in 0..4 {for l in 26..28 {out.extend_from_slice(&opening.values[s][l].to_le_bytes()[..16]);}}
+        out=append_opening_values(out,&opening);
         out.extend_from_slice(cc1.opening_salt(u).unwrap());
         out.extend_from_slice(cc2.opening_salt(u).unwrap());
-        out.extend_from_slice(&encoded(folded_word[4*(u.get()/4)..4*(u.get()/4)+4].iter().copied()));
+        let at=4*(u.get()/4);
+        out.extend_from_slice(&encoded_slice(&folded_word[at..at+4]));
         out.extend_from_slice(folded_salts.get(u.get()/4));
+        i+=1;
     }
-    assert_eq!(out.len(),compact::OFF_NODES);
-    for (batch,range) in [(0usize,0..compact::SPLIT),(1,compact::SPLIT..22)] {
-        for t in 0..3 {
-            let mut idx:Vec<u32>=queries[range.clone()].iter().map(|&u|if t==2 {u/4} else {u}).collect();
-            idx.sort();idx.dedup();
-            let nodes=match t {0=>cc1.multiproof(&idx),1=>cc2.multiproof(&idx),_=>tree.multiproof(&idx)}.ok_or(Error::Allocation)?;
-            let cap=32*compact::SLOT_NODES[3*batch+t];
-            assert!(nodes.len()<=cap);
-            out.extend_from_slice(&nodes);out.resize(out.len()+cap-nodes.len(),0);
-        }
+    out
+}
+/// pv-rw-e: `for s in 0..4 {for l in (0..26).chain(once(28)) {..}}` then
+/// `for s in 0..4 {for l in 26..28 {..}}`, the same byte order.
+fn append_opening_values(out:Vec<u8>,opening:&FibreOpening)->Vec<u8> {
+    // pv-rw-e: straight-line (a counted `while` re-binding `out` crashed Aeneas, 1991).
+    let out=append_opening_base_row(out,&opening.values[0]);
+    let out=append_opening_base_row(out,&opening.values[1]);
+    let out=append_opening_base_row(out,&opening.values[2]);
+    let out=append_opening_base_row(out,&opening.values[3]);
+    let out=append_opening_secure_row(out,&opening.values[0]);
+    let out=append_opening_secure_row(out,&opening.values[1]);
+    let out=append_opening_secure_row(out,&opening.values[2]);
+    append_opening_secure_row(out,&opening.values[3])
+}
+/// pv-rw-e: lanes 0..26 (4 bytes each) then lane 28 (16 bytes) of one row.
+fn append_opening_base_row(mut out:Vec<u8>,row:&[E;29])->Vec<u8> {
+    let mut lane=0;
+    while lane<26 {out.extend_from_slice(&row[lane].to_le_bytes()[..4]);lane+=1;}
+    out.extend_from_slice(&row[28].to_le_bytes()[..16]);
+    out
+}
+/// pv-rw-e: lanes 26 and 27 (16 bytes each) of one row.
+fn append_opening_secure_row(mut out:Vec<u8>,row:&[E;29])->Vec<u8> {
+    out.extend_from_slice(&row[26].to_le_bytes()[..16]);
+    out.extend_from_slice(&row[27].to_le_bytes()[..16]);
+    out
+}
+/// pv-rw-e: the six multiproof slots, batch 0 (queries 0..SPLIT) then batch 1
+/// (SPLIT..22), each with t = 0 (C1), 1 (C2), 2 (folded tree); the first
+/// `None` returns `Allocation`, exactly as the nested `for` loops did.
+fn append_node_slots(out:Vec<u8>,cc1:&Commitment,cc2:&Commitment,tree:&crate::multiproof::BinaryTree,queries:&[u32;22])->Result<Vec<u8>,Error> {
+    let out=append_node_slot(out,cc1,cc2,tree,queries,0,0)?;
+    let out=append_node_slot(out,cc1,cc2,tree,queries,0,1)?;
+    let out=append_node_slot(out,cc1,cc2,tree,queries,0,2)?;
+    let out=append_node_slot(out,cc1,cc2,tree,queries,1,0)?;
+    let out=append_node_slot(out,cc1,cc2,tree,queries,1,1)?;
+    append_node_slot(out,cc1,cc2,tree,queries,1,2)
+}
+fn append_node_slot(mut out:Vec<u8>,cc1:&Commitment,cc2:&Commitment,tree:&crate::multiproof::BinaryTree,queries:&[u32;22],batch:usize,t:usize)->Result<Vec<u8>,Error> {
+    use crate::compact;
+    let (begin,end)=if batch==0 {(0,compact::SPLIT)} else {(compact::SPLIT,22)};
+    let idx=sorted_unique_indices(queries,begin,end,t==2);
+    let nodes=match t {0=>cc1.multiproof(&idx),1=>cc2.multiproof(&idx),_=>tree.multiproof(&idx)}.ok_or(Error::Allocation)?;
+    let cap=32*compact::SLOT_NODES[3*batch+t];
+    assert!(nodes.len()<=cap);
+    out.extend_from_slice(&nodes);
+    let padded=out.len()+cap-nodes.len();
+    out.resize(padded,0);
+    Ok(out)
+}
+/// pv-rw-e: `queries[begin..end].iter().map(|&u|if folded {u/4} else {u}).collect()`
+/// followed by `sort(); dedup();`, computed by ordered insertion that skips
+/// duplicates. Both give the strictly increasing list of the distinct values.
+fn sorted_unique_indices(queries:&[u32;22],begin:usize,end:usize,folded:bool)->Vec<u32> {
+    let mut out:Vec<u32>=Vec::with_capacity(end-begin);
+    let mut i=begin;
+    while i<end {
+        let value=if folded {queries[i]/4} else {queries[i]};
+        let mut at=0;
+        while at<out.len() && out[at]<value {at+=1;}
+        if at==out.len() || out[at]!=value {out.insert(at,value);}
+        i+=1;
     }
-    assert_eq!(out.len(),compact::PROOF_BYTES);Ok(out)
+    out
 }
 
 // ---------------------------------------------------------------------------
@@ -314,8 +505,19 @@ fn public_check(variant:Variant,challenges:&R1PublicChallenges,c1_root:[u8;32])-
     }
     let _=c1_root;
     let (accepted,times)=aspis_z4b_probe::p_r1_check(challenges);
-    CHECK_TIMES.with(|v| v.borrow_mut().push(times));
+    record_check_times(times);
     if accepted {Ok(())} else {Err(Error::Rejected)}
+}
+
+/// pv-rw-e telemetry shell, kept OPAQUE in the extraction. Contract (lead
+/// request R3): no effect on any returned value of the prover. It appends
+/// `times` to this thread's `CHECK_TIMES` (read only by `take_check_times`);
+/// no other effect, no return value, never panics except on a re-entrant
+/// `RefCell` borrow (impossible here: no callback runs inside `with`). The
+/// verdict of `public_check` does not depend on it.
+#[cfg(feature="r1p-check")]
+fn record_check_times(times:R1CheckTimes) {
+    CHECK_TIMES.with(|v| v.borrow_mut().push(times));
 }
 
 /// One published proof from the retry loop.
@@ -360,15 +562,45 @@ pub fn prove_masked_retrying_with(
     mut next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,
 )->Result<RetriedProof,Error> {
     if variant!=Variant::S2 { return Err(Error::Semantic); }
-    for k in 0..ATTEMPT_CAP {
-        let attempt=next_attempt(k)?;
-        match prove_masked_attempt(public,compiled,variant,hash,attempt,nonce_store) {
-            Ok((proof,audit))=>return Ok(RetriedProof{proof,audit,attempts:k+1}),
-            Err(Error::Rejected)=>continue,
-            Err(e)=>return Err(e),
-        }
+    retry_attempt(public,compiled,variant,hash,nonce_store,&mut next_attempt,0)
+}
+
+/// pv-rw-e (lead request R2): the explicit per-attempt secrets provider of the
+/// retry core. `attempt_secrets(k)` is called exactly once per attempt, for
+/// k = 0, 1, ... in order, before that attempt's reservation. The closure-taking
+/// public wrappers use the blanket impl below, which is a one-line shell.
+#[cfg(feature="r1p-check")]
+pub trait AttemptSecretsProvider {
+    fn attempt_secrets(&mut self,k:usize)->Result<StateOnlyAttemptSecrets,Error>;
+}
+#[cfg(feature="r1p-check")]
+impl<F:FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>> AttemptSecretsProvider for F {
+    fn attempt_secrets(&mut self,k:usize)->Result<StateOnlyAttemptSecrets,Error> { self(k) }
+}
+
+/// pv-rw-e: attempt `k` of the D38.3 loop, as bounded recursion (depth at most
+/// `ATTEMPT_CAP`). Identical to the former `for k in 0..ATTEMPT_CAP` body:
+/// `next_attempt(k)` (error aborts), one `prove_masked_attempt`, accept on Ok,
+/// next attempt on `Rejected`, abort on any other error; `AttemptsExhausted`
+/// once `k` reaches the cap. The attempt's secrets are dropped inside
+/// `prove_masked_attempt` before the next attempt starts, as before.
+#[cfg(feature="r1p-check")]
+fn retry_attempt<P:AttemptSecretsProvider>(
+    public:Public<'_>,
+    compiled:&PoolV1PairForestMergedC1CompilationV1,
+    variant:Variant,
+    hash:HashFn,
+    nonce_store:&mut DurableStateOnlyMaskNonceStore,
+    provider:&mut P,
+    k:usize,
+)->Result<RetriedProof,Error> {
+    if k>=ATTEMPT_CAP { return Err(Error::AttemptsExhausted); }
+    let attempt=provider.attempt_secrets(k)?;
+    match prove_masked_attempt(public,compiled,variant,hash,attempt,nonce_store) {
+        Ok((proof,audit))=>Ok(RetriedProof{proof,audit,attempts:k+1}),
+        Err(Error::Rejected)=>retry_attempt(public,compiled,variant,hash,nonce_store,provider,k+1),
+        Err(e)=>Err(e),
     }
-    Err(Error::AttemptsExhausted)
 }
 
 /// Test-only injection (cfg(test)): a queue of forced P_R1 verdicts, and a

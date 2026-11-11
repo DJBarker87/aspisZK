@@ -83,6 +83,32 @@ pub struct StateOnlyMaskMaterial {
 }
 
 fn volatile_clear<T: Copy>(values: &mut [T], zero: T) {
+    // pv-rw-a (extraction rewrite): counted loop; the volatile store itself is
+    // in `volatile_store`, the one opaque helper. Same stores, same order,
+    // same fence.
+    let mut index = 0;
+    while index < values.len() {
+        volatile_store(&mut values[index], zero);
+        index += 1;
+    }
+    core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);
+}
+
+/// OPAQUE IN EXTRACTION (pv-rw-a). Contract: performs exactly one volatile
+/// write of `zero` to `*slot` (`core::ptr::write_volatile`) and has no other
+/// effect; it returns nothing and cannot fail. The model treats it as
+/// `*slot := zero`. It must stay a single volatile store so the compiler
+/// cannot elide the zeroisation.
+#[inline(always)]
+fn volatile_store<T: Copy>(slot: &mut T, zero: T) {
+    // SAFETY: `slot` is a unique borrow of initialised attempt-owned storage.
+    unsafe { core::ptr::write_volatile(slot, zero) };
+}
+
+/// Pin body of `volatile_clear` (4bb3b3f), kept only for the
+/// rewrite-equivalence test.
+#[cfg(test)]
+fn volatile_clear_pin<T: Copy>(values: &mut [T], zero: T) {
     for value in values {
         // SAFETY: callers pass uniquely borrowed attempt-owned storage.
         unsafe { core::ptr::write_volatile(value, zero) };
@@ -130,6 +156,20 @@ fn copy_active_rows() -> [bool; STATE_ONLY_POSEIDON_TRACE_ROWS] {
 }
 
 fn active_rows(rows: &[u16]) -> [bool; STATE_ONLY_POSEIDON_TRACE_ROWS] {
+    // pv-rw-a (extraction rewrite): counted loop in place of `for &row in rows`.
+    let mut active = [false; STATE_ONLY_POSEIDON_TRACE_ROWS];
+    let mut index = 0;
+    while index < rows.len() {
+        active[usize::from(rows[index])] = true;
+        index += 1;
+    }
+    active
+}
+
+/// Pin body of `active_rows` (4bb3b3f), kept only for the rewrite-equivalence
+/// test.
+#[cfg(test)]
+fn active_rows_pin(rows: &[u16]) -> [bool; STATE_ONLY_POSEIDON_TRACE_ROWS] {
     let mut active = [false; STATE_ONLY_POSEIDON_TRACE_ROWS];
     for &row in rows {
         active[usize::from(row)] = true;
@@ -246,6 +286,91 @@ pub fn apply_state_only_h1_padding_mask(
 }
 
 fn apply_h1_padding_mask_for_active(
+    h1: &mut [QM31],
+    padding: &[QM31],
+    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+) -> Result<(), StateOnlyMaskBuildError> {
+    // pv-rw-a (extraction rewrite): counted loops in place of the
+    // zip/any, enumerate/filter/fold and iter_mut/zip chains. The checks run
+    // in the pin's order and the inactive sum is evaluated only when the
+    // lengths and the active-row check pass, as with the pin's `||`. The
+    // active-row check scans all rows instead of stopping at the first
+    // violation (it removes an early exit on the reject path; it adds none).
+    if h1.len() != STATE_ONLY_POSEIDON_TRACE_ROWS || padding.len() != STATE_ONLY_POSEIDON_TRACE_ROWS
+    {
+        return Err(StateOnlyMaskBuildError::TraceShape);
+    }
+    if any_active_row_masked(padding, active) {
+        return Err(StateOnlyMaskBuildError::TraceShape);
+    }
+    if !qm31_is_zero(inactive_qm31_rows_sum(padding, active)) {
+        return Err(StateOnlyMaskBuildError::TraceShape);
+    }
+    add_qm31_rows(h1, padding);
+    Ok(())
+}
+
+/// pv-rw-a: `true` iff some active row of `padding` is non-zero (the pin's
+/// zip/any, without its early exit). `padding` has ROWS entries.
+fn any_active_row_masked(padding: &[QM31], active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS]) -> bool {
+    let mut masked = false;
+    let mut row = 0;
+    while row < STATE_ONLY_POSEIDON_TRACE_ROWS {
+        masked = any_active_row_masked_step(masked, active[row], padding[row]);
+        row += 1;
+    }
+    masked
+}
+
+/// pv-rw-a: one row of `any_active_row_masked` (branch outside the loop).
+fn any_active_row_masked_step(masked: bool, is_active: bool, value: QM31) -> bool {
+    if is_active && !qm31_is_zero(value) {
+        true
+    } else {
+        masked
+    }
+}
+
+/// pv-rw-a: sum, in row order, of the inactive rows of `table` (the pin's
+/// enumerate/filter/fold). `table` has ROWS entries.
+fn inactive_qm31_rows_sum(table: &[QM31], active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS]) -> QM31 {
+    let mut sum = QM31::ZERO;
+    let mut row = 0;
+    while row < STATE_ONLY_POSEIDON_TRACE_ROWS {
+        sum = inactive_qm31_rows_sum_step(sum, active[row], table[row]);
+        row += 1;
+    }
+    sum
+}
+
+/// pv-rw-a: one row of `inactive_qm31_rows_sum` (branch outside the loop).
+fn inactive_qm31_rows_sum_step(sum: QM31, is_active: bool, value: QM31) -> QM31 {
+    if !is_active {
+        sum.add(value)
+    } else {
+        sum
+    }
+}
+
+/// pv-rw-a: `target[row] += mask[row]` for every row (the pin's iter_mut/zip
+/// loop; both slices have ROWS entries).
+fn add_qm31_rows(target: &mut [QM31], mask: &[QM31]) {
+    let mut row = 0;
+    while row < STATE_ONLY_POSEIDON_TRACE_ROWS {
+        target[row] = target[row].add(mask[row]);
+        row += 1;
+    }
+}
+
+/// pv-rw-a: `value == QM31::ZERO` (derived `PartialEq`), outside any loop.
+fn qm31_is_zero(value: QM31) -> bool {
+    value == QM31::ZERO
+}
+
+/// Pin body of `apply_h1_padding_mask_for_active` (4bb3b3f), kept only for the
+/// rewrite-equivalence test.
+#[cfg(test)]
+fn apply_h1_padding_mask_for_active_pin(
     h1: &mut [QM31],
     padding: &[QM31],
     active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
@@ -436,6 +561,210 @@ pub fn build_state_only_mask_material(
 }
 
 fn build_mask_material_for_layout(
+    hash: HashFn,
+    precommit_binding: [u8; 32],
+    context: StateOnlyHidingContext,
+    private_entropy: &[u8; 32],
+    nonce_store: &mut impl StateOnlyMaskNonceStore,
+    cells: &[aspis_statement::TraceCell],
+    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+) -> Result<StateOnlyMaskMaterial, StateOnlyMaskBuildError> {
+    if !nonce_store.reserve(context.statement_digest, context.mask_nonce) {
+        return Err(StateOnlyMaskBuildError::ReusedMaskNonce);
+    }
+    let seed = derive_state_only_mask_seed_from_entropy_ref(
+        hash,
+        precommit_binding,
+        context,
+        private_entropy,
+    )?;
+    let mut expander = SeedExpander::new(hash, seed);
+    let inactive_dependent = first_inactive_row(active);
+    // pv-rw-a (extraction rewrite): the four mask samplers are named
+    // functions (sample_mask_cells / _columns / _g / _h1_padding), each with
+    // its loops in counted-loop helpers.
+    // DRAW ORDER (unchanged from the pin), all from this one SeedExpander:
+    //   1. sample_mask_cells: cells.len() m31 draws, cell order (c1);
+    //   2. sample_mask_columns: for each of the 10 mask-only columns in order,
+    //      1024 m31 draws in row order (the dependent row's draw is drawn and
+    //      then overwritten by the balance), then that column's balance;
+    //   3. sample_mask_g: 1024 qm31 draws in row order (dependent row drawn
+    //      and overwritten), then the balance;
+    //   4. sample_mask_h1_padding: one qm31 draw per row that is inactive and
+    //      not the dependent row, in row order (active rows and the dependent
+    //      row are NOT drawn), then the balance.
+    // Each m31 draw is rejection-sampled (at most 16 words); each qm31 is four
+    // m31 draws. The first error (sampling or balance) is returned, as with
+    // the pin's `?`.
+    let c1 = sample_mask_cells(&mut expander, cells.len())?;
+    let mask_only_c1 = sample_mask_columns(&mut expander, active, inactive_dependent)?;
+    let g = sample_mask_g(&mut expander, active, inactive_dependent)?;
+    let h1_padding = sample_mask_h1_padding(&mut expander, active, inactive_dependent)?;
+    Ok(StateOnlyMaskMaterial {
+        c1,
+        mask_only_c1,
+        g,
+        h1_padding,
+        mask_nonce: context.mask_nonce,
+    })
+}
+
+/// pv-rw-a: appends `count` m31 draws to `values`, in order; the first
+/// sampling error is returned (draws made so far stay in `values`).
+fn sample_m31_into(
+    expander: &mut SeedExpander,
+    values: &mut Vec<M31>,
+    count: usize,
+) -> Result<(), StateOnlyMaskBuildError> {
+    let mut index = 0;
+    while index < count {
+        let value = expander.m31()?;
+        values.push(value);
+        index += 1;
+    }
+    Ok(())
+}
+
+/// pv-rw-a: appends `count` qm31 draws to `values`, in order; the first
+/// sampling error is returned (draws made so far stay in `values`).
+fn sample_qm31_into(
+    expander: &mut SeedExpander,
+    values: &mut Vec<QM31>,
+    count: usize,
+) -> Result<(), StateOnlyMaskBuildError> {
+    let mut index = 0;
+    while index < count {
+        let value = expander.qm31()?;
+        values.push(value);
+        index += 1;
+    }
+    Ok(())
+}
+
+/// pv-rw-a: mask draw 1 (C1 relation-free cells): `count` m31 draws in cell
+/// order.
+fn sample_mask_cells(
+    expander: &mut SeedExpander,
+    count: usize,
+) -> Result<Vec<M31>, StateOnlyMaskBuildError> {
+    let mut c1 = Vec::with_capacity(count);
+    sample_m31_into(expander, &mut c1, count)?;
+    Ok(c1)
+}
+
+/// pv-rw-a: mask draw 2 (mask-only C1 columns): `sample_mask_column` for
+/// columns 0..9 in order. Unrolled with an array literal: the counted loop
+/// assigning into the array (local, and then borrowed) did not extract
+/// ("Could not match the contexts", runs r3/r4).
+fn sample_mask_columns(
+    expander: &mut SeedExpander,
+    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+    dependent: usize,
+) -> Result<[Vec<M31>; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS], StateOnlyMaskBuildError> {
+    const _: () = assert!(STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS == 10);
+    let column0 = sample_mask_column(expander, active, dependent)?;
+    let column1 = sample_mask_column(expander, active, dependent)?;
+    let column2 = sample_mask_column(expander, active, dependent)?;
+    let column3 = sample_mask_column(expander, active, dependent)?;
+    let column4 = sample_mask_column(expander, active, dependent)?;
+    let column5 = sample_mask_column(expander, active, dependent)?;
+    let column6 = sample_mask_column(expander, active, dependent)?;
+    let column7 = sample_mask_column(expander, active, dependent)?;
+    let column8 = sample_mask_column(expander, active, dependent)?;
+    let column9 = sample_mask_column(expander, active, dependent)?;
+    Ok([
+        column0, column1, column2, column3, column4, column5, column6, column7, column8, column9,
+    ])
+}
+
+/// pv-rw-a: one mask-only column: 1024 m31 draws in row order, then its
+/// inactive-row balance (overwrites the dependent row).
+fn sample_mask_column(
+    expander: &mut SeedExpander,
+    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+    dependent: usize,
+) -> Result<Vec<M31>, StateOnlyMaskBuildError> {
+    let mut values = Vec::with_capacity(STATE_ONLY_POSEIDON_TRACE_ROWS);
+    sample_m31_into(expander, &mut values, STATE_ONLY_POSEIDON_TRACE_ROWS)?;
+    balance_m31_copy_inactive(&mut values, dependent, active)?;
+    Ok(values)
+}
+
+/// pv-rw-a: mask draw 3 (G): 1024 qm31 draws in row order, then the
+/// inactive-row balance (overwrites the dependent row).
+fn sample_mask_g(
+    expander: &mut SeedExpander,
+    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+    dependent: usize,
+) -> Result<Vec<QM31>, StateOnlyMaskBuildError> {
+    let mut g = Vec::with_capacity(STATE_ONLY_POSEIDON_TRACE_ROWS);
+    sample_qm31_into(expander, &mut g, STATE_ONLY_POSEIDON_TRACE_ROWS)?;
+    balance_qm31_copy_inactive(&mut g, dependent, active)?;
+    Ok(g)
+}
+
+/// pv-rw-a: mask draw 4 (H1 padding): one qm31 draw per row that is inactive
+/// and not `dependent`, in row order (other rows stay zero, not drawn), then
+/// the inactive-row balance.
+fn sample_mask_h1_padding(
+    expander: &mut SeedExpander,
+    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+    dependent: usize,
+) -> Result<Vec<QM31>, StateOnlyMaskBuildError> {
+    // Built by pushing row values 0..1023 in order; rows that are not drawn
+    // get QM31::ZERO, exactly the pin's `vec![ZERO; ROWS]` entries.
+    let h1_padding = sample_mask_h1_padding_from(
+        expander,
+        Vec::with_capacity(STATE_ONLY_POSEIDON_TRACE_ROWS),
+        0,
+        active,
+        dependent,
+    )?;
+    let mut h1_padding = h1_padding;
+    balance_qm31_copy_inactive(&mut h1_padding, dependent, active)?;
+    Ok(h1_padding)
+}
+
+/// pv-rw-a: rows `row..ROWS` of `sample_mask_h1_padding`, by structural
+/// recursion on the row index with the vector moved through the calls (the
+/// counted-loop forms did not extract: runs r2-r6). Pushes one value per row
+/// in row order; the first sampling error is returned. Recursion depth is at
+/// most ROWS = 1024 small frames.
+fn sample_mask_h1_padding_from(
+    expander: &mut SeedExpander,
+    mut values: Vec<QM31>,
+    row: usize,
+    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+    dependent: usize,
+) -> Result<Vec<QM31>, StateOnlyMaskBuildError> {
+    if row >= STATE_ONLY_POSEIDON_TRACE_ROWS {
+        return Ok(values);
+    }
+    let value = sample_mask_h1_padding_row(expander, row, active[row], dependent)?;
+    values.push(value);
+    sample_mask_h1_padding_from(expander, values, row + 1, active, dependent)
+}
+
+/// pv-rw-a: one row of `sample_mask_h1_padding` (branch outside the loop):
+/// a fresh qm31 draw for an inactive non-dependent row; otherwise
+/// QM31::ZERO with no draw.
+fn sample_mask_h1_padding_row(
+    expander: &mut SeedExpander,
+    row: usize,
+    is_active: bool,
+    dependent: usize,
+) -> Result<QM31, StateOnlyMaskBuildError> {
+    if !is_active && row != dependent {
+        expander.qm31()
+    } else {
+        Ok(QM31::ZERO)
+    }
+}
+
+/// Pin body of `build_mask_material_for_layout` (4bb3b3f), kept only for the rewrite-equivalence
+/// test.
+#[cfg(test)]
+fn build_mask_material_for_layout_pin(
     hash: HashFn,
     precommit_binding: [u8; 32],
     context: StateOnlyHidingContext,
@@ -683,6 +1012,63 @@ pub fn apply_state_only_mask_material(
 }
 
 fn apply_mask_material_for_layout(
+    trace: &mut StateOnlyTraceFoundation,
+    mut material: StateOnlyMaskMaterial,
+    cells: &[aspis_statement::TraceCell],
+    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+) -> Result<AppliedStateOnlyMasks, StateOnlyMaskBuildError> {
+    if trace
+        .c1
+        .iter()
+        .any(|column| column.len() != STATE_ONLY_POSEIDON_TRACE_ROWS)
+    {
+        return Err(StateOnlyMaskBuildError::TraceShape);
+    }
+    if material.c1.len() != cells.len()
+        || material
+            .mask_only_c1
+            .iter()
+            .any(|column| column.len() != STATE_ONLY_POSEIDON_TRACE_ROWS)
+        || material.g.len() != STATE_ONLY_POSEIDON_TRACE_ROWS
+        || material.h1_padding.len() != STATE_ONLY_POSEIDON_TRACE_ROWS
+    {
+        return Err(StateOnlyMaskBuildError::TraceShape);
+    }
+    let mut inactive_dependents = [None; STATE_ONLY_HIDING_C1_COLUMNS];
+    for cell in cells {
+        let row = usize::from(cell.row);
+        let column = usize::from(cell.column);
+        if !active[row] {
+            inactive_dependents[column] = Some(row);
+        }
+    }
+    // pv-rw-a (extraction rewrite): closure in place of the `Option::is_none`
+    // function item (the closure form of `any` above extracts).
+    if inactive_dependents
+        .iter()
+        .any(|dependent| dependent.is_none())
+    {
+        return Err(StateOnlyMaskBuildError::Layout);
+    }
+    for (cell, mask) in cells.iter().copied().zip(core::mem::take(&mut material.c1)) {
+        let value = &mut trace.c1[usize::from(cell.column)][usize::from(cell.row)];
+        *value = value.add(mask);
+    }
+    for (column, dependent) in trace.c1.iter_mut().zip(inactive_dependents) {
+        balance_m31_copy_inactive(column, dependent.unwrap(), active)?;
+    }
+    Ok(AppliedStateOnlyMasks {
+        mask_only_c1: core::mem::take(&mut material.mask_only_c1),
+        g: core::mem::take(&mut material.g),
+        h1_padding: core::mem::take(&mut material.h1_padding),
+        mask_nonce: material.mask_nonce,
+    })
+}
+
+/// Pin body of `apply_mask_material_for_layout` (4bb3b3f), kept only for the rewrite-equivalence
+/// test.
+#[cfg(test)]
+fn apply_mask_material_for_layout_pin(
     trace: &mut StateOnlyTraceFoundation,
     mut material: StateOnlyMaskMaterial,
     cells: &[aspis_statement::TraceCell],
@@ -1070,6 +1456,218 @@ mod tests {
         transcript.absorb(label::STATEMENT, &context.statement_digest);
         let binding = begin_state_only_hiding_precommit(&mut transcript, context).unwrap();
         (binding, transcript)
+    }
+
+    fn pv_rw_a_random_bytes<const N: usize>() -> [u8; N] {
+        let mut out = [0u8; N];
+        getrandom::fill(&mut out).unwrap();
+        out
+    }
+
+    fn pv_rw_a_random_qm31() -> QM31 {
+        let bytes: [u8; 16] = pv_rw_a_random_bytes();
+        let limb = |i: usize| M31(u32::from_le_bytes(bytes[4 * i..4 * i + 4].try_into().unwrap()) % P);
+        QM31 {
+            c0: CM31::new(limb(0), limb(1)),
+            c1: CM31::new(limb(2), limb(3)),
+        }
+    }
+
+    /// Host hash with three of eight words forced to reject, to exercise the
+    /// rejection-sampling retry path.
+    fn pv_rw_a_partly_rejecting_hash(inputs: &[&[u8]]) -> [u8; 32] {
+        let mut out = HOST_HASH(inputs);
+        for byte in out.iter_mut().take(12) {
+            *byte = 0xff;
+        }
+        out
+    }
+
+    fn pv_rw_a_rejecting_hash(_inputs: &[&[u8]]) -> [u8; 32] {
+        [0xff; 32]
+    }
+
+    fn pv_rw_a_layouts() -> Vec<(Vec<aspis_statement::TraceCell>, [bool; STATE_ONLY_POSEIDON_TRACE_ROWS])> {
+        vec![
+            (
+                state_only_relation_free_mask_cells_v4().unwrap(),
+                copy_active_rows(),
+            ),
+            (
+                atomic_state_only_relation_free_mask_cells_v3().unwrap(),
+                atomic_copy_active_rows(),
+            ),
+            (
+                pool_v1_payment_relation_free_mask_cells_v1().unwrap(),
+                pool_v1_private_transfer_copy_active_rows(),
+            ),
+            (
+                pool_v1_payment_relation_free_mask_cells_v1().unwrap(),
+                pool_v1_withdrawal_copy_active_rows(),
+            ),
+            (
+                pool_v1_pair_forest_relation_free_mask_cells_v1().unwrap(),
+                pool_v1_pair_forest_copy_active_rows().unwrap(),
+            ),
+        ]
+    }
+
+    #[test]
+    fn pv_rw_a_active_rows_and_volatile_clear_match_pin_bodies() {
+        let fixed: [&[u16]; 3] = [
+            state_only_copy_active_rows_v4(),
+            atomic_state_only_copy_active_rows_v3(),
+            &[],
+        ];
+        for rows in fixed {
+            assert_eq!(active_rows(rows), active_rows_pin(rows));
+        }
+        let forest = pool_v1_pair_forest_copy_active_rows_v1().unwrap();
+        assert_eq!(active_rows(&forest), active_rows_pin(&forest));
+        for _ in 0..64 {
+            let bytes: [u8; 512] = pv_rw_a_random_bytes();
+            let len = usize::from(bytes[0]);
+            let rows: Vec<u16> = (0..len)
+                .map(|i| u16::from_le_bytes([bytes[2 * i + 2], bytes[2 * i + 3]]) % 1024)
+                .collect();
+            assert_eq!(active_rows(&rows), active_rows_pin(&rows));
+            let mut a: Vec<QM31> = (0..len).map(|_| pv_rw_a_random_qm31()).collect();
+            let mut b = a.clone();
+            volatile_clear(&mut a, QM31::ZERO);
+            volatile_clear_pin(&mut b, QM31::ZERO);
+            assert_eq!(a, b);
+            assert!(a.iter().all(|value| *value == QM31::ZERO));
+            let mut c: Vec<M31> = (0..len).map(|i| M31(u32::from(bytes[i]))).collect();
+            let mut d = c.clone();
+            volatile_clear(&mut c, M31(7));
+            volatile_clear_pin(&mut d, M31(7));
+            assert_eq!(c, d);
+        }
+    }
+
+    #[test]
+    fn pv_rw_a_h1_padding_matches_pin_body() {
+        for (_, active) in pv_rw_a_layouts() {
+            for case in 0..8 {
+                let mut padding: Vec<QM31> = (0..STATE_ONLY_POSEIDON_TRACE_ROWS)
+                    .map(|row| if active[row] { QM31::ZERO } else { pv_rw_a_random_qm31() })
+                    .collect();
+                let dependent = first_inactive_row(&active);
+                balance_qm31_copy_inactive(&mut padding, dependent, &active).unwrap();
+                let mut h1: Vec<QM31> = (0..STATE_ONLY_POSEIDON_TRACE_ROWS)
+                    .map(|_| pv_rw_a_random_qm31())
+                    .collect();
+                match case {
+                    0 => {}
+                    1 => {
+                        let row = (0..STATE_ONLY_POSEIDON_TRACE_ROWS).find(|r| active[*r]).unwrap();
+                        padding[row] = pv_rw_a_random_qm31();
+                    }
+                    2 => padding[dependent] = padding[dependent].add(QM31::from_cm31(CM31::from_m31(M31(1)))),
+                    3 => {
+                        padding.pop();
+                    }
+                    4 => h1.push(QM31::ZERO),
+                    5 => {
+                        let row = (0..STATE_ONLY_POSEIDON_TRACE_ROWS).rev().find(|r| active[*r]).unwrap();
+                        padding[row] = pv_rw_a_random_qm31();
+                        padding[dependent] = padding[dependent].add(QM31::from_cm31(CM31::from_m31(M31(1))));
+                    }
+                    6 => padding.push(QM31::ZERO),
+                    _ => h1.clear(),
+                }
+                let mut h1_pin = h1.clone();
+                let result = apply_h1_padding_mask_for_active(&mut h1, &padding, &active);
+                let result_pin = apply_h1_padding_mask_for_active_pin(&mut h1_pin, &padding, &active);
+                assert_eq!(result, result_pin, "case {case}");
+                assert_eq!(h1, h1_pin, "case {case}");
+                assert_eq!(result.is_ok(), case == 0);
+            }
+        }
+    }
+
+    fn pv_rw_a_assert_material_eq(a: &StateOnlyMaskMaterial, b: &StateOnlyMaskMaterial) {
+        assert_eq!(a.c1, b.c1);
+        assert_eq!(a.mask_only_c1, b.mask_only_c1);
+        assert_eq!(a.g, b.g);
+        assert_eq!(a.h1_padding, b.h1_padding);
+        assert_eq!(a.mask_nonce, b.mask_nonce);
+    }
+
+    #[test]
+    fn pv_rw_a_mask_material_build_and_apply_match_pin_bodies() {
+        let hashes: [HashFn; 3] = [HOST_HASH, pv_rw_a_partly_rejecting_hash, pv_rw_a_rejecting_hash];
+        for (layout, (cells, active)) in pv_rw_a_layouts().into_iter().enumerate() {
+            for (hash_index, hash) in hashes.into_iter().enumerate() {
+                for _ in 0..3 {
+                    let entropy: [u8; 32] = pv_rw_a_random_bytes();
+                    let nonce: [u8; 32] = pv_rw_a_random_bytes();
+                    let binding: [u8; 32] = pv_rw_a_random_bytes();
+                    let context = StateOnlyHidingContext::pinned([0x51; 32], nonce);
+                    let mut store = InMemoryStateOnlyMaskNonceStore::default();
+                    let mut store_pin = InMemoryStateOnlyMaskNonceStore::default();
+                    let built = build_mask_material_for_layout(
+                        hash, binding, context, &entropy, &mut store, &cells, &active,
+                    );
+                    let built_pin = build_mask_material_for_layout_pin(
+                        hash, binding, context, &entropy, &mut store_pin, &cells, &active,
+                    );
+                    // A reused nonce is rejected identically.
+                    assert_eq!(
+                        build_mask_material_for_layout(
+                            hash, binding, context, &entropy, &mut store, &cells, &active,
+                        )
+                        .err(),
+                        build_mask_material_for_layout_pin(
+                            hash, binding, context, &entropy, &mut store_pin, &cells, &active,
+                        )
+                        .err(),
+                    );
+                    let (material, material_pin) = match (built, built_pin) {
+                        (Ok(a), Ok(b)) => (a, b),
+                        (a, b) => {
+                            assert_eq!(a.err(), b.err());
+                            assert_eq!(hash_index, 2);
+                            continue;
+                        }
+                    };
+                    pv_rw_a_assert_material_eq(&material, &material_pin);
+                    let mut trace = zero_trace();
+                    for column in trace.c1.iter_mut() {
+                        for value in column.iter_mut() {
+                            *value = M31(u32::from_le_bytes(pv_rw_a_random_bytes::<4>()) % P);
+                        }
+                    }
+                    let mut trace_pin = zero_trace();
+                    trace_pin.c1.clone_from(&trace.c1);
+                    let applied = apply_mask_material_for_layout(&mut trace, material, &cells, &active);
+                    let applied_pin =
+                        apply_mask_material_for_layout_pin(&mut trace_pin, material_pin, &cells, &active);
+                    assert_eq!(applied, applied_pin, "layout {layout}");
+                    assert_eq!(trace.c1, trace_pin.c1, "layout {layout}");
+                }
+            }
+            // Shape errors are reported identically.
+            let entropy: [u8; 32] = pv_rw_a_random_bytes();
+            let context = StateOnlyHidingContext::pinned([0x51; 32], pv_rw_a_random_bytes());
+            let mut store = InMemoryStateOnlyMaskNonceStore::default();
+            let mut store_pin = InMemoryStateOnlyMaskNonceStore::default();
+            let mut material =
+                build_mask_material_for_layout(HOST_HASH, [1; 32], context, &entropy, &mut store, &cells, &active)
+                    .unwrap();
+            let mut material_pin = build_mask_material_for_layout_pin(
+                HOST_HASH, [1; 32], context, &entropy, &mut store_pin, &cells, &active,
+            )
+            .unwrap();
+            material.g.pop();
+            material_pin.g.pop();
+            let mut trace = zero_trace();
+            let mut trace_pin = zero_trace();
+            assert_eq!(
+                apply_mask_material_for_layout(&mut trace, material, &cells, &active),
+                apply_mask_material_for_layout_pin(&mut trace_pin, material_pin, &cells, &active),
+            );
+        }
     }
 
     fn inactive_m31_sum(table: &[M31], active: &[bool; 1024]) -> M31 {

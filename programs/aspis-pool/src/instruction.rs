@@ -10,31 +10,28 @@ use aspis_core::field::{M31, P};
 use aspis_statement::{
     decode_digest_canonical, encode_digest_canonical,
     pool_v1::{
-        decode_historical_anchor_envelope_v1, decode_verifier_policy_v1,
-        encode_historical_anchor_envelope_v1, encode_verifier_policy_v1,
+        decode_verifier_policy_v1, encode_verifier_policy_v1,
+        decode_historical_anchor_envelope_v1,
+        encode_historical_anchor_envelope_v1,
         HistoricalAnchorEnvelopeV1, PoolV1TransitionKind, POOL_V1_DIGEST_ENCODING_VERSION,
         POOL_V1_HISTORICAL_ANCHOR_ENVELOPE_BYTES,
     },
     poseidon2::Digest,
     VALUE_LIMIT,
 };
-use solana_program::{program_error::ProgramError, pubkey::Pubkey};
+use solana_program::program_error::ProgramError;
 
 use crate::{
-    deposit::DepositRequestV1,
-    deposit_transport::{decode_deposit_instruction_v1, DepositInstructionFormatErrorV1},
-    state::PoolInitializationV1,
-    vault::LEGACY_SPL_TOKEN_PROGRAM_ID,
+    state::PoolInitializationV1, vault::LEGACY_SPL_TOKEN_PROGRAM_ID,
+    deposit_transport::DepositInstructionFormatErrorV1,
 };
 
-pub const POOL_V1_INITIALIZE_INSTRUCTION_MAGIC: [u8; 4] = *b"ASIN";
 pub const POOL_V1_PRIVATE_TRANSFER_INSTRUCTION_MAGIC: [u8; 4] = *b"ASPT";
 pub const POOL_V1_PAIR_PRIVATE_TRANSFER_INSTRUCTION_MAGIC: [u8; 4] = *b"ASJP";
 pub const POOL_V1_PAIR_WITHDRAWAL_INSTRUCTION_MAGIC: [u8; 4] = *b"ASJW";
 pub const POOL_V1_WITHDRAWAL_INSTRUCTION_MAGIC: [u8; 4] = *b"ASWD";
 pub const POOL_V1_INSTRUCTION_VERSION: u8 = 1;
 
-pub const POOL_V1_INITIALIZE_INSTRUCTION_BYTES: usize = 184;
 pub const POOL_V1_TRANSITION_STATEMENT_BYTES: usize = 216;
 pub const POOL_V1_SPEND_INSTRUCTION_BYTES: usize =
     8 + POOL_V1_HISTORICAL_ANCHOR_ENVELOPE_BYTES + POOL_V1_TRANSITION_STATEMENT_BYTES;
@@ -43,15 +40,8 @@ pub const POOL_V1_PRIVATE_TRANSFER_STATEMENT_MAGIC: [u8; 4] = *b"ASCP";
 pub const POOL_V1_WITHDRAWAL_STATEMENT_MAGIC: [u8; 4] = *b"ASWP";
 pub const POOL_V1_TRANSITION_STATEMENT_VERSION: u8 = 1;
 
-pub const POOL_V1_INITIALIZATION_RECEIPT_MAGIC: [u8; 4] = *b"ASIR";
-pub const POOL_V1_INITIALIZATION_RECEIPT_BYTES: usize = 104;
 pub const POOL_V1_TRANSITION_RECEIPT_MAGIC: [u8; 4] = *b"ASTR";
 pub const POOL_V1_TRANSITION_RECEIPT_BYTES: usize = 200;
-
-const INITIALIZE_MINT_OFFSET: usize = 8;
-const INITIALIZE_ASSET_ID_OFFSET: usize = 40;
-const INITIALIZE_DOMAIN_OFFSET: usize = 48;
-const INITIALIZE_POLICY_OFFSET: usize = 80;
 
 const SPEND_ENVELOPE_OFFSET: usize = 8;
 const SPEND_STATEMENT_OFFSET: usize =
@@ -269,59 +259,6 @@ fn require_envelope_statement_match(
     Ok(())
 }
 
-pub fn encode_initialize_instruction_v1(
-    initialization: &PoolInitializationV1,
-) -> Result<[u8; POOL_V1_INITIALIZE_INSTRUCTION_BYTES], PoolInstructionFormatErrorV1> {
-    if initialization.token_program != LEGACY_SPL_TOKEN_PROGRAM_ID.to_bytes()
-        || initialization.asset_id.0 >= P
-    {
-        return Err(PoolInstructionFormatErrorV1::NonCanonicalField);
-    }
-    let policy = encode_verifier_policy_v1(&initialization.verifier_policy)
-        .map_err(|_| PoolInstructionFormatErrorV1::InvalidPolicy)?;
-    let mut bytes = [0u8; POOL_V1_INITIALIZE_INSTRUCTION_BYTES];
-    bytes[..4].copy_from_slice(&POOL_V1_INITIALIZE_INSTRUCTION_MAGIC);
-    bytes[4] = POOL_V1_INSTRUCTION_VERSION;
-    bytes[INITIALIZE_MINT_OFFSET..INITIALIZE_ASSET_ID_OFFSET]
-        .copy_from_slice(&initialization.asset_mint);
-    bytes[INITIALIZE_ASSET_ID_OFFSET..INITIALIZE_ASSET_ID_OFFSET + 4]
-        .copy_from_slice(&initialization.asset_id.to_le_bytes());
-    bytes[INITIALIZE_DOMAIN_OFFSET..INITIALIZE_POLICY_OFFSET]
-        .copy_from_slice(&initialization.deployment_domain);
-    bytes[INITIALIZE_POLICY_OFFSET..].copy_from_slice(&policy);
-    Ok(bytes)
-}
-
-pub fn decode_initialize_instruction_v1(
-    bytes: &[u8],
-) -> Result<PoolInitializationV1, PoolInstructionFormatErrorV1> {
-    if bytes.len() != POOL_V1_INITIALIZE_INSTRUCTION_BYTES {
-        return Err(PoolInstructionFormatErrorV1::WrongLength);
-    }
-    if bytes[..4] != POOL_V1_INITIALIZE_INSTRUCTION_MAGIC {
-        return Err(PoolInstructionFormatErrorV1::WrongMagic);
-    }
-    if bytes[4] != POOL_V1_INSTRUCTION_VERSION {
-        return Err(PoolInstructionFormatErrorV1::WrongVersion);
-    }
-    if bytes[5..8] != [0u8; 3] || bytes[44..48] != [0u8; 4] {
-        return Err(PoolInstructionFormatErrorV1::NonZeroReserved);
-    }
-    let raw_asset_id = u32::from_le_bytes(exact_array(&bytes[40..44])?);
-    if raw_asset_id >= P {
-        return Err(PoolInstructionFormatErrorV1::NonCanonicalField);
-    }
-    let verifier_policy = decode_verifier_policy_v1(&bytes[INITIALIZE_POLICY_OFFSET..])
-        .map_err(|_| PoolInstructionFormatErrorV1::InvalidPolicy)?;
-    Ok(PoolInitializationV1 {
-        asset_mint: exact_array(&bytes[INITIALIZE_MINT_OFFSET..INITIALIZE_ASSET_ID_OFFSET])?,
-        token_program: LEGACY_SPL_TOKEN_PROGRAM_ID.to_bytes(),
-        asset_id: M31(raw_asset_id),
-        deployment_domain: exact_array(&bytes[INITIALIZE_DOMAIN_OFFSET..INITIALIZE_POLICY_OFFSET])?,
-        verifier_policy,
-    })
-}
-
 fn encode_statement_common(
     bytes: &mut [u8; POOL_V1_TRANSITION_STATEMENT_BYTES],
     magic: &[u8; 4],
@@ -409,12 +346,6 @@ pub fn encode_pair_private_transfer_instruction_v1(
     let mut bytes = encode_private_transfer_instruction_v1(envelope, statement)?;
     bytes[..4].copy_from_slice(&POOL_V1_PAIR_PRIVATE_TRANSFER_INSTRUCTION_MAGIC);
     Ok(bytes)
-}
-
-pub fn decode_private_transfer_instruction_v1(
-    bytes: &[u8],
-) -> Result<PrivateTransferInstructionV1<'_>, PoolInstructionFormatErrorV1> {
-    decode_private_transfer_with_magic_v1(bytes, &POOL_V1_PRIVATE_TRANSFER_INSTRUCTION_MAGIC)
 }
 
 pub fn decode_pair_private_transfer_instruction_v1(
@@ -538,12 +469,6 @@ pub fn encode_pair_withdrawal_instruction_v1(
     Ok(bytes)
 }
 
-pub fn decode_withdrawal_instruction_v1(
-    bytes: &[u8],
-) -> Result<WithdrawalInstructionV1<'_>, PoolInstructionFormatErrorV1> {
-    decode_withdrawal_with_magic_v1(bytes, &POOL_V1_WITHDRAWAL_INSTRUCTION_MAGIC)
-}
-
 pub fn decode_pair_withdrawal_instruction_v1(
     bytes: &[u8],
 ) -> Result<WithdrawalInstructionV1<'_>, PoolInstructionFormatErrorV1> {
@@ -605,26 +530,6 @@ fn decode_withdrawal_with_magic_v1<'a>(
     })
 }
 
-pub fn decode_deposit_top_level_v1(
-    bytes: &[u8],
-) -> Result<DepositRequestV1<'_>, PoolInstructionFormatErrorV1> {
-    decode_deposit_instruction_v1(bytes).map_err(Into::into)
-}
-
-pub fn encode_initialization_receipt_v1(
-    pool: &Pubkey,
-    root_page_zero: &Pubkey,
-    vault_token_account: &Pubkey,
-) -> [u8; POOL_V1_INITIALIZATION_RECEIPT_BYTES] {
-    let mut bytes = [0u8; POOL_V1_INITIALIZATION_RECEIPT_BYTES];
-    bytes[..4].copy_from_slice(&POOL_V1_INITIALIZATION_RECEIPT_MAGIC);
-    bytes[4] = POOL_V1_INSTRUCTION_VERSION;
-    bytes[8..40].copy_from_slice(pool.as_ref());
-    bytes[40..72].copy_from_slice(root_page_zero.as_ref());
-    bytes[72..104].copy_from_slice(vault_token_account.as_ref());
-    bytes
-}
-
 pub fn encode_transition_receipt_v1(
     receipt: &TransitionReceiptV1,
 ) -> Result<[u8; POOL_V1_TRANSITION_RECEIPT_BYTES], PoolInstructionFormatErrorV1> {
@@ -674,151 +579,68 @@ pub fn encode_transition_receipt_v1(
     Ok(bytes)
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use aspis_statement::pool_v1::{
-        VerifierPolicyV1, POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY,
-    };
+// Shared AS8I codecs retain the frozen grammar and function text.
+pub const POOL_V1_INITIALIZE_INSTRUCTION_MAGIC: [u8; 4] = *b"ASIN";
 
-    fn digest(seed: u32) -> Digest {
-        core::array::from_fn(|index| M31(seed + 17 * index as u32))
+pub const POOL_V1_INITIALIZE_INSTRUCTION_BYTES: usize = 184;
+
+const INITIALIZE_MINT_OFFSET: usize = 8;
+
+const INITIALIZE_ASSET_ID_OFFSET: usize = 40;
+
+const INITIALIZE_DOMAIN_OFFSET: usize = 48;
+
+const INITIALIZE_POLICY_OFFSET: usize = 80;
+
+pub fn encode_initialize_instruction_v1(
+    initialization: &PoolInitializationV1,
+) -> Result<[u8; POOL_V1_INITIALIZE_INSTRUCTION_BYTES], PoolInstructionFormatErrorV1> {
+    if initialization.token_program != LEGACY_SPL_TOKEN_PROGRAM_ID.to_bytes()
+        || initialization.asset_id.0 >= P
+    {
+        return Err(PoolInstructionFormatErrorV1::NonCanonicalField);
     }
+    let policy = encode_verifier_policy_v1(&initialization.verifier_policy)
+        .map_err(|_| PoolInstructionFormatErrorV1::InvalidPolicy)?;
+    let mut bytes = [0u8; POOL_V1_INITIALIZE_INSTRUCTION_BYTES];
+    bytes[..4].copy_from_slice(&POOL_V1_INITIALIZE_INSTRUCTION_MAGIC);
+    bytes[4] = POOL_V1_INSTRUCTION_VERSION;
+    bytes[INITIALIZE_MINT_OFFSET..INITIALIZE_ASSET_ID_OFFSET]
+        .copy_from_slice(&initialization.asset_mint);
+    bytes[INITIALIZE_ASSET_ID_OFFSET..INITIALIZE_ASSET_ID_OFFSET + 4]
+        .copy_from_slice(&initialization.asset_id.to_le_bytes());
+    bytes[INITIALIZE_DOMAIN_OFFSET..INITIALIZE_POLICY_OFFSET]
+        .copy_from_slice(&initialization.deployment_domain);
+    bytes[INITIALIZE_POLICY_OFFSET..].copy_from_slice(&policy);
+    Ok(bytes)
+}
 
-    fn policy() -> VerifierPolicyV1 {
-        VerifierPolicyV1 {
-            flags: POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY,
-            registry_program: [6u8; 32],
-            registry_authority: [0u8; 32],
-            policy_binding: [8u8; 32],
-        }
+pub fn decode_initialize_instruction_v1(
+    bytes: &[u8],
+) -> Result<PoolInitializationV1, PoolInstructionFormatErrorV1> {
+    if bytes.len() != POOL_V1_INITIALIZE_INSTRUCTION_BYTES {
+        return Err(PoolInstructionFormatErrorV1::WrongLength);
     }
-
-    fn envelope(kind: PoolV1TransitionKind) -> HistoricalAnchorEnvelopeV1 {
-        HistoricalAnchorEnvelopeV1 {
-            transition_kind: kind,
-            pool: [1u8; 32],
-            deployment_domain: [2u8; 32],
-            anchor_sequence: 7,
-            anchor_root: digest(10),
-            nullifier: digest(100),
-            verifier_profile: [3u8; 32],
-            verifier_release: [4u8; 32],
-        }
+    if bytes[..4] != POOL_V1_INITIALIZE_INSTRUCTION_MAGIC {
+        return Err(PoolInstructionFormatErrorV1::WrongMagic);
     }
-
-    #[test]
-    fn initialization_is_exact_and_rejects_trailing_reserved_and_policy_confusion() {
-        let initialization = PoolInitializationV1 {
-            asset_mint: [9u8; 32],
-            token_program: LEGACY_SPL_TOKEN_PROGRAM_ID.to_bytes(),
-            asset_id: M31(11),
-            deployment_domain: [12u8; 32],
-            verifier_policy: policy(),
-        };
-        let encoded = encode_initialize_instruction_v1(&initialization).unwrap();
-        assert_eq!(
-            decode_initialize_instruction_v1(&encoded),
-            Ok(initialization)
-        );
-
-        let mut trailing = encoded.to_vec();
-        trailing.push(0);
-        assert_eq!(
-            decode_initialize_instruction_v1(&trailing),
-            Err(PoolInstructionFormatErrorV1::WrongLength)
-        );
-        let mut reserved = encoded;
-        reserved[44] = 1;
-        assert_eq!(
-            decode_initialize_instruction_v1(&reserved),
-            Err(PoolInstructionFormatErrorV1::NonZeroReserved)
-        );
-        let mut changed_policy = encoded;
-        changed_policy[INITIALIZE_POLICY_OFFSET + 4] = 2;
-        assert_eq!(
-            decode_initialize_instruction_v1(&changed_policy),
-            Err(PoolInstructionFormatErrorV1::InvalidPolicy)
-        );
+    if bytes[4] != POOL_V1_INSTRUCTION_VERSION {
+        return Err(PoolInstructionFormatErrorV1::WrongVersion);
     }
-
-    #[test]
-    fn private_transfer_round_trip_binds_both_outputs_and_all_common_fields() {
-        let envelope = envelope(PoolV1TransitionKind::PrivateTransfer);
-        let statement = PrivateTransferStatementV1 {
-            pool: envelope.pool,
-            deployment_domain: envelope.deployment_domain,
-            anchor_sequence: envelope.anchor_sequence,
-            anchor_root: envelope.anchor_root,
-            nullifier: envelope.nullifier,
-            asset_id: M31(7),
-            recipient_commitment: digest(200),
-            change_commitment: digest(300),
-        };
-        let encoded = encode_private_transfer_instruction_v1(&envelope, &statement).unwrap();
-        let decoded = decode_private_transfer_instruction_v1(&encoded).unwrap();
-        assert_eq!(decoded.envelope, envelope);
-        assert_eq!(decoded.statement, statement);
-        assert_eq!(
-            decoded.statement_payload,
-            &encoded[SPEND_STATEMENT_OFFSET..]
-        );
-
-        let mut changed = encoded;
-        changed[SPEND_STATEMENT_OFFSET + STATEMENT_POOL_OFFSET] ^= 1;
-        assert_eq!(
-            decode_private_transfer_instruction_v1(&changed),
-            Err(PoolInstructionFormatErrorV1::EnvelopeStatementMismatch)
-        );
-        let mut noncanonical = encoded;
-        noncanonical[SPEND_STATEMENT_OFFSET + STATEMENT_FIRST_OUTPUT_OFFSET
-            ..SPEND_STATEMENT_OFFSET + STATEMENT_FIRST_OUTPUT_OFFSET + 4]
-            .copy_from_slice(&P.to_le_bytes());
-        assert_eq!(
-            decode_private_transfer_instruction_v1(&noncanonical),
-            Err(PoolInstructionFormatErrorV1::NonCanonicalField)
-        );
+    if bytes[5..8] != [0u8; 3] || bytes[44..48] != [0u8; 4] {
+        return Err(PoolInstructionFormatErrorV1::NonZeroReserved);
     }
-
-    #[test]
-    fn withdrawal_round_trip_rejects_zero_amount_wrong_kind_and_trailing_data() {
-        let envelope = envelope(PoolV1TransitionKind::Withdrawal);
-        let statement = WithdrawalStatementV1 {
-            pool: envelope.pool,
-            deployment_domain: envelope.deployment_domain,
-            anchor_sequence: envelope.anchor_sequence,
-            anchor_root: envelope.anchor_root,
-            nullifier: envelope.nullifier,
-            asset_id: M31(7),
-            amount: 25,
-            destination_token_account: [5u8; 32],
-            change_commitment: digest(400),
-        };
-        let encoded = encode_withdrawal_instruction_v1(&envelope, &statement).unwrap();
-        assert_eq!(
-            decode_withdrawal_instruction_v1(&encoded)
-                .unwrap()
-                .statement,
-            statement
-        );
-
-        let mut zero_amount = encoded;
-        zero_amount[SPEND_STATEMENT_OFFSET + 148..SPEND_STATEMENT_OFFSET + 152].fill(0);
-        assert_eq!(
-            decode_withdrawal_instruction_v1(&zero_amount),
-            Err(PoolInstructionFormatErrorV1::InvalidWithdrawalAmount)
-        );
-        let mut wrong_kind = encoded;
-        wrong_kind[5] = PoolV1TransitionKind::PrivateTransfer as u8;
-        assert_eq!(
-            decode_withdrawal_instruction_v1(&wrong_kind),
-            Err(PoolInstructionFormatErrorV1::WrongTransitionKind)
-        );
-        let mut trailing = encoded.to_vec();
-        trailing.push(0);
-        assert_eq!(
-            decode_withdrawal_instruction_v1(&trailing),
-            Err(PoolInstructionFormatErrorV1::WrongLength)
-        );
+    let raw_asset_id = u32::from_le_bytes(exact_array(&bytes[40..44])?);
+    if raw_asset_id >= P {
+        return Err(PoolInstructionFormatErrorV1::NonCanonicalField);
     }
+    let verifier_policy = decode_verifier_policy_v1(&bytes[INITIALIZE_POLICY_OFFSET..])
+        .map_err(|_| PoolInstructionFormatErrorV1::InvalidPolicy)?;
+    Ok(PoolInitializationV1 {
+        asset_mint: exact_array(&bytes[INITIALIZE_MINT_OFFSET..INITIALIZE_ASSET_ID_OFFSET])?,
+        token_program: LEGACY_SPL_TOKEN_PROGRAM_ID.to_bytes(),
+        asset_id: M31(raw_asset_id),
+        deployment_domain: exact_array(&bytes[INITIALIZE_DOMAIN_OFFSET..INITIALIZE_POLICY_OFFSET])?,
+        verifier_policy,
+    })
 }

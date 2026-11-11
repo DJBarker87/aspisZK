@@ -12,7 +12,14 @@ use super::*;
 use aspis_core::r0::{encoder, opening};
 
 fn rev(width: usize, x: usize) -> usize {
-    (0..width).fold(0, |acc, b| acc | (((x >> b) & 1) << (width - 1 - b)))
+    // pv-rw-d: index loop (former fold closure).
+    let mut acc = 0;
+    let mut b = 0;
+    while b < width {
+        acc |= ((x >> b) & 1) << (width - 1 - b);
+        b += 1;
+    }
+    acc
 }
 /// X(g^e), g = (2, 1268011823) (CircleGroupOrder.lean:176).
 fn gx(e: u64) -> M31 {
@@ -56,10 +63,27 @@ fn line_fold_value(alpha: W, inv: [W; 3], v: [W; 4]) -> W {
 }
 /// RoundPairing.dualFold: quarter * sum_t w(4d+t) alpha^((4-t)%4).
 fn rp_dual_fold(alpha: W, w: &[W]) -> Vec<W> {
-    let quarter = W::from_m31(M31(4).inv());
-    w.chunks_exact(4)
-        .map(|h| quarter.mul((0..4).fold(W::ZERO, |s, t| s.add(h[t].mul(alpha.pow(((4 - t) % 4) as u64))))))
-        .collect()
+    // pv-rw-d: index loops (former chunks_exact/map/fold closures; a short tail is ignored, as before).
+    rp_dual_fold_q(alpha, w, W::from_m31(M31(4).inv()))
+}
+fn rp_dual_fold_q(alpha: W, w: &[W], quarter: W) -> Vec<W> {
+    let n = w.len() / 4;
+    let mut out: Vec<W> = Vec::with_capacity(n);
+    let mut i = 0;
+    while i < n {
+        out.push(quarter.mul(rp_dual_sum(alpha, w, i)));
+        i += 1;
+    }
+    out
+}
+fn rp_dual_sum(alpha: W, w: &[W], i: usize) -> W {
+    let mut s = W::ZERO;
+    let mut t = 0;
+    while t < 4 {
+        s = s.add(w[4 * i + t].mul(alpha.pow(((4 - t) % 4) as u64)));
+        t += 1;
+    }
+    s
 }
 const READINGS: [&str; 3] = ["inv_xyz_literal", "inv_2x_m2y_2z", "inv_2x_2y_2z"];
 fn line_inverse(v: usize, reading: usize) -> [W; 3] {
@@ -76,26 +100,56 @@ fn line_inverse(v: usize, reading: usize) -> [W; 3] {
 /// weightsR1 (§2.3) through the R0 Lean-mirror functions: indicator of copy-inactive
 /// rows at pi.symm j, eqWeight(openingPoints) at pi.symm j, libraWeight j, oodLinear.
 fn weights_design(a: &[QM31; 10], z: &[Point<QM31>; 2], kappa: W) -> Vec<W> {
-    let pts = opening::points_from_alphas(&a.map(wq));
-    let rw: Vec<_> = (0..3).map(|k| opening::row_eq_weight(&pts[k])).collect();
+    // pv-rw-d: array literal (former `a.map(wq)`, a function item argument).
+    let aw = [wq(a[0]), wq(a[1]), wq(a[2]), wq(a[3]), wq(a[4]), wq(a[5]), wq(a[6]), wq(a[7]), wq(a[8]), wq(a[9])];
+    let pts = opening::points_from_alphas(&aw);
+    // pv-rw-d: index loops and a per-j helper (former map/fold closures).
+    let rw = [opening::row_eq_weight(&pts[0]), opening::row_eq_weight(&pts[1]), opening::row_eq_weight(&pts[2])];
     let kp = r1::powers::<7>(kappa);
-    (0..1024)
-        .map(|j| {
-            let r = r1::row(j);
-            let mut e = [QM31::ZERO; 1024];
-            e[j] = QM31::ONE;
-            let ell = [
-                if opening::inactive(r).unwrap() { W::ONE } else { W::ZERO },
-                rw[0][r],
-                rw[1][r],
-                rw[2][r],
-                wq(h_weight(a, j)),
-                wq(encoder::eval_message(&e, z[0])),
-                wq(encoder::eval_message(&e, z[1])),
-            ];
-            (0..7).fold(W::ZERO, |s, k| s.add(kp[k].mul(ell[k])))
-        })
-        .collect()
+    weights_design_rows(a, z, &rw, &kp)
+}
+/// pv-rw-d: the j loop of `weights_design`, borrowed inputs only (the loop in
+/// the function that computed rw/kp crashed Aeneas at 1991).
+fn weights_design_rows(a: &[QM31; 10], z: &[Point<QM31>; 2], rw: &[[W; 1024]; 3], kp: &[W; 7]) -> Vec<W> {
+    let mut out: Vec<W> = Vec::with_capacity(1024);
+    let mut j = 0;
+    while j < 1024 {
+        out.push(weights_design_at(a, z, rw, kp, j));
+        j += 1;
+    }
+    out
+}
+fn weights_design_at(a: &[QM31; 10], z: &[Point<QM31>; 2], rw: &[[W; 1024]; 3], kp: &[W; 7], j: usize) -> W {
+    let r = r1::row(j);
+    let mut e = [QM31::ZERO; 1024];
+    e[j] = QM31::ONE;
+    let ell = [
+        if opening::inactive(r).unwrap() { W::ONE } else { W::ZERO },
+        rw[0][r],
+        rw[1][r],
+        rw[2][r],
+        wq(h_weight(a, j)),
+        wq(encoder::eval_message(&e, z[0])),
+        wq(encoder::eval_message(&e, z[1])),
+    ];
+    dot7(kp, &ell)
+}
+/// sum_k kp[k] * ell[k], k = 0..7 in order (pv-rw-d: own helper; the loop after
+/// the locals crashed Aeneas at 1991).
+fn dot7(kp: &[W; 7], ell: &[W; 7]) -> W {
+    let mut s = W::ZERO;
+    let mut k = 0;
+    while k < 7 {
+        s = s.add(kp[k].mul(ell[k]));
+        k += 1;
+    }
+    s
+}
+/// pv-rw-d: the list literal vec![(i, W::ONE)].
+fn unit_coeff(i: usize) -> Vec<(usize, W)> {
+    let mut c: Vec<(usize, W)> = Vec::new();
+    c.push((i, W::ONE));
+    c
 }
 struct DesignRels {
     s2a: Rel,
@@ -104,48 +158,127 @@ struct DesignRels {
     circ: Vec<Rel>,
     line: Vec<Vec<Rel>>, // per reading, one relation per distinct parent u/4
 }
-fn design_relations(wd: &[W], op: &Opening, qs: &[usize], lay: &Lay) -> DesignRels {
+/// pv-rw-d: the coefficient part of `design_relations` (no names, no
+/// format!, no closures).  line[rd][p] is the relation of parents[p].
+struct DesignCoeffs {
+    s2a: Vec<(usize, W)>,
+    s2b: Vec<(usize, W)>,
+    s1: Vec<(usize, W)>,
+    circ: Vec<Vec<(usize, W)>>,
+    line: Vec<Vec<Vec<(usize, W)>>>,
+    parents: Vec<usize>,
+}
+fn negw(x: W) -> W {
+    W::ZERO.sub(x)
+}
+fn design_line(op: &Opening, lay: &Lay, v: usize, rd: usize) -> Vec<(usize, W)> {
+    let inv = line_inverse(v, rd);
+    let mut c: Vec<(usize, W)> = Vec::new();
+    // pv-rw-d: the t loop unrolled (4 fixed iterations).
+    c.push((lay.fw(4 * v), line_fold_value(op.alpha1, inv, [W::ONE, W::ZERO, W::ZERO, W::ZERO])));
+    c.push((lay.fw(4 * v + 1), line_fold_value(op.alpha1, inv, [W::ZERO, W::ONE, W::ZERO, W::ZERO])));
+    c.push((lay.fw(4 * v + 2), line_fold_value(op.alpha1, inv, [W::ZERO, W::ZERO, W::ONE, W::ZERO])));
+    c.push((lay.fw(4 * v + 3), line_fold_value(op.alpha1, inv, [W::ZERO, W::ZERO, W::ZERO, W::ONE])));
+    push_nat_line(&mut c, lay, x16(v));
+    c
+}
+fn push_nat_line(c: &mut Vec<(usize, W)>, lay: &Lay, xv: M31) {
+    let mut e = 0;
+    while e < 64 {
+        c.push((lay.fin(e), negw(wm(nat_line(xv, e)))));
+        e += 1;
+    }
+}
+fn design_coeffs(wd: &[W], op: &Opening, qs: &[usize], lay: &Lay) -> DesignCoeffs {
     let quarter = W::from_m31(M31(4).inv());
     let w1 = rp_dual_fold(op.alpha0, wd);
     let w2 = rp_dual_fold(op.alpha1, &w1);
-    let neg = |x: W| W::ZERO.sub(x);
-    let mut s2b = vec![(8, W::ONE), (12, W::ONE)];
-    for i in 0..7 {
-        s2b.push((1 + i, neg(quarter.mul(op.alpha0.pow(i as u64)))));
+    let s2b = design_s2b(op.alpha0, quarter);
+    let s1 = design_s1(op.alpha1, &w2, lay);
+    let parents = design_parents(qs);
+    let line = design_lines(op, lay, &parents);
+    let mut s2a: Vec<(usize, W)> = Vec::new();
+    s2a.push((1, W::ONE));
+    s2a.push((5, W::ONE));
+    let circ = design_circ(qs, lay);
+    DesignCoeffs { s2a, s2b, s1, circ, line, parents }
+}
+fn design_s2b(alpha0: W, quarter: W) -> Vec<(usize, W)> {
+    let mut s2b: Vec<(usize, W)> = Vec::new();
+    s2b.push((8, W::ONE));
+    s2b.push((12, W::ONE));
+    let mut i = 0;
+    while i < 7 {
+        s2b.push((1 + i, negw(quarter.mul(alpha0.pow(i as u64)))));
+        i += 1;
     }
-    let mut s1: Vec<(usize, W)> = (0..7).map(|i| (8 + i, op.alpha1.pow(i as u64))).collect();
-    for e in 0..64 {
-        s1.push((lay.fin(e), neg(w2[e])));
+    s2b
+}
+fn design_s1(alpha1: W, w2: &[W], lay: &Lay) -> Vec<(usize, W)> {
+    let mut s1: Vec<(usize, W)> = Vec::new();
+    let mut i = 0;
+    while i < 7 {
+        s1.push((8 + i, alpha1.pow(i as u64)));
+        i += 1;
     }
-    let mut parents: Vec<usize> = qs.iter().map(|u| u / 4).collect();
+    let mut e = 0;
+    while e < 64 {
+        s1.push((lay.fin(e), negw(w2[e])));
+        e += 1;
+    }
+    s1
+}
+fn design_parents(qs: &[usize]) -> Vec<usize> {
+    let mut parents: Vec<usize> = Vec::with_capacity(qs.len());
+    let mut i = 0;
+    while i < qs.len() {
+        parents.push(qs[i] / 4);
+        i += 1;
+    }
     parents.sort();
     parents.dedup();
-    let line = (0..3)
-        .map(|rd| {
-            parents
-                .iter()
-                .map(|&v| {
-                    let inv = line_inverse(v, rd);
-                    let mut c = vec![];
-                    for t in 0..4 {
-                        let mut unit = [W::ZERO; 4];
-                        unit[t] = W::ONE;
-                        c.push((lay.fw(4 * v + t), line_fold_value(op.alpha1, inv, unit)));
-                    }
-                    let xv = x16(v);
-                    for e in 0..64 {
-                        c.push((lay.fin(e), neg(wm(nat_line(xv, e)))));
-                    }
-                    Rel { name: format!("line_v{v}_{}", READINGS[rd]), c }
-                })
-                .collect()
-        })
+    parents
+}
+fn design_lines_rd(op: &Opening, lay: &Lay, parents: &[usize], rd: usize) -> Vec<Vec<(usize, W)>> {
+    let mut per: Vec<Vec<(usize, W)>> = Vec::with_capacity(parents.len());
+    let mut pi = 0;
+    while pi < parents.len() {
+        per.push(design_line(op, lay, parents[pi], rd));
+        pi += 1;
+    }
+    per
+}
+fn design_lines(op: &Opening, lay: &Lay, parents: &[usize]) -> Vec<Vec<Vec<(usize, W)>>> {
+    let mut line: Vec<Vec<Vec<(usize, W)>>> = Vec::with_capacity(3);
+    line.push(design_lines_rd(op, lay, parents, 0));
+    line.push(design_lines_rd(op, lay, parents, 1));
+    line.push(design_lines_rd(op, lay, parents, 2));
+    line
+}
+fn design_circ(qs: &[usize], lay: &Lay) -> Vec<Vec<(usize, W)>> {
+    let mut circ: Vec<Vec<(usize, W)>> = Vec::with_capacity(qs.len());
+    let mut i = 0;
+    while i < qs.len() {
+        circ.push(unit_coeff(lay.fw(qs[i])));
+        i += 1;
+    }
+    circ
+}
+/// The named relations (diagnostics), built from `design_coeffs`.
+fn design_relations(wd: &[W], op: &Opening, qs: &[usize], lay: &Lay) -> DesignRels {
+    let d = design_coeffs(wd, op, qs, lay);
+    let parents = d.parents;
+    let line = d
+        .line
+        .into_iter()
+        .enumerate()
+        .map(|(rd, per)| per.into_iter().zip(&parents).map(|(c, &v)| Rel { name: format!("line_v{v}_{}", READINGS[rd]), c }).collect())
         .collect();
     DesignRels {
-        s2a: Rel { name: "s2a".into(), c: vec![(1, W::ONE), (5, W::ONE)] },
-        s2b: Rel { name: "s2b".into(), c: s2b },
-        s1: Rel { name: "s1".into(), c: s1 },
-        circ: qs.iter().map(|&u| Rel { name: format!("circ_u{u}"), c: vec![(lay.fw(u), W::ONE)] }).collect(),
+        s2a: Rel { name: "s2a".into(), c: d.s2a },
+        s2b: Rel { name: "s2b".into(), c: d.s2b },
+        s1: Rel { name: "s1".into(), c: d.s1 },
+        circ: d.circ.into_iter().zip(qs).map(|(c, &u)| Rel { name: format!("circ_u{u}"), c }).collect(),
         line,
     }
 }

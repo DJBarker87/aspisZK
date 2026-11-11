@@ -15,12 +15,16 @@ use aspis_r1_cert_check as ck;
 const OS: usize = 376;
 
 fn flat(m: &[Vec<u32>], cols: usize) -> Option<Vec<u32>> {
+    // pv-rw-d: index loop (the slice-iterator loop with an early return crashed
+    // Aeneas at InterpReduceCollapse.ml:1991).
     let mut v = Vec::with_capacity(m.len() * cols);
-    for r in m {
-        if r.len() != cols {
+    let mut i = 0;
+    while i < m.len() {
+        if m[i].len() != cols {
             return None;
         }
-        v.extend_from_slice(r);
+        v.extend_from_slice(&m[i]);
+        i += 1;
     }
     Some(v)
 }
@@ -38,104 +42,524 @@ struct Fam {
     ccs: Vec<Vec<u32>>,
     sid: Vec<(u32, u32)>, // (lane, source index) of each referenced source
 }
-fn family(ln: &Lanes, lks: &[&LaneKer], lane_ix: &dyn Fn(u32) -> u32) -> Option<Fam> {
-    let mut f = Fam { srcs: vec![], ej: vec![], es: vec![], epo: vec![], eco: vec![], pidx: vec![], coef: vec![], ccs: vec![], sid: vec![] };
-    for l in lks {
-        let li = l.lane as usize;
-        if li >= LANES {
-            return None;
-        }
-        let po = f.pidx.len() as u32;
-        for &j in &l.piv {
-            if j as usize >= ln.count(li) {
-                return None;
-            }
-            f.pidx.push(f.srcs.len() as u32);
-            f.srcs.push((lane_ix(l.lane), src3(ln, li, j as usize)));
-            f.sid.push((l.lane, j));
-        }
-        for (j, cc) in &l.ents {
-            if *j as usize >= ln.count(li) {
-                return None;
-            }
-            f.ej.push(f.srcs.len() as u32);
-            f.srcs.push((lane_ix(l.lane), src3(ln, li, *j as usize)));
-            f.sid.push((l.lane, *j));
-            f.es.push(cc.len() as u32);
-            f.epo.push(po);
-            f.eco.push(f.coef.len() as u32);
-            f.coef.extend_from_slice(cc);
-            f.ccs.push(cc.clone());
-        }
+/// pv-rw-d: the former `lane_ix: &dyn Fn(u32) -> u32` argument was `|l| l`
+/// (QPrime) or `|_| 0` (G); `g_lane` selects the second.
+fn lane_ix(g_lane: bool, l: u32) -> u32 {
+    if g_lane { 0 } else { l }
+}
+fn family(ln: &Lanes, lks: &[LaneKer], g_lane: bool) -> Option<Fam> {
+    // pv-rw-d: the lane kernels as an owned-element slice (the former
+    // `&[&LaneKer]`: loops reading references out of a slice of references
+    // failed "already registered mapping" / "Internal error"), state by value
+    // plus an `ok` flag (the loop shape of emit_qprime_lane).
+    let mut f = empty_fam();
+    let mut ok = true;
+    let mut i = 0;
+    while i < lks.len() && ok {
+        let (f2, ok2) = family_lane_flag(ln, &lks[i], g_lane, f);
+        f = f2;
+        ok = ok2;
+        i += 1;
     }
+    if ok {
+        Some(f)
+    } else {
+        None
+    }
+}
+/// The family of one lane kernel (the former `family(ln, &[&k], g)`).
+fn family_single(ln: &Lanes, k: &LaneKer, g_lane: bool) -> Option<Fam> {
+    family_lane(ln, k, g_lane, empty_fam())
+}
+fn empty_fam() -> Fam {
+    Fam { srcs: Vec::new(), ej: Vec::new(), es: Vec::new(), epo: Vec::new(), eco: Vec::new(), pidx: Vec::new(), coef: Vec::new(), ccs: Vec::new(), sid: Vec::new() }
+}
+/// `family_lane` returning the family in every case plus the success flag
+/// (on failure the partial family is discarded by the caller, as before).
+fn family_lane_flag(ln: &Lanes, l: &LaneKer, g_lane: bool, f: Fam) -> (Fam, bool) {
+    match family_lane(ln, l, g_lane, f) {
+        Some(f) => (f, true),
+        None => (empty_fam(), false),
+    }
+}
+/// One lane kernel of `family`: its pivots, then its entries.  None = the
+/// former `return None` (lane >= LANES or a source index out of range).
+fn family_lane(ln: &Lanes, l: &LaneKer, g_lane: bool, f: Fam) -> Option<Fam> {
+    let li = l.lane as usize;
+    if li >= LANES {
+        return None;
+    }
+    let po = f.pidx.len() as u32;
+    let f = family_pivots(ln, li, l.lane, &l.piv, g_lane, f)?;
+    family_entries(ln, li, l.lane, &l.ents, po, g_lane, f)
+}
+fn family_pivots(ln: &Lanes, li: usize, lane: u32, piv: &[u32], g_lane: bool, f: Fam) -> Option<Fam> {
+    let count = ln.count(li);
+    let mut cur: Option<Fam> = Some(f);
+    let mut i = 0;
+    while i < piv.len() {
+        cur = match cur {
+            Some(f) => family_pivot(ln, li, lane, piv[i], count, g_lane, f),
+            None => None,
+        };
+        i += 1;
+    }
+    cur
+}
+fn family_pivot(ln: &Lanes, li: usize, lane: u32, j: u32, count: usize, g_lane: bool, mut f: Fam) -> Option<Fam> {
+    if j as usize >= count {
+        return None;
+    }
+    f.pidx.push(f.srcs.len() as u32);
+    f.srcs.push((lane_ix(g_lane, lane), src3(ln, li, j as usize)));
+    f.sid.push((lane, j));
+    Some(f)
+}
+fn family_entries(ln: &Lanes, li: usize, lane: u32, ents: &[(u32, Vec<u32>)], po: u32, g_lane: bool, f: Fam) -> Option<Fam> {
+    let count = ln.count(li);
+    let mut cur: Option<Fam> = Some(f);
+    let mut i = 0;
+    while i < ents.len() {
+        cur = match cur {
+            Some(f) => family_entry(ln, li, lane, ents[i].0, &ents[i].1, po, count, g_lane, f),
+            None => None,
+        };
+        i += 1;
+    }
+    cur
+}
+fn family_entry(ln: &Lanes, li: usize, lane: u32, j: u32, cc: &[u32], po: u32, count: usize, g_lane: bool, mut f: Fam) -> Option<Fam> {
+    if j as usize >= count {
+        return None;
+    }
+    f.ej.push(f.srcs.len() as u32);
+    f.srcs.push((lane_ix(g_lane, lane), src3(ln, li, j as usize)));
+    f.sid.push((lane, j));
+    f.es.push(cc.len() as u32);
+    f.epo.push(po);
+    f.eco.push(f.coef.len() as u32);
+    f.coef.extend_from_slice(cc);
+    f.ccs.push(cc.to_vec());
     Some(f)
 }
 /// kcoord of entry e on the field selected by `sel` (honest emitter step).
-fn image(f: &Fam, e: usize, rows: usize, sel: &dyn Fn(&Src3) -> &[u32]) -> Vec<u32> {
-    let j = f.ej[e] as usize;
-    let po = f.epo[e] as usize;
-    let cc = &f.ccs[e];
-    (0..rows)
-        .map(|t| {
-            let mut acc = sel(&f.srcs[j].1)[t] as u64;
-            for (p, c) in cc.iter().enumerate() {
-                let s = f.pidx[po + p] as usize;
-                let x = sel(&f.srcs[s].1)[t] as u64;
-                acc = (acc + x * *c as u64 % PM) % PM;
-            }
-            acc as u32
-        })
-        .collect()
+/// pv-rw-d: the former `sel: &dyn Fn(&Src3) -> &[u32]` was `|s| &s.round` or `|s| &s.bat`.
+#[derive(Clone, Copy)]
+enum SrcField {
+    Round,
+    Bat,
 }
-fn matmul(a: &[u32], b: &[u32], ni: usize, nj: usize, len: usize) -> Vec<u32> {
-    let mut out = vec![0u32; ni * nj];
-    for i in 0..ni {
-        let row = &a[i * len..(i + 1) * len];
-        let mut acc = vec![0u64; nj];
-        for (p, &x) in row.iter().enumerate() {
-            if x == 0 {
-                continue;
-            }
-            let br = &b[p * nj..(p + 1) * nj];
-            for j in 0..nj {
-                acc[j] = (acc[j] + x as u64 * br[j] as u64) % PM;
-            }
-        }
-        for j in 0..nj {
-            out[i * nj + j] = acc[j] as u32;
-        }
+fn src_field(s: &Src3, sel: SrcField) -> &[u32] {
+    match sel {
+        SrcField::Round => &s.round,
+        SrcField::Bat => &s.bat,
+    }
+}
+fn image(f: &Fam, e: usize, rows: usize, sel: SrcField) -> Vec<u32> {
+    image_on(&f.srcs, &f.pidx, f.ej[e] as usize, f.epo[e] as usize, &f.ccs[e], rows, sel)
+}
+/// pv-rw-d: `image` on slices (loops through a borrowed struct's fields failed).
+fn image_on(srcs: &[(u32, Src3)], pidx: &[u32], j: usize, po: usize, cc: &[u32], rows: usize, sel: SrcField) -> Vec<u32> {
+    let mut out: Vec<u32> = Vec::with_capacity(rows);
+    let mut t = 0;
+    while t < rows {
+        out.push(image_at(srcs, pidx, j, po, cc, sel, t));
+        t += 1;
     }
     out
 }
+fn image_at(srcs: &[(u32, Src3)], pidx: &[u32], j: usize, po: usize, cc: &[u32], sel: SrcField, t: usize) -> u32 {
+    image_acc(srcs, pidx, po, cc, sel, t, src_value(&srcs[j].1, sel, t) as u64) as u32
+}
+/// pv-rw-d: the accumulation loop with its seed passed in by value (lane C R5).
+fn image_acc(srcs: &[(u32, Src3)], pidx: &[u32], po: usize, cc: &[u32], sel: SrcField, t: usize, seed: u64) -> u64 {
+    let mut acc = seed;
+    let mut p = 0;
+    while p < cc.len() {
+        acc = image_step(srcs, pidx, po, cc, sel, t, p, acc);
+        p += 1;
+    }
+    acc
+}
+/// pv-rw-d: src_field(s, sel)[t] read by value (a match returning a slice
+/// crashed 1991, as in lane C's R7).
+fn src_value(s: &Src3, sel: SrcField, t: usize) -> u32 {
+    match sel {
+        SrcField::Round => s.round[t],
+        SrcField::Bat => s.bat[t],
+    }
+}
+fn image_step(srcs: &[(u32, Src3)], pidx: &[u32], po: usize, cc: &[u32], sel: SrcField, t: usize, p: usize, acc: u64) -> u64 {
+    let s = pidx[po + p] as usize;
+    let x = src_value(&srcs[s].1, sel, t) as u64;
+    (acc + x * cc[p] as u64 % PM) % PM
+}
+fn matmul(a: &[u32], b: &[u32], ni: usize, nj: usize, len: usize) -> Vec<u32> {
+    // pv-rw-d: index loops (former enumerate loop with continue); same sums mod PM.
+    let mut out = vec![0u32; ni * nj];
+    let mut i = 0;
+    while i < ni {
+        let acc = matmul_row(a, b, i, nj, len);
+        let mut j = 0;
+        while j < nj {
+            out[i * nj + j] = acc[j] as u32;
+            j += 1;
+        }
+        i += 1;
+    }
+    out
+}
+fn matmul_row(a: &[u32], b: &[u32], i: usize, nj: usize, len: usize) -> Vec<u64> {
+    // pv-rw-d: index arithmetic instead of sub-slices (crashed 1991); the
+    // former slice ranges are the asserts (same panic conditions).
+    assert!((i + 1) * len <= a.len());
+    let mut acc = vec![0u64; nj];
+    let mut p = 0;
+    while p < len {
+        let x = a[i * len + p];
+        if x != 0 {
+            acc = axpy_acc(acc, x, b, p * nj, nj);
+        }
+        p += 1;
+    }
+    acc
+}
+fn axpy_acc(mut acc: Vec<u64>, x: u32, b: &[u32], off: usize, nj: usize) -> Vec<u64> {
+    assert!(off + nj <= b.len());
+    let mut j = 0;
+    while j < nj {
+        acc[j] = (acc[j] + x as u64 * b[off + j] as u64) % PM;
+        j += 1;
+    }
+    acc
+}
 
+/// pv-rw-d: `dst[off..off + src.len()] = src` (the former copy_from_slice on a
+/// range; out of range -> panic, as the slice index did).
+fn put_at(dst: &mut [u32], off: usize, src: &[u32]) {
+    assert!(off + src.len() <= dst.len());
+    let mut i = 0;
+    while i < src.len() {
+        dst[off + i] = src[i];
+        i += 1;
+    }
+}
+/// pv-rw-d: `dst[off..off + len].copy_from_slice(src)`: also panics unless src.len() == len.
+fn put_exact(dst: &mut [u32], off: usize, len: usize, src: &[u32]) {
+    assert!(off + len <= dst.len());
+    assert!(src.len() == len);
+    put_at(dst, off, src);
+}
+/// z9c "qprime shape": every entry's prefix stays inside its lane's pivot
+/// block.  pv-rw-d: on slices (lanes[i] = srcs[i].0), flag loops without early
+/// exit; once a check fails no later entry is examined (as the former `return`).
+fn prefix_in_lane(pidx: &[u32], lanes: &[u32], po: usize, s: usize, lane: u32) -> bool {
+    let mut ok = true;
+    let mut q = 0;
+    while q < s {
+        if ok && lanes[pidx[po + q] as usize] != lane {
+            ok = false;
+        }
+        q += 1;
+    }
+    ok
+}
+fn qprime_shape_ok(f: &Fam) -> bool {
+    let lanes = src_lanes(f);
+    qprime_shape_ok_on(&f.ej, &f.epo, &f.es, &f.pidx, &lanes)
+}
+fn qprime_shape_ok_on(ej: &[u32], epo: &[u32], es: &[u32], pidx: &[u32], lanes: &[u32]) -> bool {
+    let mut ok = true;
+    let mut e = 0;
+    while e < ej.len() {
+        if ok {
+            ok = entry_shape_ok(ej[e], epo[e], es[e], pidx, lanes);
+        }
+        e += 1;
+    }
+    ok
+}
+fn entry_shape_ok(ej: u32, po: u32, s: u32, pidx: &[u32], lanes: &[u32]) -> bool {
+    let po = po as usize;
+    let s = s as usize;
+    let lane = lanes[ej as usize];
+    if po + s > pidx.len() {
+        false
+    } else {
+        prefix_in_lane(pidx, lanes, po, s, lane)
+    }
+}
+fn g_shape_ok(f: &Fam) -> bool {
+    g_shape_ok_on(&f.epo, &f.es, f.ej.len(), f.pidx.len())
+}
+fn g_shape_ok_on(epo: &[u32], es: &[u32], m: usize, npidx: usize) -> bool {
+    let mut ok = true;
+    let mut e = 0;
+    while e < m {
+        if ok && epo[e] as usize + es[e] as usize > npidx {
+            ok = false;
+        }
+        e += 1;
+    }
+    ok
+}
+/// pv-rw-d: by-value accumulators (the &mut reborrows inside these loops failed
+/// "Could not match the contexts").  `put_v` = put_at, `put_exact_v` = put_exact.
+fn put_v(mut dst: Vec<u32>, off: usize, src: &[u32]) -> Vec<u32> {
+    put_at(&mut dst, off, src);
+    dst
+}
+fn put_exact_v(mut dst: Vec<u32>, off: usize, len: usize, src: &[u32]) -> Vec<u32> {
+    put_exact(&mut dst, off, len, src);
+    dst
+}
+fn concat_v(mut a: Vec<u32>, b: Vec<u32>) -> Vec<u32> {
+    let mut i = 0;
+    while i < b.len() {
+        a.push(b[i]);
+        i += 1;
+    }
+    a
+}
+/// own (OS per source) and round (RW per source) blocks of a family.
+fn own_round_blocks(f: &Fam) -> (Vec<u32>, Vec<u32>) {
+    (own_blocks(&f.srcs), round_blocks(&f.srcs))
+}
+fn own_blocks(srcs: &[(u32, Src3)]) -> Vec<u32> {
+    let mut own = vec![0u32; srcs.len() * OS];
+    let mut t = 0;
+    while t < srcs.len() {
+        own = put_v(own, t * OS, &srcs[t].1.own);
+        t += 1;
+    }
+    own
+}
+fn round_blocks(srcs: &[(u32, Src3)]) -> Vec<u32> {
+    let mut round = vec![0u32; srcs.len() * RW];
+    let mut t = 0;
+    while t < srcs.len() {
+        round = put_exact_v(round, t * RW, RW, &srcs[t].1.round);
+        t += 1;
+    }
+    round
+}
+fn bat_blocks(f: &Fam, bwr: usize) -> Vec<u32> {
+    bat_blocks_on(&f.srcs, bwr)
+}
+fn bat_blocks_on(srcs: &[(u32, Src3)], bwr: usize) -> Vec<u32> {
+    let mut bat = vec![0u32; srcs.len() * bwr];
+    let mut t = 0;
+    while t < srcs.len() {
+        bat = put_exact_v(bat, t * bwr, bwr, &srcs[t].1.bat);
+        t += 1;
+    }
+    bat
+}
+/// image(e) for every entry e, concatenated.
+fn images(f: &Fam, rows: usize, sel: SrcField) -> Vec<u32> {
+    images_on(&f.srcs, &f.pidx, &f.ej, &f.epo, &f.ccs, rows, sel)
+}
+fn images_on(srcs: &[(u32, Src3)], pidx: &[u32], ej: &[u32], epo: &[u32], ccs: &[Vec<u32>], rows: usize, sel: SrcField) -> Vec<u32> {
+    let m = ej.len();
+    let mut out: Vec<u32> = Vec::with_capacity(m * rows);
+    let mut e = 0;
+    while e < m {
+        out = concat_v(out, image_on(srcs, pidx, ej[e] as usize, epo[e] as usize, &ccs[e], rows, sel));
+        e += 1;
+    }
+    out
+}
+/// lst = pivots ++ free columns; tag = its inverse (tag[lst[x]] = x); None if a column is >= bwr.
+fn lst_tag(piv: &[u32], fr: &[u32], bwr: usize) -> Option<(Vec<u32>, Vec<u32>)> {
+    let mut lst: Vec<u32> = Vec::with_capacity(piv.len() + fr.len());
+    lst.extend_from_slice(piv);
+    lst.extend_from_slice(fr);
+    let mut tag = vec![u32::MAX; bwr];
+    let mut x = 0;
+    while x < lst.len() {
+        let col = lst[x] as usize;
+        if col >= bwr {
+            return None;
+        }
+        tag[col] = x as u32;
+        x += 1;
+    }
+    Some((lst, tag))
+}
+fn null_matrix(fr: &[u32], tag: &[u32], e: &[u32], bwr: usize, r: usize) -> Vec<u32> {
+    // pv-rw-d: one row per free column, the column passed by value.
+    let mut nm: Vec<u32> = Vec::with_capacity(fr.len() * bwr);
+    let mut f = 0;
+    while f < fr.len() {
+        nm.extend_from_slice(&null_row(tag, e, bwr, r, fr[f]));
+        f += 1;
+    }
+    nm
+}
+fn null_entry(tag: &[u32], e: &[u32], bwr: usize, r: usize, fc: u32, t: usize) -> u32 {
+    if t == fc as usize {
+        1
+    } else if (tag[t] as usize) < r {
+        negm(e[tag[t] as usize * bwr + fc as usize])
+    } else {
+        0
+    }
+}
+fn null_row(tag: &[u32], e: &[u32], bwr: usize, r: usize, fc: u32) -> Vec<u32> {
+    let mut row: Vec<u32> = Vec::with_capacity(bwr);
+    let mut t = 0;
+    while t < bwr {
+        row.push(null_entry(tag, e, bwr, r, fc, t));
+        t += 1;
+    }
+    row
+}
+fn contains_u32(v: &[u32], x: u32) -> bool {
+    let mut i = 0;
+    while i < v.len() {
+        if v[i] == x {
+            return true;
+        }
+        i += 1;
+    }
+    false
+}
+/// Selection shape of lift ci: |sel| = |uinv| = w and every selected member eligible
+/// (lift_members is strictly increasing, so membership = the former binary_search Ok).
+fn lift_shape_ok(l: &Lift, w: usize, members: &[u32]) -> bool {
+    l.sel.len() == w && l.uinv.len() == w && all_members(&l.sel, members)
+}
+/// Every selected member eligible; no element is examined after the first failure.
+fn all_members(sel: &[u32], members: &[u32]) -> bool {
+    let mut ok = true;
+    let mut i = 0;
+    while i < sel.len() {
+        if ok && !contains_u32(members, sel[i]) {
+            ok = false;
+        }
+        i += 1;
+    }
+    ok
+}
+/// Observation block of lift ci, row-major over (i, x): lo[i w + x] = src(sel[x])[i],
+/// appended to `lo` (by value).
+fn lift_cols(cx: &Ctx, ci: usize, sel: &[u32]) -> Vec<Vec<u32>> {
+    let mut cols: Vec<Vec<u32>> = Vec::with_capacity(sel.len());
+    let mut x = 0;
+    while x < sel.len() {
+        cols.push(lift_src(cx, ci, sel[x]));
+        x += 1;
+    }
+    cols
+}
+fn lift_obs_v(cols: &[Vec<u32>], w: usize, mut lo: Vec<u32>) -> Vec<u32> {
+    let mut i = 0;
+    while i < w {
+        let mut x = 0;
+        while x < w {
+            lo.push(cols[x][i]);
+            x += 1;
+        }
+        i += 1;
+    }
+    lo
+}
+fn identity_v(mut lid: Vec<u32>, w: usize) -> Vec<u32> {
+    let mut i = 0;
+    while i < w {
+        let mut j = 0;
+        while j < w {
+            lid.push((i == j) as u32);
+            j += 1;
+        }
+        i += 1;
+    }
+    lid
+}
+fn lane_kers(qp: &[LaneKer]) -> Vec<&LaneKer> {
+    let mut v: Vec<&LaneKer> = Vec::with_capacity(qp.len());
+    let mut i = 0;
+    while i < qp.len() {
+        v.push(&qp[i]);
+        i += 1;
+    }
+    v
+}
+/// pv-rw-d: the lift part's accumulators.
+struct LiftAcc {
+    lw: Vec<u32>,
+    loff: Vec<u32>,
+    lo: Vec<u32>,
+    lu: Vec<u32>,
+    lid: Vec<u32>,
+}
+/// One lift of the converter (by value); None on a shape error.
+fn lift_block_step(cx: &Ctx, ci: usize, l: &Lift, mut a: LiftAcc) -> Option<LiftAcc> {
+    let w = lift_width(ci);
+    let members = lift_members(ci);
+    if !lift_shape_ok(l, w, &members) {
+        return None;
+    }
+    a.lw.push(w as u32);
+    a.loff.push(a.lo.len() as u32);
+    let cols = lift_cols(cx, ci, &l.sel);
+    a.lo = lift_obs_v(&cols, w, a.lo);
+    let uf = flat(&l.uinv, w)?;
+    a.lu = concat_v(a.lu, uf);
+    a.lid = identity_v(a.lid, w);
+    Some(a)
+}
+/// The lift part of the converter: (lw, loff, lo, lu, lid); None on a shape error.
+fn lift_blocks(cx: &Ctx, lifts: &[Lift]) -> Option<(Vec<u32>, Vec<u32>, Vec<u32>, Vec<u32>, Vec<u32>)> {
+    let mut cur: Option<LiftAcc> = Some(LiftAcc { lw: Vec::new(), loff: Vec::new(), lo: Vec::new(), lu: Vec::new(), lid: Vec::new() });
+    let mut ci = 0;
+    while ci < lifts.len() {
+        cur = match cur {
+            Some(a) => lift_block_step(cx, ci, &lifts[ci], a),
+            None => None,
+        };
+        ci += 1;
+    }
+    match cur {
+        Some(a) => Some((a.lw, a.loff, a.lo, a.lu, a.lid)),
+        None => None,
+    }
+}
+fn src_lanes(f: &Fam) -> Vec<u32> {
+    src_lanes_on(&f.srcs)
+}
+fn src_lanes_on(srcs: &[(u32, Src3)]) -> Vec<u32> {
+    let mut out: Vec<u32> = Vec::with_capacity(srcs.len());
+    let mut i = 0;
+    while i < srcs.len() {
+        out.push(srcs[i].0);
+        i += 1;
+    }
+    out
+}
+fn lane_widths() -> Vec<u32> {
+    let mut out: Vec<u32> = Vec::with_capacity(LANES);
+    let mut li = 0;
+    while li < LANES {
+        out.push(own_width(li) as u32);
+        li += 1;
+    }
+    out
+}
 /// Builders + emitter supplied values.  None = the converter refuses (shape or
-/// index error that z9c also rejects); counted as a reject.
+/// index error that z9c also rejects); counted as a reject.  pv-rw-d: the
+/// former loops and closures are helpers on slices; same checks and values in
+/// the same order.
 fn convert(p: &Pub, c: &Cert, ln: &Lanes) -> Option<(ck::Pub, ck::Cert)> {
     let bwr = p.lay.bw - BAT0;
     // QPrime.
-    let lks: Vec<&LaneKer> = c.qp.iter().collect();
-    let fq = family(ln, &lks, &|l| l)?;
-    for e in 0..fq.ej.len() {
-        let po = fq.epo[e] as usize;
-        let s = fq.es[e] as usize;
-        // the prefix must stay inside this lane's pivot block (z9c "qprime shape")
-        let lane = fq.srcs[fq.ej[e] as usize].0;
-        if po + s > fq.pidx.len() || (0..s).any(|q| fq.srcs[fq.pidx[po + q] as usize].0 != lane) {
-            return None;
-        }
+    let fq = family(ln, &c.qp, false)?;
+    if !qprime_shape_ok(&fq) {
+        return None;
     }
-    let nsrc = fq.srcs.len();
-    let mut own = vec![0u32; nsrc * OS];
-    let mut round = vec![0u32; nsrc * RW];
-    for (t, (_, s)) in fq.srcs.iter().enumerate() {
-        own[t * OS..t * OS + s.own.len()].copy_from_slice(&s.own);
-        round[t * RW..(t + 1) * RW].copy_from_slice(&s.round);
-    }
+    let (own, round) = own_round_blocks(&fq);
     let m = fq.ej.len();
-    let mut rho = Vec::with_capacity(m * RW);
-    for e in 0..m {
-        rho.extend(image(&fq, e, RW, &|s| &s.round));
-    }
+    let rho = images(&fq, RW, SrcField::Round);
     if c.qp_y.len() != RW {
         return None;
     }
@@ -152,85 +576,40 @@ fn convert(p: &Pub, c: &Cert, ln: &Lanes) -> Option<(ck::Pub, ck::Cert)> {
     }
     let u = flat(&c.bc_u, q)?;
     let e = matmul(&u, &rel, r, bwr, q);
-    // lst = pivots ++ free columns; tag = its inverse (tag[lst[x]] = x).
-    let lst: Vec<u32> = c.bc_piv.iter().chain(c.bc_fr.iter()).copied().collect();
-    let mut tag = vec![u32::MAX; bwr];
-    for (x, &col) in lst.iter().enumerate() {
-        *tag.get_mut(col as usize)? = x as u32;
-    }
+    let (lst, tag) = lst_tag(&c.bc_piv, &c.bc_fr, bwr)?;
     if c.bc_g.lane != 10 {
         return None;
     }
-    let fg = family(ln, &[&c.bc_g], &|_| 0)?;
-    for e2 in 0..fg.ej.len() {
-        if fg.epo[e2] as usize + fg.es[e2] as usize > fg.pidx.len() {
-            return None;
-        }
+    let fg = family_single(ln, &c.bc_g, true)?;
+    if !g_shape_ok(&fg) {
+        return None;
     }
     let ngs = fg.srcs.len();
     let mg = fg.ej.len();
-    let mut gown = vec![0u32; ngs * OS];
-    let mut ground = vec![0u32; ngs * RW];
-    let mut gbat = vec![0u32; ngs * bwr];
-    for (t, (_, s)) in fg.srcs.iter().enumerate() {
-        gown[t * OS..t * OS + s.own.len()].copy_from_slice(&s.own);
-        ground[t * RW..(t + 1) * RW].copy_from_slice(&s.round);
-        gbat[t * bwr..(t + 1) * bwr].copy_from_slice(&s.bat);
-    }
-    let mut beta = Vec::with_capacity(mg * bwr);
-    for e2 in 0..mg {
-        beta.extend(image(&fg, e2, bwr, &|s| &s.bat));
-    }
+    let (gown, ground) = own_round_blocks(&fg);
+    let gbat = bat_blocks(&fg, bwr);
+    let beta = images(&fg, bwr, SrcField::Bat);
     if c.bc_y.len() != k {
         return None;
     }
     let yg = flat(&c.bc_y, mg)?;
-    let mut nm = vec![0u32; k * bwr];
-    for (f, &fc) in c.bc_fr.iter().enumerate() {
-        for t in 0..bwr {
-            nm[f * bwr + t] = if t == fc as usize {
-                1
-            } else if (tag[t] as usize) < r {
-                negm(e[tag[t] as usize * bwr + fc as usize])
-            } else {
-                0
-            };
-        }
-    }
+    let nm = null_matrix(&c.bc_fr, &tag, &e, bwr, r);
     // Lifts.
     if c.lifts.len() != 17 {
         return None;
     }
-    let (mut lw, mut loff, mut lo, mut lu, mut lid) = (vec![], vec![], vec![], vec![], vec![]);
-    for (ci, l) in c.lifts.iter().enumerate() {
-        let w = lift_width(ci);
-        let members = lift_members(ci);
-        if l.sel.len() != w || l.uinv.len() != w || l.sel.iter().any(|mm| members.binary_search(mm).is_err()) {
-            return None;
-        }
-        lw.push(w as u32);
-        loff.push(lo.len() as u32);
-        let cols: Vec<Vec<u32>> = l.sel.iter().map(|&mm| lift_src(&p.cx, ci, mm)).collect();
-        for i in 0..w {
-            for x in 0..w {
-                lo.push(cols[x][i]);
-            }
-        }
-        lu.extend(flat(&l.uinv, w)?);
-        for i in 0..w {
-            for j in 0..w {
-                lid.push((i == j) as u32);
-            }
-        }
-    }
+    let (lw, loff, lo, lu, lid) = lift_blocks(&p.cx, &c.lifts)?;
     let nl = lw.len() as u32;
+    // pv-rw-d: was the list literal vec![own_width(10) as u32].
+    let mut gwl_g: Vec<u32> = Vec::with_capacity(1);
+    gwl_g.push(own_width(10) as u32);
     let pb = ck::Pub {
         nq: p.qs.len() as u32,
         a9: ql(p.a[9]).to_vec(),
         rw: RW as u32,
         bw: bwr as u32,
-        lane: fq.srcs.iter().map(|z| z.0).collect(),
-        wl: (0..LANES).map(|li| own_width(li) as u32).collect(),
+        lane: src_lanes(&fq),
+        wl: lane_widths(),
         os: OS as u32,
         own,
         round,
@@ -239,7 +618,7 @@ fn convert(p: &Pub, c: &Cert, ln: &Lanes) -> Option<(ck::Pub, ck::Cert)> {
         rel,
         gw: OS as u32,
         glane: vec![0; ngs],
-        gwl: vec![own_width(10) as u32],
+        gwl: gwl_g,
         gown,
         ground,
         gbat,
@@ -345,11 +724,11 @@ fn builder_diff(p: &Pub, cert: &Cert, label: &str) {
         (f.sid.iter().map(|&(li, _)| li).collect(), f.sid.iter().map(|&(li, j)| j / pr(li) + 1).collect(), f.sid.iter().map(|&(li, j)| j % pr(li)).collect())
     };
     let lks: Vec<&LaneKer> = cert.qp.iter().collect();
-    let fq = family(&ln, &lks, &|l| l).expect("family");
+    let fq = family(&ln, &cert.qp, false).expect("family");
     let (kq, rq, lq) = desc(&fq);
     let tb = Instant::now();
     let own = aspis_r1_cert_build::fill_own(&al, &zz, &tr, &sx, &sy, &inact, &kq, &rq, &lq, kq.len(), 376, nq);
-    let fg = family(&ln, &[&cert.bc_g], &|_| 0).expect("family");
+    let fg = family_single(&ln, &cert.bc_g, true).expect("family");
     let (_, rg, lg) = desc(&fg);
     let kg = vec![10u32; rg.len()];
     let gown = aspis_r1_cert_build::fill_own(&al, &zz, &tr, &sx, &sy, &inact, &kg, &rg, &lg, kg.len(), 376, nq);
