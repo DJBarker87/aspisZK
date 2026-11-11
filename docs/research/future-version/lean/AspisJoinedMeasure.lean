@@ -62,7 +62,18 @@ open Lean Elab Command
       else
         mods := mods.insert m
         match env.find? c with
-        | some ci => stack := ci.getUsedConstantsAsSet.toList ++ stack
+        | some ci =>
+          stack := ci.getUsedConstantsAsSet.toList ++ stack
+          -- A structure or inductive type: visit its constructors and recursor too, so that
+          -- constants occurring only in field types are reached even when no constructor is used.
+          match ci with
+          | .inductInfo v =>
+            stack := v.ctors ++ stack
+            stack := (Name.mkStr c "rec") :: stack
+            stack := v.all ++ stack
+          | .ctorInfo v => stack := v.induct :: stack
+          | .recInfo v => stack := v.all ++ stack
+          | _ => pure ()
         | none => pure ()
     let hit := mods.toList.filter iii.contains
     for m in mods.toList do
@@ -76,4 +87,4 @@ open Lean Elab Command
   let importedProject := imported.filter (fun m => !isLib m)
   let importedIii := importedProject.filter iii.contains
   logInfo s!"import closure: {imported.length} modules, {importedProject.length} project modules, class iii imported: {importedIii.length} {importedIii}"
-  IO.FS.writeFile (dir ++ "joined-measure.tsv") (String.intercalate "\n" lines.toList)
+  IO.FS.writeFile (dir ++ "joined-measure-2.tsv") (String.intercalate "\n" lines.toList)

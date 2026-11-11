@@ -352,6 +352,53 @@ In order of what they unblock:
 
 ## 7. Joined: form (P) with one open hypothesis (lead, 2026-11-11)
 
+**CORRECTION, same day (soundness lead's reviewer, on ef4cd439a53): the open
+hypothesis below is mis-stated, and this section's theorem is vacuous for some
+provers.** `FinalDecoding40` asks rows 33 to 39 to decode on every run that
+meets R1's four premises. None of those premises says anything about rows 33
+to 39: R1's `Format` makes R1's 33 rows valid and nothing does that for the
+late rows. The reviewer's counterexample, from the source: a prover with
+statement tag 2, rows 0 to 32 in `Format`, and `.initial` at rows 35 and 36.
+Canonicalisation and enrichment keep `.initial`; on `.initial` past row 0 the
+sampler returns the squeeze of the initial cell, so rows 35 and 36 have the
+same first cell and the same table before it; `FinalDecodes` would then make
+the 35-round and the 36-round transcripts equal, which is impossible; and all
+four premises can hold. For such a prover `FinalDecoding40 D P Q` is false and
+`failure_bound40P_of_final` says nothing.
+
+What was wrong on my side: I read the statement and did not test whether its
+hypothesis can hold. It is the same kind of error as the first form of the
+payout theorem (ONE-TRANSACTION-GAME.md section 11), found the same day.
+
+The repair is known and does not weaken the bound: the hit-in-prefix step is
+only needed on accepted runs, and there the `AspisChecks` value constrains the
+late rows (payload, the 64-byte frame, canonical decoding, the certificate
+tie). The hypothesis is being restated with that premise, supplied from the
+checks inside `hit_in_prefix_of`, with the counterexample retained and a
+satisfiability check added. Until the restated files are compiled, read this
+section as: form (P) is conditional on a hypothesis that is NOT YET CORRECTLY
+STATED. The composition itself (which hypotheses the bound takes, the terms on
+the right) was confirmed by the reviewer.
+
+Other points of the same review, recorded:
+- The lift from the fixed-proof statement is sound pointwise in the oracle.
+  It is not "without C7": `fibre_checks40` is stated at C7's `pairProver` and
+  that module is in the constant walk; only R1's `annotated_selected` is
+  unused.
+- The tag step does use the Aspis admission (through `admitted_aspis` and
+  `accepted_guardS`), keeping only the tag conjunct. No validity of rows 33 to
+  39 is used anywhere, which is why the hypothesis had nothing to stand on.
+- The right-hand side is `kappa(Q+1111)` plus the weighted start charge plus
+  `2^-126` (plus `2^-454` in form (P)); no account term, no payout conjunct,
+  no campaign accounting, no figure.
+- The constant walk can miss constants that occur only in the field types of
+  a structure whose constructor is never used. The walk was extended to visit
+  constructors (see the table below).
+- Stale headers in `AspisRec40CleanWords` and `AspisRec40CleanTag`, to be
+  corrected at the coherent rebuild.
+
+The text below is the section as first written.
+
 The three hypotheses of section 0 are now reduced to one.
 
 `AspisRec40.CleanJoin` (the clean-event work, RECORDED-EXPERIMENT-40.md section 8) proves the
@@ -415,6 +462,11 @@ closure holds 32 class iii modules; none of their constants is used. Module list
 | LDJ-04 | AspisRec40CleanJoin (source unchanged, recompiled) | 695c79cc89487a90f1b1eef54f19acaa4eaefebc25fde422904ac85a910e8041 | 0 | 2.41 s | 4,249,268 KB | 420,229,120 B | standard three |
 | LDJ-05 | AspisFailureBoundJoined (source unchanged, recompiled) | 05a140378b1c3f9f4537cd67c89b4788628a4c635824c4a4abe18b3b266a6506 | 0 | 2.28 s | 4,253,492 KB | 424,812,544 B | [propext, Classical.choice, Quot.sound] |
 | LDM-03 | AspisJoinedMeasure (measurement only) | 1a626725f12551af75df4f87e7662c42801f3789c086b2209521ea7e9c352ac9 | 0 | 9.00 s | 4,317,316 KB | 446,160,896 B | none (no theorems) |
+| LDM-04 | AspisJoinedMeasure, walk extended to constructors and recursors of every inductive type reached | 29e932021ac8d32d0fa24545a1ce5b04fd39c18022c9586862c12e694ba3d49a | 0 | 11.54 s | 4,312,940 KB | 428,302,336 B | none (no theorems) |
+
+LDM-04 answers the reviewer's caveat on the walk. With constructors and recursors visited it
+reaches the same 1,003 project modules, 11,958 project constants (64 more), and no class iii
+module.
 
 All `#print axioms` lines of LDJ-02 to LDJ-05 (32 of them) are `[propext, Classical.choice,
 Quot.sound]`. No warnings. These are focused compiles against cached objects, not a coherent
