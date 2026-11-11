@@ -1,5 +1,15 @@
 # The residual pair under the batching challenge: binding before ρ
 
+> **Correction after independent reading, 2026-11-11 (one-transaction game note, section 0).** The
+> finding that R1 already binds all three trees is true in substance, but the modules cited for it
+> below are not the ones R1's bound uses. The bound reaches the recovery through
+> `OraclePortFrozenOrder.authenticated` (OraclePortFrozenOrderSelectedRecovery.lean), which
+> recovers through an in-place slot program. `OraclePortAllSelectedRecoveryC6.authenticated` and
+> `OraclePortRecoveredAcceptanceC6.accepted_checks` belong to an earlier draft chain: they are in
+> the closure but, as far as that reading went, not used by the bound at theorem level. Both
+> versions have the same conclusion and the same collision event. See ONE-TRANSACTION-GAME.md
+> sections 0 and 3.2.
+
 Status, 2026-11-11. Research note for the Aspis one-transaction verifier
 (`verify_summed_format`, crates/aspis-r1-cost-probe/src/fused.rs). It addresses
 the item SOUNDNESS-ARGUMENT.md section 3 and section 8 (a) leave OPEN: that

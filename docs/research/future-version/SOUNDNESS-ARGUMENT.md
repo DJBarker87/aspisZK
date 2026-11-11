@@ -431,6 +431,14 @@ correspondence), which are open for the new code as for the old.
 
 ### 6.4 Account term (2,965) and issued calls (2,322)
 
+> **Correction, 2026-11-11 (ONE-TRANSACTION-GAME.md sections 0 and 2.3).** The issued-call figure
+> 2,322 is, in the Lean, Q plus two runs of the model verifier at 1,161 each (the original run
+> and the annotation compiler's re-run). It does not come from the two transactions, contrary to
+> what this section says. The account term's 2,965 splits as 1,921 + 1,040 + 4; only the 4 audit
+> reads exist because of the two transactions, and the other two parts have Aspis analogues only
+> if the split-B failure event is kept (an owner decision).
+
+
 Both derive from the two-transaction account run. The one-transaction run
 (`stage2_owned` with `future-one-tx`: `validate_asq8`, statement validation,
 `verify_summed_format`, `emit_result`, Pool) has not been counted. If it is no
