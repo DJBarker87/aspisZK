@@ -1,0 +1,81 @@
+diff -ruN src-base2/crates/aspis-core/src/field/wide_exact.rs src-tp3-core1/crates/aspis-core/src/field/wide_exact.rs
+--- src-base2/crates/aspis-core/src/field/wide_exact.rs	2026-11-11 15:58:37.000000000 +0000
++++ src-tp3-core1/crates/aspis-core/src/field/wide_exact.rs	2026-11-11 21:55:17.710778227 +0000
+@@ -269,11 +269,17 @@
+         Self::from_limbs(limbs)
+     }
+ 
++    /// Eight little-endian u32 limbs in `to_limbs` order. Index loop
++    /// (Aspis translatability pass) in place of `chunks_exact_mut(4).zip(..)`:
++    /// the same bytes written in the same order.
+     #[inline(always)]
+     pub fn to_le_bytes(self) -> [u8; Self::BYTE_LEN] {
++        let limbs = self.to_limbs();
+         let mut bytes = [0; Self::BYTE_LEN];
+-        for (chunk, limb) in bytes.chunks_exact_mut(4).zip(self.to_limbs()) {
+-            chunk.copy_from_slice(&limb.to_le_bytes());
++        let mut index = 0;
++        while index < Self::LIMB_COUNT {
++            bytes[4 * index..4 * index + 4].copy_from_slice(&limbs[index].to_le_bytes());
++            index += 1;
+         }
+         bytes
+     }
+@@ -626,3 +632,57 @@
+         assert_canonical(x.sub(x.neg()));
+     }
+ }
++
++/// Differential oracle for the translatability rewrite of `to_le_bytes`: the
++/// pre-rewrite text, kept verbatim, against the shipped form.
++#[cfg(test)]
++mod translatability_oracle {
++    use super::*;
++
++    fn to_le_bytes_old(value: WideExact) -> [u8; WideExact::BYTE_LEN] {
++        let mut bytes = [0; WideExact::BYTE_LEN];
++        for (chunk, limb) in bytes.chunks_exact_mut(4).zip(value.to_limbs()) {
++            chunk.copy_from_slice(&limb.to_le_bytes());
++        }
++        bytes
++    }
++
++    fn of_limbs(limbs: [u32; 8]) -> WideExact {
++        let [a, b, c, d, e, f, g, h] = limbs;
++        WideExact {
++            c0: QM31 { c0: CM31 { a: M31(a), b: M31(b) }, c1: CM31 { a: M31(c), b: M31(d) } },
++            c1: QM31 { c0: CM31 { a: M31(e), b: M31(f) }, c1: CM31 { a: M31(g), b: M31(h) } },
++        }
++    }
++
++    /// Edge limbs in every position (including non-canonical representatives,
++    /// which the field type can hold), and 400,000 random limb vectors.
++    #[test]
++    fn to_le_bytes_equals_the_old_text() {
++        let edges = [0u32, 1, 2, P - 2, P - 1, P, P + 1, u32::MAX - 1, u32::MAX, 0x0102_0304];
++        for position in 0..8 {
++            for edge in edges {
++                for fill in edges {
++                    let mut limbs = [fill; 8];
++                    limbs[position] = edge;
++                    let value = of_limbs(limbs);
++                    assert_eq!(value.to_le_bytes(), to_le_bytes_old(value), "{limbs:?}");
++                }
++            }
++        }
++        let mut state = 0x7e57_b17e_5000_0001u64;
++        for _ in 0..400_000 {
++            let limbs: [u32; 8] = core::array::from_fn(|_| {
++                state ^= state << 13;
++                state ^= state >> 7;
++                state ^= state << 17;
++                state as u32
++            });
++            let value = of_limbs(limbs);
++            assert_eq!(value.to_le_bytes(), to_le_bytes_old(value));
++            if limbs.iter().all(|limb| *limb < P) {
++                assert_eq!(WideExact::from_le_bytes(&value.to_le_bytes()), Some(value));
++            }
++        }
++    }
++}
