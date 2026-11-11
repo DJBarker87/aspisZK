@@ -32,7 +32,23 @@ from PIN2_seed_accounts import allocate, check_layout, proof_plan_seeded, b58dec
 from r1_devnet_policy import require_key, created_accounts, state_rent
 
 C = L.init(sys.argv[1], sys.argv[2]); O = L.O; URL = L.URL; P = C['programs']; UP = C['upload_program']
-from r1_devnet_rpc import rpc
+from r1_devnet_rpc import rpc as _rpc_once
+import NPC_record
+
+
+def rpc(url, method, params):
+    """The shared transport, plus a bounded retry of the public endpoint's transient history error (-32019,
+    "Failed to query long-term storage; please try again"), which otherwise stops the run after a transaction has landed."""
+    for attempt in range(6):
+        try:
+            return _rpc_once(url, method, params)
+        except RuntimeError as e:
+            if '-32019' not in str(e) or attempt == 5:
+                raise
+            time.sleep(3 * (attempt + 1))
+
+
+L.rpc = NPC_record.rpc = rpc
 CU_LIMIT = 1_400_000
 EXPECTED = C.get('expected_negative_errors')     # pinned from the rehearsal for a network run
 
