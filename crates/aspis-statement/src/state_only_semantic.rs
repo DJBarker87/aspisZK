@@ -581,6 +581,26 @@ pub fn state_only_semantic_openings_at_point(
 }
 
 pub fn state_only_copy_helper_sum(h1: &[QM31]) -> Option<QM31> {
+    // pv-aspis-rw (extraction rewrite, behaviour unchanged): length test and
+    // counted loop in place of `bool::then` with a closure that folded with
+    // the function item `QM31::add`; same rows, same order, same `add`
+    // (evidence/pv-aspis-rewrite-20261111/notes/04-copy_helper_sum.md).
+    if h1.len() != TRACE_ROWS {
+        return None;
+    }
+    let mut sum = QM31::ZERO;
+    let mut row = 0;
+    while row < TRACE_ROWS {
+        sum = sum.add(h1[row]);
+        row += 1;
+    }
+    Some(sum)
+}
+
+/// Pin body of `state_only_copy_helper_sum` (c7593d23fdc), kept only for the
+/// rewrite-equivalence test.
+#[cfg(test)]
+fn state_only_copy_helper_sum_pin(h1: &[QM31]) -> Option<QM31> {
     (h1.len() == TRACE_ROWS).then(|| h1.iter().copied().fold(QM31::ZERO, QM31::add))
 }
 
@@ -595,6 +615,47 @@ mod tests {
         project_state_only_trace_v4, STATE_ONLY_PADDING_ROW_START_IN_BLOCK,
     };
     use crate::trace_v4::build_spend_trace_v4;
+
+    /// pv-aspis-rw: the rewritten `state_only_copy_helper_sum` against the pin
+    /// body, on structured tables (zeros, ones, P - 1 in every limb, one
+    /// non-zero row), on generated tables, and on every wrong length nearby.
+    #[test]
+    fn pv_aspis_rw_copy_helper_sum_matches_pin_body() {
+        use aspis_core::field::{CM31, P};
+        let mut state = 0x243f_6a88_85a3_08d3u64;
+        let mut next = move || {
+            state ^= state << 13;
+            state ^= state >> 7;
+            state ^= state << 17;
+            M31((state >> 20) as u32 % P)
+        };
+        let q = |a: M31, b: M31, c: M31, d: M31| QM31 { c0: CM31::new(a, b), c1: CM31::new(c, d) };
+        let top = M31(P - 1);
+        let mut tables: alloc::vec::Vec<alloc::vec::Vec<QM31>> = alloc::vec![
+            alloc::vec![QM31::ZERO; TRACE_ROWS],
+            alloc::vec![QM31::ONE; TRACE_ROWS],
+            alloc::vec![q(top, top, top, top); TRACE_ROWS],
+        ];
+        for row in [0, 1, TRACE_ROWS / 2, TRACE_ROWS - 1] {
+            let mut table = alloc::vec![QM31::ZERO; TRACE_ROWS];
+            table[row] = q(next(), next(), next(), next());
+            tables.push(table);
+        }
+        for _ in 0..200 {
+            tables.push((0..TRACE_ROWS).map(|_| q(next(), next(), next(), next())).collect());
+        }
+        for length in [0, 1, TRACE_ROWS - 1, TRACE_ROWS + 1, 2 * TRACE_ROWS] {
+            tables.push((0..length).map(|_| q(next(), next(), next(), next())).collect());
+        }
+        let mut some = 0usize;
+        for table in &tables {
+            let new = state_only_copy_helper_sum(table);
+            assert_eq!(new, state_only_copy_helper_sum_pin(table));
+            assert_eq!(new.is_some(), table.len() == TRACE_ROWS);
+            some += usize::from(new.is_some());
+        }
+        assert_eq!(some, 207);
+    }
 
     fn digest(seed: u32) -> [M31; 8] {
         core::array::from_fn(|index| M31(seed + index as u32 * 17))
