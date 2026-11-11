@@ -1187,3 +1187,35 @@ Information recorded for the owner, not adopted: with this patch the SDK hash ro
 about what X1 costs today (1,355,305 at the heaviest measured case).
 
 Tested, not proved.
+
+## Round 10: the optimised verifier and the changed Pool together (measured)
+
+Verifier: the branch head after rounds 8 and 9 (ELF `7540abe6c5f0…`, host build `BASE2`). Pool:
+the page-check change of POOL-PAGE-CHECK.md in its first form (the SDK memory-compare call; ELF
+`78b28e1494d0…`). One run of the worst-case tool with both, the X1 verifier beside it for
+reference (`evidence/future-version-20261111/combined/cmb1.json`, host attempt `CMB-1`). Whole
+transaction, compute units:
+
+| Scenario | X1 verifier, old Pool | X1 verifier, new Pool | Head verifier, new Pool |
+|---|---:|---:|---:|
+| Withdrawal at rollover, seed 60 (897 parent digests), one-lamport marker: the heaviest measured | 1,354,102 | 1,287,576 | 1,261,722 |
+| Same, no marker pre-funding | 1,350,005 | 1,283,479 | 1,257,625 |
+| Withdrawal at rollover, seed 1 | 1,338,871 | 1,272,345 | 1,246,739 |
+| Withdrawal, nearly full page (254) | 1,275,255 | 1,274,563 | 1,248,839 |
+| Withdrawal, young page (3) | not run in this form before | 1,264,180 | 1,238,479 |
+| Withdrawal at genesis | 1,317,359 | 1,267,868 | 1,242,098 |
+| Transfer at rollover, seed 1 | 1,331,299 | 1,264,773 | 1,239,164 |
+| Transfer, young page (3) | not run in this form before | 1,258,995 | 1,233,195 |
+
+All runs settle with the expected state; no errors.
+
+Worst case of the head with the changed Pool: 1,261,722 measured, plus the arithmetic allowance of
+WORST-CASE-COMPUTE.md. That allowance was fitted for X1 (10,697); the optimised verifier spends
+less per Merkle digest, so the same figure is taken here as an upper allowance and not refitted:
+1,272,419, which leaves 127,581 under the limit of 1,400,000. An ordinary payment on a young
+lane leaves about 161,500 (withdrawal) to 166,800 (transfer).
+
+The Pool's helper is being changed once more before the freeze, from the SDK call to slice
+equality (the soundness lead's request: std slice equality is already a modelled item in the
+proof's library; the SDK call would be a new one). The Pool worker measured the two forms within
+4 CU of each other; the figures above are to be re-measured on the final Pool ELF.
