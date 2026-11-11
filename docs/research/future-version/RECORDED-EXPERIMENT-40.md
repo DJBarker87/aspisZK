@@ -1459,3 +1459,226 @@ Failed attempts:
 Hashes are copied from the first line of each receipt's stdout.log and match
 the repository files. No `sorry`, `axiom`, `opaque` or `native_decide`, and no
 limit was raised.
+
+## 14. W4, `final_decoding40` and the model bound
+
+### 14.1 Final statements
+
+These are in `lean/AspisFailureBoundModel.lean` (PSD-104). For each of the four
+theorems, `#print axioms` gives propext, Classical.choice and Quot.sound.
+
+```lean
+theorem final_decoding40 (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
+    (_hq : ∀ H : Bytes → State, (eval H P).1.length ≤ Q) :
+    AspisFailureBound.Joined.FinalDecoding40 D P Q
+
+theorem failure_bound40P_model (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
+    (hq : ∀ H : Bytes → State, (eval H P).1.length ≤ Q) :
+    lazyMean (AspisFailureBound.exp D P) emptyTable failureMass +
+        QueryScanModelFailure.failureProbability (2^18) ≤
+      BinCombinedMerkleCollision.kappa (Q+1111) +
+        ((Q : ℚ) * capMax + verifierCharge40) + 1/(2:ℚ)^126 + 1/(2:ℚ)^454
+
+theorem failure_le_per_query_model (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
+    (hQ : Q ≤ 2^150)
+    (hq : ∀ H : Bytes → State, (eval H P).1.length ≤ Q) :
+    lazyMean (AspisFailureBound.exp D P) emptyTable failureMass +
+        QueryScanModelFailure.failureProbability (2^18) ≤
+      ((Q : ℚ) + 1) / 2^100
+
+theorem hq_of_done (x : Input) (Q : Nat) :
+    ∀ H : Bytes → State, (eval H (Program.done x : Prover)).1.length ≤ Q
+```
+
+`failure_bound40P_model` has the conclusion of
+`AspisFailureBound.Joined.failure_bound40P_of_final`, and its only hypothesis
+is `hq`. `failure_le_per_query_model` is `AspisNumeric.Bound.failure_le_per_query`
+applied to `final_decoding40`, and its only hypotheses are `hQ` and `hq`.
+
+`final_decoding40` uses no premise beyond the ones inside `FinalDecoding40`'s
+own body, and it does not use `hq`. Its body is
+`AspisRec40.FinalDecoding.final_decodes D P (Q+1111) H …`, which is proved for
+every decoder, prover and budget.
+
+These are model theorems about the 40-row recorded experiment. They are not a
+bound on the deployed program, and they have no account term, no payout
+conjunct and no campaign accounting.
+
+### 14.2 W4: `FinalBridgeStatement.DecodesAndFollows40`, proved unchanged
+
+`AspisRec40.FinalBridge.decodes_and_follows40 : DecodesAndFollows40`
+(PSD-94). It proves the second worker's compiled statement as it stands; I did
+not need a different statement. The proof copies R1's byte chain for rows
+below 33 and needs three files:
+
+- `lean/AspisRec40FinalAddr.lean` (PSD-90) works at the address level, at R1's
+  selected parameters. `decodes_and_follows` states three things on the 40-row
+  run after any consistent prior trace: the statement is selected at row n's
+  frame (W2), `Final.component` decodes there (W1 with `decode_of_parse`,
+  lifted by `DecoderStateList`), and its follow gives row n's prefix, message
+  and challenge (`FollowProof.follow`). The follow's row-0 codec premise is
+  met by replacing the unused row-0 payload (R1's `UnifiedPayloadZero`, with
+  `trace_payload_zero` for the 40-row trace). This is the analogue of R1's
+  `UnifiedTotalCase`.
+- `lean/AspisRec40FinalLegacy.lean` (PSD-92) copies R1's `LiteralLegacyRun`
+  and `LiteralLegacyVerifierTrace` from 33 to 40 rows. It holds under
+  `Valid40 pf` (R1's validity below 33 together with `FinalLiteral.LateLiteral`).
+  - `message_eq40`, `erased_transcript_eq40`, `chain_eval_eq40` and
+    `chain_firstCell_eq40` give the literal rows as legacy rows.
+  - `legacy_firstCell`: a row n chain starts at row n's absorb frame.
+  - `restricted_trace_eq40`: the byte trace restricted to canonical addresses
+    is the 40-row address-level verifier trace.
+  - `actual_prefix40` and `message_restore` restore the enriched prefix with
+    the chosen words. Rows 33 to 39 are payload rows, and both the restore and
+    the enrichment leave them as payloads.
+- `lean/AspisRec40FinalBridge.lean` (PSD-94) composes these with R1's
+  `RWireRawBoundedCollision`, `RawBoundedTrace`, `RawBackgroundCompletion`
+  and `BackgroundOutputMap`, and with `FinalByte.atCanonical_of_component`.
+
+### 14.3 `final_decodes` (`lean/AspisRec40FinalDecoding.lean`, PSD-99)
+
+This is a copy of R1's `Frozen2StartChargeCompletion.decodes` for rows 33 to
+39. It uses:
+
+- R1's `Format`;
+- `FinalLiteral.base_literal`, which gives the literal late-row form from
+  `LatePayload` and the R16 canonicalisation of the base run;
+- W3 (`constructed_components40`), which gives the word equality;
+- W4;
+- `Starts.decAspis_final` with `finalRow_absorb`, which dispatches row n's
+  frame to `fin n`;
+- `RawCutTranscriptRun.transcript_eq` and `chain_eq`, which move from the base
+  proof to the enriched charged proof.
+
+### 14.4 Constant walk (`lean/AspisRec40FinalMeasure.lean`, PSD-105, measurement only)
+
+This is a copy of `AspisJoinedMeasure`, in the version that also visits the
+constructors and recursors of every inductive type it reaches. The input is
+`headline-iii.txt` (178 modules). The output is
+`lean-src/final-model-measure.tsv` on the build host (3,396 lines).
+
+| Root | Project modules | Project constants | Library constants at boundary | Class iii reached |
+|---|---|---|---|---|
+| `failure_bound40P_model` | 1,020 | 12,227 | 4,028 | 0 |
+| `failure_le_per_query_model` | 1,024 | 12,361 | 4,038 | 0 |
+| `final_decoding40` | 329 | 2,776 | 885 | 0 |
+| both model theorems | 1,024 | 12,362 | 4,038 | 0 |
+
+None of the closures contains `AspisFuture.StageD.perKind_margin`. The import
+closure contains 32 class iii modules, all imported transitively. None of them
+is reached at constant level.
+
+### 14.5 Satisfiability, and the `Prop` definitions used as hypotheses
+
+`hq : ∀ H, (eval H P).1.length ≤ Q` says that the prover makes at most `Q`
+oracle queries in every oracle world. Any prover whose query count is bounded
+by `Q` satisfies it, adaptive or not, whatever statement and proof it outputs.
+`hq_of_done` compiles the simplest case: a prover that makes no query
+satisfies `hq` at every `Q`. So the model theorems are not vacuous, and the
+per-query form applies to every such prover with `Q ≤ 2^150`.
+
+Every `def … : Prop` in my files that is used as a hypothesis anywhere, and
+how it is now discharged:
+
+- `FollowStatement.FollowClaim`: it is a theorem (`FollowProof.follow`).
+- `FinalBridgeStatement.DecodesAndFollows40` (the second worker's statement):
+  it is a theorem (`FinalBridge.decodes_and_follows40`).
+- `CleanStatement.FinalDecodes`: this is the conclusion of `final_decodes`,
+  for every `D`, `P`, `Q` and `H` under the premises of `FinalDecoding40`'s
+  body.
+- `FinalShape.LatePayload`: this is a premise of `FinalDecoding40`'s body
+  only. Where `hit_in_prefix_of` consumes `hfinal`, it is supplied from the
+  checks (`latePayload_of_checks`).
+- `FinalLiteral.LateLiteral`: derived from `LatePayload` by `base_literal`.
+- `FinalLegacy.Valid40`: built from `Format`'s validity below 33 and
+  `LateLiteral`.
+- `CleanStatement.CheckedAcceptance40` (the `hchecks` premise of
+  `Clean.clean40` and `hit_in_prefix_of`): discharged in
+  `CleanJoin.accepted_checks40` and `hit_in_prefix40` through
+  `checks_of_fibre`.
+- `CleanStatement.CleanAcceptedModel40`: the conclusion of `clean40`.
+- `CleanRun.Decodes40`: produced by `CleanRun.decodes40` from R1's decoding
+  and `FinalDecodes`.
+- `CallBudget.Budget`: discharged by `CallBudgetAspis.dV_aspis_budget` (975).
+- `AspisRows40Literal.valid40`: used only in `valid40_take33`, which is not in
+  the closure of the model theorems.
+
+The joined file's `AcceptedChecks40`, `WordAlignment40` and `HitInPrefix40`
+belong to another agent's file. They are discharged by
+`CleanJoin.accepted_checks40`, `word_alignment40` and `hit_in_prefix40`, and
+`FinalDecoding40` is discharged by `final_decoding40`. The final statements
+have no hypothesis other than `hq`, and `hQ` for the per-query form.
+
+### 14.6 What this establishes and what it does not
+
+Established: a model-level failure bound for the 40-row recorded experiment.
+Its only hypothesis is the prover's query budget (and `Q ≤ 2^150` for the
+per-query figure). It uses the standard axioms, and its constant closure
+reaches no two-transaction module.
+
+Not established:
+
+- A coherent replay of the final dependency closure. Every compile here was a
+  focused compile against the cached oleans in lean-out. The sources consumed
+  from other agents (FinalContext, FinalWords, FinalSelect,
+  FinalBridgeStatement, CleanJoin, Clean, FinalShape, CleanStatement,
+  AspisFailureBound, AspisFailureBoundJoined, AspisNumeric,
+  AspisNumericBound) were checked to have the same sha256 on the host as in
+  the worktree.
+- Any refinement from this model to the Rust verifier or the deployed
+  program.
+- The honest-run argument of 11.4. It is no longer needed for non-vacuity of
+  `FinalDecoding40`, because that is now proved for all runs.
+
+### 14.7 Validation
+
+| Attempt | Module | Source sha256 | Exit | Wall | Peak RSS (time) | cgroup peak |
+|---|---|---|---|---|---|---|
+| PSD-90 | AspisRec40FinalAddr | 7154cd171fa621f642c71e2c3d77890e565e9d9bcd265dbd4dae326f637d507b | 0 | 2.84 s | 3,569,708 KB | 356,110,336 B |
+| PSD-92 | AspisRec40FinalLegacy | a4420aac78c88f60db74391856c42dd7e9a516a09bc93d0726cae3223bd291ee | 0 | 2.86 s | 4,263,932 KB | 433,643,520 B |
+| PSD-94 | AspisRec40FinalBridge | 06329741bafbb1ae1778b9a702b732a9f43d3571967d392c3e8b1b00d0efa4fa | 0 | 2.49 s | 4,263,656 KB | 437,460,992 B |
+| PSD-99 | AspisRec40FinalDecoding | dc8b33c9c281c7b6d52e4d1417bb60277df899d2e681e8d29db7514de9eb9837 | 0 | 2.20 s | 4,257,884 KB | 425,607,168 B |
+| PSD-104 | AspisFailureBoundModel | 450df4419691bb45dd02615deb7cf6b34ffc1d6095ac458cf81e2a12f43eeb2f | 0 | 2.13 s | 4,256,568 KB | 420,982,784 B |
+| PSD-105 | AspisRec40FinalMeasure | 2ad77f9de296768ec7d8733b1f397bff63b8e39b7d7ccabb7f88337dc4438ee7 | 0 | 10.66 s | 4,327,420 KB | 437,190,656 B |
+
+Every theorem in these files prints only propext, Classical.choice and
+Quot.sound.
+
+Failed attempts:
+
+- AspisRec40FinalAddr:
+  - PSD-88 (e1b9629f42b2eec4d55bdbd91a67dda587fc5e7065b223b0e3c043e5f79151c2):
+    a `congr` closed a goal early, and two rewrites did not match a let-bound
+    payload.
+  - PSD-89 (9f2e9da60e6ed37437621eeee400a7eb22291f45831e4ada4fd373f057035723):
+    a dependent rewrite needed `congr`.
+- AspisRec40FinalLegacy, PSD-91
+  (cad96f04b58903e5270fa7a06db5cedde6c41edd36b47c8451413fb4e8b5659b): a
+  surplus `rfl`, and a function composition that had to be unfolded first.
+- AspisRec40FinalBridge, PSD-93
+  (5748c1c69833733c6b008ef3ee370e3ca106a517d26313eca6d725ee3c465411): `as`
+  used as a binder name, and let binders that were not introduced.
+- AspisRec40FinalDecoding:
+  - PSD-95 (3e07afedf8551a48e40afcbba32271f7cde5d5b4d7f31d2b155e7567354362ab):
+    a wrong namespace.
+  - PSD-96 (8c9079c90b03e5a1bcdf9a44cd088a1be3e6896f6582df1ca17925760eeca344):
+    a `dsimp` that made no progress.
+  - PSD-97 (a169f2b63dde416ed51adc3ce377835cfd675930e00dd0ecfca980847fe303f0)
+    and PSD-98 (90566de08a81fe9f6748d10a3f466757ef8c572825493292de5e6b2bdb285473):
+    rewrite targets.
+- AspisFailureBoundModel, PSD-102
+  (936f4d375f8428426f9b7f6475c081bf3758b3b1fa5e726a41552bd870760db1): the
+  prover's output type in `hq_of_done`.
+
+Superseded runs:
+
+- PSD-100 (26d3a79b908bb59c7928d45ca57937eb81b0d0d3bb179e6a342113859e9ee071):
+  AspisFailureBoundModel without `hq_of_done`. It compiled with exit 0, and
+  the same three theorems are recompiled in PSD-104.
+- PSD-101 and PSD-103: walks of the same file. PSD-103 ran against the PSD-100
+  olean because PSD-102 had failed. PSD-105 is the walk of record. All three
+  printed identical counts.
+
+Hashes are copied from the first line of each receipt's stdout.log and match
+the worktree files. No `sorry`, `axiom`, `opaque` or `native_decide`, no
+`set_option` other than `autoImplicit false`, and no limit was raised.
