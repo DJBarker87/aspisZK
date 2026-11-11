@@ -817,3 +817,56 @@ No limit was raised.
 All hashes were copied from the receipts' stdout.log and checked against
 the masters. `AspisRec40CleanStatement` (PSD-38) is unchanged. No `sorry`,
 no new axioms.
+
+## 9. Step 2 (`final_decoding40`): scoping before building, nothing compiled yet
+
+Target: `final_decoding40 D P Q hq : AspisFailureBound.Joined.FinalDecoding40 D P Q`.
+No new Lean was written for it in this round. This section records what the
+proof must contain, from reading R1's row-32 chain end to end. One obligation
+is added to the three sub-results of §8.2.
+
+**4. Word choice at rows 33 to 39.** `FinalByte.fin` restores its output with
+R1's `LiteralTableWordChoiceBin.choose a T`: words 0, 2 and 30 are read back
+from the table before the frame. The target prefix of `FinalDecodes` is the
+charged run's transcript, i.e. the transcript at the enriched proof. So the
+words chosen from `T_n` must equal `wordsFromRun` of the base run. R1 proves
+this only for `n < 33`:
+`RWireLiteralTableChoiceWords.constructed_components (… hn : n < 33)` (line
+86), used in `RWireRawLiteralRecordedDecoder.actual_run_decodes_and_follows`.
+A copy for 33 ≤ n < 40 is needed. The table `T_n` contains R1's `T_32`, so
+the recovered maps should coincide under the same no-collision premise. This
+is expected to be provable with R1's premises; it is not yet proved.
+
+Neither the three sub-results of §8.2 nor (4) needs a premise beyond `hq`.
+R1's four premises (`hQ`, `hout`, `format`, `tag`) are derived inside
+`hit_in_prefix_of` from `hq` and acceptance, as for R1. No counterexample has
+been found. The step most at risk is the follow (§8.2, 3). The decoded start
+of row n is the FIRST occurrence of its absorb frame in the charged trace,
+and that occurrence can be the prover's, earlier than the verifier's earlier
+rows. Then the squeeze cells of rows 32..n−1 and R1's pending cells are
+absent from `T_n` and are read only later. R1's
+`JointNextTrace.follows_after_prefix_query` handles this ordering for row 32
+with R1's collision events (`badColl`, `ParsedStateCollision`). The Aspis
+copy must do the same for the additional pending cells; it does not hold
+without the no-collision premise. That premise is R1's, not a new one.
+
+Required modules, in dependency order (estimate 12–18). Copies:
+- a 40-row address-level run model, extending R1's
+  `UnifiedRun`/`UnifiedPrefixedReads`/`UnifiedSteps` with the reads of rows
+  33–39;
+- context recovery at `T_n` (§8.2, 1), with R1's anchor-parametric
+  `OpeningPrefixAnchor.walk_before_anchor` and `DuplexSeek.seek_of_noColl`;
+- selection at `T_n` (§8.2, 2), with
+  `RawLatePublicSelector.select_of_joint_context` and
+  `RawPublicOpeningAnchor.walk_before_anchor`;
+- word choice (4);
+- the byte-to-address bridge for 40 rows (copies of
+  `RWireRawLiteralDecoderRestore`, `RWireLiteralLegacyDecoderCompletion`,
+  `RWireRawFullPublicRun`).
+
+New proof:
+- the follow for `Final.output` (§8.2, 3).
+
+Order, as instructed: the generic follow lemma first, compiled alone; then
+row 33 end to end; then general n; then the bridge; then `final_decoding40`;
+then `AspisFailureBoundModel` and the constant walk.
