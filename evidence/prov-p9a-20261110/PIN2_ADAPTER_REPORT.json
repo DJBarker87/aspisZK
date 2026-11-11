@@ -52,5 +52,14 @@
    "note": "see PIN2_CANNOT_EXTRACT.json"
   }
  ],
- "unchanged_functions_in_modules": "none reached: stage1/stage2/lifecycle_* are opaque children, unchanged text, not emitted"
+ "unchanged_functions_in_modules": "none reached: stage1/stage2/lifecycle_* are opaque children, unchanged text, not emitted",
+ "new_gate_compile": {
+  "status": "NOT COMPILED: library environment lacks the models the emission needs; none added",
+  "missing": [
+   "solana_pubkey.Pubkey and solana_account_info.AccountInfo (TypesExternal template axioms; the old gate has AdapterRw.solana_pubkey.Pubkey / ProgramError models but no AccountInfo)",
+   "core.slice.Slice.first, core.option.OptionShared0T.copied, core.slice.Slice.starts_with, core.ops.range.RangeInclusive.contains, Slice.Insts.CoreCmpPartialEqArray.eq, Shared0Slice.Insts.CoreCmpPartialEqArray.eq (FunsExternal template axioms; the old Hiq_DispatchSource gate replaced them by hand models eqU8/firstByte/copied/starts)",
+   "the six opaque children stage1, stage2, lifecycle_init/write/finalize, close_checkpoint"
+  ],
+  "rule": "HM-A/HM-B/HM-D rows would supply the first group; adding models is not mine to do"
+ }
 }
