@@ -39,13 +39,49 @@ def readFrontier (xs : List Byte) := atom (PublicParserWork.readFrontier xs)
   (read_work 640 _ _ frontier_work xs)
 def expect (tag : Byte) (xs : List Byte) := atom (PublicParserWork.expect tag xs) 1 (by change 1 ≤ 2; decide)
 
+/-! PIN2 (2026-11-11, W3b): the binding suffix.  `bytes32` allocates one
+subtype constructor (the 32 bytes were copied by the cursor and are counted
+by `readCells`); `readDestination` reads its tag byte and, for tag 1, one
+capped 32-byte read.  `run` is literally the work function, so `erase`
+stays definitional. -/
+def bytes32Cells (_ : List Byte) : Nat := 1
+
+theorem bytes32_paid (xs : List Byte) : bytes32Cells xs ≤ (PublicParserWork.bytes32 xs).2 := by
+  simp only [bytes32Cells, PublicParserWork.bytes32, PublicPrimitiveDecoderWork.length_work]; omega
+
+def readBytes32 (xs : List Byte) := atom (PublicParserWork.readBytes32 xs)
+  (readCells 32 bytes32Cells xs) (read_work 32 _ _ bytes32_paid xs)
+
+def destinationCells : List Byte → Nat
+  | [] => 1
+  | tag :: rest =>
+    if tag = 0 then 1 else if tag = 1 then readCells 32 bytes32Cells rest + 1 else 1
+
+theorem destination_paid (xs : List Byte) :
+    destinationCells xs ≤ (PublicParserWork.readDestination xs).2 := by
+  cases xs with
+  | nil => exact Nat.le_refl _
+  | cons tag rest =>
+    have h := read_work 32 PublicParserWork.bytes32 bytes32Cells bytes32_paid rest
+    simp only [destinationCells, PublicParserWork.readDestination, PublicParserWork.readBytes32]
+    split
+    · dsimp only; omega
+    · split <;> dsimp only <;> omega
+
+def readDestination (xs : List Byte) := atom (PublicParserWork.readDestination xs)
+  (destinationCells xs) (destination_paid xs)
+
 def decodeAfter (anchor nullifier : Digest) (asset : M31) (change : Digest)
     (xs : List Byte) : Model Common :=
   bind (readIndex xs) fun (index, rest) =>
   bind (readFrontier rest) fun (snapshot, rest) =>
   bind (readDigest rest) fun (root, rest) =>
   bind (readFrontier rest) fun (nextFrontier, rest) =>
-  atom (if rest.isEmpty then some ⟨anchor,nullifier,asset,change,index,snapshot,root,nextFrontier⟩
+  bind (readBytes32 rest) fun (pool, rest) =>
+  bind (readBytes32 rest) fun (domain, rest) =>
+  bind (readDestination rest) fun (destination, rest) =>
+  atom (if rest.isEmpty then some ⟨anchor,nullifier,asset,change,index,snapshot,root,nextFrontier,
+      pool,domain,destination⟩
     else none,2) 2 (Nat.le_refl _)
 
 def decodeTransfer (xs : List Byte) : Model Wire :=
@@ -99,8 +135,10 @@ theorem cells_work (xs : List Byte) :
   rw [← erase xs]
   exact (parsePublic xs).paid
 
+-- PIN2 (lead decision 2026-11-11): stage work budget 110542, was 110260; the
+-- parser now performs three more reads (PublicParserWork.parsePublic_work).
 def spec : AllocationStageSpecM10.StageSpec 1024 SemanticPublicWire.parsePublic
-    (fun _ => True) (fun _ => True) (fun _ => 110260) where
+    (fun _ => True) (fun _ => True) (fun _ => 110542) where
   run := PublicParserWork.parsePublic
   value := PublicParserWork.parsePublic_value
   work _ xs _ := PublicParserWork.parsePublic_work xs
@@ -112,6 +150,8 @@ theorem allocated_bits_work (xs : List Byte) :
     (spec.allocation xs).bits ≤ 1024*(PublicParserWork.parsePublic xs).2 :=
   AllocationStageSpecM10.allocation_le_work spec xs
 
+#print axioms bytes32_paid
+#print axioms destination_paid
 #print axioms erase
 #print axioms cells_work
 #print axioms allocated_bits_work
