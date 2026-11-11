@@ -494,8 +494,13 @@ pub(super) fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[
     program::set_return_data(&[]);
     #[cfg(feature="cu-profiling")]
     { msg!("r1:pool-adapter-stage2-begin"); solana_program::log::sol_log_compute_units(); }
+    // FUTURE-VERSION EXPERIMENT: the one-transaction entry takes a summed-format proof buffer.
+    #[cfg(feature = "future-one-tx")]
+    let proof_buffer_bytes = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::candidate::fused::summed_format::PROOF_BYTES;
+    #[cfg(not(feature = "future-one-tx"))]
+    let proof_buffer_bytes = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::PROOF_BYTES;
     let owned = [
-        snapshot(&accounts[0], POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::PROOF_BYTES, POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::PROOF_BYTES),
+        snapshot(&accounts[0], proof_buffer_bytes, proof_buffer_bytes),
         snapshot(&accounts[1], POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES),
         snapshot(&accounts[2], POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES),
         snapshot(&accounts[3], POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES),

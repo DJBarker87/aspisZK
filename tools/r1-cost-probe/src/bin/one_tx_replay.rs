@@ -91,10 +91,52 @@ fn recorded_accounts(tx: &Value) -> Result<Vec<Recorded>> {
     }
     Ok(out)
 }
+/// (lamports, owner, data) of one account after a run, or `None` if absent.
+type State = Vec<(String, Option<(u64, String, Vec<u8>)>)>;
 struct Outcome {
     error: Option<String>,
     logs: Vec<String>,
     transaction_cu: u64,
+    post: State,
+}
+fn base58(a: &Address) -> String {
+    LegacyPubkey::new_from_array(a.to_bytes()).to_string()
+}
+/// The recorded state of every non-executable account of a recorded snapshot.
+fn recorded_state(snapshot: &Value) -> Result<State> {
+    let mut out = vec![];
+    for a in snapshot["accounts"].as_array().context("accounts")? {
+        if a["executable"].as_bool().unwrap_or(false) {
+            continue;
+        }
+        let key = a["key"].as_str().context("key")?.to_string();
+        if !a["exists"].as_bool().unwrap_or(false) {
+            out.push((key, None));
+            continue;
+        }
+        out.push((key, Some((a["lamports"].as_u64().context("lamports")?, a["owner"].as_str().context("owner")?.to_string(), unbase64(a["data_base64"].as_str().context("data")?)?))));
+    }
+    Ok(out)
+}
+/// Keys whose state differs between two snapshots, ignoring `skip`; lamports are
+/// compared only for keys outside `skip_lamports`.
+fn differing(a: &State, b: &State, skip: &[&str], skip_lamports: &[&str]) -> Vec<String> {
+    let mut out = vec![];
+    for (key, left) in a {
+        if skip.contains(&key.as_str()) {
+            continue;
+        }
+        let right = b.iter().find(|(k, _)| k == key).map(|(_, v)| v);
+        let same = match (left, right) {
+            (None, Some(None)) => true,
+            (Some(l), Some(Some(r))) => l.1 == r.1 && l.2 == r.2 && (skip_lamports.contains(&key.as_str()) || l.0 == r.0),
+            _ => false,
+        };
+        if !same {
+            out.push(key.clone());
+        }
+    }
+    out
 }
 fn consumed(logs: &[String], program: &str) -> Option<u64> {
     logs.iter().rev().find_map(|l| l.strip_prefix(&format!("Program {program} consumed "))?.split_whitespace().next()?.parse().ok())
@@ -144,7 +186,9 @@ fn main() -> Result<()> {
     let mut buffer = proof.account.data[..prefix].to_vec();
     buffer.extend_from_slice(&packed);
 
-    let run = |verifier_elf: &[u8], proof_buffer: Option<Vec<u8>>| -> Result<Outcome> {
+    let pre_state = recorded_state(&stage2["pre"])?;
+    let recorded_post = recorded_state(&stage2["post"])?;
+    let run_with = |verifier_elf: &[u8], proof_buffer: Option<Vec<u8>>, marker_prefund: Option<(Address, u64)>| -> Result<Outcome> {
         let mut svm = LiteSVM::new().with_sigverify(false);
         svm.warp_to_slot(slot);
         svm.add_program(address(&pool_id)?, &pool_elf).map_err(|e| anyhow!("load pool: {e:?}"))?;
@@ -158,6 +202,10 @@ fn main() -> Result<()> {
             }
             svm.set_account(a.key, account).map_err(|e| anyhow!("set account: {e:?}"))?;
         }
+        if let Some((marker, lamports)) = marker_prefund {
+            // A marker address funded in advance by a third party: system-owned, no data.
+            svm.set_account(marker, Account { lamports, data: vec![], owner: address("11111111111111111111111111111111")?, executable: false, rent_epoch: u64::MAX }).map_err(|e| anyhow!("prefund: {e:?}"))?;
+        }
         let instructions = [ComputeBudgetInstruction::set_compute_unit_limit(1_400_000), ComputeBudgetInstruction::request_heap_frame(256 * 1024), instruction.clone()];
         let message = Message::new_with_blockhash(&instructions, Some(&payer), &svm.latest_blockhash());
         let tx = Transaction::new_unsigned(message);
@@ -165,8 +213,14 @@ fn main() -> Result<()> {
             Ok(m) => (None, m),
             Err(e) => (Some(format!("{:?}", e.err)), e.meta),
         };
-        Ok(Outcome { error, logs: meta.logs, transaction_cu: meta.compute_units_consumed })
+        let mut post = vec![];
+        for (key, _) in &pre_state {
+            let account = svm.get_account(&address(key)?);
+            post.push((key.clone(), account.filter(|a| a.lamports > 0 || !a.data.is_empty()).map(|a| (a.lamports, base58(&a.owner), a.data))));
+        }
+        Ok(Outcome { error, logs: meta.logs, transaction_cu: meta.compute_units_consumed, post })
     };
+    let run = |verifier_elf: &[u8], proof_buffer: Option<Vec<u8>>| run_with(verifier_elf, proof_buffer, None);
     let record = |name: &str, o: &Outcome| json!({"mode": name, "error": o.error, "transaction_cu": o.transaction_cu, "pool_cu": consumed(&o.logs, &pool_id), "verifier_cu": consumed(&o.logs, &verifier_id), "logs": o.logs});
 
     // Control: the deployed verifier on the recorded accounts.
@@ -182,6 +236,27 @@ fn main() -> Result<()> {
     bad[last] ^= 1;
     let changed = run(&one_tx_elf, Some(bad))?;
     let stale = run(&one_tx_elf, None)?;
+    // Final account states. The replayed transaction is unsigned and built as a legacy message, so the
+    // payer's balance differs from the recorded one by the fee; everything else must match.
+    let payer_key = stage2["keys"][0].as_str().unwrap().to_string();
+    let proof_key = base58(&proof.key);
+    let control_vs_recorded = differing(&control.post, &recorded_post, &[], &[payer_key.as_str()]);
+    // One transaction against the control: every account except the proof buffer (different bytes by
+    // design, and not written by either run), including the payer's balance.
+    let one_vs_control = differing(&one.post, &control.post, &[proof_key.as_str()], &[]);
+    let one_proof_untouched = one.post.iter().find(|(k, _)| *k == proof_key).and_then(|(_, v)| v.as_ref()).map(|v| v.2 == buffer) == Some(true);
+    // Rejected runs leave every account as it was before the transaction (the failed
+    // transaction is not committed, so the payer is unchanged too), apart from the proof buffer we installed.
+    let changed_vs_pre = differing(&changed.post, &pre_state, &[proof_key.as_str()], &[]);
+    let stale_vs_pre = differing(&stale.post, &pre_state, &[], &[]);
+    // Marker funding states of the Pool (one, three and two System calls): the marker is the
+    // account absent before and Pool-owned after the recorded settlement.
+    let marker = recorded_post.iter().find(|(k, v)| v.as_ref().map(|v| v.1 == pool_id) == Some(true) && pre_state.iter().any(|(pk, pv)| pk == k && pv.is_none())).context("marker")?;
+    let marker_rent = marker.1.as_ref().unwrap().0;
+    let marker_address = address(&marker.0)?;
+    let partial = run_with(&one_tx_elf, Some(buffer.clone()), Some((marker_address, 1)))?;
+    let funded = run_with(&one_tx_elf, Some(buffer.clone()), Some((marker_address, marker_rent)))?;
+    let variant_state_ok = |o: &Outcome| differing(&o.post, &control.post, &[proof_key.as_str()], &[payer_key.as_str()]).is_empty();
     let summary = json!({
         "operation": operation,
         "recorded_pool_cu": recorded_pool,
@@ -194,6 +269,12 @@ fn main() -> Result<()> {
         "one_tx_completes_at_1400000": one.error.is_none(),
         "changed_certificate_rejected": changed.error.is_some(),
         "pinned_format_buffer_rejected": stale.error.is_some(),
+        "control_final_state_equals_recorded_except_payer_fee": control_vs_recorded.is_empty(),
+        "one_tx_final_state_equals_control": one_vs_control.is_empty() && one_proof_untouched,
+        "rejected_runs_leave_state_unchanged": changed_vs_pre.is_empty() && stale_vs_pre.is_empty(),
+        "state_differences": {"control_vs_recorded": control_vs_recorded, "one_tx_vs_control": one_vs_control, "changed_vs_pre": changed_vs_pre, "pinned_vs_pre": stale_vs_pre},
+        "marker_prefunded_one_lamport": {"error": partial.error, "transaction_cu": partial.transaction_cu, "pool_cu": consumed(&partial.logs, &pool_id), "final_state_equals_control_except_payer": variant_state_ok(&partial)},
+        "marker_prefunded_full_rent": {"error": funded.error, "transaction_cu": funded.transaction_cu, "pool_cu": consumed(&funded.logs, &pool_id), "final_state_equals_control_except_payer": variant_state_ok(&funded)},
         "proof_buffer_bytes": buffer.len(),
     });
     println!("{summary}");
@@ -204,9 +285,10 @@ fn main() -> Result<()> {
         "recorded_signature": stage2["signature"], "recorded_slot": slot, "summed_proof_sha256": sha(&packed),
         "runtime": {"litesvm": "0.16.0", "agave": "4.2.1", "heap_bytes": 262144},
         "summary": summary,
-        "runs": [record("control-deployed-verifier", &control), record("one-transaction", &one), record("one-transaction-changed-certificate", &changed), record("one-transaction-pinned-format-buffer", &stale)],
+        "runs": [record("control-deployed-verifier", &control), record("one-transaction", &one), record("one-transaction-changed-certificate", &changed), record("one-transaction-pinned-format-buffer", &stale), record("one-transaction-marker-prefunded-one-lamport", &partial), record("one-transaction-marker-prefunded-full-rent", &funded)],
     });
     fs::write(out, serde_json::to_string_pretty(&value)? + "\n")?;
     ensure!(control_ok, "control did not reproduce the recorded compute units");
+    ensure!(control_vs_recorded.is_empty(), "control final state differs from the recorded one: {control_vs_recorded:?}");
     Ok(())
 }
