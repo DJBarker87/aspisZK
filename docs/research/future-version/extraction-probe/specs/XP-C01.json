@@ -1,0 +1,37 @@
+{
+ "run": "XP-C01",
+ "pair": "second",
+ "crate": "verifier",
+ "features": "private-leaf-salts,optimized-terminal,program-build,future-validated-decode,future-merkle-single-pass,future-merkle-in-place,future-tight-base,future-tight-weights,future-lazy-boundary,future-d-inactive-tensor,future-d-pair-expansion,future-fold-shared,aspis-core/future-fast-kmul,aspis-core/future-fast-prepared,aspis-core/future-fast-square,aspis-core/future-lazy-horner",
+ "overflow_checks": true,
+ "roots": [
+  "crate::verifier::candidate::fused::verify_summed_format",
+  "crate::r1_semantic::semantic_boundary",
+  "crate::r1_semantic::semantic_value",
+  "crate::r1_wire::_::decode_k",
+  "crate::multiproof::node_count_merged",
+  "crate::transcript::_::resume",
+  "aspis_core::field::_::mul",
+  "aspis_core::field::_::square",
+  "aspis_core::field::_::mul_add"
+ ],
+ "opaque": [
+  "crate::verifier::candidate::prepare",
+  "crate::verifier::_::for_range",
+  "crate::verifier::finish_relation_round",
+  "crate::weights::_::new",
+  "aspis_core::field::wide_exact",
+  "aspis_core::r0::heap::filled",
+  "aspis_core::state_only_private_merkle",
+  "crate::sampler",
+  "crate::trace",
+  "crate::verifier::candidate::canonical_scan_pinned",
+  "crate::verifier::candidate::canonical_scan_words"
+ ],
+ "include": [
+  "aspis_core::field",
+  "aspis_core::digest",
+  "aspis_core::circle::SecureCirclePoint"
+ ],
+ "note": "first broad pass, second pair: entry verify_summed_format plus targets it does not reach; R1-unchanged callees opaque"
+}
