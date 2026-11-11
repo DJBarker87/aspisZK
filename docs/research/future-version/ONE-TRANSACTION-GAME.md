@@ -1417,6 +1417,14 @@ Caveats, each recorded as it stands:
   "PAPER" in its header, though both are now proved. The header is corrected
   at the coherent rebuild before the freeze, not now: changing the file
   changes its hash under the modules already compiled against it.
+- **One line changed after the review.** `AspisOneTxRun.lean:107` used
+  `VerifierCallBudget.firstReads_le_length`, a generic lemma that lives in a
+  two-transaction module. It now uses the re-proved
+  `AspisRec40.CallBudget.firstReads_le_length`. Nothing else in the file
+  changed. New source sha256
+  26cbb3f61f10a5f6a4c14aae485cb90549c482013947d8b5c03591c03d60ec97, host
+  attempt LDJ-02; the modules above it were recompiled (ASPIS-FAILURE-BOUND.md
+  section 7). The reviewer read the file before this change.
 - **Mistyped hash.** The PSE-23 row carried a wrong tail. Fixed, with five
   others found by `tools/check_note_hashes.py` (RECORDED-EXPERIMENT-40.md
   section 5.5).
