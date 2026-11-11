@@ -248,6 +248,33 @@ fn endpoint_counts(
 ) -> Result<([u8; 1024], [u8; 1024]), PoolV1PairHidingLayoutErrorV1> {
     let mut producers = [0u8; 1024];
     let mut consumers = [0u8; 1024];
+    // pv-aspis-rw (extraction rewrite, behaviour unchanged): the pin iterated an
+    // array of `(row, &mut counts)` pairs; the two endpoints are now handled one
+    // after the other, producer first, with the same test, the same error and
+    // the same increment (evidence/pv-aspis-rewrite-20261111/notes/01-endpoint_counts.md).
+    for link in links {
+        let row = usize::from(link.producer_row);
+        if row >= POOL_V1_PAIR_TRACE_ROWS || producers[row] >= 2 {
+            return Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity { row: row as u16 });
+        }
+        producers[row] += 1;
+        let row = usize::from(link.consumer_row);
+        if row >= POOL_V1_PAIR_TRACE_ROWS || consumers[row] >= 2 {
+            return Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity { row: row as u16 });
+        }
+        consumers[row] += 1;
+    }
+    Ok((producers, consumers))
+}
+
+/// Pin body of `endpoint_counts` (c7593d23fdc), kept only for the
+/// rewrite-equivalence test.
+#[cfg(test)]
+fn endpoint_counts_pin(
+    links: &[PoolV1PairCopyRowLinkV1],
+) -> Result<([u8; 1024], [u8; 1024]), PoolV1PairHidingLayoutErrorV1> {
+    let mut producers = [0u8; 1024];
+    let mut consumers = [0u8; 1024];
     for link in links {
         for (row, counts) in [
             (usize::from(link.producer_row), &mut producers),
@@ -452,6 +479,53 @@ mod tests {
         cells
             .binary_search_by_key(&(column as u8, row as u16), |cell| (cell.column, cell.row))
             .is_ok()
+    }
+
+    /// pv-aspis-rw: the rewritten `endpoint_counts` against the pin body, on the
+    /// real schedule, on its prefixes, and on generated link lists that reach
+    /// both error branches (a third use of a row; a row outside the trace) for
+    /// the producer and for the consumer endpoint.
+    #[test]
+    fn pv_aspis_rw_endpoint_counts_matches_pin_body() {
+        let schedule = build_pool_v1_pair_copy_row_schedule_v1().unwrap();
+        assert_eq!(endpoint_counts(&schedule), endpoint_counts_pin(&schedule));
+        for end in 0..=schedule.len() {
+            assert_eq!(endpoint_counts(&schedule[..end]), endpoint_counts_pin(&schedule[..end]));
+        }
+        let kind = schedule[0].kind;
+        let mut state = 0x9e37_79b9_7f4a_7c15u64;
+        let mut next = move || {
+            state ^= state << 13;
+            state ^= state >> 7;
+            state ^= state << 17;
+            state
+        };
+        let (mut ok, mut capacity, mut range) = (0usize, 0usize, 0usize);
+        for case in 0..20_000usize {
+            let length = (next() % 48) as usize;
+            // Small row ranges make a third use likely; every eighth case may
+            // also name a row at or beyond the trace height.
+            let span = [4u64, 16, 64, 1024, 1030, 65536][case % 6];
+            let links: alloc::vec::Vec<_> = (0..length)
+                .map(|_| PoolV1PairCopyRowLinkV1 {
+                    kind,
+                    producer_row: (next() % span) as u16,
+                    consumer_row: (next() % span) as u16,
+                })
+                .collect();
+            let new = endpoint_counts(&links);
+            assert_eq!(new, endpoint_counts_pin(&links));
+            match new {
+                Ok(_) => ok += 1,
+                Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity { row })
+                    if usize::from(row) >= POOL_V1_PAIR_TRACE_ROWS =>
+                {
+                    range += 1
+                }
+                Err(_) => capacity += 1,
+            }
+        }
+        assert!(ok > 100 && capacity > 100 && range > 100, "{ok} {capacity} {range}");
     }
 
     #[test]
