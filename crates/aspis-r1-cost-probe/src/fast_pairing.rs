@@ -121,6 +121,23 @@ mod canonical {
             }
         }
         pub fn finish(self)->Q {Q([reduce(self.sums[0]),reduce(self.sums[1]),reduce(self.sums[2]),reduce(self.sums[3])])}
+
+        /// FUTURE-VERSION EXPERIMENT H1: `push` on limbs already widened by
+        /// the caller, with no `Q` values built. Same product formulas and the
+        /// same folded accumulation as `Q::raw` followed by `push`.
+        /// Precondition: all eight limbs canonical (`< P`).
+        #[inline(always)]
+        pub(super) fn push_limbs(&mut self,a:u64,b:u64,c:u64,d:u64,e:u64,f:u64,g:u64,h:u64) {
+            const PP:u64=(P as u64)*(P as u64);
+            let p=u64::from(P);
+            let partial=|x:u64|(x&p).wrapping_add(x>>31u32);
+            let u=partial((c*g).wrapping_add(PP).wrapping_sub(d*h));
+            let v=partial((c*h).wrapping_add(d*g));
+            self.sums[0]=self.sums[0].wrapping_add(partial((a*e).wrapping_add(PP).wrapping_sub(b*f).wrapping_add(2*u).wrapping_add(3*p).wrapping_sub(v)));
+            self.sums[1]=self.sums[1].wrapping_add(partial((a*f).wrapping_add(b*e).wrapping_add(u).wrapping_add(2*v)));
+            self.sums[2]=self.sums[2].wrapping_add(partial((a*g).wrapping_add(c*e).wrapping_add(2*PP).wrapping_sub(b*h).wrapping_sub(d*f)));
+            self.sums[3]=self.sums[3].wrapping_add(partial((a*h).wrapping_add(b*g).wrapping_add(c*f).wrapping_add(d*e)));
+        }
     }
 }
 
@@ -163,6 +180,10 @@ impl EbyKDot {
 
     #[inline(always)]
     pub fn push(&mut self, value: E, scalar: QM31) -> Result<(), ()> {
+        if cfg!(feature = "future-lean-dot") {
+            self.push_lean(value, scalar);
+            return Ok(());
+        }
         if self.count >= MAX_TERMS { return Err(()); }
         let [value_c0,value_c1] = canonical::Q::from_wide(value);
         let scalar = checked_q(scalar)?;
@@ -170,6 +191,18 @@ impl EbyKDot {
         self.c1.push(value_c1, scalar);
         self.count += 1;
         Ok(())
+    }
+
+    /// FUTURE-VERSION EXPERIMENT H1: `push` without the per-push scalar check
+    /// and term counter, reading each limb once. Precondition: `scalar` is
+    /// canonical, and the caller pushes fewer than 2^30 terms (each folded
+    /// product is below 2^34).
+    #[inline(always)]
+    pub fn push_lean(&mut self, value: E, scalar: QM31) {
+        let v = value.to_limbs();
+        let (e, f, g, h) = (u64::from(scalar.c0.a.0), u64::from(scalar.c0.b.0), u64::from(scalar.c1.a.0), u64::from(scalar.c1.b.0));
+        self.c0.push_limbs(u64::from(v[0]), u64::from(v[1]), u64::from(v[2]), u64::from(v[3]), e, f, g, h);
+        self.c1.push_limbs(u64::from(v[4]), u64::from(v[5]), u64::from(v[6]), u64::from(v[7]), e, f, g, h);
     }
 
     #[inline(always)]
@@ -238,12 +271,26 @@ impl KbyKDot {
 
     #[inline(always)]
     pub fn push(&mut self, left: QM31, right: QM31) -> Result<(), ()> {
+        if cfg!(feature = "future-lean-dot") {
+            self.push_lean(left, right);
+            return Ok(());
+        }
         if self.count >= MAX_TERMS { return Err(()); }
         let left = checked_q(left)?;
         let right = checked_q(right)?;
         self.dot.push(left, right);
         self.count += 1;
         Ok(())
+    }
+
+    /// FUTURE-VERSION EXPERIMENT H1: as `EbyKDot::push_lean`. Precondition:
+    /// both operands canonical.
+    #[inline(always)]
+    pub fn push_lean(&mut self, left: QM31, right: QM31) {
+        self.dot.push_limbs(
+            u64::from(left.c0.a.0), u64::from(left.c0.b.0), u64::from(left.c1.a.0), u64::from(left.c1.b.0),
+            u64::from(right.c0.a.0), u64::from(right.c0.b.0), u64::from(right.c1.a.0), u64::from(right.c1.b.0),
+        );
     }
 
     #[inline(always)]
@@ -258,4 +305,59 @@ impl KbyKDot {
 #[inline(always)]
 pub fn k_mul_sixteen(left: QM31, right: QM31) -> Result<QM31, ()> {
     Ok(qm31_of(checked_q(left)?.mul(checked_q(right)?)))
+}
+
+#[cfg(test)]
+mod future_lean_dot_tests {
+    use super::*;
+    use aspis_core::field::{M31, P};
+
+    fn k(limbs: [u32; 4]) -> QM31 {
+        QM31 { c0: CM31 { a: M31(limbs[0]), b: M31(limbs[1]) }, c1: CM31 { a: M31(limbs[2]), b: M31(limbs[3]) } }
+    }
+
+    /// H1: lean pushes give the same sums as the direct field computation
+    /// (and so as the checked pushes, which other tests compare with it), on
+    /// sequences of 1 to 200 terms of edge and random canonical operands.
+    #[test]
+    fn lean_pushes_equal_the_field_sums() {
+        let mut state = 0x853c_49e6_748f_ea9bu64;
+        let mut next = move || {
+            state ^= state << 13;
+            state ^= state >> 7;
+            state ^= state << 17;
+            state
+        };
+        let mut limb = |mode: usize| match mode % 5 {
+            0 => 0,
+            1 => P - 1,
+            2 => 1,
+            _ => (next() % u64::from(P)) as u32,
+        };
+        for case in 0..300usize {
+            let terms = 1 + case % 200;
+            let (mut lean_e, mut checked_e, mut lean_k, mut checked_k) = (EbyKDot::new(), EbyKDot::new(), KbyKDot::new(), KbyKDot::new());
+            let (mut expected_e, mut expected_k) = (E::ZERO, QM31::ZERO);
+            for t in 0..terms {
+                let mode = if case < 10 { case } else { case + t };
+                let scalar = k(core::array::from_fn(|_| limb(mode)));
+                let other = k(core::array::from_fn(|_| limb(mode / 2 + 3)));
+                let value = E::new(k(core::array::from_fn(|_| limb(mode + 1))), k(core::array::from_fn(|_| limb(mode + 2))));
+                lean_e.push_lean(value, scalar);
+                lean_k.push_lean(other, scalar);
+                if !cfg!(feature = "future-lean-dot") {
+                    checked_e.push(value, scalar).unwrap();
+                    checked_k.push(other, scalar).unwrap();
+                }
+                expected_e = expected_e.add(value.mul_qm31(scalar));
+                expected_k = expected_k.add(other.mul(scalar));
+            }
+            assert_eq!(lean_e.finish(), expected_e, "case {case}");
+            assert_eq!(lean_k.finish(), expected_k, "case {case}");
+            if !cfg!(feature = "future-lean-dot") {
+                assert_eq!(checked_e.finish(), expected_e, "case {case}");
+                assert_eq!(checked_k.finish(), expected_k, "case {case}");
+            }
+        }
+    }
 }
