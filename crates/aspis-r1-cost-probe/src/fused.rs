@@ -816,9 +816,6 @@ pub fn verify_summed_format<H: Digest32>(public: Public<'_>, proof: &[u8], hash:
     let mut g = [E::ZERO; 29];
     let p = prepare(public, proof, hash, obs, &mut g)?;
     mark(obs, Phase::Prepare);
-    let folded_root: [u8; 32] = proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();
-    merged_merkle(proof, &p, &folded_root, hash)?;
-    mark(obs, Phase::Merkle(0));
     let geometry = QueryGeometry::for_range(&p.queries, 0, QUERIES)?;
     let openings = &proof[compact::OFF_OPENINGS..compact::OFF_NODES];
     let sums = fold_sums(openings, &p.queries, p.rho, &p.alpha, &g, &geometry, obs)?;
@@ -831,6 +828,14 @@ pub fn verify_summed_format<H: Digest32>(public: Public<'_>, proof: &[u8], hash:
     mark(obs, Phase::QueryPart(5, 0));
     summed_final_checks(&p, v.final_message, claim, sums.rhs2, &geometry, &proof[summed_format::OFF_CERTIFICATE..], hash, obs)?;
     mark(obs, Phase::Final);
+    // Merkle authentication LAST: every transcript row (0 to 39) is derived before any Merkle
+    // digest is computed, which is the order the formal model has (all rows, then the terminal
+    // decision). The same checks are made and all must pass, so acceptance is unchanged; only
+    // the order of rejections differs. The opened values the earlier steps used are the ones
+    // authenticated here.
+    let folded_root: [u8; 32] = proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();
+    merged_merkle(proof, &p, &folded_root, hash)?;
+    mark(obs, Phase::Merkle(0));
     Ok(())
 }
 
