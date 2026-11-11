@@ -1,6 +1,6 @@
 # The recorded/charged experiment for the Aspis 40-row protocol (plan item 13)
 
-Status: the measurement is done (section 1). The charged experiment and its
+Status (updated, section 5): the hit-mass equality with the terminal decision as a parameter compiles. The measurement is done (section 1). The charged experiment and its
 start count for 40 rows compile (section 2). The clean event and the
 full-to-charged hit-mass equality do not copy as they stand, because R1 states
 them on its full experiment, which is built with R1's two-transaction decision
@@ -194,3 +194,141 @@ choice. Two ways on, for the lead:
   copy reads `lean-src/measure-expand.txt`, which is the 555-module list
   derived from the TSV. Output: `lean-src/measure-*.tsv` on the build host.
 - `lean/AspisRec40Compiler.lean`, `lean/AspisRec40ChargePrefix.lean`.
+
+## 5. The hit-mass chain with the terminal decision as a parameter (lead's decision, way 1)
+
+### 5.1 The statement, and the hypotheses on the decision
+
+```lean
+-- AspisRec40.HitMass.hit_mass
+theorem hit_mass (cls : Classifier) (D : LiteralByteProtocol.Decoder) (d : Decision)
+    (P : Prover) :
+    lazyMean (projected D d P) emptyTable (fun run => indicator (prefixHit cls D P run)) =
+      lazyMean (AspisRec40.ChargePrefix.charged D P) emptyTable (fun run => indicator
+        (hitsChain3 AspisRows40.FinalStarts.decFinal cls emptyTable run.1))
+```
+
+Here:
+- `Decision` is `OraclePortStoredExperimentC4.Decision`, i.e. `Bytes →
+  ErasedPrefix → ErasedMessage → Program Bytes State Bool`, the type of R1's
+  `dV_frozen2`. `decision_type` checks it by `rfl`.
+- `Prover` is R1's stored-input prover type.
+- `Classifier` is the type of R1's `RawAdaptiveClassifierHitDensity.classifier`;
+  the Aspis classifier belongs to another agent.
+- `projected D d P := bind (annotated D d (canon P)) fun v => .done ((v.1.statement, v.1.proof), v.2)`
+  is R1's `OraclePortFrozen2Consumer.projected` with `dV_frozen2` replaced by `d`
+  and the 40-row verifier in place of R1's.
+- `prefixHit cls D P run := hitsChain3 decFinal cls emptyTable (recovered D P run).1`.
+
+R1 (`Frozen2StartChargeProbability.hit_mass`):
+`lazyMean (projected D P) emptyTable (fun run => indicator (prefixHit D P run)) =
+lazyMean (charged D P) emptyTable (fun run => indicator (hitsChain3
+RecordedBinaryExperimentBin.dec RawAdaptiveClassifierHitDensity.classifier emptyTable run.1))`.
+
+The changes, and only these:
+- R1's decision `dV_frozen2` becomes the parameter `d`, of the same type.
+- R1's classifier becomes the parameter `cls`, of the same type.
+- R1's `dec` becomes `decFinal`.
+- R1's 33-row protocol becomes the 40-row protocol, through the copied verifier,
+  experiment and charged experiment.
+
+**Hypotheses on `d`: none.** The proof uses only that the full experiment's
+trace starts with the charged trace (`chronological_prefix`). That holds for
+every decision, because the decision runs after the 40 sampler rows
+(`Decision.split_trace`).
+
+Properties of `dV_frozen2` that R1 uses elsewhere on the bound path, though not
+on this one. The one-transaction game agent's decision will need them for
+neighbouring theorems:
+- `OraclePortExperiment.Budget dO`: at most 1,046 oracle calls per decision
+  call, for every input. R1 uses it for the issued-call count
+  (`verifier_budget`, ≤ 1,161) and so for the collision envelope `Q + 1161`.
+- `OraclePortAdmission.admit (dV s) = dV s` (`OraclePortFrozen2Consumer.admitted_dV`),
+  used by the clean event.
+- `OraclePortFrozen2C6.checked_acceptance` (acceptance gives the checks), used by
+  the clean event.
+
+Also `mass_of_recovered`: for any observable `f`,
+`lazyMean (projected D d P) emptyTable (fun run => f (recovered D P run)) =
+lazyMean (charged D P) emptyTable f`.
+
+R1's statement as the instance `d := dV_frozen2` is not checked. The copy is
+for the 40-row protocol, so instantiating it at `dV_frozen2` would give a
+40-row statement, not R1's 33-row one, and it would mean importing
+`OraclePortFrozen2Decision` (class iii), which the rules forbid. R1's
+statement is R1's own theorem.
+
+### 5.2 Modules
+
+| Aspis | R1 copied | Change |
+|---|---|---|
+| `AspisRec40.Decision.{verifierFrom, verifier, original}` | `OracleDecisionFeasibilityCore.{verifierFrom, verifier, original}` | 33 → 40 (rows 0–39 sampled; the decision reads prefix 40 and message 40); `Decision` and `onBytes` reused |
+| `AspisRec40.Decision.{from_eval, verifier_eval}` | `OracleDecisionFeasibilityBudget.{from_eval, verifier_eval}` | 33 → 40, 40-row protocol; same proof |
+| `AspisRec40.Decision.{verifierFrom_eq, verifier_eq, compiled, eval_compiled, compiled_experiment_eval}` | `OracleDecisionFeasibilityCompiler.{…}` | 33 → 40; same proofs (`byte_sampler_eq` and `prefix_ext` are generic in the row) |
+| `AspisRec40.Decision.annotated`, `recorded` | `OracleDecisionPrereqStarts.annotated`, `OraclePortExperiment.recorded` | 40-row verifier |
+| `AspisRec40.Decision.{base, terminal, split_trace}` | `OraclePortSamplerPrefixDraft.{base, terminal, split_trace}` | 40-row verifier; `FS2.verifier_eval` at `r = 40` |
+| `AspisRec40.HitMass.{verifier, original, compiled, recorded, original_eval, compiled_eval}` | `OraclePortStoredExperimentC4.{…}` | 40-row decision verifier |
+| `AspisRec40.HitMass.annotated` | `OraclePortStoredAdmissionC4.annotated` | as above |
+| `AspisRec40.HitMass.projected` | `OraclePortFrozen2Consumer.projected` | `dV_frozen2` → parameter `d` |
+| `AspisRec40.HitMass.{chronological_prefix, recovered, recovered_eval}` | `Frozen2StartChargePrefix.{…}` | see below |
+| `AspisRec40.HitMass.{prefixHit, hit_mass}` | `Frozen2StartChargeClean.prefixHit`, `Frozen2StartChargeProbability.hit_mass` | `dec` → `decFinal`; classifier → `cls` |
+
+Not a mechanical copy: `chronological_prefix`. R1 proves it through
+`same_transcript`'s ingredients: `annotated_selected`, `fibre_prover` and
+`OraclePortStoredReductionC7`, which is a C7 module importing
+`OraclePortStoredAcceptanceC6`. Here it is proved directly from the
+evaluations, with two helper lemmas stated next to it in the file:
+- `projected_trace`: the full trace is the first run's trace followed by a tail.
+- `original_canon_trace`: the first run's trace is the 40-row decision
+  verifier's trace on R1's projected prover.
+
+`split_trace` and `charged_eval` finish it. The statement is R1's with the
+replacements above. The proof route is shorter and goes through no C6 or C7
+module.
+
+### 5.3 Two-transaction modules: imported transitively, not used
+
+No class (iii) module is copied, and no constant from one is used. A second
+measurement (`AspisRec40Measure2.lean`, PSD-32) walks the constant
+dependencies of `hit_mass`, `mass_of_recovered`, `ChargePrefix.starts` and
+`FinalStarts.verifier_starts`, expanding through every changed-dependent,
+two-transaction and Aspis module. It reaches 246 modules and 1,097 constants,
+and **0 class (iii) modules**. No `OraclePortFrozen2*` module is reached.
+
+The import closure, however, does contain 13 modules that the TSV
+classifies iii. They come in through R1 modules this work imports unchanged:
+- `RecordedBinaryExperimentBin`, i.e. R1's byte decoder `dec`, which `decAspis`
+  contains, through `R1FinalSoundness`.
+- `R16CanonReduction` (R1's message canonicalisation, used by `canon`).
+- `OraclePortStoredAdmissionC4`.
+
+The 13 are: `DecoderInstanceBoundary`, `HchecksPublicComposition`,
+`QvStage{1,2}Count`, `R16Decision{Checkpoint, QueryModel}`,
+`R19BudgetOriginalReads`, `R1FinalSoundnessBinPerQuery{,R18}`,
+`R1FinalSoundnessNumeric`, `R1VerifierCallBudget`, `SharedBinaryRecordGrammar`
+and `WireBindingRecordCodec`.
+
+This was already true of the earlier committed files (`AspisRows40Starts`
+imports `BinHonestQueryBudget`, whose closure contains
+`RecordedBinaryExperimentBin`). The new modules in this step add no iii
+import: `OracleDecisionFeasibilityCore` has none in its closure, and neither
+do `OracleProgramLawExt` and `OracleProgramReplay`. Removing the import, not
+just the use, would need a split of R1's module graph, which this work does
+not do.
+
+### 5.4 Validation
+
+| Attempt | Module | Source sha256 | Exit | Wall | Peak RSS (time) | cgroup peak | Axioms |
+|---|---|---|---|---|---|---|---|
+| PSD-27 | AspisRec40Decision | c5f31e1e…6fce51d32 | 0 | 11.04 s | 4,238,408 KB | 471,560,192 B | 7× [propext, Classical.choice, Quot.sound] |
+| PSD-31 | AspisRec40HitMass | 8d4e0ec6…270c43563f | 0 | 2.64 s | 4,211,532 KB | 435,265,536 B | 9× [propext, Classical.choice, Quot.sound] |
+| PSD-32 | AspisRec40Measure2 (measurement only) | 8db994db…31328dc2 | 0 | 2.57 s | 4,227,160 KB | 444,956,672 B | none (no theorems) |
+
+Earlier attempts on HitMass, all exit 1:
+- PSD-28: an existential witness left to unification, and a missing `open` for `Table`.
+- PSD-29: `rfl` against a goal with different append associativity.
+- PSD-30: a superfluous `rfl` after `rw` closed the goal.
+
+No `sorry`, no new axioms, no option raised. Not started, as instructed: the
+clean event, the restricted union bound and the weighted composition (item
+14), and the honest-run copies.
