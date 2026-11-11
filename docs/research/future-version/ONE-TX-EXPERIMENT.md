@@ -829,3 +829,74 @@ stage D with the certificate read from the proof.
 - Measurement: W22 = W20 with the summed-format path, plain build, six
   fixtures; and the replay of the two devnet settlements with the proof
   buffer re-packed into the summed format and the certificate inside it.
+
+### Round 5: result
+
+**The summed format, verifier alone** (W22 = the kept set with the
+summed-format path, source `4d90eb5f43e`, ELF `413cd484…ed5f0ff`; proofs
+re-packed from the six fixtures, 55,815 bytes each):
+
+| | transfer-13 | transfer-255 | transfer-1023 | withdrawal-13 | withdrawal-255 | withdrawal-1023 |
+|---|---:|---:|---:|---:|---:|---:|
+| W20, certificate in a separate account, two batches per tree | 1,206,081 | 1,209,165 | 1,207,537 | 1,206,255 | 1,207,300 | 1,207,354 |
+| W22, summed format | 1,188,076 | 1,191,300 | 1,190,853 | 1,189,844 | 1,193,943 | 1,195,051 |
+| Saving | 18,005 | 17,865 | 16,684 | 16,411 | 13,357 | 12,303 |
+
+Predicted about 6k; measured 12k to 18k; kept. All six complete inside a real
+1,400,000 CU transaction. On chain, a summed proof with one certificate byte
+changed is rejected and a pinned-format proof is rejected. Host tests (39
+pass): the six re-packed fixtures accepted; the two formats reject each
+other; a changed byte rejected in every region, including multiproof nodes,
+slot padding and the certificate; node counts equal to the pinned count
+function and within the slots; the bit-reversed index sets attain exactly 296
+and 254 nodes.
+
+**One transaction through the Pool, summed format** (adapter ELF
+`b04bf96d…31060be`; source `58ff2daf4d7`; replay tool at
+`b9dd44e9e76`). The recorded proof buffers are re-packed into the summed
+format (56,503 bytes with the candidate prefix); the seventh account is left
+as recorded and is not read. The first attempt (adapter ELF A3) failed at an
+account-length check in the adapter wrapper that still expected the pinned
+length; that is fixed in A4 and the failed records are retained.
+
+| | Transfer | Withdrawal |
+|---|---:|---:|
+| Whole transaction | 1,314,472 | 1,320,977 |
+| Pool program (inclusive) | 1,314,116 | 1,320,621 |
+| Nested verifier | 1,217,420 | 1,214,524 |
+| Margin to 1,400,000 | 85,528 | 79,023 |
+| Marker address prefunded with one lamport (three System calls) | 1,318,569 | 1,325,074 |
+| Marker address prefunded with full rent (two System calls) | 1,316,954 | 1,323,459 |
+
+Checks the replay now makes, all passing for both payments:
+
+- the control (deployed verifier, recorded accounts) reproduces the recorded
+  compute units and ends in the recorded final state on every account, apart
+  from the payer's fee (the replayed transaction is unsigned and built as a
+  legacy message). The replay uses devnet's rent, 5,080 lamports per byte,
+  read off the recorded accounts; with LiteSVM's default rent the created
+  marker held a different balance, which the first version of this check
+  caught;
+- the one-transaction run ends in the same final state as the control on
+  every account, the payer's balance included; the proof buffer is not
+  written;
+- the two rejected runs (one certificate byte changed; the recorded
+  pinned-format buffer) change no account apart from the fee charged to the
+  payer for a failed transaction;
+- with the marker address prefunded, the settlement still ends in the same
+  state apart from the payer's balance.
+
+**Not measured.** Root-history page occupancy and rollover, and lane frontier
+patterns other than the two recorded ones. The recorded payments are on a
+young Pool; a rollover needs a different account list and a consistent Pool
+state that the devnet receipts do not contain. The 79k to 86k margin is
+therefore a margin on these two payments plus the two marker variants, not an
+all-input bound.
+
+**Prover and client.** The publish step for the summed format is
+`to_summed_format`, a function of the pinned proof and the public statement;
+it is what the measurement driver and the replay use. Not built: a client
+that uploads the summed proof and sends the single settlement transaction to
+a network, and the programs deployed for it (a new verifier address needs a
+registry entry, and the devnet registry in use is frozen, so a network run
+needs a fresh deployment decision).
