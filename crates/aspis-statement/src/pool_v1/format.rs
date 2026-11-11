@@ -265,7 +265,7 @@ mod tests {
         assert_eq!(&POOL_V1_FORMAT_BINDING[..8], b"ASPPOOL1");
         assert_eq!(
             POOL_V1_FORMAT_BINDING[8..21],
-            [2, 2, 1, 3, 1, 20, 8, 1, 1, 1, 1, 1, 1]
+            [2, 2, 1, 3, 1, 20, 8, 1, 1, 2, 2, 1, 1]
         );
 
         let owner = digest(10);
