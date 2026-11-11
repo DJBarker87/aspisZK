@@ -1,0 +1,60 @@
+R1PublicSourceRawMap.lean:103:73: error: unsolved goals
+c : SemanticPublicWire.Common
+⊢ SemanticPublicWire.encodeBytes32 c.pool ++
+      (SemanticPublicWire.encodeBytes32 c.deploymentDomain ++ SemanticPublicWire.encodeDestination c.destination) =
+    SemanticPublicWire.bindingBytes c
+R1PublicSourceRawMap.lean:124:25: error: unsolved goals
+case transfer
+c : Common
+recipient : Digest
+hc : Canonical (Public.transfer c recipient)
+hn : NonzeroWithdrawal (Public.transfer c recipient)
+⊢ (mapCommon c ⋯).destination = none ∧
+    PublicOptionShape.bindingLengths
+      { variant := R0P.Variant.privateTransfer, anchor := (mapCommon c ⋯).anchor,
+        nullifier := (mapCommon c ⋯).nullifier, assetId := (mapCommon c ⋯).assetId,
+        recipient := some fun i => mapField (recipient i) ⋯, change := (mapCommon c ⋯).change, withdrawalAmount := none,
+        nextPairIndex := ↑(mapCommon c ⋯).nextPairIndex, snapshotFrontier := (mapCommon c ⋯).snapshotFrontier,
+        nextRoot := (mapCommon c ⋯).nextRoot, nextFrontier := (mapCommon c ⋯).nextFrontier,
+        pool := ↑(mapCommon c ⋯).pool, deploymentDomain := ↑(mapCommon c ⋯).deploymentDomain,
+        destination := (mapCommon c ⋯).destination.unattach }
+R1PublicSourceRawMap.lean:126:24: error: unsolved goals
+case withdrawal
+c : Common
+amount : Word
+hc : Canonical (Public.withdrawal c amount)
+hn : NonzeroWithdrawal (Public.withdrawal c amount)
+hm : mapField amount ⋯ ≠ 0
+⊢ (mapCommon c ⋯).destination.isSome = true ∧
+    PublicOptionShape.bindingLengths
+      { variant := R0P.Variant.withdrawal, anchor := (mapCommon c ⋯).anchor, nullifier := (mapCommon c ⋯).nullifier,
+        assetId := (mapCommon c ⋯).assetId, recipient := none, change := (mapCommon c ⋯).change,
+        withdrawalAmount := some (mapField amount ⋯), nextPairIndex := ↑(mapCommon c ⋯).nextPairIndex,
+        snapshotFrontier := (mapCommon c ⋯).snapshotFrontier, nextRoot := (mapCommon c ⋯).nextRoot,
+        nextFrontier := (mapCommon c ⋯).nextFrontier, pool := ↑(mapCommon c ⋯).pool,
+        deploymentDomain := ↑(mapCommon c ⋯).deploymentDomain, destination := (mapCommon c ⋯).destination.unattach }
+'AspisR1.PublicSourceRawMap.rawField_mapField' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicSourceRawMap.toWire_reifies' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicSourceRawMap.serialize_rawPublic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicSourceRawMap.serialize_of_toWire' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicSourceRawMap.mapped_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicSourceRawMap.encode_of_serialize' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicSourceRawMap.decode_of_serialize' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        1.90 real         1.22 user         0.67 sys
+          2818752512  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              224223  page reclaims
+                 120  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   3  voluntary context switches
+                1078  involuntary context switches
+         20322804608  instructions retired
+          6820763281  cycles elapsed
+           453234872  peak memory footprint

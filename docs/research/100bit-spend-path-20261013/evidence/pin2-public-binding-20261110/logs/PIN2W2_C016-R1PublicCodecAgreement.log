@@ -1,0 +1,205 @@
+R1PublicCodecAgreement.lean:23:33: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+R1PublicCodecAgreement.lean:103:4: error: Tactic `rfl` failed: The left-hand side
+  PublicByteCodec.WireOK
+    { variant := R0P.Variant.privateTransfer, anchor := anchor, nullifier := nullifier, assetId := assetId,
+      recipient := some recipient, change := change, withdrawalAmount := none, nextPairIndex := ↑index,
+      snapshotFrontier := snapshot, nextRoot := root, nextFrontier := frontier, pool := ↑pool,
+      deploymentDomain := ↑domain, destination := none }
+is not definitionally equal to the right-hand side
+  FixedWidthDecoder.encode PublicByteCodec.encodeDigest snapshot ++
+      (FixedWidthDecoder.encode ExactLeafFieldCodec.encodeM31 root ++
+        (FixedWidthDecoder.encode PublicByteCodec.encodeDigest frontier ++ (↑pool ++ (↑domain ++ [0])))) =
+    FixedWidthDecoder.encode PublicFieldBlockCodec.encodeDigest snapshot ++
+      (FixedWidthDecoder.encode ExactLeafFieldCodec.encodeM31 root ++
+        (FixedWidthDecoder.encode PublicFieldBlockCodec.encodeDigest frontier ++ (↑pool ++ (↑domain ++ [0]))))
+
+case transfer.none
+recipient anchor nullifier : SemanticPublicWire.Digest
+assetId : SemanticPublicWire.M31
+change : SemanticPublicWire.Digest
+index : PublicIndexCodec.Index
+snapshot : SemanticPublicWire.Frontier
+root : SemanticPublicWire.Digest
+frontier : SemanticPublicWire.Frontier
+pool domain : SemanticPublicWire.Bytes32
+⊢ PublicByteCodec.WireOK
+      { variant := R0P.Variant.privateTransfer, anchor := anchor, nullifier := nullifier, assetId := assetId,
+        recipient := some recipient, change := change, withdrawalAmount := none, nextPairIndex := ↑index,
+        snapshotFrontier := snapshot, nextRoot := root, nextFrontier := frontier, pool := ↑pool,
+        deploymentDomain := ↑domain, destination := none } ∧
+    FixedWidthDecoder.encode PublicByteCodec.encodeDigest snapshot ++
+        (FixedWidthDecoder.encode ExactLeafFieldCodec.encodeM31 root ++
+          (FixedWidthDecoder.encode PublicByteCodec.encodeDigest frontier ++ (↑pool ++ (↑domain ++ [0])))) =
+      FixedWidthDecoder.encode PublicFieldBlockCodec.encodeDigest snapshot ++
+        (FixedWidthDecoder.encode ExactLeafFieldCodec.encodeM31 root ++
+          (FixedWidthDecoder.encode PublicFieldBlockCodec.encodeDigest frontier ++ (↑pool ++ (↑domain ++ [0]))))
+R1PublicCodecAgreement.lean:103:4: error: Tactic `rfl` failed: The left-hand side
+  PublicByteCodec.WireOK
+    { variant := R0P.Variant.privateTransfer, anchor := anchor, nullifier := nullifier, assetId := assetId,
+      recipient := some recipient, change := change, withdrawalAmount := none, nextPairIndex := ↑index,
+      snapshotFrontier := snapshot, nextRoot := root, nextFrontier := frontier, pool := ↑pool,
+      deploymentDomain := ↑domain, destination := some ↑val✝ }
+is not definitionally equal to the right-hand side
+  FixedWidthDecoder.encode PublicByteCodec.encodeDigest snapshot ++
+      (FixedWidthDecoder.encode ExactLeafFieldCodec.encodeM31 root ++
+        (FixedWidthDecoder.encode PublicByteCodec.encodeDigest frontier ++ (↑pool ++ (↑domain ++ 1 :: ↑val✝)))) =
+    FixedWidthDecoder.encode PublicFieldBlockCodec.encodeDigest snapshot ++
+      (FixedWidthDecoder.encode ExactLeafFieldCodec.encodeM31 root ++
+        (FixedWidthDecoder.encode PublicFieldBlockCodec.encodeDigest frontier ++ (↑pool ++ (↑domain ++ 1 :: ↑val✝))))
+
+case transfer.some
+recipient anchor nullifier : SemanticPublicWire.Digest
+assetId : SemanticPublicWire.M31
+change : SemanticPublicWire.Digest
+index : PublicIndexCodec.Index
+snapshot : SemanticPublicWire.Frontier
+root : SemanticPublicWire.Digest
+frontier : SemanticPublicWire.Frontier
+pool domain val✝ : SemanticPublicWire.Bytes32
+⊢ PublicByteCodec.WireOK
+      { variant := R0P.Variant.privateTransfer, anchor := anchor, nullifier := nullifier, assetId := assetId,
+        recipient := some recipient, change := change, withdrawalAmount := none, nextPairIndex := ↑index,
+        snapshotFrontier := snapshot, nextRoot := root, nextFrontier := frontier, pool := ↑pool,
+        deploymentDomain := ↑domain, destination := some ↑val✝ } ∧
+    FixedWidthDecoder.encode PublicByteCodec.encodeDigest snapshot ++
+        (FixedWidthDecoder.encode ExactLeafFieldCodec.encodeM31 root ++
+          (FixedWidthDecoder.encode PublicByteCodec.encodeDigest frontier ++ (↑pool ++ (↑domain ++ 1 :: ↑val✝)))) =
+      FixedWidthDecoder.encode PublicFieldBlockCodec.encodeDigest snapshot ++
+        (FixedWidthDecoder.encode ExactLeafFieldCodec.encodeM31 root ++
+          (FixedWidthDecoder.encode PublicFieldBlockCodec.encodeDigest frontier ++ (↑pool ++ (↑domain ++ 1 :: ↑val✝))))
+R1PublicCodecAgreement.lean:103:4: error: Tactic `rfl` failed: The left-hand side
+  PublicByteCodec.WireOK
+    { variant := R0P.Variant.withdrawal, anchor := anchor, nullifier := nullifier, assetId := assetId,
+      recipient := none, change := change, withdrawalAmount := some amount, nextPairIndex := ↑index,
+      snapshotFrontier := snapshot, nextRoot := root, nextFrontier := frontier, pool := ↑pool,
+      deploymentDomain := ↑domain, destination := none }
+is not definitionally equal to the right-hand side
+  FixedWidthDecoder.encode PublicByteCodec.encodeDigest snapshot ++
+      (FixedWidthDecoder.encode ExactLeafFieldCodec.encodeM31 root ++
+        (FixedWidthDecoder.encode PublicByteCodec.encodeDigest frontier ++ (↑pool ++ (↑domain ++ [0])))) =
+    FixedWidthDecoder.encode PublicFieldBlockCodec.encodeDigest snapshot ++
+      (FixedWidthDecoder.encode ExactLeafFieldCodec.encodeM31 root ++
+        (FixedWidthDecoder.encode PublicFieldBlockCodec.encodeDigest frontier ++ (↑pool ++ (↑domain ++ [0]))))
+
+case withdrawal.none
+amount : SemanticPublicWire.M31
+anchor nullifier : SemanticPublicWire.Digest
+assetId : SemanticPublicWire.M31
+change : SemanticPublicWire.Digest
+index : PublicIndexCodec.Index
+snapshot : SemanticPublicWire.Frontier
+root : SemanticPublicWire.Digest
+frontier : SemanticPublicWire.Frontier
+pool domain : SemanticPublicWire.Bytes32
+⊢ PublicByteCodec.WireOK
+      { variant := R0P.Variant.withdrawal, anchor := anchor, nullifier := nullifier, assetId := assetId,
+        recipient := none, change := change, withdrawalAmount := some amount, nextPairIndex := ↑index,
+        snapshotFrontier := snapshot, nextRoot := root, nextFrontier := frontier, pool := ↑pool,
+        deploymentDomain := ↑domain, destination := none } ∧
+    FixedWidthDecoder.encode PublicByteCodec.encodeDigest snapshot ++
+        (FixedWidthDecoder.encode ExactLeafFieldCodec.encodeM31 root ++
+          (FixedWidthDecoder.encode PublicByteCodec.encodeDigest frontier ++ (↑pool ++ (↑domain ++ [0])))) =
+      FixedWidthDecoder.encode PublicFieldBlockCodec.encodeDigest snapshot ++
+        (FixedWidthDecoder.encode ExactLeafFieldCodec.encodeM31 root ++
+          (FixedWidthDecoder.encode PublicFieldBlockCodec.encodeDigest frontier ++ (↑pool ++ (↑domain ++ [0]))))
+R1PublicCodecAgreement.lean:103:4: error: Tactic `rfl` failed: The left-hand side
+  PublicByteCodec.WireOK
+    { variant := R0P.Variant.withdrawal, anchor := anchor, nullifier := nullifier, assetId := assetId,
+      recipient := none, change := change, withdrawalAmount := some amount, nextPairIndex := ↑index,
+      snapshotFrontier := snapshot, nextRoot := root, nextFrontier := frontier, pool := ↑pool,
+      deploymentDomain := ↑domain, destination := some ↑val✝ }
+is not definitionally equal to the right-hand side
+  FixedWidthDecoder.encode PublicByteCodec.encodeDigest snapshot ++
+      (FixedWidthDecoder.encode ExactLeafFieldCodec.encodeM31 root ++
+        (FixedWidthDecoder.encode PublicByteCodec.encodeDigest frontier ++ (↑pool ++ (↑domain ++ 1 :: ↑val✝)))) =
+    FixedWidthDecoder.encode PublicFieldBlockCodec.encodeDigest snapshot ++
+      (FixedWidthDecoder.encode ExactLeafFieldCodec.encodeM31 root ++
+        (FixedWidthDecoder.encode PublicFieldBlockCodec.encodeDigest frontier ++ (↑pool ++ (↑domain ++ 1 :: ↑val✝))))
+
+case withdrawal.some
+amount : SemanticPublicWire.M31
+anchor nullifier : SemanticPublicWire.Digest
+assetId : SemanticPublicWire.M31
+change : SemanticPublicWire.Digest
+index : PublicIndexCodec.Index
+snapshot : SemanticPublicWire.Frontier
+root : SemanticPublicWire.Digest
+frontier : SemanticPublicWire.Frontier
+pool domain val✝ : SemanticPublicWire.Bytes32
+⊢ PublicByteCodec.WireOK
+      { variant := R0P.Variant.withdrawal, anchor := anchor, nullifier := nullifier, assetId := assetId,
+        recipient := none, change := change, withdrawalAmount := some amount, nextPairIndex := ↑index,
+        snapshotFrontier := snapshot, nextRoot := root, nextFrontier := frontier, pool := ↑pool,
+        deploymentDomain := ↑domain, destination := some ↑val✝ } ∧
+    FixedWidthDecoder.encode PublicByteCodec.encodeDigest snapshot ++
+        (FixedWidthDecoder.encode ExactLeafFieldCodec.encodeM31 root ++
+          (FixedWidthDecoder.encode PublicByteCodec.encodeDigest frontier ++ (↑pool ++ (↑domain ++ 1 :: ↑val✝)))) =
+      FixedWidthDecoder.encode PublicFieldBlockCodec.encodeDigest snapshot ++
+        (FixedWidthDecoder.encode ExactLeafFieldCodec.encodeM31 root ++
+          (FixedWidthDecoder.encode PublicFieldBlockCodec.encodeDigest frontier ++ (↑pool ++ (↑domain ++ 1 :: ↑val✝))))
+R1PublicCodecAgreement.lean:94:8: warning: This simp argument is unused:
+  toPublic_wireOK
+
+Hint: Omit it from the simp argument list.
+  simp [
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1.PublicByteCodec.encode,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1.PublicByteCodec.publicCodec,
+       ̵ ̵ ̵ ̵AspisR1.PublicByteCodec.publicFieldsEquiv,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1.PublicByteCodec.toFields,
+       ̵ ̵ ̵ ̵AspisR1.PublicByteCodec.fieldsCodec,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1.PublicByteCodec.PrefixCodec.transport,
+       ̵ ̵ ̵ ̵AspisR1.PublicByteCodec.PrefixCodec.pair,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1.PublicByteCodec.PrefixCodec.fixed,
+       ̵ ̵ ̵ ̵AspisR1.PublicByteCodec.PrefixCodec.option,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1.PublicByteCodec.variantCodec,
+       ̵ ̵ ̵ ̵AspisR1.PublicByteCodec.digestCodec,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1.PublicByteCodec.m31Codec,
+       ̵ ̵ ̵ ̵AspisR1.PublicByteCodec.frontierCodec,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1.PublicByteCodec.bytes32Codec,
+       ̵ ̵ ̵ ̵AspisR1.PublicByteCodec.destOf,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1.PublicByteCodec.encodeFrontier,
+       ̵ ̵ ̵ ̵AspisR1.PublicByteCodec.encodeDigest,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1.PublicFieldBlockCodec.encodeDigest,
+       ̵ ̵ ̵ ̵AspisR1.PublicFieldBlockCodec.encodeFields,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1.PublicFieldBlockCodec.encodeFrontier,
+       ̵ ̵ ̵ ̵t̵o̵P̵u̵b̵l̵i̵c̵_̵w̵i̵r̵e̵O̵K̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1.SemanticPublicWire.toPublic,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1.SemanticPublicWire.encode,
+       ̵ ̵ ̵ ̵AspisR1.SemanticPublicWire.header,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1.SemanticPublicWire.afterBytes,
+       ̵ ̵ ̵ ̵AspisR1.SemanticPublicWire.bindingBytes,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1.SemanticPublicWire.encodeBytes32,
+       ̵ ̵ ̵ ̵AspisR1.SemanticPublicWire.encodeDestination,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵u64_emit_eq_index_encode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PublicCodecAgreement.u64_emit_eq_index_encode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicCodecAgreement.toPublic_wireOK' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicCodecAgreement.encode_toPublic_eq_wire_encode' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        6.89 real         6.23 user         0.66 sys
+          2851569664  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              226834  page reclaims
+                   7  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                1084  involuntary context switches
+         75740635031  instructions retired
+         25261029407  cycles elapsed
+           483643552  peak memory footprint
