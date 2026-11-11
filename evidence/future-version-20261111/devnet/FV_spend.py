@@ -24,6 +24,13 @@ withdrawal). Differences, per payment:
     of the seed-derived accounts and signs every other transaction of the payment; the close
     empties it. Nothing but the nullifier marker rent and the fees stays spent.
 Production path per payment: 1 + 15 + 1 + 1 = 18 transactions, one of them signed by the payer.
+
+Config "mode": "evidence" (default) is the flow above: every transaction awaited to finality and
+recorded, with the negative tests. "mode": "timing" pays the way a wallet would and measures it:
+all 18 transactions of a payment are signed first (one blockhash), then sent in four phases
+(open; the 15 writes together; settlement; close), each phase awaited to confirmation only. The
+clock runs from the first send. No negative tests in that mode; the same validation and accounting
+run afterwards on the finalized transactions.
 Never deploys. Run against devnet only with the owner's go.
 """
 import base64, json, os, pathlib, re, subprocess, sys, time
@@ -50,6 +57,7 @@ def rpc(url, method, params):
 
 L.rpc = NPC_record.rpc = rpc
 CU_LIMIT = 1_400_000
+MODE = C.get('mode', 'evidence'); assert MODE in ('evidence', 'timing')
 EXPECTED = C.get('expected_negative_errors')     # pinned from the rehearsal for a network run
 
 
@@ -113,6 +121,94 @@ def send_together(label, names, instructions, keys, sender):
         L.write(label + '-sent-together', timing)
     results = [sender(n, [i]) for n, i in zip(names, instructions)]
     return results, timing
+
+
+SEND_URLS = C.get('send_urls') or [URL]      # a payment's transactions are broadcast to every endpoint listed
+
+
+def post(url, method, params):
+    """One JSON-RPC call, no pacing, no retry. Errors never carry the endpoint URL (it may hold an API key)."""
+    import urllib.request, urllib.error
+    req = urllib.request.Request(url, json.dumps({'jsonrpc': '2.0', 'id': 1, 'method': method, 'params': params}).encode(), {'Content-Type': 'application/json'})
+    try:
+        with urllib.request.urlopen(req, timeout=30) as r:
+            v = json.load(r)
+    except urllib.error.HTTPError as e:
+        raise RuntimeError(f'HTTP {e.code}') from None
+    except OSError as e:
+        raise RuntimeError(type(e).__name__) from None
+    if 'error' in v:
+        raise RuntimeError(v['error'])
+    return v['result']
+
+
+def rpc_now(method, params):
+    """A status read without the shared pacing, retried briefly."""
+    for attempt in range(6):
+        try:
+            return post(URL, method, params)
+        except RuntimeError:
+            if attempt == 5:
+                raise
+            time.sleep(0.4 * (attempt + 1))
+
+
+def broadcast(signed_hex):
+    """Send one signed transaction to every endpoint; it is enough that one accepts it (the signature can land once)."""
+    wire = base64.b64encode(bytes.fromhex(signed_hex)).decode(); accepted = 0; refused = []
+    for u in SEND_URLS:
+        try:
+            post(u, 'sendTransaction', [wire, {'encoding': 'base64', 'skipPreflight': True, 'maxRetries': 5}]); accepted += 1
+        except RuntimeError as e:
+            refused.append(str(e)[:120])
+    if not accepted:
+        raise RuntimeError(f'no endpoint accepted the transaction: {refused}')
+    return accepted
+
+
+def wallet_payment(label, phases):
+    """Sign everything, then send phase by phase, waiting for confirmation only. phases: [(phase, [(name, instructions, keys)])].
+
+    Each signed transaction is retained as an attempt record before anything is sent, so the evidence
+    path that follows reconciles it by name at finality instead of sending it again.
+    """
+    bh = rpc(URL, 'getLatestBlockhash', [{'commitment': 'confirmed'}])['value']
+    t_sign = time.monotonic(); signed = {}
+    for _, txs in phases:
+        for name, ixs, keys in txs:
+            signed[name] = L.invoke({'keys': keys, 'instructions': ixs, 'blockhash': bh['blockhash']})
+    sign_seconds = time.monotonic() - t_sign; started = time.time()
+    for name, t in signed.items():
+        L.write(f'{name}-attempt-0', {'signature': t['signature'], 'blockhash': bh, 'simulation_error': None, 'serialized_bytes': t['bytes'],
+                                      'started_unix': started, 'wallet_mode': True})
+    t0 = time.monotonic(); rows = []
+    for phase, txs in phases:
+        begin = time.monotonic() - t0; sigs = [signed[name]['signature'] for name, _, _ in txs]
+        from concurrent.futures import ThreadPoolExecutor
+        with ThreadPoolExecutor(max_workers=16) as workers:      # a phase's transactions leave concurrently
+            accepted = list(workers.map(broadcast, [signed[name]['hex'] for name, _, _ in txs]))
+        sent = time.monotonic() - t0
+        while True:
+            st = rpc_now('getSignatureStatuses', [sigs])['value']
+            bad = [x['err'] for x in st if x and x['err']]
+            if bad:
+                raise RuntimeError(f'{label} {phase}: transaction failed: {bad}')
+            if all(x and x['confirmationStatus'] in ('confirmed', 'finalized') for x in st):
+                break
+            if time.monotonic() - t0 > 75:
+                raise RuntimeError(f'{label} {phase}: not confirmed in 75 s')
+            time.sleep(0.35)
+        rows.append({'phase': phase, 'transactions': len(txs), 'endpoints_accepting': sorted(set(accepted)), 'begin_seconds': begin, 'sent_seconds': sent,
+                     'confirmed_seconds': time.monotonic() - t0, 'slots': sorted({x['slot'] for x in st})})
+    by = {r['phase']: r for r in rows}
+    out = {'clock': 'wall seconds from the first send, all transactions signed beforehand; confirmation, not finality',
+           'send_endpoints': len(SEND_URLS),
+           'signing_seconds_in_this_harness': sign_seconds, 'phases': rows,
+           'first_send_to_settled_seconds': by['settle']['confirmed_seconds'], 'first_send_to_closed_seconds': by['close']['confirmed_seconds'],
+           'slots_from_open_to_settle': by['settle']['slots'][-1] - by['open']['slots'][0]}
+    L.write(label + '-wallet-timing', out)
+    print(label, 'wallet-timing', json.dumps(out), flush=True)
+    return out
 
 
 L.write('retained-payer', require_key(L.PAYER_KEY, L.CLI, C['payer']))
@@ -206,30 +302,45 @@ for n, label in enumerate(['transfer', 'withdrawal']):
     # rent the settlement spends, the fees of the session key's transactions (15 writes, settlement, close; plus
     # this run's seven test transactions), and a margin that keeps the key rent-exempt in between. All but the
     # marker rent and the fees returns in the close.
-    session_transactions = 15 + 1 + 1 + 7; margin = 3_000_000
+    session_transactions = 15 + 1 + 1 + (7 if MODE == 'evidence' else 0); margin = 3_000_000
     fund = rent_proof + rent_cp + rent_marker + session_transactions * FEE1 + margin
+    open_ixs = [transfer(C['payer'], session, fund), mk_proof['instruction'], mk_cp['instruction'], tail['instructions'][0]]
+    w = splan('pin2_writes', seed=proof_entry['seed'], body=proof[:full].hex())
+    assert w['address'] == proof_entry['address'] and w['chunk'] == L.CHUNK and w['count'] == 15
+    close_ixs = lambda sweep: [splan('pin2_close_one', kind='upload', owner=UP, seed=proof_entry['seed']),
+                               splan('pin2_close_one', kind='checkpoint', owner=P['verifier'], seed=cpe['seed']),
+                               transfer(session, C['payer'], sweep)]
+    if MODE == 'timing' and not (O / (label + '-wallet-timing.json')).exists() and not (O / (label + '-open.json')).exists() and not list(O.glob(label + '-open-attempt-*.json')):
+        assert L.account(session)['value'] is None, 'session key already has an account'
+        L.write(label + '-payer-before', {'payer_lamports': balance(C['payer']), 'fund_lamports': fund})
+        # Known in advance: the session key pays the two rents, 15 writes and the settlement (which also spends the marker rent).
+        session_before_close = fund - rent_proof - rent_cp - rent_marker - 16 * FEE1
+        L.write(label + '-close-before', {'accounts': {proof_entry['address']: rent_proof, verifiercp: rent_cp}, 'session_lamports': session_before_close, 'computed_in_advance': True})
+        wallet_payment(label, [('open', [(label + '-open', open_ixs, [L.PAYER_KEY, sessionkey])]),
+                               ('writes', [(f'{label}-proof-upload-{i}', [one], [sessionkey]) for i, one in enumerate(w['instructions'])]),
+                               ('settle', [(label + '-settle', [p['settle']], [sessionkey])]),
+                               ('close', [(label + '-close', close_ixs(session_before_close + rent_proof + rent_cp - FEE1), [sessionkey])])])
     started = O / (label + '-payer-before.json')
     if not started.exists():
         assert L.account(session)['value'] is None, 'session key already has an account'
         L.write(label + '-payer-before', {'payer_lamports': balance(C['payer']), 'fund_lamports': fund})
     payer_before = json.loads(started.read_text())['payer_lamports']
-    L.send(label + '-open', [transfer(C['payer'], session, fund), mk_proof['instruction'], mk_cp['instruction'], tail['instructions'][0]], [L.PAYER_KEY, sessionkey])
-    w = splan('pin2_writes', seed=proof_entry['seed'], body=proof[:full].hex())
-    assert w['address'] == proof_entry['address'] and w['chunk'] == L.CHUNK and w['count'] == 15
+    L.send(label + '-open', open_ixs, [L.PAYER_KEY, sessionkey])
     if C.get('uploads_together', True):
         ups, together = send_together(label + '-proof-upload', [f'{label}-proof-upload-{i}' for i in range(15)], w['instructions'], [sessionkey], send)
     else:
         ups, together = [send(f'{label}-proof-upload-{i}', [one]) for i, one in enumerate(w['instructions'])], None
-    assert bytes.fromhex(L.readhex(proof_entry['address'], UP)) == proof, 'upload readback differs'
-    cpv = L.account(verifiercp)['value']
-    assert cpv['owner'] == P['verifier'] and not any(base64.b64decode(cpv['data'][0])), 'checkpoint account is not a zeroed verifier-owned account'
+    if MODE == 'evidence':
+        assert bytes.fromhex(L.readhex(proof_entry['address'], UP)) == proof, 'upload readback differs'
+        cpv = L.account(verifiercp)['value']
+        assert cpv['owner'] == P['verifier'] and not any(base64.b64decode(cpv['data'][0])), 'checkpoint account is not a zeroed verifier-owned account'
     L.write(label + '-uploads-phase', {'proof_count': len(ups), 'tail_bytes_in_open': len(proof) - full, 'compute_units': sum(s['compute_units'] for s in ups),
                                        'sent_together': together, 'slots': sorted({s['slot'] for s in ups})})
     # 3. Negatives before the settlement: a changed byte must make the ONE transaction fail and leave state alone.
     protected = [p['marker'], p['output_lane'], p['page'], setup['vault'], dest, setup['master'], verifiercp]
-    before = {a: L.account(a)['value'] for a in protected}
-    assert before[p['marker']] is None, 'nullifier marker exists before the settlement'
-    for name, at in [('cert', L.AFTERSTATE_BYTES + p['off_certificate']), ('node', L.AFTERSTATE_BYTES + p['off_nodes'])]:
+    before = {a: L.account(a)['value'] for a in protected} if MODE == 'evidence' else {}
+    assert MODE == 'timing' or before[p['marker']] is None, 'nullifier marker exists before the settlement'
+    for name, at in [('cert', L.AFTERSTATE_BYTES + p['off_certificate']), ('node', L.AFTERSTATE_BYTES + p['off_nodes'])] if MODE == 'evidence' else []:
         change = splan('pin2_writes', seed=proof_entry['seed'], body=bytes([proof[at] ^ 1]).hex(), offset=at)['instructions'][0]
         send(f'{label}-{name}-mutate', [change])
         bad = send(f'{label}-{name}-settle', [p['settle']], negative=True)
@@ -241,13 +352,13 @@ for n, label in enumerate(['transfer', 'withdrawal']):
         undo = splan('pin2_writes', seed=proof_entry['seed'], body=proof[at:at + 1].hex(), offset=at)['instructions'][0]
         send(f'{label}-{name}-restore', [undo])
         L.write(f'{label}-{name}-validation', {'offset_in_account': at, 'error': bad['error'], 'compute_units': bad['compute_units'], 'protected_accounts_unchanged': True})
-    assert bytes.fromhex(L.readhex(proof_entry['address'], UP)) == proof, 'proof not restored'
+    assert MODE == 'timing' or bytes.fromhex(L.readhex(proof_entry['address'], UP)) == proof, 'proof not restored'
     # 4. THE transaction: verification and settlement.
     settled = send(label + '-settle', [p['settle']])
     assert settled['compute_units'] < CU_LIMIT
     readback = {a: L.account(a) for a in [p['marker'], p['output_lane'], setup['vault'], dest, verifiercp]}; L.write(label + '-readback', readback)
     assert readback[p['marker']]['value'] is not None, 'settled nullifier marker missing'
-    assert readback[verifiercp]['value'] == before[verifiercp], 'the unread checkpoint account changed'
+    assert MODE == 'timing' or readback[verifiercp]['value'] == before[verifiercp], 'the unread checkpoint account changed'
     validation = plan('validate_settlement', note=n, lane_bytes=base64.b64decode(readback[p['output_lane']]['value']['data'][0]).hex(),
                       marker_bytes=base64.b64decode(readback[p['marker']]['value']['data'][0]).hex(), candidate_bytes=proof[:L.AFTERSTATE_BYTES].hex())
     L.write(label + '-settlement-validation', validation)
@@ -256,10 +367,11 @@ for n, label in enumerate(['transfer', 'withdrawal']):
     assert (vault_amount, destination_amount) == ((2000, 0) if n == 0 else (1750, 250)), 'settlement SPL balance mismatch'
     L.write(label + '-token-balances', {'vault': vault_amount, 'destination': destination_amount})
     # 5. Replay.
-    replay = send(label + '-replay', [p['settle']], negative=True)
-    assert replay['error'] == {'InstructionError': [0, {'Custom': 0x41532026}]}, 'replay did not reject as NullifierAlreadyConsumed'
-    assert all(readback[a]['value'] == L.account(a)['value'] for a in readback), 'replay changed protected state'
-    L.write(label + '-replay-validation', {'error_name': 'NullifierAlreadyConsumed', 'custom_code': 0x41532026, 'protected_accounts_unchanged': True})
+    if MODE == 'evidence':
+        replay = send(label + '-replay', [p['settle']], negative=True)
+        assert replay['error'] == {'InstructionError': [0, {'Custom': 0x41532026}]}, 'replay did not reject as NullifierAlreadyConsumed'
+        assert all(readback[a]['value'] == L.account(a)['value'] for a in readback), 'replay changed protected state'
+        L.write(label + '-replay-validation', {'error_name': 'NullifierAlreadyConsumed', 'custom_code': 0x41532026, 'protected_accounts_unchanged': True})
     # 6. Close and sweep: one transaction, fixed order [proof, checkpoint, everything back to the payer].
     closing = [proof_entry['address'], verifiercp]
     held = O / (label + '-close-before.json')
@@ -270,9 +382,7 @@ for n, label in enumerate(['transfer', 'withdrawal']):
     held_state = json.loads(held.read_text()); rent_closed = sum(held_state['accounts'].values())
     assert rent_closed == rent_proof + rent_cp
     sweep = held_state['session_lamports'] + rent_closed - FEE1
-    send(label + '-close', [splan('pin2_close_one', kind='upload', owner=UP, seed=proof_entry['seed']),
-                            splan('pin2_close_one', kind='checkpoint', owner=P['verifier'], seed=cpe['seed']),
-                            transfer(session, C['payer'], sweep)])
+    send(label + '-close', close_ixs(sweep))
     after = {a: L.account(a)['value'] for a in closing + [session]}
     assert all(v is None or v['lamports'] == 0 for v in after.values()), 'closed account or session key still funded'
     payer_after = balance(C['payer'])
@@ -295,7 +405,7 @@ for n, label in enumerate(['transfer', 'withdrawal']):
     left = sum(v['lamports'] for v in live.values())
     assert left == rent_marker and -delta == fees + left, 'payer balance change != fees + marker rent'
     recovered = fund - (-delta - FEE2)      # what came back of the funding
-    tests = {f'{label}-{x}' for x in ('cert-mutate', 'cert-settle', 'cert-restore', 'node-mutate', 'node-settle', 'node-restore', 'replay')}
+    tests = {f'{label}-{x}' for x in ('cert-mutate', 'cert-settle', 'cert-restore', 'node-mutate', 'node-settle', 'node-restore', 'replay')} if MODE == 'evidence' else set()
     prod = [k for k in names if k not in tests]
     assert len(prod) == 18 and set(tests) <= set(names), f'production path is not 18 transactions: {prod}'
     test_fees = sum(txs[k]['meta']['fee'] for k in tests)
@@ -311,7 +421,8 @@ for n, label in enumerate(['transfer', 'withdrawal']):
                        'rent_closed_lamports': rent_closed,
                        'left_live': {a: {'owner': v['owner'], 'lamports': v['lamports'], 'role': 'nullifier marker' if a == p['marker'] else 'root page'} for a, v in live.items()},
                        'left_lamports': left, 'check_payer_delta_eq_fees_plus_left': True, 'closed': closing + [session],
-                       'negatives': {name: json.loads((O / f'{label}-{name}-validation.json').read_text()) for name in ('cert', 'node')}}
+                       'negatives': {name: json.loads((O / f'{label}-{name}-validation.json').read_text()) for name in ('cert', 'node')} if MODE == 'evidence' else None,
+                       'wallet_timing': json.loads((O / (label + '-wallet-timing.json')).read_text()) if MODE == 'timing' else None}
     L.write(label + '-close-accounting', payments[label])
 created = set()
 for receipt in O.glob('*-transaction.json'):
@@ -328,7 +439,7 @@ L.write('rent-ledger', ledger)
 L.write('complete', {'route': 'future-version one-transaction (summed format)', 'settled': ['transfer', 'withdrawal'],
                      'settle_compute_units': {k: v['settle']['compute_units'] for k, v in payments.items()},
                      'negative_errors': observed_errors, 'closed_per_payment': {k: v['closed'] for k, v in payments.items()},
-                     'negative_checks': [f'{l}-{x}' for l in payments for x in ('cert-settle', 'node-settle', 'replay')],
+                     'mode': MODE, 'negative_checks': [f'{l}-{x}' for l in payments for x in ('cert-settle', 'node-settle', 'replay')] if MODE == 'evidence' else [],
                      'mint': mint, 'source': source, 'destination': dest, 'fixture_witnesses_public': True, 'programs': P,
                      'upload_program': UP, 'payer': C['payer'], 'key_namespace': ns, 'payments': payments})
 print(json.dumps({'settle_compute_units': {k: v['settle']['compute_units'] for k, v in payments.items()}, 'negative_errors': observed_errors}))

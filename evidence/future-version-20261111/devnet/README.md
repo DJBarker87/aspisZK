@@ -109,3 +109,54 @@ now waits for it.
 | Two nullifier markers | 3,413,760 expected | the double-spend record; permanent by design |
 
 Everything a payment creates besides its marker is closed by that payment.
+
+## Results of the registered run (devnet, 2026-11-11, 13:30 to 13:46 UTC)
+
+Receipts: receipts/FV_spend (71 transactions with the cleanup). The run stopped once, six
+transactions in, on the public endpoint's transient history error (-32019) after
+destination-initialize had landed; it was resumed with a bounded retry for that error
+(b70dcc3fe4a). That one transaction has no before/after recording; its finalized metadata is kept.
+
+| Prediction | Result |
+|---|---|
+| 1. Transfer settles in one transaction, 1,309,000 to 1,321,000 | Settled at 1,308,068. MISSED by 932 below the band. Margin to the limit 91,932. |
+| 1. Withdrawal settles in one transaction, 1,317,000 to 1,331,000 | Settled at 1,321,318. Met. Margin 78,682. |
+| 2. Changed certificate byte rejected, 1,285,000 to 1,312,000 | InvalidInstructionData after 1,288,670 and 1,298,768. Met. |
+| 2. Changed node byte rejected, 650,000 to 680,000 | InvalidInstructionData after 658,327 and 665,434. Met. |
+| 2. Replay rejected, protected accounts unchanged | Custom 0x41532026 both times, accounts unchanged. Met. |
+| 3. 18 transactions per payment, payer signs one, fees 20,000 and 15,000 | Met for both payments. |
+| 4. Payer balance change 2,086,880 per payment (1,981,880 without tests) | 2,086,880 and 1,981,880 for both. Session key, proof account and checkpoint gone. Met. |
+| 5. 15 writes confirmed within 15 s, none re-sent | 10.57 s and 10.65 s, none re-sent. Met, but the figure measures this script: the shared transport spaces calls 0.65 s apart, so the sends took 9.2 s to leave and landed in 15 different slots. |
+| 6. Cleanup returns 2,976,880 lamports | 2,976,880. Met. |
+| 7. Payer ends between 15.752 and 15.755 SOL | 15.753457781 SOL. Met. The run cost 137,087,000 lamports outside the deployment. |
+
+Settlement transactions:
+transfer 2S8hoUe1QYg8YsD8eYzEzdkpSNTHpjVQysVDvNi8VJRmQcNuNtpJYpb5dtrycNaRiinrikCg3GQzk2MwKi6EV9Fg,
+withdrawal 3bHPFX7FVCWFmi374UEtDTsr9jqNQ9tzzbmq948qG1KwVweL9hi6vvGSprCMeekaaviXsMySsuqTv69eMboAPhYb.
+
+The missed band: the transfer has now been measured at 1,308,068 (devnet), 1,310,614, 1,315,160 and
+1,316,145 (local validator) and 1,314,172 (replay of the PIN2 proof). The spread between proofs is
+about 8,100 compute units; the band was 12,000 wide but centred too high.
+
+What this run is: a fixture measurement on one fresh Pool state with two proofs. It is not a
+bound over all inputs. Root-page rollover and a Pool with a long history were not exercised.
+
+## Timing run: what it is and its predictions (registered before its first signature)
+
+The same deployed verifier, a second fresh mint and Pool state (key namespace FV_timing), two
+payments in "mode": "timing": all 18 transactions of a payment are signed first, then sent in four
+phases (open; the 15 writes at once; settlement; close), each awaited to confirmation only, each
+transaction broadcast to two endpoints (a private RPC endpoint and the public one). No negative
+tests. The clock starts at the first send. Proving time is not part of it. The same validation and
+accounting then run on the finalized transactions.
+
+Rehearsal on the local validator (local5): first send to settlement confirmed 1.06 s for both
+payments; open, writes and settlement in three consecutive slots; accounting exact.
+
+1. Both payments settle. Settlement compute units: transfer 1,303,000 to 1,321,000, withdrawal
+   1,315,000 to 1,331,000.
+2. First send to settlement confirmed: under 8 seconds for each payment, and at most 15 slots from
+   the open to the settlement.
+3. The 15 writes are confirmed within 3 seconds of the start of their phase; none is re-sent.
+4. 18 transactions per payment, the payer signs one; the payer's balance falls by 1,981,880
+   lamports per payment; session key, proof account and checkpoint gone.
