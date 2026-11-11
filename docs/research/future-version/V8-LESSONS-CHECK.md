@@ -177,6 +177,14 @@ strengthens the statement, changes no code and touches nothing published. Its co
 a source-level proof of the Pool's withdrawal path, and one new trust row of the runtime class
 for the SPL Token transfer the Pool calls.
 
+**Owner's answer, 2026-11-11: "i say yes".** For Aspis the Pool's payout is inside the proved
+game: the headline is to carry a conjunct that an accepted withdrawal's settlement pays the amount
+to the destination token account of the public statement the proof is bound to, for the Pool and
+deployment it names. The trust row for the SPL Token transfer the Pool calls is accepted for
+Aspis as a runtime-class row. This is a decision about the statement to be proved; the conjunct is
+not proved, and until it is, the wording above ("what may be said about Aspis") stands. It does
+not decide the same question (L159) for R1.
+
 ## V8 soundness failures and Aspis
 
 | V8 failure | Where it could recur in Aspis | Status |
