@@ -188,10 +188,21 @@ Supporting lemmas are `first`, `prefix_nonempty`, `words_noninitial`, `frontier_
 
 So the six NHG statements named by the lead keep their constants (seven counting `frontier_domain`), and `returned` moves to ≤ 1524, as predicted in section 1. These are new PIN2 modules, not edits of the release NHG_* files: the release files stay valid for the frozen extraction.
 
-**Still open in this item:**
+**Still open in this item:** `NHG_Lengths.digest_domain` as a composition with `NGX_SemanticRuntime.seedViews`. That module depends on R0P.Core, so the composition stays blocked on that chain, as recorded. Its arithmetic premise is `seed_size`, proved here.
 
-- `NHG_Lengths.digest_domain` as a composition with `NGX_SemanticRuntime.seedViews`. That module depends on R0P.Core; its arithmetic premise is `seed_size`, proved here.
-- `NHG_PublicCarrier.same_execution` and `begin_carrier`. These are about `r1_semantic::public_transcript`, which the PIN2 emission does not contain; it covers only the r0 module. Their only length fact is `returned` (≤ 1524, proved here). The open part is the PIN2 extraction of `public_transcript`, and the chain from it through `NGX_SemanticNew`.
+**`same_execution` and `begin_carrier`: done in their final form (5c).**
+
+### 5c. `same_execution`, `new_carrier` and `begin_carrier` against the PIN2 `public_transcript`
+
+The source is Stream C's `PIN2_NEWGATE_r1_semantic` (source sha `b5ff0038fb968bbd…`, object `7b590c58d7ae8415`). It imports `PIN2_NEWGATE_r0`, so `public_transcript` calls the PIN2 `public_bytes` refined above. The new module `PIN2_NHG_PublicCarrier` (C036, then C037 with two unused simp arguments removed; object `23617a4fddb214c5`) states:
+
+- **`same_execution`**: if `r1_semantic.public_transcript D q hash root = ok (.Ok t)`, then there are `bytes` with `public_bytes q = ok (.Ok bytes)`, `bytes.val.length ≤ 1524`, and `r1_wire.SemanticTranscript.new D hash (Vec.deref bytes) root = ok (.Ok t)`. This is the release statement with ≤ 1455 replaced by ≤ 1524. The bound comes from `PIN2_NHG_Final.returned`, so it rests on `public_bytes_refines`.
+- **`new_carrier`**: if `SemanticTranscript.new D hash bytes root = ok (.Ok t)`, then `t.hash = hash ∧ t.next_row = 0`. The statement is unchanged.
+- **`begin_carrier`**: if `public_transcript … = ok (.Ok t)`, then `t.hash = hash ∧ t.next_row = 0`. The statement is unchanged.
+
+Every rejection path is eliminated from the actual definitions: producer failure or divergence; producer `Err`, mapped through `map_err` to `Error.Public`; the `try_from` length conversion failing or returning `Err`; and digest failure. There is no added premise. The only uses of the emission's `PCWN_NewLib` models are `map_err`, `branch` and `from_residual`, unfolded by definition. Those models are the emission's own trust row (HM-C), which I neither introduce nor discharge here.
+
+`#print axioms`: `propext`, `Classical.choice` and `Quot.sound` only.
 
 Neither the emission nor these theorems prove that `public_bytes` succeeds on canonical inputs. They are success-conditional, like the release theorems.
 
@@ -201,7 +212,7 @@ My new objects: `PublicParserAllocationM10` `27645f94`, `OptionWorkInvariantM10`
 
 ## Compile table
 
-Wall time is in seconds and peak RSS in GiB. Host swap during these runs was 7.06–7.2 GB (unchanged). The revision is the branch head at the time of each run (dirty worktree).
+Wall time is in seconds and peak RSS in GiB. Host swap during these runs was 7.05–7.2 GB (unchanged). The revision is the branch head at the time of each run (dirty worktree).
 
 | id | file | exit | wall s | peak RSS GiB | note |
 | --- | --- | --- | --- | --- | --- |
@@ -240,10 +251,10 @@ Wall time is in seconds and peak RSS in GiB. Host swap during these runs was 7.0
 | C033 | PIN2_PublicBytesRefinement | 0 | 1.83 | 2.12 | unused simp argument removed |
 | C034 | PIN2_NHG_Final | 1 | 1.63 | 2.08 | `decide` on a free singleton |
 | C035 | PIN2_NHG_Final | 0 | 1.62 | 2.10 | new |
+| C036 | PIN2_NHG_PublicCarrier | 0 | 12.74 | 2.10 | new |
+| C037 | PIN2_NHG_PublicCarrier | 0 | 1.67 | 2.10 | unused simp arguments removed |
 
 ## Remaining blockers by owner
-
-**Stream C:** the PIN2 extraction of `r1_semantic::public_transcript` (and its NGX_SemanticNew chain). That is needed for `same_execution` and `begin_carrier`; their length fact (≤ 1524) is already proved.
 
 **W3a, or the build-host replay:**
 
@@ -265,8 +276,9 @@ Obligations closed here:
 - the M10 parser budget at 110542 in the allocation model (compiled), with the two extractor-stage sites edited;
 - record sizes tied to the parser and re-checked against L;
 - the source refinement of the re-extracted `public_bytes` to the PIN2 byte image, with no premise beyond successful return;
-- the final PIN2 forms of the NHG_* lengths and offsets, `returned` at ≤ 1524.
+- the final PIN2 forms of the NHG_* lengths and offsets, `returned` at ≤ 1524;
+- `same_execution` (≤ 1524), `new_carrier` and `begin_carrier` against the PIN2 `public_transcript` emission.
 
-Obligations still open: compiling the two extractor-stage modules, `digest_domain`/`same_execution`/`begin_carrier` (which need NGX and `public_transcript`), and the coherent replay.
+Obligations still open: compiling the two extractor-stage modules, the `digest_domain` composition with `NGX_SemanticRuntime` (blocked on the R0P.Core chain), and the coherent replay.
 
 Target not yet established.
