@@ -999,3 +999,86 @@ Acceptance, fixed now:
   rewrite is redone function by function until it costs nothing.
 - If X1 costs more, it is bisected by file (multiproof, wire, weights, the fold and final checks)
   so that each function's cost is known.
+
+### Round 7: result
+
+Builds (recipe and feature set of A6; each from its own copy of the source and its own target
+directory):
+
+| Build | Source | ELF sha256 | Bytes |
+|---|---|---|---:|
+| A6 | branch head 4045ecbdda3 | `5dd5b2b16c00922813dec692ee348dda2a73a58cbfaabe5a2f591b0b8c5a003b` | 967,120 |
+| X1 | head + `rewrites-tested.patch` | `7a77273b1dc64689a0eed1cc267c6e81c9f6d0ad2e17fe0be316243d3ae9a3d5` | 972,024 |
+| X2 | X1 + SDK `hashv` in `digest_into` | `dff6a4385d7ae6503e97a6672835aab3b0ad3937bfba0caa0a339e9508a2556c` | 972,544 |
+
+Replay of the two recorded devnet settlements (`replays-v5/`), whole transaction:
+
+| Payment | A6 | X1 | X1 − A6 | X2 | X2 − X1 | X2 − A6 |
+|---|---:|---:|---:|---:|---:|---:|
+| Transfer | 1,314,308 | 1,306,700 | −7,608 | 1,331,318 | +24,618 | +17,010 |
+| Withdrawal | 1,320,803 | 1,313,188 | −7,615 | 1,337,466 | +24,278 | +16,663 |
+| Withdrawal, marker pre-funded with one lamport (heaviest measured) | 1,324,900 | 1,317,285 | −7,615 | 1,341,563 | +24,278 | +16,663 |
+
+Both predictions missed:
+- X1: predicted 0 to +20,000 (point +8,000). Measured −7,608 and −7,615. Wrong direction: the
+  rewritten functions are cheaper. Which function the saving comes from was not attributed; the
+  bisection by file was conditional on X1 costing more and was not run.
+- X2 over X1: predicted +4,000 to +12,000. Measured +24,618 and +24,278, twice the top of the
+  band: about 25 CU for each in-place digest, not 4 to 12.
+
+Acceptance conditions, both builds: the one-transaction run completes under 1,400,000 CU, its
+final state equals the control's, a changed certificate byte is rejected, the pinned-format buffer
+is rejected, rejected runs leave the state unchanged apart from the fee, and the four redirect
+attempts are rejected with no token movement (`replays-redirect/X1-rewrites-withdrawal.json`,
+`X2-rewrites-hashv-withdrawal.json`). All hold.
+
+**Is the rewritten verifier the same function?** A cheaper build could be a build that lost a
+check, so this was tested before anything else is said about X1.
+
+- Mutation campaign (`tools/r1-cost-probe/src/bin/one_tx_mutants.rs`, host script
+  `fv_mutants.sh`). The tool is built once from the original source and once from the rewritten
+  source. Each binary runs the verifier on 156,704 corrupted copies of the two recorded proofs
+  (every single-bit flip at every byte, 111,630 of them; a non-canonical limb at every 4-byte
+  position; every Merkle node and certificate block zeroed; every adjacent pair of node blocks
+  exchanged; four length changes) and writes the verdict and the number of observer marks
+  reached. The two verdict files are byte-identical (sha256
+  `e3659a53d3b4e308711668d82715cd981e8d3bdc7ba859c9ff3bdaa1e3c9e2b9`), with the deployed feature
+  set switched on (`mutants/MUTANTS_dep2.done`) and with the default features
+  (`MUTANTS_full.done`). The deployed-feature verdicts also equal the default-feature verdicts.
+- In both, every single-bit flip is rejected. 174 mutants are accepted: each zeroes or exchanges
+  blocks of the all-zero padding of a node slot, so the mutant is the original proof.
+- The first two runs (`full`, `dep`) shared one cargo target directory between the two trees.
+  A control run of the tests in that arrangement finished in 0.15 s, which showed that cargo can
+  take one tree's artifacts for the other's. The campaign was therefore rerun with one target
+  directory per tree (`dep2`). Each tree compiled its own crates, the two binaries have the same
+  hashes as in `dep`, and the verdict files are the same. So the earlier runs had not mixed the
+  trees, and `dep2` is the run relied on.
+- On the rewritten source with the deployed feature set: the statement-binding test (69
+  changed-statement cases rejected) and the weights, pairing, dots and validated-prefix
+  equivalence tests pass (host receipt `SB-dep-src-xp1`). The control on the original source
+  reused the rewritten tree's test binaries and is not a control.
+
+What this does not show: equality on every input. The mutants are corruptions of two honest
+proofs with their own statements. On-chain behaviour of the rewritten build is tested by the
+replays above and by nothing else. Nothing here is proved.
+
+**The prover.** `weights.rs`, `r1_wire.rs` and `fast_pairing.rs` are compiled into the prover as
+well. The pinned prover (`prover.rs`, `host_*.rs`) names none of the changed functions. The
+re-packing helper `to_summed_format` gives the same bytes from both trees on the two recorded
+proofs (the proof hashes in the verdict files' header lines agree). A byte-identity run of the
+prover on the frozen source is still owed at the freeze.
+
+**Cost outside compute.** The ELF grows by 4,904 bytes (X1) or 5,424 bytes (X2). An immutable
+verifier locks its rent: at 5,080 lamports per byte that is about 0.025 SOL or 0.028 SOL more,
+once, at deployment.
+
+**Status against the owner's rule.**
+- X1 costs less than A6 on both payments, so the rewrites pass the compute test. Soundness is
+  tested as above, not proved. Not yet adopted: adoption is part of the freeze proposal.
+- X2 costs more than A6. Under the rule as given it is the owner's decision. On 2026-11-11 the
+  owner first said the direct call is a fine trust assumption, then: "for what is really a proof
+  of concept research thing, maybe there is more value in more clean proof". The lead recommended
+  the SDK route (X2) and asked for a confirmation, with a proposed working rule: proof
+  cleanliness wins while the heaviest measured payment stays at least 50,000 CU under the limit.
+  X2's heaviest measured payment is 58,437 CU under the limit. The page-rollover path is not
+  measured in any build. No decision is recorded until the owner confirms.
