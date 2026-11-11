@@ -1,0 +1,98 @@
+{
+ "schema": "PW8_SUBSTITUTION/1",
+ "input": {
+  "emission": "PW8_E003 Funs.lean",
+  "sha256": "92d5f52e8f620cfa31202c6c4e6adc33e580f371bf64b7d8f4f676d8676b0376",
+  "external_template_sha256": "0c2e193ea83c02e95f7c4c05901947aadfe63eff55b33d85101e19597e14fbc2"
+ },
+ "recorded_identifier_map": {
+  "r1_semantic.mark": "VerifyPrefix.mark",
+  "r1_semantic.verify_finish": "F",
+  "r1_semantic.verify_observed": "VerifyPrefix.verify",
+  "r1_wire.Prefix.parse": "PrefixAdapter.parseAccepted"
+ },
+ "recorded_binding_audit_sha256": "74a9744199c91e85ecbe09a05a9cbb4912c0909edb9d203a7507ffc824681d1c",
+ "phase_swap": {
+  "(?<![\\w.])verifier\\.Phase(?![\\w])": "RPz7_PhaseIso.Phase"
+ },
+ "tool_map_entries_used": [
+  {
+   "pattern": "(?<![\\w.])core\\.result\\.Result\\.Insts\\.CoreOpsTryTraitFromResidualResultInfallible\\.from_residual(?![\\w])",
+   "replacement": "PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual",
+   "reason": "library encoding: old Aeneas residual over core.convert.Infallible; second tool over Never (PCWN_NewLib, castN/from_residual_eq in PIN2_NEWGATE_r0)"
+  },
+  {
+   "pattern": "(?<![\\w.«])public1(?![\\w])",
+   "replacement": "«public»",
+   "reason": "binder spelling of the Rust parameter `public` (keyword): old tool renamed to public1, second tool escapes with guillemets"
+  },
+  {
+   "pattern": "\\{(H|Self|T|E|U) : Type\\}",
+   "replacement": "{\\1 : Type _}",
+   "reason": "universe annotation: second tool emits Type _"
+  }
+ ],
+ "steps": {
+  "r1_semantic.mark": {
+   "fresh_raw_block_sha256": "188e192b36f695bd85faca8038af076e8d235ce06b2d1cd0da957fce5c331e9a",
+   "after_xform_toolmap_sha256": "3a2944d5e5666c0f9e975b56ff9216cda7c38f2436d4a112604bf42becc4751e",
+   "output_sha256": "538d0a6dd2c57ddae8f65b5465723bfe2c2a6231f4fae2fbc4ae4ba54486a632",
+   "binder_addition": ""
+  },
+  "r1_semantic.verify_observed": {
+   "fresh_raw_block_sha256": "9562c5ffc980cef84e5fee13f379a847d20fe9a35d35d5f9a7bad84c080080f5",
+   "after_xform_toolmap_sha256": "b6b989c4f190f79a5b4f7e23146c944c2ff76d87885cbef95accbe5346f25079",
+   "output_sha256": "20c5c6f4cf0f89e6d0b1b5420a0d062e913832cae364a767e73b0ebde156cb8f",
+   "binder_addition": " (F : VerifyPrefix.Finish)"
+  }
+ },
+ "frozen_rpz7_sha256": "e60dfd0523f25128a628eda535350b81cc659aafaf23c63c9026875be41ae778",
+ "frozen_fe80_model_sha256": "9d9595774ab2678042cd27d5f8e40e8d1e74c2f525cfc27b6b68e3f297c82c16",
+ "comparison_b": [
+  {
+   "declaration": "VerifyPrefix.mark",
+   "equal_after_maps": true,
+   "frozen_tokens_sha256": "08d05d4f698387d4a5cce78183323723474044a9ca25e70325e0a7b1b04eee0d",
+   "pin2_tokens_sha256": "08d05d4f698387d4a5cce78183323723474044a9ca25e70325e0a7b1b04eee0d",
+   "diff": null
+  },
+  {
+   "declaration": "VerifyPrefix.verify",
+   "equal_after_maps": true,
+   "frozen_tokens_sha256": "38c85850881e593d8b38a18f49dd85eb447c0f92d32ce7daa2d893ea254185a9",
+   "pin2_tokens_sha256": "38c85850881e593d8b38a18f49dd85eb447c0f92d32ce7daa2d893ea254185a9",
+   "diff": null
+  },
+  {
+   "declaration": "VerifyPrefix.Finish",
+   "equal_after_maps": false,
+   "frozen_tokens_sha256": "7280e7ffa8fb60b4bc120080bf9fe19a45a019beb4b701cfb8b075d22171f428",
+   "pin2_tokens_sha256": "8198f5e467208fda045311e2d2f6fb2e1b7c96372510a474fb7258a0f951735d",
+   "diff": [
+    "@@ -15,4 +15,4 @@",
+    " →",
+    "-r1_wire.SemanticTranscript",
+    "-H",
+    "+(r1_wire.SemanticTranscript",
+    "+H)",
+    " →",
+    "@@ -20,3 +20,3 @@",
+    " →",
+    "-Option",
+    "+(Option",
+    " (RPz7_PhaseIso.Phase",
+    "@@ -24,3 +24,3 @@",
+    " Result",
+    "-Unit)",
+    "+Unit))",
+    " →"
+   ]
+  }
+ ],
+ "output_text": {
+  "VerifyPrefix.mark": "def VerifyPrefix.mark\n  (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) (i : Std.U8) :\n  Result Unit\n  := do\n  ok ()",
+  "VerifyPrefix.verify": "def VerifyPrefix.verify (F : VerifyPrefix.Finish)\n  {H : Type _} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)\n  («public» : pool_v1.pair_forest_semantic_terminal.r0.Public)\n  (bytes : Slice Std.U8) (hash : H)\n  (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) :\n  Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)\n  := do\n  let r ← PrefixAdapter.parseAccepted bytes\n  let cf ← PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r\n  match cf with\n  | core.ops.control_flow.ControlFlow.Continue p =>\n    VerifyPrefix.mark obs 0#u8\n    let r1 ←\n      r1_semantic.public_transcript aspis_coredigestDigest32Inst «public» hash\n        p.c1_root\n    let cf1 ← PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1\n    match cf1 with\n    | core.ops.control_flow.ControlFlow.Continue val =>\n      let (r2, val1) ← r1_wire.begin aspis_coredigestDigest32Inst p val\n      let cf2 ← PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r2\n      match cf2 with\n      | core.ops.control_flow.ControlFlow.Continue val2 =>\n        VerifyPrefix.mark obs 1#u8\n        F aspis_coredigestDigest32Inst «public» p val1\n          val2 obs\n      | core.ops.control_flow.ControlFlow.Break residual =>\n        PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual\n          (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error)\n          residual\n    | core.ops.control_flow.ControlFlow.Break residual =>\n      PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual\n        (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual\n  | core.ops.control_flow.ControlFlow.Break residual =>\n    PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual\n      (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual",
+  "VerifyPrefix.Finish": "abbrev VerifyPrefix.Finish := {H : Type _} → aspis_core.digest.Digest32 H →\n  pool_v1.pair_forest_semantic_terminal.r0.Public → r1_wire.Prefix → (r1_wire.SemanticTranscript H) → aspis_core.state_only_prefix.r0.Challenges → (Option (RPz7_PhaseIso.Phase → Result Unit)) → Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)"
+ },
+ "output_sha256": "e36816857b36099e83cd660918f975a0f35cabefa944b74d8bea078672e3955f"
+}
