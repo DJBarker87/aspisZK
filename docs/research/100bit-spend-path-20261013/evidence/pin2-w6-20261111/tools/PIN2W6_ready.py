@@ -23,7 +23,8 @@ while st:
     for y in rev[x]:
         if y not in dep: dep.add(y); st.append(y)
 aff = {l.split('\t')[1] for i, l in enumerate(open('/Users/dominic/aspis-lead-infra/PIN2-HOST-REBUILD-ORDER.tsv')) if i}
-inW4 = lambda m: G.layer.get(m) == 'overlay-PIN2-W4'
+KEEP = {l.split('\t')[0] for l in open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'KEEP-RELEASE.tsv')).read().splitlines()[1:]}
+inW4 = lambda m: G.layer.get(m) == 'overlay-PIN2-W4' or m in KEEP
 def sat(d):
     if inW4(d): return True
     if d in dep: return False

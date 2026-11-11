@@ -20,6 +20,7 @@ BUILD = Path('/private/tmp/claude-501/-Users-dominic-ZK/3db59790-41f3-4c53-ae90-
 W6 = S.W6; status = W6 / 'drive_status.tsv'
 prev = [l.split('\t') for l in status.read_text().splitlines()] if status.exists() else []
 failed = {(f[0], f[3]) for f in prev if f[1] == 'fail'}
+NOTES = dict(l.split('\t', 1) for l in (W6 / 'CHANGE-NOTES.tsv').read_text().splitlines()[1:]) if (W6 / 'CHANGE-NOTES.tsv').exists() else {}
 n = 0
 for m in order:
     b, note = S.source(m)
@@ -27,7 +28,7 @@ for m in order:
     h = hashlib.sha256(b).hexdigest()
     if (m, h) in failed: print('skip: earlier failure on same source', m); break
     (BUILD / f'{m}.lean').write_bytes(b)
-    r = subprocess.run([str(W6 / 'PIN2W6_compile.sh'), m, f'{sys.argv[3]}; {note}'], env={**os.environ, 'SRCDIR': str(BUILD)}, capture_output=True, text=True)
+    r = subprocess.run([str(W6 / 'PIN2W6_compile.sh'), m, f'{sys.argv[3]}; {note}' + (f'; {NOTES[m]}' if m in NOTES else '')], env={**os.environ, 'SRCDIR': str(BUILD)}, capture_output=True, text=True)
     line = r.stdout.strip().split('\n')[0] if r.stdout.strip() else ''
     print(line, flush=True)
     open(status, 'a').write(f'{m}\t{"ok" if r.returncode == 0 else "fail"}\t{line}\t{h}\n')

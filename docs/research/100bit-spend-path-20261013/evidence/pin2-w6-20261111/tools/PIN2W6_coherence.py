@@ -11,18 +11,21 @@ T = sys.argv[3:]
 if T == ['--w4']: T = sorted(m for m, L in G.layer.items() if L == 'overlay-PIN2-W4')
 allm = set(T)
 for t in T: allm |= G.closure(t)
-OV = ('overlay-PIN2', 'overlay-PIN2-W4')
+OV = ('overlay-PIN2', 'overlay-PIN2-W4', 'overlay-HOST-P1')
+MT = ('overlay-PIN2', 'overlay-PIN2-W4')   # mtime order is checked for locally built layers;
+# overlay-HOST-P1 holds host-built copies (host receipts, copy mtimes) and is checked only
+# as an import target: a local object must be newer than every HOST-P1 import.
 bad, shadow = [], []
 for x in sorted(allm):
     px = G.path(x)
     if px is None: bad.append((x, 'no object')); continue
     L = G.layer.get(x, 'base')
-    if L in OV:
+    if L in MT:
         mt = os.path.getmtime(px)
         for d in G.imp.get(x, []):
             pd = G.path(d)
             if pd and os.path.getmtime(pd) > mt: bad.append((x, 'older than import ' + d))
-    else:
+    elif L not in OV:
         ovi = [d for d in G.imp.get(x, []) if G.layer.get(d) in OV]
         if ovi: shadow.append((x, ovi[:3]))
 rows = {}
