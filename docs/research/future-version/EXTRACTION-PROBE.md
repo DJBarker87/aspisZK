@@ -569,3 +569,45 @@ rewrites of section 5 are to be made before the freeze; then a compute-unit
 measurement of the three rewrites named there, and a release-style emission
 (with `-abort-on-error`, split by tool pair as in section 5) of the reshaped
 source.
+
+## 11. Addendum (lead, 2026-11-11): a translator defect that exits 0, checked against this probe
+
+Reported by the soundness lead after the probe finished, found by the privacy stream and confirmed
+on the verifier side (finding 27 on the research branch): the Aeneas lineage in use (959659a6 and
+later, probably both tool pairs) silently drops a write made through a REVERSED mutable iterator
+(`for x in s.iter_mut().rev() { *x = … }`). Charon emits the double-ended iterator over `IterMut`
+with an erased region and the give-back is lost. The tool exits 0 and the emitted Lean is wrong.
+Any function with that pattern cannot be extracted with the current tools, whatever the exit code.
+
+Checked for Aspis, by search of the source at the branch head and of this probe's emissions (not by
+the privacy stream's pre-pass, which has not been run here):
+
+| Where | Pattern | Function | Status |
+|---|---|---|---|
+| `crates/aspis-r1-cost-probe/src/sampler.rs:61` | `quotient.iter_mut().rev()` | `low_base_p_digits` | Pinned R1 code, unchanged in Aspis, on the verifier's path. It is R1's known site; R1's closure does not use that emission (finding 27). Aspis reuses the sampler unchanged, so it inherits R1's treatment and needs nothing new, but the function stays in the cannot-extract class for Aspis too. |
+| `sampler.rs:140`, `:155` | `rank.iter_mut().rev()` | `old_sample`, `old_pass` | Inside the test module; not compiled into the program. |
+| `crates/aspis-core/src/r0_transcript.rs:129` | `rank.iter_mut().rev()` | `base_p_digits` | Pinned code. The soundness lead's audit gives `low_base_p_digits` as R1's only verifier-path site; I did not re-derive that for this function. |
+| Functions changed for Aspis (`fused.rs`, `multiproof.rs`, `weights.rs`, `fast_pairing.rs`, `r1_wire.rs`, `r1_semantic.rs`, the field kernels, the adapter) and the rewrite patch | none | | No reversed mutable iteration anywhere. |
+| Pool payout path | none | | No `iter_mut` at all in the emitted functions. |
+
+Forward `iter_mut()` (not the reported defect) occurs in `base_lanes_tight` (`fused.rs:382`, the
+function whose Lean does not elaborate, section 6), `accumulate_weights_tight` (`fused.rs:465`),
+`Weights::materialize` (`weights.rs:353`) and `multiproof::verify_in_place` (`multiproof.rs:174`).
+
+The probe's emissions, scanned for the symptoms the soundness lead named:
+- No `Rev` over `IterMut` in any emitted file. The one `Rev` is over an immutable iterator
+  (`semantic_value`'s reversed `fold`).
+- `let _ ←` occurs three times in each verifier emission, in `coefficients_loop.body` (two
+  discarded array reads) and `factored_s2_libra_weights_loop.body` (one discarded product). Each
+  discards a value the Rust also discards. None is a value the Rust writes back.
+- The forward `IterMut` loop of `base_lanes_tight` is emitted with its give-back function.
+
+Consequences for the freeze:
+- Nothing has to be reshaped in the changed functions because of this defect.
+- A release emission must not rely on exit codes. In addition to the completeness check against
+  Charon's declaration list (finding 2 of section 7), it must run the privacy stream's
+  erased-region pre-pass (branch `codex/pv-itermut-20261111`, `src/MutInst.ml`) over every LLBC
+  file, or scan the LLBC structurally for mutable-borrow type arguments with an erased region.
+- `base_lanes_tight` is the one changed function with a mutable iterator. Rewriting its loop over
+  an index would remove the iterator and may also let its Lean elaborate. That is a source change
+  with a compute cost to measure, so it is a proposal, not something done here.
