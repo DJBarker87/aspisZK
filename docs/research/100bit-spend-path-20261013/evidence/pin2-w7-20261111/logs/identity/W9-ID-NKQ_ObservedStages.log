@@ -1,0 +1,28 @@
+'AspisR1.NKQ_ObservedStages.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedStages.parsed_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedStages.parsed_fail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedStages.parsed_div' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_ObservedStages.factor : ∀ (F : VerifyPrefix.Finish) {H : Type} (D : aspis_core.Digest32 H)
+  (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H),
+  VerifyPrefix.verify (fun {H} => F) D pub bytes hash none = do
+    let r ← PrefixAdapter.parseAccepted bytes
+    afterParsed (fun {H} => F) D pub hash r :=
+fun F {H} D pub bytes hash => Eq.refl (VerifyPrefix.verify (fun {H} => F) D pub bytes hash none)
+        4.75 real         1.85 user         1.35 sys
+          5166497792  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              376352  page reclaims
+               12961  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                2292  voluntary context switches
+               12001  involuntary context switches
+         34771842987  instructions retired
+         11624521284  cycles elapsed
+           818942040  peak memory footprint
