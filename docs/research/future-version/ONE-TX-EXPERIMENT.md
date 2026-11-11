@@ -356,3 +356,46 @@ plus batching", with the measured gap. If it is within 1,275,000 on all six:
 "fits the hard-cap budget on six fixtures", which is still not an all-input
 bound and not a release claim. Only measured savings count; no estimate is
 added to a total.
+
+### Round 2: inventory result and candidate predictions (committed before the candidates' ELFs are measured)
+
+**Deviation from the pre-registration.** The debug-line build B8 (same source
+and features as B6, plus `CARGO_PROFILE_RELEASE_DEBUG=line-tables-only`, own
+target directory) does not have B6's instruction stream: its `.text` is 864
+bytes longer and its stripped hash is `d7021af9…e1e9e3d9`. The inventory is
+therefore of B8 itself (traced and symbolised against its own unstripped ELF),
+whose program CU is 1,601,929 on transfer-13 against B6's 1,602,695, a
+difference of 766. It is used for attribution only. All totals and all
+keep-or-drop decisions are measured on builds without debug information.
+
+**Inventory, transfer-13, batched (tag 9).** 1,442,577 executed instructions
+and 159,352 CU of syscall charges (1,540 syscalls: 1,098 SHA-256 calls, 354
+`memcpy`, 80 `memset`, 8 others); 100% of instructions map to a source line.
+Inclusive instruction counts of the outlined functions: semantic layer 457,016
+(terminal 326,803; ten rounds 76,178); batched folds 336,776; relation
+263,215; Merkle 145,843; final-weight accumulation 101,588; preparation
+84,833. By source file, `aspis-core/src/field.rs` is 550,423 of the
+instructions: canonical M31 addition 144,428, subtraction 66,164, the
+reduction routine about 141,000.
+
+**Predictions** (executions times saving per execution, less overhead; every
+one is an estimate to be replaced by a measurement):
+
+| Candidate | Basis | Predicted saving |
+|---|---|---:|
+| E1 prepared multiply | about 270 calls, nested form about 250 against about 136 | 30k |
+| E2 square | 162 calls, about 226 against about 110 | 16k |
+| E3 validated decode | 426 values, about 18 against about 6 | 5k |
+| E4a Merkle: count while verifying | `node_count` is 36,401 instructions in six calls | 36k |
+| E4b Merkle: digest written in place, pair test and sibling read tightened | about 880 parents at about 81 instructions | 20k |
+| E5 base-lane kernel | 572 lane-query steps at 232 instructions; the probe's loop is 94 | 50k |
+| E6 QM31-lane kernel on raw limbs with one reduction | 264 products at about 248 | 30k |
+| E7 final-weight accumulation | 101,478 instructions for 5,632 limb products and 1,386 M31 products | 40k |
+| E8 semantic boundary sum with one reduction | 280 QM31 additions at about 39 | 9k |
+| E9 final message decoded once for relation and final check | about 256 repeated WideExact decodes at about 38 | 9k |
+
+Sum of predictions: about 245k, which would put the verifier near 1.36M. That
+is above the 1,275,000 line, so the predicted outcome is "not supported by
+exact changes plus batching". E5, E6 and E7 change only this branch's own
+stage C kernels; the others change pinned source behind default-off features.
+Candidates are measured in the order E1, E2, E3, E4a, E5, E6, E7, E8, E9, E4b.
