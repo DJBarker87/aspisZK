@@ -1,0 +1,37 @@
+--- /private/tmp/claude-501/-Users-dominic-ZK/3db59790-41f3-4c53-ae90-3fc42a8cab96/scratchpad/w3c/build/ExtractedWithdrawalCallerPublic.lean	2026-11-11 01:55:17
++++ /Users/dominic/ZK/.worktrees/pin2-lean/docs/research/100bit-spend-path-20261013/evidence/pin2-w3c-20261111/sources/ExtractedWithdrawalCallerPublic.lean	2026-11-11 01:55:19
+@@ -14,7 +14,7 @@
+ namespace AspisR1WithdrawalCaller.CallerPublic
+ 
+ /-- The carrier is fixed before observing either output byte string. -/
+-def projectRaw (p : Carrier.Public) (t : Whole431.Transition) :
++def projectRaw (p : Carrier.Public) (t : RawBridge431.Transition) :
+     PublicSourceRaw.Public :=
+   ExtractedPublicCheckedBridge432.projectRaw (.Withdrawal (Carrier.toSerializer p) t)
+ 
+@@ -22,10 +22,10 @@
+ existing extracted serializer-to-live-parser bridge. -/
+ theorem encoder_serializer_parsePublic
+     (p : Carrier.Public) (aswp : Array U8 216#usize)
+-    (t : Whole431.Transition) (out : FieldsRefinement431.ByteVec)
++    (t : RawBridge431.Transition) (out : FieldsRefinement431.ByteVec)
+     (he : pool_v1.payment_relation.encode_pool_v1_withdrawal_public_v1 p =
+       ok (.Ok aswp))
+-    (hs : AspisR1PublicSerializer.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
++    (hs : AspisR1PublicPreparationPIN2.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
+       (.Withdrawal (Carrier.toSerializer p) t) = ok (.Ok out)) :
+     ∃ wire, PublicSourceRaw.toWire (projectRaw p t) = some wire ∧
+       SemanticPublicWire.parsePublic (out.val.map RawBridge431.rawByte) =
+@@ -37,10 +37,10 @@
+ public. It is not inferred from encoder success or from the ASWP bytes. -/
+ theorem encoder_serializer_supplied_public
+     (p : Carrier.Public) (aswp : Array U8 216#usize)
+-    (t : Whole431.Transition) (out : FieldsRefinement431.ByteVec)
++    (t : RawBridge431.Transition) (out : FieldsRefinement431.ByteVec)
+     (he : pool_v1.payment_relation.encode_pool_v1_withdrawal_public_v1 p =
+       ok (.Ok aswp))
+-    (hs : AspisR1PublicSerializer.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
++    (hs : AspisR1PublicPreparationPIN2.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
+       (.Withdrawal (Carrier.toSerializer p) t) = ok (.Ok out))
+     (wire : SemanticPublicWire.Wire)
+     (hw : PublicSourceRaw.toWire (projectRaw p t) = some wire)

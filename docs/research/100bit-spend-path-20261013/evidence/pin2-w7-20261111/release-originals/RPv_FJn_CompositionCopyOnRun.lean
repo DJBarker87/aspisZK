@@ -1,0 +1,52 @@
+import RPv_FJk_CompositionWideOnRun
+import RPv_FJn_CopyFullValue
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.FJn_CompositionCopyOnRun
+open Aeneas Aeneas.Std Result FIq_Native
+open FIv_NativeValue (K Canon decode)
+open FIw_ArrayValue (canonical decoded)
+open FIw_CompositionOrigins (SemPub composition)
+open FIz_ConcretePack (embed)
+def copyModel (a : Array field.QM31 16#usize) (h : field.QM31)
+    (s : pool_v1.pair_forest_copy_terminal.Selectors) (lambda chi : field.QM31) (index : U64)
+    (v : pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1) :=
+  R0P.copyEvaluateWithSelectors (decoded a) (decode h) (FIw_CopyEndpoint.modelSelectors s)
+    (decode lambda) (decode chi) index.val (FJk_CopyDescriptor.variant v)
+/-- SAME actual composition cut, now with the full native copy-model seed and active VALUE. -/
+theorem value (pub : SemPub) (claims : Array field.QM31 84#usize) (point : Array field.QM31 10#usize)
+    (lambda chi theta comp g h active : field.QM31)
+    (c1 : Array field.QM31 16#usize) (mask : Array field.QM31 10#usize)
+    (hclaims : canonical claims) (hpoint : canonical point)
+    (hlambda : Canon lambda) (hchi : Canon chi) (htheta : Canon theta)
+    (bounds : FJa_PublicBounds.Bounds pub)
+    (run : composition pub claims point lambda chi theta=ok (.Ok (comp,c1,mask,g,h,active))) :
+    ∃ (a a1 a2 : Array field.QM31 16#usize)
+      (s : pool_v1.pair_forest_copy_terminal.Selectors)
+      (v : pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1),
+      c1=a ∧ pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point=ok s ∧
+      pool_v1.pair_forest_semantic_terminal.copy_variant pub.variant=ok v ∧
+      Canon comp ∧ Canon active ∧
+      decode active=(copyModel a h s lambda chi pub.transition.live_snapshot.next_pair_index v).2 ∧
+      embed (decode comp)=ExtractedMaskTerminalHorner.composeGroups (embed (decode theta))
+        (embed (copyModel a h s lambda chi pub.transition.live_snapshot.next_pair_index v).1)
+        (FJk_CompositionWideOnRun.semantic pub ⟨a,a1,a2⟩ s)
+        (FJk_CompositionWideOnRun.poseidon pub ⟨a,a1,a2⟩ s) := by
+  obtain ⟨a,a1,a2,s,v,copy,same,ca,_,_,rs,rv,rc,ra,_,act,cc,cv⟩ :=
+    FJk_CompositionWideOnRun.value pub claims point lambda chi theta comp g h active c1 mask
+      hclaims hpoint hlambda hchi htheta bounds run
+  have cs := FJa_BoxedCanonical.value point s hpoint rs
+  have hh := FIr_H1Canonical.canonical pub claims point lambda chi theta comp g h active c1 mask run hclaims
+  have got := FJn_CopyFullValue.value a h s lambda chi pub.transition.live_snapshot.next_pair_index v copy
+    ca hh cs.1 cs.2 hlambda hchi rc
+  have resid := congrArg Prod.fst got.2.2
+  have activeValue : decode active=(copyModel a h s lambda chi pub.transition.live_snapshot.next_pair_index v).2 := by
+    rw [←ra]
+    exact congrArg Prod.snd got.2.2
+  refine ⟨a,a1,a2,s,v,same,rs,rv,cc,act,activeValue,?_⟩
+  exact cv.trans (congrArg (fun seed=>ExtractedMaskTerminalHorner.composeGroups (embed (decode theta))
+    (embed seed) (FJk_CompositionWideOnRun.semantic pub ⟨a,a1,a2⟩ s)
+    (FJk_CompositionWideOnRun.poseidon pub ⟨a,a1,a2⟩ s)) resid)
+#print axioms value
+end AspisR1.FJn_CompositionCopyOnRun
+end

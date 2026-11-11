@@ -1,0 +1,45 @@
+'AspisR1.S2W_TraceSplice.run_shift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.split_tag' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.invocation_first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.invocation_second' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.expanded_schedule' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.S2W_TraceSplice.FirstMarks {E : Type} {ops : AdapterRw.Ops} (port : ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.FirstMarks.source : ∀ (event : S2W_Trace.Event),
+      mark event = some false → ∃ fs, List.map project (events port event) = S2W_SiteSchedule.firstTrace fs
+constructor:
+  AspisR1.S2W_TraceSplice.FirstMarks.mk {E : Type} {ops : AdapterRw.Ops} {port : ChildConeJoin E ops}
+    (source :
+      ∀ (event : S2W_Trace.Event),
+        mark event = some false → ∃ fs, List.map project (events port event) = S2W_SiteSchedule.firstTrace fs) :
+    FirstMarks port
+structure AspisR1.S2W_TraceSplice.SecondMarks {E : Type} {ops : AdapterRw.Ops} (port : ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.SecondMarks.source : ∀ (event : S2W_Trace.Event),
+      mark event = some true → ∃ ss, List.map project (events port event) = S2W_SiteSchedule.secondTrace ss
+constructor:
+  AspisR1.S2W_TraceSplice.SecondMarks.mk {E : Type} {ops : AdapterRw.Ops} {port : ChildConeJoin E ops}
+    (source :
+      ∀ (event : S2W_Trace.Event),
+        mark event = some true → ∃ ss, List.map project (events port event) = S2W_SiteSchedule.secondTrace ss) :
+    SecondMarks port
+        2.76 real         1.84 user         0.89 sys
+          3756752896  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              293161  page reclaims
+                   3  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                 860  involuntary context switches
+         28901644420  instructions retired
+         10142493093  cycles elapsed
+           605341552  peak memory footprint

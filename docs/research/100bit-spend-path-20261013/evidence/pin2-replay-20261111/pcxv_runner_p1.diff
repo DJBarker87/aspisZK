@@ -1,0 +1,85 @@
+55c55
+<         if p.is_file():n+=link(p,VIEW/p.relative_to(OVERLAY))
+---
+>         if p.is_file() and not (OBJS/p.relative_to(OVERLAY)).is_file():n+=link(p,VIEW/p.relative_to(OVERLAY))   # lead patch 4 2026-11-11: a host-built object always wins over an overlay copy
+75a76
+> LAST_ADMIT=[0.0]
+80a82
+>         if time.time()-LAST_ADMIT[0]<20.0:ev(event='admission_cached',target=name);break   # lead patch 2026-11-11: reuse an allowed admission for 20 s
+85c87
+<         if r.returncode==0 and ad.get('allowed') is True:break
+---
+>         if r.returncode==0 and ad.get('allowed') is True:LAST_ADMIT[0]=time.time();break
+94c96
+<     for _ in range(30):
+---
+>     for _ in range(150):
+97c99
+<         time.sleep(1)
+---
+>         time.sleep(0.2)   # lead patch 3 2026-11-11: finer poll, same 30 s bound
+133a136,160
+> 
+> _li={}
+> def lean_imports(path):
+>     try:st=path.stat()
+>     except OSError:return []
+>     k=(str(path),st.st_mtime_ns,st.st_size)
+>     if k in _li:return _li[k]
+>     out=[]
+>     try:txt=path.read_text(errors='replace')
+>     except OSError:return out
+>     for line in txt.splitlines():
+>         line=line.strip()
+>         if line.startswith('import '):out+=line[7:].split()
+>     _li[k]=out;return out   # lead patch 10 2026-11-11: memoised by (path, mtime, size)
+> _occ={}
+> def overlay_closure_imports(m):
+>     """rebuild-set modules reachable through overlay (new) modules' import lines, starting at overlay module m"""
+>     if m in _occ:return _occ[m]
+>     seen=set();st=[m];res=set()
+>     while st:
+>         x=st.pop()
+>         for tok in lean_imports(OVERLAY/(x.replace('.','/')+'.lean')):
+>             if tok in M:res.add(tok)
+>             elif (OVERLAY/rel(tok)).is_file() and tok not in seen:seen.add(tok);st.append(tok)
+>     _occ[m]=res;return res
+136c163,166
+<     r=M[m];ho=handover_src(m)
+---
+>     r=M[m]
+>     for i in r['imports_rebuild']+r['imports_overlay']:   # lead patch 11 2026-11-11: cheap in-memory pre-check before any file I/O
+>         if i in M and st.get(i)!='done':return 'DEP'
+>     ho=handover_src(m)
+139a170
+>     if not pathlib.Path(src).is_file():return 'HANDOVER'   # lead patch 9 2026-11-11: a module with no source anywhere is reported as blocked_handover, never a crash
+141c172,181
+<     for i in r['imports_rebuild']+r['imports_overlay']+r['imports_unchanged']:
+---
+>     extra=[]   # lead patch 7/8 2026-11-11: handover sources may import modules the plan did not list; overlay (new) modules' own rebuild-set imports must be built too
+>     known=set(r['imports_rebuild']+r['imports_overlay']+r['imports_unchanged'])
+>     if ho:
+>         for tok in lean_imports(pathlib.Path(src)):
+>             if tok in M and tok not in known:extra.append(tok)
+>     for i0 in list(known)+list(extra):
+>         if i0 not in M and (OVERLAY/rel(i0)).is_file():
+>             for tok in overlay_closure_imports(i0):
+>                 if tok in M and tok not in known and tok not in extra:extra.append(tok)
+>     for i in r['imports_rebuild']+r['imports_overlay']+r['imports_unchanged']+extra:
+143c183
+<         if i in r['imports_rebuild'] and t not in('new','overlay'):return 'DEP'
+---
+>         if i in M and (t!='new' or st.get(i)!='done'):return 'DEP'   # lead patch 6: every rebuild-set import must be host-built and processed   # lead patches 2+5 2026-11-11: a rebuild-set import (also one the plan called overlay-provided) counts only when host-built and processed, or still overlay-provided
+168,169c208
+<             if (OVERLAY/rel(m)).is_file() and not handover_src(m):
+<                 st[m]='done';done_n+=1;ev(event='overlay_built',target=m,sha256=sha(OVERLAY/rel(m)));continue
+---
+>             # lead patch 6 2026-11-11: overlay objects are never credited for rebuild-set modules; the host compiles every one
+182c221
+<             if stop or len(running)>=a.workers or launched:waiting_ready=True;continue
+---
+>             if stop or len(running)>=a.workers:waiting_ready=True;continue   # lead patch 2026-11-11: fill all worker slots per tick
+188c227
+<     time.sleep(2 if launched else 5)
+---
+>     time.sleep(0.5 if launched else 2)   # lead patch 3 2026-11-11: shorter tick

@@ -1,0 +1,24 @@
+theorem AspisR1.NKR_TermPublic.source : ∀ (pub : r0.Public), pub.semantic = ok (value pub) :=
+fun pub =>
+  r0.Public.casesOn (motive := fun t => pub = t → pub.semantic = ok (value pub)) pub
+    (fun a a_1 h => Eq.symm h ▸ Eq.refl (r0.Public.Transfer a a_1).semantic)
+    (fun a a_1 h => Eq.symm h ▸ Eq.refl (r0.Public.Withdrawal a a_1).semantic) (Eq.refl pub)
+'AspisR1.NKR_TermPublic.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+        3.41 real         1.95 user         1.44 sys
+          4998201344  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              377948  page reclaims
+                   3  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                 457  involuntary context switches
+         36931581383  instructions retired
+         12226445829  cycles elapsed
+           788947176  peak memory footprint

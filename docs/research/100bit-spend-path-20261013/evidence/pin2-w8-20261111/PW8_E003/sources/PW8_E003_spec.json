@@ -1,0 +1,175 @@
+{
+ "run": "PW8_E003",
+ "spec_id": "PW8_E003",
+ "label": "PIN2 W8 verify_observed at c7593d23fdc, fe80 configuration",
+ "charon_command": [
+  "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+  "cargo",
+  "--preset",
+  "aeneas",
+  "--mir",
+  "built",
+  "--sysroot",
+  "default",
+  "--include",
+  "core::option::Option",
+  "--include",
+  "core::result::Result",
+  "--include",
+  "core::option::_::ok_or",
+  "--start-from",
+  "crate::r1_semantic::verify_observed",
+  "--opaque",
+  "crate::r1_wire::_::parse",
+  "--opaque",
+  "crate::r1_semantic::public_transcript",
+  "--opaque",
+  "crate::r1_wire::begin",
+  "--opaque",
+  "crate::r1_semantic::verify_finish",
+  "--include",
+  "crate::verifier::Prepared",
+  "--include",
+  "crate::verifier::Accumulator",
+  "--include",
+  "crate::verifier::BatchedWeights",
+  "--include",
+  "crate::verifier::View",
+  "--include",
+  "crate::verifier::Error",
+  "--include",
+  "crate::verifier::Variant",
+  "--include",
+  "crate::verifier::Phase",
+  "--include",
+  "crate::verifier::QueryGeometry",
+  "--include",
+  "crate::r1_semantic::Verified",
+  "--include",
+  "crate::r1_wire::SemanticTranscript",
+  "--include",
+  "crate::r1_wire::Challenges",
+  "--include",
+  "aspis_core::field::M31",
+  "--include",
+  "aspis_core::field::CM31",
+  "--include",
+  "aspis_core::field::QM31",
+  "--include",
+  "aspis_core::field::wide_exact::WideExact",
+  "--include",
+  "aspis_core::circle::SecureCirclePoint",
+  "--dest-file",
+  "/home/dombarker/project-offloads/codex-pc-pin2-w8-20261111/PW8_E003_emitted/repro.llbc",
+  "--",
+  "--manifest-path",
+  "/home/dombarker/project-offloads/codex-pc-pin2-w8-20261111/PW8_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+  "--locked",
+  "--offline",
+  "--release",
+  "--lib",
+  "--jobs",
+  "4",
+  "--features",
+  "private-leaf-salts,optimized-terminal,program-build"
+ ],
+ "aeneas_command": [
+  "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended",
+  "-diagnose-translation",
+  "-sequential",
+  "-no-progress-bar",
+  "-abort-on-error",
+  "-backend",
+  "lean",
+  "-namespace",
+  "PW8_vo",
+  "-dest",
+  "/home/dombarker/project-offloads/codex-pc-pin2-w8-20261111/PW8_E003_emitted/raw",
+  "-subdir",
+  "PW8_vo",
+  "-split-files",
+  "/home/dombarker/project-offloads/codex-pc-pin2-w8-20261111/PW8_E003_emitted/repro.llbc"
+ ],
+ "opacity": [
+  {
+   "path": "crate::r1_wire::_::parse",
+   "why": "fe80 opaque_paths; binds to PrefixAdapter.parseAccepted"
+  },
+  {
+   "path": "crate::r1_semantic::public_transcript",
+   "why": "fe80 opaque_paths; binds by name to PIN2_NEWGATE_r1_semantic"
+  },
+  {
+   "path": "crate::r1_wire::begin",
+   "why": "fe80 opaque_paths; binds by name to the PW8_E002 emission"
+  },
+  {
+   "path": "crate::r1_semantic::verify_finish",
+   "why": "fe80 opaque_paths; parameter F"
+  }
+ ],
+ "configuration": {
+  "start_from": [
+   "crate::r1_semantic::verify_observed"
+  ],
+  "include": [
+   "crate::verifier::Prepared",
+   "crate::verifier::Accumulator",
+   "crate::verifier::BatchedWeights",
+   "crate::verifier::View",
+   "crate::verifier::Error",
+   "crate::verifier::Variant",
+   "crate::verifier::Phase",
+   "crate::verifier::QueryGeometry",
+   "crate::r1_semantic::Verified",
+   "crate::r1_wire::SemanticTranscript",
+   "crate::r1_wire::Challenges",
+   "aspis_core::field::M31",
+   "aspis_core::field::CM31",
+   "aspis_core::field::QM31",
+   "aspis_core::field::wide_exact::WideExact",
+   "aspis_core::circle::SecureCirclePoint"
+  ],
+  "opaque": [
+   "crate::r1_wire::_::parse",
+   "crate::r1_semantic::public_transcript",
+   "crate::r1_wire::begin",
+   "crate::r1_semantic::verify_finish"
+  ],
+  "features": "private-leaf-salts,optimized-terminal,program-build",
+  "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+  "namespace": [
+   "PW8_vo"
+  ],
+  "crate": "aspis-r1-cost-probe",
+  "roots": [
+   "crate::r1_semantic::verify_observed"
+  ]
+ },
+ "covers": {},
+ "supersedes": {
+  "earlier_run": "none (first PIN2 emission of verify_observed); frozen counterparts: fe80 verify-helper-prefix emission and PCVL_E003",
+  "change": "source c7593d23fdc, second tool version, real crate instead of mirror crate"
+ },
+ "frozen_revision": "c7593d23fdc56fcee9a9df1628d5f63b52ac7a95",
+ "frozen_source_tree_git_hash": "41502cde12546a508272e75d71f0e5a9e449780e",
+ "expected_limits": {
+  "memory.high": "3221225472",
+  "memory.max": "4294967296",
+  "memory.swap.max": "0",
+  "pids.max": "64"
+ },
+ "extra_env": {
+  "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+  "RUSTFLAGS": "-C overflow-checks=yes",
+  "CARGO_BUILD_JOBS": "4",
+  "CARGO_PROFILE_RELEASE_CODEGEN_UNITS": "2"
+ },
+ "aeneas_tool": "extended",
+ "derived_from": "prov-p9f-20261110/PCXU_E003_spec.json",
+ "jobs_note": "cargo --jobs 4 and CARGO_BUILD_JOBS=4, rustc -Zthreads 1 (not used); identity by class receipt PCWE_E003",
+ "aeneas_sha256": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958",
+ "charon_sha256": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+ "tool_label": "ORIGINAL/fe80 TOOL (Charon daad69be XRa_bin / Aeneas b59d5188-lean432-extended)",
+ "variant": "fe80"
+}

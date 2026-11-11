@@ -1,0 +1,64 @@
+RPv_FIz_CoefficientsOnRun.lean:26:67: error: Application type mismatch: The argument
+  p
+has type
+  Public
+but is expected to have type
+  FIw_PublicModel.Public
+in the application
+  FIw_PublicModel.ofPublic p
+RPv_FIz_CoefficientsOnRun.lean:30:43: error: Application type mismatch: The argument
+  p
+has type
+  Public
+but is expected to have type
+  FIw_PublicModel.Public
+in the application
+  FIz_SemanticAlignment.value p
+RPv_FIz_CoefficientsOnRun.lean:27:57: error: unsolved goals
+p : Public
+o : Openings
+s : Selectors
+out : Std.Array NQ 24#usize
+hz : canonical o.z
+hs : canonical o.succ_z
+hx : canonical o.xor12_z
+hh : canonical s.high
+hl : canonical s.low
+ha : ∀ x ∈ ↑p.anchor, ↑x < FIw_ScalarArithmetic.P
+hn : ∀ x ∈ ↑p.nullifier, ↑x < FIw_ScalarArithmetic.P
+hr :
+  ∀ (recipient : Std.Array field.M31 8#usize),
+    p.recipient = some recipient → ∀ x ∈ ↑recipient, ↑x < FIw_ScalarArithmetic.P
+hc : ∀ x ∈ ↑p.change, ↑x < FIw_ScalarArithmetic.P
+hf : ∀ row ∈ ↑p.transition.live_snapshot.frontier, ∀ x ∈ ↑row, ↑x < FIw_ScalarArithmetic.P
+hnr : ∀ x ∈ ↑p.transition.candidate_afterstate.next_root, ↑x < FIw_ScalarArithmetic.P
+hnf : ∀ row ∈ ↑p.transition.candidate_afterstate.next_frontier, ∀ x ∈ ↑row, ↑x < FIw_ScalarArithmetic.P
+hab : ↑p.asset_id < FIw_ScalarArithmetic.P
+haw : ↑(p.withdrawal_amount.getD 0#u32) < FIw_ScalarArithmetic.P
+hm : ∑ h, FIv_NativeArray.value s.high ↑h = 1
+lm : ∑ l, FIv_NativeArray.value s.low ↑l = 1
+success : pool_v1.pair_forest_semantic_terminal.semantic_packed p o s = ok out
+native : canonical out ∧ decoded out = FIy_NativeCoefficients.model p o s
+⊢ FIy_NativeCoefficients.model p o s = fun j =>
+    FIx_PreweightedPack.pack fun i =>
+      R0P.SemSource.scalarLaneAt (FIw_PublicModel.ofPublic sorry) (FIw_PublicModel.openings o)
+        (FIw_PublicModel.selector s) (4 * ↑j + ↑i)
+'AspisR1.FIz_CoefficientsOnRun.on_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        2.04 real         1.20 user         0.83 sys
+          3400794112  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              269957  page reclaims
+                   4  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                 243  involuntary context switches
+         23747827844  instructions retired
+          7872786377  cycles elapsed
+           528941744  peak memory footprint

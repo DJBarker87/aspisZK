@@ -1,0 +1,197 @@
+NKR_DigestOptionalValue.lean:35:4: error: Type mismatch: After simplification, term
+  rm
+ has type
+  (match (PIN2P.SemanticPublic.dropDestination p).recipient with
+    | none => ok NJX_RecipientRoot.zero
+    | some d => NJX_LeftRoot.cohort (NKR_DigestChildren.high s 29) o.z d) =
+    ok c.recipient
+but is expected to have type
+  ok NJX_RecipientRoot.zero = ok c.recipient
+NKR_DigestOptionalValue.lean:40:4: error: Type mismatch: After simplification, term
+  rm
+ has type
+  (match (PIN2P.SemanticPublic.dropDestination p).recipient with
+    | none => ok NJX_RecipientRoot.zero
+    | some d => NJX_LeftRoot.cohort (NKR_DigestChildren.high s 29) o.z d) =
+    ok c.recipient
+but is expected to have type
+  NJX_LeftRoot.cohort (NKR_DigestChildren.high s 29) o.z d = ok c.recipient
+NKR_DigestOptionalValue.lean:62:4: error: Type mismatch: After simplification, term
+  cam
+ has type
+  @Eq (Result (Fin 2 → FIv_NativeArithmetic.NQ))
+    (NJX_LeftRoot.cohort (NKR_DigestChildren.high s i) o.z
+      (NJX_AppendDomains.frontier (PIN2P.SemanticPublic.dropDestination p).transition.candidate_afterstate.next_frontier
+        (NKI_PublicDomains.carryLevel ↑c.carry)))
+    (ok c.carried)
+but is expected to have type
+  @Eq (Result (Fin 2 → FIv_NativeArithmetic.NQ))
+    (NJX_LeftRoot.cohort (NKR_DigestChildren.high s i) o.z
+      (NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier
+        (NKI_PublicDomains.carryLevel ↑c.carry)))
+    (ok c.carried)
+NKR_DigestOptionalValue.lean:65:94: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  R0P.digestCarry ↑(PIN2P.SemanticPublic.dropDestination p).transition.live_snapshot.next_pair_index
+in the target expression
+  R0P.digestCarry ↑p.transition.live_snapshot.next_pair_index < 20
+
+p : Public
+o : Openings
+s : Selectors
+c : Children
+hp : NKR_DigestChildren.Domain (PIN2P.SemanticPublic.dropDestination p)
+ho : FIw_ArrayValue.canonical o.z
+hh : FIw_ArrayValue.canonical s.high
+g : Fin 2
+left✝¹² : NKR_DigestChildren.left s o 56 (PIN2P.SemanticPublic.dropDestination p).anchor = ok c.anchor
+left✝¹¹ :
+  NJX_LeftRoot.cohort (NKR_DigestChildren.high s 56) o.z (PIN2P.SemanticPublic.dropDestination p).anchor = ok c.anchor
+left✝¹⁰ : NKR_DigestChildren.left s o 26 (PIN2P.SemanticPublic.dropDestination p).nullifier = ok c.nullifier
+left✝⁹ :
+  NJX_LeftRoot.cohort (NKR_DigestChildren.high s 26) o.z (PIN2P.SemanticPublic.dropDestination p).nullifier =
+    ok c.nullifier
+left✝⁸ :
+  NJX_RecipientRoot.reference (PIN2P.SemanticPublic.dropDestination p).recipient o.z (NKR_DigestChildren.high s 29) =
+    ok c.recipient
+left✝⁷ :
+  NJX_RecipientRoot.cohort (PIN2P.SemanticPublic.dropDestination p).recipient o.z (NKR_DigestChildren.high s 29) =
+    ok c.recipient
+left✝⁶ : NKR_DigestChildren.left s o 32 (PIN2P.SemanticPublic.dropDestination p).change = ok c.change
+left✝⁵ :
+  NJX_LeftRoot.cohort (NKR_DigestChildren.high s 32) o.z (PIN2P.SemanticPublic.dropDestination p).change = ok c.change
+left✝⁴ :
+  NKI_LevelsFrame.run (PIN2P.SemanticPublic.dropDestination p).transition.live_snapshot.next_pair_index
+      (PIN2P.SemanticPublic.dropDestination p).transition.live_snapshot.frontier o.z s.high (List.finRange 20)
+      NKI_LevelsRoot.zero =
+    ok c.levels
+left✝³ :
+  NKR_DigestChildren.left s o 53 (PIN2P.SemanticPublic.dropDestination p).transition.candidate_afterstate.next_root =
+    ok c.nextRoot
+left✝² :
+  NJX_LeftRoot.cohort (NKR_DigestChildren.high s 53) o.z
+      (PIN2P.SemanticPublic.dropDestination p).transition.candidate_afterstate.next_root =
+    ok c.nextRoot
+left✝¹ :
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.bounded_append_carry
+      (PIN2P.SemanticPublic.dropDestination p).transition.live_snapshot.next_pair_index =
+    ok c.carry
+cv : ↑c.carry = R0P.digestCarry ↑(PIN2P.SemanticPublic.dropDestination p).transition.live_snapshot.next_pair_index
+bound : ↑c.carry ≤ 20
+left✝ :
+  NJX_CarryRoot.reference (↑c.carry) (NKI_PublicDomains.high s ↑c.carry) o.z
+      (NJX_AppendDomains.frontier (PIN2P.SemanticPublic.dropDestination p).transition.candidate_afterstate.next_frontier
+        (NKI_PublicDomains.carryLevel ↑c.carry)) =
+    ok c.carried
+cam :
+  NJX_CarryRoot.cohort (↑c.carry) (NKI_PublicDomains.high s ↑c.carry) o.z
+      (NJX_AppendDomains.frontier (PIN2P.SemanticPublic.dropDestination p).transition.candidate_afterstate.next_frontier
+        (NKI_PublicDomains.carryLevel ↑c.carry)) =
+    ok c.carried
+active : ↑c.carry < 20
+minc : min (↑c.carry) 19 = ↑c.carry
+i : Fin 64 := ⟨33 + ↑c.carry, ⋯⟩
+d : NJX_AppendDomains.D :=
+  NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier (NKI_PublicDomains.carryLevel ↑c.carry)
+high : NKI_PublicDomains.high s ↑c.carry = NKR_DigestChildren.high s i
+call : NJX_LeftRoot.cohort (NKR_DigestChildren.high s i) o.z d = ok c.carried
+hd : NJX_DigestCohort.dc d
+scaled : NKR_DigestRegularValue.binding s o.z i d g = FIv_NativeArray.value s.low 11 * decode (c.carried g)
+⊢ R0P.digestCarry ↑p.transition.live_snapshot.next_pair_index < 20
+NKR_DigestOptionalValue.lean:68:3: error: Type mismatch: After simplification, term
+  scaled
+ has type
+  (FIw_PublicModel.selector s (R0P.g2Row ⟨33 + ↑c.carry, ⋯⟩ 11) *
+      NJB_PackLinearity.pack fun j =>
+        FIv_NativeArray.value o.z ↑(NJX_DigestGroups.index g j) -
+          FIw_PublicModel.digest (↑p.transition.candidate_afterstate.next_frontier)[↑c.carry]
+            (NJX_DigestGroups.index g j)) =
+    FIv_NativeArray.value s.low 11 * decode (c.carried g)
+but is expected to have type
+  (FIw_PublicModel.selector s (R0P.g2Row ⟨33 + R0P.digestCarry ↑p.transition.live_snapshot.next_pair_index, ⋯⟩ 11) *
+      NJB_PackLinearity.pack fun j =>
+        FIv_NativeArray.value o.z ↑(NJX_DigestGroups.index g j) -
+          FIw_PublicModel.digest
+            (↑p.transition.candidate_afterstate.next_frontier)[R0P.digestCarry
+                ↑p.transition.live_snapshot.next_pair_index]
+            (NJX_DigestGroups.index g j)) =
+    FIv_NativeArray.value s.low 11 * decode (c.carried g)
+NKR_DigestOptionalValue.lean:77:96: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  R0P.digestCarry ↑(PIN2P.SemanticPublic.dropDestination p).transition.live_snapshot.next_pair_index
+in the target expression
+  ¬R0P.digestCarry ↑p.transition.live_snapshot.next_pair_index < 20
+
+p : Public
+o : Openings
+s : Selectors
+c : Children
+hp : NKR_DigestChildren.Domain (PIN2P.SemanticPublic.dropDestination p)
+ho : FIw_ArrayValue.canonical o.z
+hh : FIw_ArrayValue.canonical s.high
+g : Fin 2
+left✝¹² : NKR_DigestChildren.left s o 56 (PIN2P.SemanticPublic.dropDestination p).anchor = ok c.anchor
+left✝¹¹ :
+  NJX_LeftRoot.cohort (NKR_DigestChildren.high s 56) o.z (PIN2P.SemanticPublic.dropDestination p).anchor = ok c.anchor
+left✝¹⁰ : NKR_DigestChildren.left s o 26 (PIN2P.SemanticPublic.dropDestination p).nullifier = ok c.nullifier
+left✝⁹ :
+  NJX_LeftRoot.cohort (NKR_DigestChildren.high s 26) o.z (PIN2P.SemanticPublic.dropDestination p).nullifier =
+    ok c.nullifier
+left✝⁸ :
+  NJX_RecipientRoot.reference (PIN2P.SemanticPublic.dropDestination p).recipient o.z (NKR_DigestChildren.high s 29) =
+    ok c.recipient
+left✝⁷ :
+  NJX_RecipientRoot.cohort (PIN2P.SemanticPublic.dropDestination p).recipient o.z (NKR_DigestChildren.high s 29) =
+    ok c.recipient
+left✝⁶ : NKR_DigestChildren.left s o 32 (PIN2P.SemanticPublic.dropDestination p).change = ok c.change
+left✝⁵ :
+  NJX_LeftRoot.cohort (NKR_DigestChildren.high s 32) o.z (PIN2P.SemanticPublic.dropDestination p).change = ok c.change
+left✝⁴ :
+  NKI_LevelsFrame.run (PIN2P.SemanticPublic.dropDestination p).transition.live_snapshot.next_pair_index
+      (PIN2P.SemanticPublic.dropDestination p).transition.live_snapshot.frontier o.z s.high (List.finRange 20)
+      NKI_LevelsRoot.zero =
+    ok c.levels
+left✝³ :
+  NKR_DigestChildren.left s o 53 (PIN2P.SemanticPublic.dropDestination p).transition.candidate_afterstate.next_root =
+    ok c.nextRoot
+left✝² :
+  NJX_LeftRoot.cohort (NKR_DigestChildren.high s 53) o.z
+      (PIN2P.SemanticPublic.dropDestination p).transition.candidate_afterstate.next_root =
+    ok c.nextRoot
+left✝¹ :
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.bounded_append_carry
+      (PIN2P.SemanticPublic.dropDestination p).transition.live_snapshot.next_pair_index =
+    ok c.carry
+cv : ↑c.carry = R0P.digestCarry ↑(PIN2P.SemanticPublic.dropDestination p).transition.live_snapshot.next_pair_index
+bound : ↑c.carry ≤ 20
+left✝ :
+  NJX_CarryRoot.reference (↑c.carry) (NKI_PublicDomains.high s ↑c.carry) o.z
+      (NJX_AppendDomains.frontier (PIN2P.SemanticPublic.dropDestination p).transition.candidate_afterstate.next_frontier
+        (NKI_PublicDomains.carryLevel ↑c.carry)) =
+    ok c.carried
+cam :
+  NJX_CarryRoot.cohort (↑c.carry) (NKI_PublicDomains.high s ↑c.carry) o.z
+      (NJX_AppendDomains.frontier (PIN2P.SemanticPublic.dropDestination p).transition.candidate_afterstate.next_frontier
+        (NKI_PublicDomains.carryLevel ↑c.carry)) =
+    ok c.carried
+active : ¬↑c.carry < 20
+eq : NJX_CarryRoot.zero = c.carried
+⊢ ¬R0P.digestCarry ↑p.transition.live_snapshot.next_pair_index < 20
+'AspisR1.NKR_DigestOptionalValue.recipient' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_DigestOptionalValue.carry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        5.07 real         3.58 user         1.48 sys
+          4887068672  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              371120  page reclaims
+                  16  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                 902  involuntary context switches
+         59696961977  instructions retired
+         18442049498  cycles elapsed
+           786654928  peak memory footprint

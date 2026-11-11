@@ -1,0 +1,39 @@
+def AspisR1PublicSerializer.Whole431.sourceSteps : Public → List Step :=
+fun x =>
+  match x with
+  | AspisR1PublicSerializer.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer p t =>
+    [Step.byte 0#u8, Step.words p.anchor_root.to_slice, Step.words p.nullifier.to_slice, Step.words (single p.asset_id),
+        Step.byte 1#u8, Step.words p.recipient_commitment.to_slice, Step.words p.change_commitment.to_slice,
+        Step.byte 0#u8] ++
+      tailSteps t
+  | AspisR1PublicSerializer.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal p t =>
+    [Step.byte 1#u8, Step.words p.anchor_root.to_slice, Step.words p.nullifier.to_slice, Step.words (single p.asset_id),
+        Step.byte 0#u8, Step.words p.change_commitment.to_slice, Step.byte 1#u8, Step.words (single p.amount)] ++
+      tailSteps t
+@[reducible] def AspisR1PublicSerializer.Whole431.Withdrawal : Type :=
+AspisR1PublicSerializer.pool_v1.payment_relation.PoolV1WithdrawalPublicV1
+@[reducible] def AspisR1PublicSerializer.Whole431.Transfer : Type :=
+AspisR1PublicSerializer.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+@[reducible] def AspisR1PublicSerializer.Whole431.Public : Type :=
+AspisR1PublicSerializer.pool_v1.pair_forest_semantic_terminal.r0.Public
+PIN2W3b_Probe.lean:8:8: error(lean.unknownIdentifier): Unknown identifier `JFs_SerializerLengths.words`
+PIN2W3b_Probe.lean:9:8: error(lean.unknownIdentifier): Unknown identifier `JFs_SerializerLengths.frontier_words`
+PIN2W3b_Probe.lean:10:8: error(lean.unknownIdentifier): Unknown identifier `JFs_SerializerLengths.frontier_bytes`
+        2.13 real         1.13 user         0.76 sys
+          2216411136  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              180376  page reclaims
+                1249  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                 235  voluntary context switches
+                4695  involuntary context switches
+         15963786278  instructions retired
+          6179941925  cycles elapsed
+           372133744  peak memory footprint

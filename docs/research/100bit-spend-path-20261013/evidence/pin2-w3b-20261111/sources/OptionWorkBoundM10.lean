@@ -1,0 +1,18 @@
+import PublicParserWork
+
+set_option autoImplicit false
+namespace AspisR1.OptionWorkBoundM10
+
+theorem bind_bound {A B : Type} (x : Option A × Nat) (f : A → Option B × Nat)
+    (C D : Nat) (hx : x.2 ≤ C) (hf : ∀ a, x.1 = some a → (f a).2 ≤ D) :
+    (PublicParserWork.bind x f).2 ≤ C+D+1 := by
+  unfold PublicParserWork.bind
+  split
+  · omega
+  · rename_i a ha
+    have hh := hf a ha
+    dsimp only
+    omega
+
+#print axioms bind_bound
+end AspisR1.OptionWorkBoundM10

@@ -1,0 +1,118 @@
+RPz8_F3R_PublicLog.lean:30:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from init.encoded.deref.len
+in the target expression
+  observe
+      (run
+          (PreparedHashCode.bind
+            (PreparedHashCode.bind (Code.done (core.ops.control_flow.ControlFlow.Continue init.encoded)) fun cf =>
+              match cf with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let r ← liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from val.deref.len)
+                let r1 ←
+                  liftM
+                      (PCWN_NewLib.core.result.Result.map_err
+                        (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                          (PIN2W7_TranscriptCopy.digest D))
+                        r ())
+                let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val_1 => do
+                    let s ←
+                      liftM
+                          (lift
+                            (Array.make 1#usize [0#u8]
+                                AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                    let a ← liftM (lift (core.num.U32.to_le_bytes val_1))
+                    let s1 ← liftM (lift a.to_slice)
+                    let s2 ← liftM (lift root.to_slice)
+                    let s3 ←
+                      liftM
+                          (lift
+                            (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, val.deref, s2]
+                                ⋯).to_slice)
+                    let a1 ←
+                      effects.digest (PIN2W7_PrefixGlue.digestBack (PIN2W7_TranscriptCopy.digest D)) before.hash s3
+                    pure (core.result.Result.Ok { state := a1, hash := before.hash, next_row := 0#u8 })
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                        (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript Hash)
+                        (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                    (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript Hash)
+                    (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual))
+            fun x => pure (PIN2W7_PrefixGlue.cres PIN2W7_PrefixGlue.transcriptBack PIN2W7_PrefixGlue.errorBack x))).1 =
+    [initPair init]
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+root : Std.Array U8 32#usize
+before : r1_wire.SemanticTranscript Hash
+init : PublicInitCall D pub root before
+⊢ observe
+      (run
+          (PreparedHashCode.bind
+            (PreparedHashCode.bind (Code.done (core.ops.control_flow.ControlFlow.Continue init.encoded)) fun cf =>
+              match cf with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let r ← liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from val.deref.len)
+                let r1 ←
+                  liftM
+                      (PCWN_NewLib.core.result.Result.map_err
+                        (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                          (PIN2W7_TranscriptCopy.digest D))
+                        r ())
+                let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val_1 => do
+                    let s ←
+                      liftM
+                          (lift
+                            (Array.make 1#usize [0#u8]
+                                AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                    let a ← liftM (lift (core.num.U32.to_le_bytes val_1))
+                    let s1 ← liftM (lift a.to_slice)
+                    let s2 ← liftM (lift root.to_slice)
+                    let s3 ←
+                      liftM
+                          (lift
+                            (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, val.deref, s2]
+                                ⋯).to_slice)
+                    let a1 ←
+                      effects.digest (PIN2W7_PrefixGlue.digestBack (PIN2W7_TranscriptCopy.digest D)) before.hash s3
+                    pure (core.result.Result.Ok { state := a1, hash := before.hash, next_row := 0#u8 })
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                        (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript Hash)
+                        (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                    (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript Hash)
+                    (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual))
+            fun x => pure (PIN2W7_PrefixGlue.cres PIN2W7_PrefixGlue.transcriptBack PIN2W7_PrefixGlue.errorBack x))).1 =
+    [initPair init]
+'AspisR1.F3R_PublicLog.log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3R_PublicLog.publicPIN2_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+        2.93 real         1.64 user         1.09 sys
+          4196139008  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              322014  page reclaims
+                  27  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   2  voluntary context switches
+                3737  involuntary context switches
+         27437227925  instructions retired
+          9735859664  cycles elapsed
+           615545800  peak memory footprint

@@ -1,0 +1,44 @@
+PIN2_F3U_Head.lean:78:18: error(lean.unknownIdentifier): Unknown identifier `SourceDigestAddresses.flatten_init`
+PIN2_F3U_Head.lean:76:86: error: unsolved goals
+H : Type
+D : AspisR1PublicPreparationPIN2.aspis_core.digest.Digest32 H
+hash : H
+pub : Slice U8
+root : Std.Array U8 32#usize
+out : AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H
+success :
+  erase (AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash pub root) = ok (core.result.Result.Ok out)
+len : U32
+state : State
+converted : core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from pub.len = ok (core.result.Result.Ok len)
+first :
+  RawK_Head.head (AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash pub root) =
+    some (flatten (PIN2_RawJ_Read.initPartsPIN2 pub len root), state)
+⊢ ∃ state,
+    RawK_Head.head (AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash pub root) =
+      some (PublicInitFrame.frame (rawBytes pub) (decodeState root), state)
+PIN2_F3U_Head.lean:161:45: error(lean.unknownIdentifier): Unknown identifier `SourceDigestAddresses.rawBytes`
+'AspisR1.PIN2_F3U_Head.init_reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PIN2_F3U_Head.flatten_initPartsPIN2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PIN2_F3U_Head.init_head' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PIN2_F3U_Head.public_first' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PIN2_F3U_Head.publicPIN2_first' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PIN2_F3U_Head.verify_first' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       22.03 real         1.72 user         2.28 sys
+          4207230976  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              117700  page reclaims
+              208016  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               25216  voluntary context switches
+              166653  involuntary context switches
+         42224573532  instructions retired
+         15280065120  cycles elapsed
+           626525408  peak memory footprint

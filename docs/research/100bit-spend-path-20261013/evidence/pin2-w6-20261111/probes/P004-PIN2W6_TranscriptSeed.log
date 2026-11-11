@@ -1,0 +1,50 @@
+8e18f08e7484dc73d4ffe58b2f9d48fd15156c8a3b3a43d82ff4d946b0b50215  /Users/dominic/ZK/.worktrees/pin2-lean/docs/research/100bit-spend-path-20261013/evidence/pin2-w6-20261111/sources/PIN2W6_TranscriptSeed.lean
+PIN2W6_TranscriptSeed.lean:30:74: error: unsolved goals
+H : Type
+D : D32 H
+hash : H
+bytes : Slice U8
+root : Std.Array U8 32#usize
+length : U32
+hlen : core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from bytes.len = ok (core.result.Result.Ok length)
+⊢ (do
+      let a1 ←
+        D.digest hash
+            (Array.make 5#usize
+                [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN,
+                  (Array.make 1#usize [0#u8]
+                      AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new._proof_4).to_slice,
+                  (core.num.U32.to_le_bytes length).to_slice, bytes, root.to_slice]
+                ⋯).to_slice
+      ok (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })) =
+    do
+    let state ←
+      D.digest hash
+          (Array.make 5#usize
+              [AspisR1PublicPreparation.r1_wire.DOMAIN,
+                (Array.make 1#usize [0#u8] AspisR1PublicPreparation.TranscriptStep.initParts._proof_4).to_slice,
+                (core.num.U32.to_le_bytes length).to_slice, bytes, root.to_slice]
+              ⋯).to_slice
+    ok (core.result.Result.Ok { state := state, hash := hash, next_row := 0#u8 })
+'AspisR1.PIN2W6_TranscriptSeed.new_of_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PIN2W6_TranscriptSeed.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PIN2W6_TranscriptSeed.public_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PIN2W6_TranscriptSeed.converted' depends on axioms: [propext, Classical.choice, Quot.sound]
+        1.61 real         1.02 user         0.58 sys
+          2256912384  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              186590  page reclaims
+                   5  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  12  voluntary context switches
+                 789  involuntary context switches
+         18139745471  instructions retired
+          5955982914  cycles elapsed
+           375017616  peak memory footprint

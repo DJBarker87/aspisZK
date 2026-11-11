@@ -1,0 +1,45 @@
+RPz8_F3Q_PrepareMap.lean:26:2: error: Type mismatch
+  map_log ?m.17 ?m.18
+has type
+  (run do
+        let a ← ?m.17
+        pure (?m.18 a)).1 =
+    (run ?m.17).1
+but is expected to have type
+  (run do
+        let result ←
+          AspisR1PublicPreparation.S1SemanticCode.verifyPIN2
+              (fun {H} =>
+                AspisR1PublicPreparation.S1SemanticCode.finish R
+                  (AspisR1PublicPreparation.S1SemanticRootCopy.install B))
+              (retainedDigest D) (FirstComposition.toRetainedPublic pub) bytes hash none
+        pure
+            (match result with
+            | core.result.Result.Ok sem => core.result.Result.Ok (S1SemanticCarrier.currentSem sem)
+            | core.result.Result.Err error => core.result.Result.Err (S1SemanticCarrier.currentWireError error))).1 =
+    (run
+        (AspisR1PublicPreparation.S1SemanticCode.verify
+          (fun {H} =>
+            AspisR1PublicPreparation.S1SemanticCode.finish R (AspisR1PublicPreparation.S1SemanticRootCopy.install B))
+          (retainedDigest D) (FirstComposition.toRetainedPublic pub) bytes hash none)).1
+'AspisR1.F3Q_PrepareMap.map_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3Q_PrepareMap.semantic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3Q_PrepareMap.original' depends on axioms: [propext, Classical.choice, Quot.sound]
+        2.21 real         1.36 user         0.85 sys
+          4156866560  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              319306  page reclaims
+                   3  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                 285  involuntary context switches
+         25926246645  instructions retired
+          8472195234  cycles elapsed
+           607118160  peak memory footprint

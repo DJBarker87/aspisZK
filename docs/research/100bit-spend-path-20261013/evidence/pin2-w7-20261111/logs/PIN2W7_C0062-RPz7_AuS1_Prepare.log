@@ -1,0 +1,50 @@
+RPz7_AuS1_Prepare.lean:21:4: error: Tactic `apply` failed: could not unify the conclusion of `AuS1_Semantic.verify_uniform`
+  Uniform ?hashv (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish ?R ?B) ?D ?pub ?bytes ?hash ?obs)
+with the goal
+  Uniform hashv
+    (S1SemanticCode.verifyPIN2 (fun {H} => S1SemanticCode.finish R (S1SemanticRootCopy.install B))
+      (InstalledPreparation.retainedDigest D) (FirstComposition.toRetainedPublic pub) bytes hash none)
+
+Note: The full type of `AuS1_Semantic.verify_uniform` is
+  ∀ (R : RoundModel.Boundaries) (B : FinishModel.Boundaries) {H : Type} (D : aspis_core.Digest32 H)
+    (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest),
+    (∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts) →
+      ∀ (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H)
+        (obs : Option (RPz7_PhaseIso.Phase → Result Unit)),
+        Uniform hashv (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes hash obs)
+
+case hp
+R : RoundModel.Boundaries
+B : FinishModel.Boundaries
+H : Type
+D : aspis_core.digest.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+⊢ Uniform hashv
+    (S1SemanticCode.verifyPIN2 (fun {H} => S1SemanticCode.finish R (S1SemanticRootCopy.install B))
+      (InstalledPreparation.retainedDigest D) (FirstComposition.toRetainedPublic pub) bytes hash none)
+'AspisR1.AuS1_Prepare.semantic_uniform' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.AuS1_Prepare.original_uniform' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.AuS1_Prepare.uniform' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.AuS1_Prepare.associated' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        4.22 real         2.45 user         0.93 sys
+          4180312064  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              309675  page reclaims
+               11052  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                1550  voluntary context switches
+                7733  involuntary context switches
+         42294182353  instructions retired
+         13009707070  cycles elapsed
+           627385480  peak memory footprint

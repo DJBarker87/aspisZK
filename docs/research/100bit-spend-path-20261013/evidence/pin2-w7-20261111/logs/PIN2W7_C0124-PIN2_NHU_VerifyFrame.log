@@ -1,0 +1,77 @@
+PIN2_NHU_VerifyFrame.lean:72:19: error: unsolved goals
+case ok.Ok.ok.Ok.ok.Err
+finish : VerifyPrefix.Finish
+H : Type
+D : aspis_core.digest.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+pre : r1_wire.Prefix
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+initial : r1_wire.SemanticTranscript H
+created : r1_semantic.public_transcript D pub hash pre.c1_root = ok (core.result.Result.Ok initial)
+after : r1_wire.SemanticTranscript H
+e : r1_wire.Error
+begun : r1_wire.begin D pre initial = ok (core.result.Result.Err e, after)
+⊢ (let (r2, val1) := (core.result.Result.Err e, after)
+    do
+    let cf2 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val2 => finish D pub pre val1 val2 none
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        match residual with
+        | core.result.Result.Ok x =>
+          PCWN_NewLib.Never.rec (fun x => Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)) x
+        | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    let (status, after) := (core.result.Result.Err e, after)
+    match status with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok value => finish D pub pre after value none
+PIN2_NHU_VerifyFrame.lean:61:32: warning: This simp argument is unused:
+  PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̵P̵C̵W̵N̵_̵N̵e̵w̵L̵i̵b̵.̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+             PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual,
+             core.convert.FromSame.from]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PIN2_NHU_VerifyFrame.lean:65:32: warning: This simp argument is unused:
+  PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵ ̵P̵C̵W̵N̵_̵N̵e̵w̵L̵i̵b̵.̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PIN2_NHU_VerifyFrame.lean:73:36: warning: This simp argument is unused:
+  PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̵P̵C̵W̵N̵_̵N̵e̵w̵L̵i̵b̵.̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+                 PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual,
+                 core.convert.FromSame.from]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PIN2_NHU_VerifyFrame.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PIN2_NHU_VerifyFrame.parse_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        7.15 real         1.82 user         1.52 sys
+          4722753536  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              319924  page reclaims
+               40282  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                3508  voluntary context switches
+               34208  involuntary context switches
+         37556394369  instructions retired
+         12649818857  cycles elapsed
+           740560936  peak memory footprint

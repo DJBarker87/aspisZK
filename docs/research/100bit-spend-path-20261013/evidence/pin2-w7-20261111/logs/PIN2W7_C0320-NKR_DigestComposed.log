@@ -1,0 +1,68 @@
+NKR_DigestComposed.lean:33:73: error: Application type mismatch: The argument
+  p
+has type
+  Public
+but is expected to have type
+  FIw_PublicModel.Public
+in the application
+  NKR_DigestWrapper.reference p
+NKR_DigestComposed.lean:34:26: error: Application type mismatch: The argument
+  p
+has type
+  Public
+but is expected to have type
+  FIw_PublicModel.Public
+in the application
+  NKR_DigestWrapper.cohort p
+NKR_DigestComposed.lean:36:94: error: Application type mismatch: The argument
+  p
+has type
+  Public
+but is expected to have type
+  FIw_PublicModel.Public
+in the application
+  NKR_DigestWrapper.source p
+theorem AspisR1.NKR_DigestComposed.source : ∀ (p : Public) (o : Openings) (s : Selectors),
+  NKR_DigestChildren.Domain p →
+    FIw_ArrayValue.canonical o.z →
+      FIw_ArrayValue.canonical s.high →
+        FIw_ArrayValue.canonical s.low →
+          ∃ c sums out old v m,
+            NKR_DigestChildren.Clauses p o s c ∧
+              NKR_DigestChildren.Canonical c ∧
+                NKR_DigestInvocation.PrefixArithmetic c v ∧
+                  NKR_DigestPrefixStep.Trace p o s c (List.finRange 4) ![zero, zero, zero] ![zero, v 3, zero] ∧
+                    NKR_DigestInvocation.MiddleArithmetic c ![zero, v 3, zero] m ∧
+                      NKR_DigestCuts.MiddleNative p o s c ![zero, v 3, zero] m ∧
+                        NKR_DigestCuts.afterCarry m = sums ∧
+                          NKR_DigestWrapperView.NativeCut p o s p o s out out 1 ∧
+                            NKR_DigestCuts.WrapperCut p o s p o s out out 1 ∧
+                              NKR_DigestPrefix.run p o s = ok (c, sums) ∧
+                                NKR_DigestPrefix.Frame c sums ∧
+                                  NKR_DigestComplete.reference p o s = ok out ∧
+                                    NKR_DigestWrapper.reference sorry o s = ok out ∧
+                                      NKR_DigestWrapper.cohort sorry o s = ok out ∧
+                                        (∀ (j : Fin 2), Canon (out j)) ∧
+                                          FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes p o s =
+                                              ok old ∧
+                                            FIw_ArrayValue.canonical old :=
+fun p o s hp ho hh hl => sorry (NKR_DigestWrapper.source sorry o s sorry ho hh hl)
+'AspisR1.NKR_DigestComposed.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        8.56 real         6.95 user         1.56 sys
+          4772642816  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              373956  page reclaims
+                 113  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  21  voluntary context switches
+                2760  involuntary context switches
+        106329974467  instructions retired
+         31075963459  cycles elapsed
+           796600784  peak memory footprint

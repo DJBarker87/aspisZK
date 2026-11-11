@@ -1,0 +1,36 @@
+import RPv_FJq_PublicField
+set_option autoImplicit false
+/-! PIN2 W11 (2026-11-11): W3a's PIN2 text (pool/deploymentDomain in `common`, destination
+from the withdrawal constructor), with one layout fix: W3a's continuation line for the
+withdrawal `destination` field sat left of the structure-instance field column and did not
+parse (C0200); it is joined onto the previous line.  No other change. -/
+noncomputable section
+namespace AspisR1.FJq_PublicModel
+open FIz_ConcretePack (embed)
+abbrev K:=FIv_NativeValue.K
+def common (c : PublicSourceRaw.Common) : R0P.Public K :=
+  {variant:=.privateTransfer,anchor:=fun i=>(c.anchor i).val,
+   nullifier:=fun i=>(c.nullifier i).val,assetId:=c.assetId.val,
+   recipient:=none,change:=fun i=>(c.change i).val,withdrawalAmount:=none,
+   nextPairIndex:=c.nextPairIndex.val,snapshotFrontier:=fun l i=>(c.snapshotFrontier l i).val,
+   nextRoot:=fun i=>(c.nextRoot i).val,nextFrontier:=fun l i=>(c.nextFrontier l i).val,
+   pool:=c.pool.val,deploymentDomain:=c.deploymentDomain.val,destination:=none}
+def model : PublicSourceRaw.Public → R0P.Public K
+  | .transfer c r=>{common c with recipient:=some (fun i=>(r i).val)}
+  | .withdrawal c a d=>{common c with variant:=.withdrawal,withdrawalAmount:=some (a.val : K),destination:=some d.val}
+/-- The guarded parser mapping preserves every field of the public model. -/
+theorem mapped (p : PublicSourceRaw.Public) (h : PublicSourceRaw.Canonical p) :
+    SpendDataMap.mapPublic ExactBaseProjection.embed
+      (SemanticPublicWire.toPublic (PublicSourceRaw.mapPublic p h))=
+      SpendDataMap.mapPublic embed (model p) := by
+  cases p <;> simp only [PublicSourceRaw.mapPublic,PublicSourceRaw.mapCommon,
+    SemanticPublicWire.toPublic,SpendDataMap.mapPublic,model,common,
+    Option.map_some,Option.map_none,FJq_PublicField.value,map_natCast]
+  all_goals
+    congr 1 <;> (try funext i) <;> (try funext j) <;>
+      (try simp only [SpendDataMap.digest,FJq_PublicField.value,map_natCast])
+  all_goals
+    first | rfl | (apply congrArg some;funext i;exact FJq_PublicField.value _ _)
+#print axioms mapped
+end AspisR1.FJq_PublicModel
+end

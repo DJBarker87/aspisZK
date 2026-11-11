@@ -1,0 +1,26 @@
+'AspisR1.NKQ_ObservedTrace.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedTrace.parser_rejection' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_ObservedTrace.factor : ∀ (F : S1SemanticCode.Finish) {H : Type} (D : aspis_core.Digest32 H)
+  (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H),
+  S1SemanticCode.verify (fun {H} => F) D pub bytes hash none = do
+    let r ← liftM (PrefixAdapter.parseAccepted bytes)
+    afterParsed (fun {H} => F) D pub hash r :=
+fun F {H} D pub bytes hash => Eq.refl (S1SemanticCode.verify (fun {H} => F) D pub bytes hash none)
+        5.36 real         2.12 user         1.59 sys
+          5172068352  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              376169  page reclaims
+               13030  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                2117  voluntary context switches
+               12803  involuntary context switches
+         38128631053  instructions retired
+         13119759198  cycles elapsed
+           821039960  peak memory footprint

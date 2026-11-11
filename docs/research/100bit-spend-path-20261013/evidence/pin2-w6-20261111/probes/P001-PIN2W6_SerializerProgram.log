@@ -1,0 +1,38 @@
+abf2064443d16de7b74ac72b6079306f439d116bc0840c6066e7fc4e89fa5504  /Users/dominic/ZK/.worktrees/pin2-lean/docs/research/100bit-spend-path-20261013/evidence/pin2-w6-20261111/sources/PIN2W6_SerializerProgram.lean
+PIN2W6_SerializerProgram.lean:33:43: error: unsolved goals
+u : ByteVec
+k : ByteVec → Result PIN2_PublicBytesRefinement.Output
+⊢ (let (r, out) := (core.result.Result.Ok (), u)
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => k out
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+          PIN2_SerializerTransport.ByteVec (core.convert.FromSame NewError) residual) =
+    k u
+'AspisR1.PIN2W6_SerializerProgram.new_of_mapped' depends on axioms: [propext]
+'AspisR1.PIN2W6_SerializerProgram.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PIN2W6_SerializerProgram.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PIN2W6_SerializerProgram.public_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        8.24 real         1.06 user         1.04 sys
+          2237497344  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              120894  page reclaims
+               62516  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               10671  voluntary context switches
+               56516  involuntary context switches
+         22362978250  instructions retired
+          7895486198  cycles elapsed
+           377507888  peak memory footprint

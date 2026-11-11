@@ -1,0 +1,87 @@
+NOC_Op9Slot.lean:83:82: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1PublicPreparationPIN2.r1_semantic.public_transcript
+    (AspisR1PublicPreparation.PIN2W7_TranscriptCopy.digest (LIB_VCode.digest env))
+    (AspisR1PublicPreparation.PreparationBinding.toPIN2 pub) () (LIB_Env.nativeKey (NNH_Libraries.VL.c1Root p.prefix_))
+in the target expression
+  AspisR1PublicPreparation.PIN2W7_PrefixGlue.rmap
+      (AspisR1PublicPreparation.PIN2W7_PrefixGlue.cres AspisR1PublicPreparation.PIN2W7_PrefixGlue.transcriptBack
+        AspisR1PublicPreparation.PIN2W7_PrefixGlue.errorBack)
+      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript
+        (AspisR1PublicPreparation.PIN2W7_TranscriptCopy.digest (LIB_VCode.digest env))
+        (AspisR1PublicPreparation.PreparationBinding.toPIN2 pub) ()
+        (LIB_Env.nativeKey (LIB_VCarriers.c1Root p.prefix_))) =
+    ok (core.result.Result.Ok p.initial)
+
+pub : NNH_Libraries.VL.Public
+bytes : Slice U8
+env : RSL.Env
+sem : RSL.Verified NNH_Libraries.VL
+called : NNH_ObservedReturns.value { public_ := pub, bytes := LIB_Carriers.bytes bytes } env = Except.ok sem
+p : NNV_ObservedCut.Packet { public_ := pub, bytes := LIB_Carriers.bytes bytes } env sem
+parsed :
+  AspisR1PublicPreparation.PrefixAdapter.parseAccepted bytes =
+    ok (core.result.Result.Ok (LIB_VCarriers.prefixRaw p.prefix_))
+initialized :
+  AspisR1PublicPreparationPIN2.r1_semantic.public_transcript
+      (AspisR1PublicPreparation.PIN2W7_TranscriptCopy.digest (LIB_VCode.digest env))
+      (AspisR1PublicPreparation.PreparationBinding.toPIN2 pub) ()
+      (LIB_Env.nativeKey (NNH_Libraries.VL.c1Root p.prefix_)) =
+    ok (core.result.Result.Ok (AspisR1PublicPreparation.PIN2W7_TranscriptCopy.transcript p.initial))
+begun :
+  AspisR1PublicPreparation.r1_wire.begin (LIB_VCode.digest env) (LIB_VCarriers.prefixRaw p.prefix_) p.initial =
+    ok (core.result.Result.Ok (LIB_VCarriers.challengesRaw p.challenges), p.before)
+fin :
+  AspisR1PublicPreparation.FinishModel.finish AspisS1ExtractedRoundChildren.children NOC_FinishSource.Bi
+      (LIB_VCode.digest env)
+      { public_ := pub, prefix_ := p.prefix_, transcript := p.before, challenges := p.challenges }.public_
+      (LIB_VCarriers.prefixRaw
+        { public_ := pub, prefix_ := p.prefix_, transcript := p.before, challenges := p.challenges }.prefix_)
+      { public_ := pub, prefix_ := p.prefix_, transcript := p.before, challenges := p.challenges }.transcript
+      (LIB_VCarriers.challengesRaw
+        { public_ := pub, prefix_ := p.prefix_, transcript := p.before, challenges := p.challenges }.challenges)
+      none =
+    ok (core.result.Result.Ok (LIBC_PreparedCarriers.verified LIB_Prepared.types sem))
+hk : LIB_Env.nativeKey (LIB_VCarriers.c1Root p.prefix_) = (LIB_VCarriers.prefixRaw p.prefix_).c1_root
+⊢ AspisR1PublicPreparation.PIN2W7_PrefixGlue.rmap
+      (AspisR1PublicPreparation.PIN2W7_PrefixGlue.cres AspisR1PublicPreparation.PIN2W7_PrefixGlue.transcriptBack
+        AspisR1PublicPreparation.PIN2W7_PrefixGlue.errorBack)
+      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript
+        (AspisR1PublicPreparation.PIN2W7_TranscriptCopy.digest (LIB_VCode.digest env))
+        (AspisR1PublicPreparation.PreparationBinding.toPIN2 pub) ()
+        (LIB_Env.nativeKey (LIB_VCarriers.c1Root p.prefix_))) =
+    ok (core.result.Result.Ok p.initial)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    pub
+  has type
+    NNH_Libraries.VL.Public
+  but is expected to have type
+    AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public
+  in the application
+    AspisR1PublicPreparation.PreparationBinding.toPIN2 pub
+'AspisR1.NOC_Op9Slot.slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOC_Op9Slot.digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOC_Op9Slot.pub_round' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOC_Op9Slot.reservation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOC_Op9Slot.installed_verify' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOC_Op9Slot.prefix_finish' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        3.72 real         2.20 user         1.50 sys
+          5417484288  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              407174  page reclaims
+                 108  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   6  voluntary context switches
+                 546  involuntary context switches
+         43271199572  instructions retired
+         14040302650  cycles elapsed
+           896614560  peak memory footprint

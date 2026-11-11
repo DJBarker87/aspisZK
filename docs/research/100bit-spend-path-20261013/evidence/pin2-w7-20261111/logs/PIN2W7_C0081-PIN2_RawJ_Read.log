@@ -1,0 +1,81 @@
+PIN2_RawJ_Read.lean:45:40: error: Application type mismatch: The argument
+  member
+has type
+  Read
+    (observe
+      (run do
+          let state ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash parts
+          pure (core.result.Result.Ok { state := state, hash := hash, next_row := 0#u8 })).1)
+    (flatten parts)
+but is expected to have type
+  Read
+    (observe
+      (run
+          (match core.ops.control_flow.ControlFlow.Continue len with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let s ←
+              liftM
+                  (lift
+                    (Array.make 1#usize [0#u8]
+                        AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+            let a ← liftM (lift (core.num.U32.to_le_bytes val))
+            let s1 ← liftM (lift a.to_slice)
+            let s2 ← liftM (lift root.to_slice)
+            let s3 ←
+              liftM (lift (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+            let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+            pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual))).1)
+    (flatten parts)
+in the application
+  sub3 (flatten parts) member
+PIN2_RawJ_Read.lean:110:57: warning: 'head_reduce s2' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PIN2_RawJ_Read.lean:110:74: warning: 'split at s2' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PIN2_RawJ_Read.lean:124:61: warning: 'head_reduce s5' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PIN2_RawJ_Read.lean:124:78: warning: 'split at s5' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PIN2_RawJ_Read.lean:110:57: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+PIN2_RawJ_Read.lean:110:74: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+PIN2_RawJ_Read.lean:124:61: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+PIN2_RawJ_Read.lean:124:78: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'AspisR1.PIN2_RawJ_Read.init_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PIN2_RawJ_Read.public_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PIN2_RawJ_Read.publicPIN2_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PIN2_RawJ_Read.verify_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        2.66 real         1.60 user         0.99 sys
+          4211703808  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              323314  page reclaims
+                  56  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                 711  voluntary context switches
+                 371  involuntary context switches
+         30535902915  instructions retired
+          9844503062  cycles elapsed
+           622871392  peak memory footprint

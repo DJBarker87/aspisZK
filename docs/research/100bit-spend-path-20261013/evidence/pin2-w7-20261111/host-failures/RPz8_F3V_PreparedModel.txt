@@ -1,0 +1,27 @@
+ ∧
+                                                        ((F3L_SourcePrepared.numeric sourcePrepared).roots = fun j =>
+                                                            OraclePortBatchDraft.committedRoot
+                                                              { wire := bytesOf ↑proof,
+                                                                semantic :=
+                                                                  List.map (fun s => bytesOf ↑s) ↑pre.records }
+                                                              ↑j) ∧
+                                                          ∃ modelView,
+                                                            LiteralOpeningView.read
+                                                                  (OraclePortStoredDecisionDraftC4.typedRows
+                                                                    { wire := bytesOf ↑proof,
+                                                                      semantic :=
+                                                                        List.map (fun s => bytesOf ↑s) ↑pre.records }
+                                                                    q
+                                                                    (LiteralTranscript.erasePrefix
+                                                                      (eval H
+                                                                          (F3J_SamplerRun.program i.proof 0 33
+                                                                            (FS.emptyPrefix i.semantic.value))).2)) =
+                                                                some modelView ∧
+                                                              (F3L_SourcePrepared.numeric
+                                                                      sourcePrepared).semanticAlpha =
+                                                                  (OraclePortAcceptedContextC6.context
+                                                                      { wire := bytesOf ↑proof,
+                                                                        semantic := List.map (fun s => bytesOf ↑s) ⋯ }
+                                                                      sourceInput modelView).semanticAlpha ∧
+                                                                ∃ point0 point1 block0 block1, ⋯ ∧ ⋯
+'AspisR1.F3V_PreparedModel.from_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
