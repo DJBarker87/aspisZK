@@ -1,0 +1,105 @@
+diff -ruN src-xp1/crates/aspis-r1-cost-probe/src/fused.rs src-opt-r2bx2/crates/aspis-r1-cost-probe/src/fused.rs
+--- src-xp1/crates/aspis-r1-cost-probe/src/fused.rs	2026-11-11 17:38:29.789418585 +0000
++++ src-opt-r2bx2/crates/aspis-r1-cost-probe/src/fused.rs	2026-11-11 20:59:02.877003687 +0000
+@@ -193,17 +193,25 @@
+     })
+ }
+ 
++/// A QM31 opening value read from its four little-endian limbs at `at`, without a second
++/// canonicality check. Precondition (as for the base-lane kernel): the caller's `canonical_scan`
++/// accepted these bytes, so every limb is below P and the value equals `K::from_le_bytes`.
++#[inline(always)]
++fn scanned_k(q: &[u8; 608], at: usize) -> K {
++    let limb = |o: usize| M31(u32::from_le_bytes([q[o], q[o + 1], q[o + 2], q[o + 3]]));
++    K { c0: aspis_core::field::CM31 { a: limb(at), b: limb(at + 4) }, c1: aspis_core::field::CM31 { a: limb(at + 8), b: limb(at + 12) } }
++}
++
+ /// One QM31 lane (`which` 0, 1: the two C2 lanes; 2: the C1 tail lane).
++/// Precondition: `canonical_scan` accepted the openings (the values are read with `scanned_k`).
+ #[inline(always)]
+ fn extension_lane(openings: &[u8], circle: &[[K; 4]], which: usize) -> Result<[K; 4], Error> {
+     let mut dots = [KbyKDot::new(), KbyKDot::new(), KbyKDot::new(), KbyKDot::new()];
+     for i in 0..QUERIES {
+-        let q = &openings[i * OPENING..i * OPENING + 608];
+-        let read = |s: usize| {
+-            let at = if which == 2 { s * 120 + 104 } else { 480 + s * 32 + which * 16 };
+-            K::from_le_bytes(&q[at..at + 16]).ok_or(Error::Parse)
+-        };
+-        let (v0, v1, v2, v3) = (read(0)?, read(1)?, read(2)?, read(3)?);
++        // A fixed-size view, as in `base_accumulate`, so that the limb offsets are checked at compile time.
++        let q: &[u8; 608] = openings[i * OPENING..i * OPENING + 608].try_into().map_err(|_| Error::Parse)?;
++        let at = |s: usize| if which == 2 { s * 120 + 104 } else { 480 + s * 32 + which * 16 };
++        let (v0, v1, v2, v3) = (scanned_k(q, at(0)), scanned_k(q, at(1)), scanned_k(q, at(2)), scanned_k(q, at(3)));
+         let u = v0.add(v1);
+         let w = v2.add(v3);
+         let x = v0.sub(v1);
+@@ -402,11 +410,21 @@
+         }
+     }
+ }
++/// The periodic fold of every accumulator, eight per step (same operation on each entry as a
++/// one-entry loop; the loop overhead is paid once per eight).
+ #[inline(always)]
+ fn base_fold(acc: &mut [u64; 416]) {
+     let mut t = 0;
+-    while t < 416 {
+-        acc[t] = (acc[t] & P64) + (acc[t] >> 31);
++    while t < 52 {
++        let b = 8 * t;
++        acc[b] = (acc[b] & P64) + (acc[b] >> 31);
++        acc[b + 1] = (acc[b + 1] & P64) + (acc[b + 1] >> 31);
++        acc[b + 2] = (acc[b + 2] & P64) + (acc[b + 2] >> 31);
++        acc[b + 3] = (acc[b + 3] & P64) + (acc[b + 3] >> 31);
++        acc[b + 4] = (acc[b + 4] & P64) + (acc[b + 4] >> 31);
++        acc[b + 5] = (acc[b + 5] & P64) + (acc[b + 5] >> 31);
++        acc[b + 6] = (acc[b + 6] & P64) + (acc[b + 6] >> 31);
++        acc[b + 7] = (acc[b + 7] & P64) + (acc[b + 7] >> 31);
+         t += 1;
+     }
+ }
+@@ -1513,6 +1531,25 @@
+         let _ = geometry;
+     }
+ 
++    /// `scanned_k` is `K::from_le_bytes` on canonical limbs (the scan's precondition), at every
++    /// extension-lane offset of random and edge openings.
++    #[test]
++    fn scanned_extension_values_equal_the_checked_decoder_on_canonical_openings() {
++        let mut state = 0x7766_5544_3322_1100u64;
++        for case in 0..12 {
++            let openings = random_openings(&mut state, case % 5);
++            for i in 0..QUERIES {
++                let q: &[u8; 608] = openings[i * OPENING..i * OPENING + 608].try_into().unwrap();
++                for which in 0..3 {
++                    for s in 0..4 {
++                        let at = if which == 2 { s * 120 + 104 } else { 480 + s * 32 + which * 16 };
++                        assert_eq!(scanned_k(q, at), K::from_le_bytes(&q[at..at + 16]).unwrap(), "case {case} query {i} lane {which} slot {s}");
++                    }
++                }
++            }
++        }
++    }
++
+     #[test]
+     fn tight_weight_accumulation_equals_the_first_form() {
+         for (name, proof, public) in FIXTURES {
+diff -ruN src-xp1/programs/r1-cost-probe/src/lib.rs src-opt-r2bx2/programs/r1-cost-probe/src/lib.rs
+--- src-xp1/programs/r1-cost-probe/src/lib.rs	2026-11-11 15:58:37.000000000 +0000
++++ src-opt-r2bx2/programs/r1-cost-probe/src/lib.rs	2026-11-11 20:59:03.160013506 +0000
+@@ -18,15 +18,7 @@
+     /// returns by value).
+     #[inline(always)]
+     fn digest_into(&self, parts: &[&[u8]], out: &mut [u8; 32]) {
+-        #[cfg(target_os = "solana")]
+-        #[allow(deprecated)]
+-        unsafe {
+-            solana_program::syscalls::sol_sha256(parts as *const _ as *const u8, parts.len() as u64, out.as_mut_ptr());
+-        }
+-        #[cfg(not(target_os = "solana"))]
+-        {
+-            *out = hashv(parts).to_bytes();
+-        }
++        *out = hashv(parts).to_bytes();
+     }
+ }
+ #[cfg(target_os="solana")]

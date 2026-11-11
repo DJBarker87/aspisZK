@@ -394,14 +394,20 @@ fn merged_level<H: Digest32>(
     slot: &[u8],
     mut at: usize,
 ) -> Option<(usize, usize)> {
+    // The entry's index is carried from the previous step (read once per entry); same tests, same
+    // digests in the same order, same slot reads.
     let tag = [BINARY_NODE_TAG];
     let mut w = 0;
     let mut i = 0;
+    let mut index = if n > 0 { idx[0] } else { 0 };
     while i < n {
-        let index = idx[i];
-        if i + 1 < n && idx[i + 1] == index ^ 1 {
+        let has_next = i + 1 < n;
+        let next = if has_next { idx[i + 1] } else { 0 };
+        let parent = index >> 1;
+        if has_next && next == index ^ 1 {
             hash.digest_into(&[&tag, &cur[i], &cur[i + 1]], &mut nxt[w]);
             i += 2;
+            index = if i < n { idx[i] } else { 0 };
         } else {
             let Some(sibling) = slot.get(at..at + 32) else { return None };
             at += 32;
@@ -411,8 +417,9 @@ fn merged_level<H: Digest32>(
                 hash.digest_into(&[&tag, sibling, &cur[i]], &mut nxt[w]);
             }
             i += 1;
+            index = next;
         }
-        idx[w] = index >> 1;
+        idx[w] = parent;
         w += 1;
     }
     Some((w, at))
@@ -562,6 +569,127 @@ mod tests {
             assert!(verify(hash, Arity::Two, &t.root(), set, &leaves(set), &n));
         }
     }
+    /// The merged traversal before the carried-index form (as in the X1 source), for comparison.
+    fn reference_counting_merged(root: &[u8; 32], idx: &mut [u32; MAX_MERGED], val: &mut [[u8; 32]; MAX_MERGED], mut n: usize, slot: &[u8]) -> Counted {
+        let hash = LegacyHashFn(h);
+        if n == 0 || n > MAX_MERGED || !well_formed_merged(&idx[..n]) {
+            return Counted::Malformed;
+        }
+        let mut at = 0usize;
+        for _ in 0..LEAF_BITS {
+            let mut next = [[0u8; 32]; MAX_MERGED];
+            let mut w = 0;
+            let mut i = 0;
+            while i < n {
+                let index = idx[i];
+                if i + 1 < n && idx[i + 1] == index ^ 1 {
+                    next[w] = hash.digest(&[&[BINARY_NODE_TAG], &val[i], &val[i + 1]]);
+                    i += 2;
+                } else {
+                    let Some(sibling) = slot.get(at..at + 32) else { return Counted::Short };
+                    at += 32;
+                    next[w] = if index & 1 == 0 { hash.digest(&[&[BINARY_NODE_TAG], &val[i], sibling]) } else { hash.digest(&[&[BINARY_NODE_TAG], sibling, &val[i]]) };
+                    i += 1;
+                }
+                idx[w] = index >> 1;
+                w += 1;
+            }
+            val[..w].copy_from_slice(&next[..w]);
+            n = w;
+        }
+        Counted::Done { root_ok: n == 1 && idx[0] == 0 && val[0] == *root, used: at }
+    }
+
+    /// The canonical node stream of a binary multiproof over up to `MAX_MERGED` indices.
+    fn merged_nodes(t: &BinaryTree, indices: &[u32]) -> Vec<u8> {
+        let mut out = Vec::new();
+        let mut level: Vec<u32> = indices.to_vec();
+        for depth in 0..LEAF_BITS {
+            let mut next = Vec::new();
+            let mut i = 0;
+            while i < level.len() {
+                let parent = level[i] >> 1;
+                for slot in 0..2u32 {
+                    let child = (parent << 1) | slot;
+                    if i < level.len() && level[i] == child {
+                        i += 1;
+                    } else {
+                        out.extend_from_slice(&t.node(depth, child));
+                    }
+                }
+                next.push(parent);
+            }
+            level = next;
+        }
+        out
+    }
+
+    /// `verify_counting_merged` gives the reference verdict on random index sets of 1 to 22
+    /// leaves (adjacent pairs included), with the honest nodes, a changed node, a slot one node
+    /// short, a padded slot, and a malformed set.
+    #[test]
+    fn merged_traversal_equals_the_reference_on_random_sets() {
+        let t = tree();
+        let hash = LegacyHashFn(h);
+        let mut state = 0x1234_5678_9abc_def0u64;
+        let mut next = || {
+            state = state.wrapping_add(0x9e37_79b9_7f4a_7c15);
+            let mut z = state;
+            z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
+            z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
+            z ^ (z >> 31)
+        };
+        for case in 0..200 {
+            let k = 1 + (next() % MAX_MERGED as u64) as usize;
+            let mut set: Vec<u32> = Vec::new();
+            while set.len() < k {
+                let base = (next() % (1 << LEAF_BITS)) as u32;
+                for x in [base, base ^ 1] {
+                    if set.len() < k && !set.contains(&x) && (x == base || next() % 3 == 0) {
+                        set.push(x);
+                    }
+                }
+            }
+            set.sort();
+            let nodes = merged_nodes(&t, &set);
+            assert_eq!(nodes.len(), 32 * node_count_merged(&set).unwrap());
+            let mut variants: Vec<Vec<u8>> = Vec::new();
+            variants.push(nodes.clone());
+            let mut changed = nodes.clone();
+            if !changed.is_empty() {
+                let at = (next() as usize) % changed.len();
+                changed[at] ^= 1;
+            }
+            variants.push(changed);
+            if nodes.len() >= 32 {
+                variants.push(nodes[..nodes.len() - 32].to_vec());
+            }
+            let mut padded = nodes.clone();
+            padded.extend_from_slice(&[0u8; 64]);
+            variants.push(padded);
+            for (v, slot) in variants.iter().enumerate() {
+                let mut idx = [0u32; MAX_MERGED];
+                let mut val = [[0u8; 32]; MAX_MERGED];
+                idx[..k].copy_from_slice(&set);
+                val[..k].copy_from_slice(&leaves(&set));
+                let (mut idx2, mut val2) = (idx, val);
+                let got = verify_counting_merged(hash, &t.root(), &mut idx, &mut val, k, slot);
+                let want = reference_counting_merged(&t.root(), &mut idx2, &mut val2, k, slot);
+                assert_eq!(got, want, "case {case} variant {v}");
+                if v == 0 {
+                    assert_eq!(got, Counted::Done { root_ok: true, used: nodes.len() }, "case {case}");
+                }
+            }
+            if k >= 2 {
+                let mut idx = [0u32; MAX_MERGED];
+                let mut val = [[0u8; 32]; MAX_MERGED];
+                idx[..k].copy_from_slice(&set);
+                idx.swap(0, 1);
+                assert_eq!(verify_counting_merged(hash, &t.root(), &mut idx, &mut val, k, &nodes), Counted::Malformed);
+            }
+        }
+    }
+
     #[test]
     fn worst_case_counts() {
         let spread = |k: u32, bits: u32| -> Vec<u32> {

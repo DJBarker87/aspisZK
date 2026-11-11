@@ -1141,3 +1141,49 @@ script `fv_sampler_gate.sh`, verdict reader `fv_gate_compare.py`.
 
 Tested, not proved. The prover check covers accepted fixture proofs only; the privacy lead runs
 its own harness with failing attempts on the integrated candidate before the freeze.
+
+## Round 9: bounded verifier optimisation, adopted (owner asked for "a couple of rounds")
+
+Full account, with the profile, every candidate, the predictions and the rejected changes:
+OPTIMISATION-ROUNDS.md. Summary of what is adopted.
+
+Patch `optimisation/r2c.patch` (sha256
+d5894a550a464b2a8879949e74cac2d750836e52ab8cb95ec8cbf27f431d2dbb), three changes, all in
+functions that exist only in Aspis (`fused.rs`, `multiproof.rs`; nothing present at the R1 pin
+c7593d23fdc is touched):
+- `base_fold`: eight entries per loop step (8,659 CU at the heaviest measured case);
+- `merged_level`: each index read once (2,246);
+- `extension_lane` with a new `scanned_k`: the extension-lane values read without a second
+  canonicality check, the canonical scan having already accepted the same bytes (15,086).
+
+No change to the proof format, the transcript, the order or number of digest calls, the prover's
+functions, the Pool, or the direct hash call.
+
+| | X1 | X1 + patch | Saving |
+|---|---:|---:|---:|
+| Transfer (recorded) | 1,306,700 | 1,280,827 | 25,873 |
+| Withdrawal (recorded) | 1,313,188 | 1,287,348 | 25,840 |
+| Heaviest measured (withdrawal at rollover, seed 60, one-lamport marker) | 1,354,102 | 1,328,111 | 25,991 |
+
+Predicted for the combination before it was built: 26,000 (band 22,000 to 28,000). Of the six
+single-candidate predictions in the two rounds, three were in their band and three missed in the
+wrong direction (two rejected, one rewritten); they are listed in the note.
+
+Gates on the combined tree: mutation campaign verdict file identical to X1's (156,704 corrupted
+proofs); statement-binding and equivalence tests 11 of 11, library tests 23 of 23 with two new
+equivalence tests; replays, changed certificate, pinned-format buffer and redirect attempts as
+before; the translator accepts the changed functions and their Lean elaborates (the same four
+declarations fail as on X1, none of them changed here); a rebuild after a test-only fix gives
+the same ELF (`639642a06c0aeef10e8a9bb60660757febbf8df768d103504ec9a7a35916ff78`).
+
+Branch head after rounds 8 and 9 (this patch and the sampler rewrite): program ELF
+`7540abe6c5f07827011b11d3313fe5594816a32fa05963195ee4a1f5cf7856b5`, 972,072 bytes (host build
+`BASE2`); recorded payments 1,280,964 and 1,287,485, each 137 above the patch alone, as the
+sampler rewrite predicts. Worst case of this head with the allowance of WORST-CASE-COMPUTE.md
+(10,697): 1,328,248 + 10,697 = 1,338,945, by arithmetic from the two measured parts; the
+heaviest scenario has not been rerun on this exact ELF yet.
+
+Information recorded for the owner, not adopted: with this patch the SDK hash route would cost
+about what X1 costs today (1,355,305 at the heaviest measured case).
+
+Tested, not proved.

@@ -1,0 +1,16 @@
+diff -ruN src-xp1/crates/aspis-r1-cost-probe/src/multiproof.rs src-opt-a1/crates/aspis-r1-cost-probe/src/multiproof.rs
+--- src-xp1/crates/aspis-r1-cost-probe/src/multiproof.rs	2026-11-11 17:38:29.790418601 +0000
++++ src-opt-a1/crates/aspis-r1-cost-probe/src/multiproof.rs	2026-11-11 20:45:48.531996781 +0000
+@@ -384,7 +384,11 @@
+ 
+ /// One level of the merged traversal, from `cur` into `nxt`: the new entry count and slot offset, or `None`
+ /// when the slot holds too few sibling nodes.
+-#[inline(always)]
++///
++/// Kept out of line: one copy serves all eighteen levels of the three trees. Inlined, the compiler
++/// unrolled the nine level pairs and the copies ran short of registers (cost only; same digests in the
++/// same order).
++#[inline(never)]
+ fn merged_level<H: Digest32>(
+     hash: H,
+     idx: &mut [u32; MAX_MERGED],

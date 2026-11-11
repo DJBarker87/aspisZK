@@ -1,0 +1,106 @@
+diff -ruN src-xp1/crates/aspis-r1-cost-probe/src/fused.rs src-opt-r1/crates/aspis-r1-cost-probe/src/fused.rs
+--- src-xp1/crates/aspis-r1-cost-probe/src/fused.rs	2026-11-11 17:38:29.789418585 +0000
++++ src-opt-r1/crates/aspis-r1-cost-probe/src/fused.rs	2026-11-11 20:45:48.788013771 +0000
+@@ -375,16 +375,25 @@
+ /// `(P-1)(P+3) = 2^62 - 4`; the accumulators are folded after every third
+ /// query, so each holds at most three products plus a folded residue below
+ /// `2^34`, which is below `2^64`.
++///
++/// The four signed sums of all 26 lanes are formed first; then each coefficient's four limbs are
++/// held while they multiply that coefficient's signed sum of every lane. Same products into the same
++/// accumulators as a lane-by-lane order (addition order per accumulator unchanged: one product per
++/// query).
+ #[inline(always)]
+ fn base_query(acc: &mut [u64; 416], q: &[u8; 480], c: &[K; 4]) {
+-    let mut l = [0u64; 16];
+-    for k in 0..4 {
+-        l[4 * k] = u64::from(c[k].c0.a.0);
+-        l[4 * k + 1] = u64::from(c[k].c0.b.0);
+-        l[4 * k + 2] = u64::from(c[k].c1.a.0);
+-        l[4 * k + 3] = u64::from(c[k].c1.b.0);
+-    }
+-    for lane in 0..26 {
++    let mut s = [0u64; 104];
++    base_signed(&mut s, q);
++    base_coefficient(acc, &s, &c[0], 0);
++    base_coefficient(acc, &s, &c[1], 1);
++    base_coefficient(acc, &s, &c[2], 2);
++    base_coefficient(acc, &s, &c[3], 3);
++}
++/// `s[4 * lane + k]`: the k-th signed sum of the lane's four slot values, folded once (at most `P + 3`).
++#[inline(always)]
++fn base_signed(s: &mut [u64; 104], q: &[u8; 480]) {
++    let mut lane = 0;
++    while lane < 26 {
+         let at = 4 * lane;
+         let read = |o: usize| u64::from(u32::from_le_bytes([q[o], q[o + 1], q[o + 2], q[o + 3]]));
+         let (v0, v1, v2, v3) = (read(at), read(120 + at), read(240 + at), read(360 + at));
+@@ -393,20 +402,43 @@
+         let x = v0 + P64 - v1;
+         let y = v3 + P64 - v2;
+         let fold = |z: u64| (z & P64) + (z >> 31);
+-        let signed = [fold(u + w), fold(x + y), fold(u + 2 * P64 - w), fold(x + 2 * P64 - y)];
+-        let base = 16 * lane;
+-        for k in 0..4 {
+-            for j in 0..4 {
+-                acc[base + 4 * k + j] += l[4 * k + j] * signed[k];
+-            }
+-        }
++        s[at] = fold(u + w);
++        s[at + 1] = fold(x + y);
++        s[at + 2] = fold(u + 2 * P64 - w);
++        s[at + 3] = fold(x + 2 * P64 - y);
++        lane += 1;
++    }
++}
++/// `acc[16 * lane + 4 * k + j] += limb_j(c) * s[4 * lane + k]` for every lane.
++#[inline(always)]
++fn base_coefficient(acc: &mut [u64; 416], s: &[u64; 104], c: &K, k: usize) {
++    let (l0, l1, l2, l3) = (u64::from(c.c0.a.0), u64::from(c.c0.b.0), u64::from(c.c1.a.0), u64::from(c.c1.b.0));
++    let mut lane = 0;
++    while lane < 26 {
++        let x = s[4 * lane + k];
++        let b = 16 * lane + 4 * k;
++        acc[b] += l0 * x;
++        acc[b + 1] += l1 * x;
++        acc[b + 2] += l2 * x;
++        acc[b + 3] += l3 * x;
++        lane += 1;
+     }
+ }
++/// The periodic fold of every accumulator, eight per step (same operation on each entry as a
++/// one-entry loop; the loop overhead is paid once per eight).
+ #[inline(always)]
+ fn base_fold(acc: &mut [u64; 416]) {
+     let mut t = 0;
+-    while t < 416 {
+-        acc[t] = (acc[t] & P64) + (acc[t] >> 31);
++    while t < 52 {
++        let b = 8 * t;
++        acc[b] = (acc[b] & P64) + (acc[b] >> 31);
++        acc[b + 1] = (acc[b + 1] & P64) + (acc[b + 1] >> 31);
++        acc[b + 2] = (acc[b + 2] & P64) + (acc[b + 2] >> 31);
++        acc[b + 3] = (acc[b + 3] & P64) + (acc[b + 3] >> 31);
++        acc[b + 4] = (acc[b + 4] & P64) + (acc[b + 4] >> 31);
++        acc[b + 5] = (acc[b + 5] & P64) + (acc[b + 5] >> 31);
++        acc[b + 6] = (acc[b + 6] & P64) + (acc[b + 6] >> 31);
++        acc[b + 7] = (acc[b + 7] & P64) + (acc[b + 7] >> 31);
+         t += 1;
+     }
+ }
+diff -ruN src-xp1/crates/aspis-r1-cost-probe/src/multiproof.rs src-opt-r1/crates/aspis-r1-cost-probe/src/multiproof.rs
+--- src-xp1/crates/aspis-r1-cost-probe/src/multiproof.rs	2026-11-11 17:38:29.790418601 +0000
++++ src-opt-r1/crates/aspis-r1-cost-probe/src/multiproof.rs	2026-11-11 20:45:48.810015231 +0000
+@@ -384,7 +384,11 @@
+ 
+ /// One level of the merged traversal, from `cur` into `nxt`: the new entry count and slot offset, or `None`
+ /// when the slot holds too few sibling nodes.
+-#[inline(always)]
++///
++/// Kept out of line: one copy serves all eighteen levels of the three trees. Inlined, the compiler
++/// unrolled the nine level pairs and the copies ran short of registers (cost only; same digests in the
++/// same order).
++#[inline(never)]
+ fn merged_level<H: Digest32>(
+     hash: H,
+     idx: &mut [u32; MAX_MERGED],

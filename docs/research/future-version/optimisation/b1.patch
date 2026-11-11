@@ -1,0 +1,27 @@
+diff -ruN src-xp1/crates/aspis-r1-cost-probe/src/fused.rs src-opt-b1/crates/aspis-r1-cost-probe/src/fused.rs
+--- src-xp1/crates/aspis-r1-cost-probe/src/fused.rs	2026-11-11 17:38:29.789418585 +0000
++++ src-opt-b1/crates/aspis-r1-cost-probe/src/fused.rs	2026-11-11 20:45:48.610001958 +0000
+@@ -402,11 +402,21 @@
+         }
+     }
+ }
++/// The periodic fold of every accumulator, eight per step (same operation on each entry as a
++/// one-entry loop; the loop overhead is paid once per eight).
+ #[inline(always)]
+ fn base_fold(acc: &mut [u64; 416]) {
+     let mut t = 0;
+-    while t < 416 {
+-        acc[t] = (acc[t] & P64) + (acc[t] >> 31);
++    while t < 52 {
++        let b = 8 * t;
++        acc[b] = (acc[b] & P64) + (acc[b] >> 31);
++        acc[b + 1] = (acc[b + 1] & P64) + (acc[b + 1] >> 31);
++        acc[b + 2] = (acc[b + 2] & P64) + (acc[b + 2] >> 31);
++        acc[b + 3] = (acc[b + 3] & P64) + (acc[b + 3] >> 31);
++        acc[b + 4] = (acc[b + 4] & P64) + (acc[b + 4] >> 31);
++        acc[b + 5] = (acc[b + 5] & P64) + (acc[b + 5] >> 31);
++        acc[b + 6] = (acc[b + 6] & P64) + (acc[b + 6] >> 31);
++        acc[b + 7] = (acc[b + 7] & P64) + (acc[b + 7] >> 31);
+         t += 1;
+     }
+ }
