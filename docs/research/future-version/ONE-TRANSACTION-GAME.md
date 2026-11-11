@@ -164,6 +164,46 @@ The failure indicator is `max (r H) (ind (Runs1 ∧ ¬ Outcome1))`, with the sam
 `r` (accepted, and the extractor returns none, plus query scan). Whether
 `Outcome1` and an account-run event stay is decision D2.
 
+### 1.2a The outcome: withdrawal destination, pool and deployment domain (owner, 2026-11-11)
+
+The owner said: "make sure we have the withdrawal address locked, that was a
+major oversight on r1". Named obligation: **WD (withdrawal binding)**. An
+accepted Aspis spend must not pay tokens to a destination other than the one in
+the public statement the proof is bound to, or for a pool or deployment domain
+other than the ones it names.
+
+What R1 has at PIN2, from the soundness lead's reading (V8-LESSONS-CHECK.md,
+finding 3; not re-derived here):
+- The headline `deployed_splitB` (TAS_FinalB.lean:94-113) concludes
+  `Bound ∧ NNH8_Split.rest ∧ (headlineB.OutcomeRec ∨ ERec)`.
+- `OutcomeRec` unfolds to `FJv_DResult.Outcome` (RPx_FJv_DBoundCaller.lean:111-151).
+  Its public object (`f.semantic`, `i.decoded : R0P.Public`, R0P/Core.lean:70-76)
+  carries pool, deployment domain and destination.
+- No conjunct constrains those three fields. The relation is absorb-only for
+  them (Core.lean:55-57).
+- The headline does not reach the Pool's payment. The Pool settlement models
+  `NGP_L159`, `NGK_NFO_ReadModel`, `NGK_NFR_CSettlement` and
+  `NIB_ReadToSettlement` are not among its constants. R1's payout is tied to the
+  proof only outside Lean, by the checkpoint hash (verifier.rs:329, checked at
+  :396). R1's L159 is pending.
+
+The two forms of the one-phase outcome:
+
+| | Outcome |
+|---|---|
+| **(A) R1's outcome carried over (comparison only)** | `Outcome1 := ` the Aspis copy of `FJv_DResult.Outcome` / `OutcomeRec`, with the three fields only in the public object |
+| **(B) ADOPTED for Aspis (owner: "i say yes")** | (A) **∧ PayoutBound**: for an accepted withdrawal, the Pool's settlement in the same transaction transfers exactly the statement's `amount` from the Pool vault of the statement's pool and deployment domain to the statement's `destination_token_account`. Here "the statement" is the public statement whose PIN2 serialization (pool ‖ deployment domain ‖ has-destination byte ‖ destination, pair_forest_semantic_terminal.rs:2020-2090) seeds the transcript the accepted proof is checked against. For a transfer there is no token movement to a destination (has-destination byte 0) |
+
+`ind (Runs1 ∧ ¬ (A ∧ PayoutBound))` is at least `ind (Runs1 ∧ ¬ A)`. So (B)
+strengthens the failure event and weakens nothing.
+
+**Claimable today, and nothing stronger:** pool, deployment domain and
+destination are bound into the transcript and present in the public object; the
+relation does not constrain them. The paid account is tied by the entry, which
+rebuilds the statement from the request the Pool pays on. That tie is outside
+the relation until PayoutBound is proved. PayoutBound is OPEN; section 9.3
+scopes it.
+
 Notes on equivalence of power and metric:
 
 - In R1, `issued` depends on the environment digest `J` only through the native
@@ -278,6 +318,17 @@ branch head it is 1,111.** Both are below 1,161, and the adapter adds nothing.
 most 975 digest calls on every input, rejections included (66 leaf hashes plus
 at most 909 parents; 339/339/297 per tree). The 40-row sampler prefix (136) and
 the verifier total (1,111) remain paper counts.
+**Update (section 9):** both are now PROVED, by the rows agent at the Aspis decision:
+- `AspisRec40CallBudget`: the 40-row transcript part issues at most 136 calls.
+- `AspisRec40CallBudgetAspis` applies `AspisOneTx.decision_budgetS` (≤ 975):
+  `verifier_issued` gives at most **1,111** calls, and `projected_first_reads`
+  gives `firstReads ≤ Q + 1111` on the full experiment at `dV_aspis`.
+
+The collision envelope for Aspis is therefore Q + 1,111 as a theorem, on the
+model. Its transfer to the Rust is the accepted-run join, which is still OPEN.
+Call order: the model runs rows 0–39 and then the terminal Merkle decision. The
+Rust at the branch head (4045ecbdda3) has that order. The devnet-deployed build
+(source 8a4059c8bc2) ran the Merkle digests before rows 33–39.
 
 Status before section 8: PAPER COUNT. To make it a theorem, an Aspis model decision is needed
 (section 4, items M3 and M5), with a budget lemma `≤ 975` for the decision and a
@@ -679,6 +730,18 @@ quarters of them are copies.
   recomputing the first, and it does not arise. The verifier calls charged per
   earlier attempt become Aspis's count instead of R1's.
   - *Recommendation:* decide it together with R1's pending item; no new rule.
+- **D5. Withdrawal payout inside the proved game (WD, section 1.2a).**
+  - *Decided, owner, 2026-11-11:* "i say yes" (recorded by the lead in
+    V8-LESSONS-CHECK.md, finding 3). Form (B) is the Aspis one-phase outcome.
+    The SPL Token transfer the Pool calls is accepted as a runtime-class trust
+    row for Aspis. Nothing is decided for R1; its L159 stays pending.
+  - *Three-condition check:* it strengthens the statement (the failure event
+    gains a conjunct, section 1.2a), changes no code (no compute-unit change),
+    and touches neither the prover nor anything published. It adds one trust
+    row, which is why it went to the owner.
+  - *Status:* PayoutBound is OPEN, scoped in section 9.3. Until it is proved,
+    the only claim is: "bound into the transcript and present in the public
+    object; the relation does not constrain it".
 - **Not a decision (recorded).** The one-transaction entry still requires a
   seventh, verifier-owned, read-only account of checkpoint size and does not read
   its bytes. This is harmless for soundness and part of the entry contract.
@@ -706,6 +769,12 @@ compiled on the host against L187. Next: M4/M8, once the acceptance-link agent
 has fixed `AspisChecks`. M5 and M7 can go before them where they do not need
 `AspisChecks`: the decision skeleton without its arithmetic, and the roots and
 reached-run plumbing on PSD's 40-row run.
+
+**Update (section 9):** M5, M4 and M8 are done, including "accepted ⇒
+AspisChecks" in containing-log form. Next:
+1. M7, the actual-run identification on the rows agent's 40-row run;
+2. the clean-event copies (`CheckedAcceptance40`, `fibre_checks`);
+3. then PayoutBound (9.3), statements first.
 
 ## 8. M1–M3 and M6: the merged in-place slot, its budget and the recovery (COMPILED)
 
@@ -890,3 +959,265 @@ be proved for M5.
 
 Nothing here touches the verifier, the prover or anything published. No
 compute-unit, adversary, metric, failure-event or trust change is involved.
+
+## 9. M5, M4 and M8: the Aspis decision, the typed batched check and accepted ⇒ AspisChecks (COMPILED); M7 open; scope of PayoutBound
+
+Two modules, with the same compile set-up as section 8. Kind of result: model
+definitions and model theorems in R1's stored-decision and binary commitment
+model. None is a source refinement, a composed security theorem, or connected
+to the release artifacts. Every `#print axioms` is a subset of `[propext,
+Classical.choice, Quot.sound]`. There is no `sorry`, `axiom`, `native_decide` or
+raised heartbeats, and no warnings in the final compiles. Local hashes equal
+the compiled ones. The files are untracked on `future-version`.
+
+| Attempt | Module | sha256 (source) | Exit | Wall | Peak RSS | cgroup peak | Swaps |
+|---|---|---|---|---|---|---|---|
+| PSE-06 | AspisOneTxDecision (first version) | e8e9e8fe…ff7473 | 1 | 5.00 s | 4.22 GB | 0.44 GB | 0 |
+| PSE-07 | AspisOneTxDecision | b1a127e1…b0aea7 | 0 | 6.02 s | 4.24 GB | 0.44 GB | 0 |
+| PSE-08, -09, -12, -13 | AspisOneTxChecks (versions) | ce032acd…, 481095e6…, 2f5d85f0…, f5071f10… | 1 | 20.8–39.6 s | ≤ 4.24 GB | ≤ 0.45 GB | 0 |
+| PSE-10 | AspisOneTxProbe (probe, scratch) | 8d00b43d…5dd0c | 1 | 20.5 s | 4.21 GB | 0.42 GB | 0 |
+| PSE-11 | AspisOneTxProbe2 (probe, scratch) | 6dfb5ce3…7814f | 0 | 7.11 s | 4.23 GB | 0.44 GB | 0 |
+| PSE-14 | AspisOneTxChecks (without admission) | aa4cc657…3c00b308 | 0 | 13.2 s | 4.26 GB | 0.47 GB | 0 |
+| PSE-15 | AspisOneTxChecks (admission, first version) | 983aa21e…1643c2d | 1 | 10.9 s | 4.24 GB | 0.45 GB | 0 |
+| PSE-16 | AspisOneTxChecks | 1f26406e…2f04d2 | 0 | 12.1 s | 4.26 GB | 0.46 GB | 0 |
+
+**Failures, and what changed (none is a mathematical change).**
+- PSE-06: two `rfl` placeholders where a named hypothesis was needed.
+- PSE-08 to PSE-13: heartbeat timeouts in `isDefEq`/`whnf`. Each one occurred
+  where a concrete replacement word, or a concrete field tower, met a defeq
+  check: through a `let`, through `Iff.rfl` on `Boundaries`, or through `exact`
+  after unfolding `FirstBatch`. This is the acceptance-link agent's lesson.
+  - Probes PSE-10 and PSE-11 isolated it: projection lemmas `(withWords d W V).x
+    = d.x` are instant by `rfl`, and `Iff.rfl` on `Boundaries` times out even
+    after unfolding.
+  - The fix restates every word-replacement fact by rewriting with those
+    projection lemmas (`bnd_ww`, `fin_ww`). It moves the transport into
+    `transport_core` over abstract words `W`, `V`, and states the `FirstBatch`
+    congruence generically in the fields (`firstBatch_congr`), as R1's
+    `HchecksAccumulator` does.
+- PSE-15: a missing classical `Decidable` instance in the admission section.
+- The probe files are mine, in lean-src and lean-out on the host and in the
+  session scratchpad. They are not part of the deliverable.
+
+### 9.1 Statements next to the R1 statements they copy
+
+**M5, decision (AspisOneTxDecision).**
+
+| Aspis | R1 | Difference |
+|---|---|---|
+| `dV_aspis : OraclePortStoredExperimentC4.Decision` | `OraclePortFrozenOrder.dV_frozen` (not the two-transaction `dV_frozen2`) | guard `Guard (take33 tr) ∧ tr.rounds.length = 40`; parser `parseReachedS` (`parseSummed`, R1's `Aligned` on `take33 tr`, plus `AlignedCert`: rounds 34..39 are the stored certificate frames); queries `queries (take33 tr)`; Merkle part `verifyMergedAll` (section 8) in place of `short (slotPrograms p q slots)`; arithmetic `arithmeticS` (R1's `input` on `take33 tr`, then `verifyS` on the 40 typed rows) |
+| `accepted_detailsS` | `OraclePortFrozenOrder.accepted_details` | same shape, plus `length = 40` |
+| `decision_budgetS : (eval H (dV_aspis stored tr m)).1.length ≤ 975` | `OraclePortFrozen2.decision_budget` (≤ 1,046 = 477 + 563 + 6) | merged slots, no checkpoint |
+| `decision_budget_r1 : OraclePortStoredExperimentC4.Budget dV_aspis` | — | R1's 1,046 bound holds as a corollary |
+| `admitted_aspis : admitS (dV_aspis s) = dV_aspis s`, `accepted_guardS` (in AspisOneTxChecks) | `OraclePortFrozen2Consumer.admitted_dV`, `OraclePortAdmission.accepted_guard` | `admitS` checks R1's guard on the first 33 rounds and length 40. **R1's `OraclePortAdmission.admit` cannot be used for Aspis**: its `Schedule` requires exactly 33 rounds, so it rejects every 40-round prefix. The Aspis clean event must use `admitS` |
+
+Order: the model runs rows 0–39, then the terminal decision. Inside the
+decision, the Merkle programs are the only oracle calls. The arithmetic
+(`arithmeticS`) issues none, so its position relative to the Merkle check
+inside the decision does not matter. Nothing here assumed the devnet build's
+order. The Rust at the branch head (4045ecbdda3) runs the merged Merkle
+authentication last, after the final sumcheck, which is the model's order. The
+devnet build (8a4059c8bc2) ran it before rows 33–39.
+
+**M4, typed batched check (AspisOneTxDecision).**
+
+| Aspis `verifyS rs i` (decided Prop; reads on `rs.take 33` are R1's) | R1 `D0TypedChecks.verify rs i` |
+|---|---|
+| `LiteralMatchingData.read (rs.take 33) = some data`, `data = i.data` | same, on 33 rows |
+| `Boundaries data` (the two boundary conjuncts) | `LiteralPairingChecks.checks rs` (three conjuncts; the first, `pair = claim`, is removed) |
+| — | `R16DecisionQueryModel.verify` (per-query first fold, through R1's checkpoint model): **removed** |
+| `EquationEndpoint i.decoded (rs.take 33) data` | same |
+| `∀ q, decode = some q → FirstBatch eK (rhoOf i.rho) data q ∧ FinalPart rs data q (rhoOf i.rho)` | `∀ q, decode = some q → ClosedSum eK data q (rhoOf i.rho)`: **replaced** |
+
+`FinalPart` holds exactly the acceptance link's rows-33..39 fields: `m33`,
+`lamV`, `entry33`, `decode33`, `claimDef`, `rhs2Def`, `rounds`, `roundsLen`,
+`entryRound` and `finalCheck`, all at the codec `decodePairS`. That codec is
+the acceptance link's `decodePair` parameter, fixed here. It decodes the 64-byte
+payload of a 64-byte frame (`AspisRows40.Protocol.payloadOf`) as two wide-field
+values with R1's `SelectedFieldSequenceCodec.decodeWide`.
+- **Canonical:** `decodePairS_canonical` shows a successful read determines the
+  payload bytes as `encodeWide` of the values, so non-canonical encodings
+  are rejected.
+- **Untouched by word enrichment:** `decodePairS_enrich`.
+- **Rust correspondence, OPEN (source refinement):** that `E::from_le_bytes` is
+  `FoldedLeafCodec.decodeWide`, the same correspondence R1 needs for its folded
+  leaf values.
+
+The row-33 message deserves a note. The Rust does not store it: it computes
+`claim` and `rhs2` and absorbs `claims_bytes(claim, rhs2)`. The model has the
+prover supply row 33, and the decision accepts only if `decodePairS m33 =
+some (claimS, rhs2)` with `claimS` and `rhs2` the computed values. Because the
+codec is canonical, that fixes `m33`'s payload to the bytes the Rust absorbs.
+
+**M8, selected checks and the containing-log theorem (AspisOneTxChecks).**
+
+| Aspis | R1 | Difference |
+|---|---|---|
+| `SelChecks pub rs` | `OraclePortSelectedConsumerC6.Checks` | 40 rounds, R1's reads on `rs.take 33`. `writer` and `backend` are replaced by `boundaries`, `firstBatch` and `final : FinalPart`; `semantic` is R1's field on `observe` |
+| `ofTypedS` | `OraclePortObservationTransportC6.ofTyped` | from `verifyS` |
+| `transportS` (via `transport_core`) | `OraclePortObservationTransportC6.transport` | same three agreement premises. Semantic part: R1's `observe_withWords` and `OraclePortMatchingRewordC6.semantic`. First fold: PSC's `pair_withWords`. Rows 33..39: `decodePairS_enrich` and the map form of `reword` |
+| `toAspisChecks : SelChecks pub rs → Nonempty (AspisChecks decodePairS pub rs)` | `OraclePortSelectedConsumerC6.toLiteral_nonempty` | target is the acceptance link's `AspisChecks` |
+| `accepted_checks_aspis` (below) | `OraclePortFrozenOrderChecks.accepted_checks` | `dV_aspis`, `verifyMergedAll`, `authenticated_merged`; conclusion `AspisChecks decodePairS` |
+
+```lean
+theorem accepted_checks_aspis (H : Bytes → State) (stored : Bytes)
+    (tr : ErasedPrefix) (m : ErasedMessage) (p : Parsed) (q : Fin 22 → Fin 262144)
+    (parsed : parseReachedS stored tr = some p) (query : queries (take33 tr) = some q)
+    (accepted : (eval H (dV_aspis stored tr m)).2 = true)
+    (log : List (Bytes × State)) (Q : Nat) (consistent : ∀ a ∈ log, a.2 = H a.1)
+    (contains : ∀ a, Read (eval H (verifyMergedAll p q)).1 a → Read log a)
+    (bound : firstReads emptyTable log ≤ Q)
+    (clean : ¬ hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv
+      BinRawByteCollisionTargets.pred Q) emptyTable log)
+    (frames : Fin 3 → Bytes) (selectors : Fin 3 → Fin 5)
+    (frameRead : ∀ k, Read log (frames k))
+    (rootRead : ∀ k, BinRawByteCollisionTargets.pred (selectors k) (frames k) =
+      some (committedRoot p k.val)) :
+    Nonempty (AspisChecks decodePairS tr.statement
+      (reword (OraclePortFrozenOrderChecks.maps log frames p) (typedRows p q tr)))
+```
+
+This is "accepted ⇒ AspisChecks" in R1's containing-log form. The checks are
+on the typed rows carrying the words recovered from the log. Its hypotheses are
+R1's (log consistent with H, Merkle reads in the log, first reads ≤ Q, R1's
+single collision event, root frames read), and its conclusion is the
+acceptance link's structure. With PSA's `aspis_checks_noHit_r1_checks` and
+`aspis_relation` it reaches R1's spend relation on a no-hit transcript. That
+composition is not written as one theorem here.
+
+### 9.2 What is still open in this layer
+
+- **M7, the actual-run identification.** This means instantiating
+  `accepted_checks_aspis` at the actual 40-row run, which needs copies of:
+  - `OraclePortFrozen2Reached.{accepted, slots_read, consistent, distinct_bound,
+    frame_read}` and `OraclePortFrozen2Roots.targets` (the three roots read from
+    the sampler frames of rows 0, 2 and 30), on the rows agent's
+    `AspisRec40.Decision.original D dV_aspis P`;
+  - `OraclePortFrozen2ActualChecks.maps_eq_builder` (recovered maps =
+    `wordsFromRun`).
+
+  R1 proves these with 33-row lemmas (`OraclePortStoredProjectionC4.frame_eq`,
+  `OraclePortReplay.sampler_reads`, `OraclePortParsedRootsC6.{c2_record,
+  folded_record}`). The roots part reads only rows 0, 2 and 30, so it should
+  copy through `take33`. The frame and replay lemmas need the rows agent's
+  40-row run. `distinct_bound` is the rows agent's `projected_first_reads`
+  (Q + 1111). Not started in this round, because the run definitions it needs
+  landed during it.
+- **Clean event and consumer.** `CheckedAcceptance40` and `fibre_checks`
+  (copies of `OraclePortFrozen2CanonicalChecks`, `OraclePortFrozen2C6` and
+  `OraclePortFrozen2Consumer.fibre_checks`) come after M7. The admission
+  property they use is `admitted_aspis` (9.1).
+- **Source refinement**, outside this layer: that `verify_summed_format` at the
+  branch head computes `dV_aspis`. In particular `fold_sums`' `lhs1 = rhs1` is
+  `FirstBatch`, `finish_relation_round` gives `Boundaries` and `claimDef`,
+  `sums.rhs2` is `rhs2Def`, `summed_final_checks` is `FinalPart`,
+  `merged_merkle` is `verifyMergedAll`, and the codec is as above.
+
+### 9.3 Scope of PayoutBound (form (B) of section 1.2a; statements only, not built)
+
+**The join to prove.** For an accepted withdrawal:
+1. The Pool's request bytes are the bytes the verifier is called with.
+2. The verifier's entry rebuilds the statement from those request bytes and the
+   authenticated accounts. That statement's PIN2 public bytes (pool ‖ deployment
+   domain ‖ has-destination ‖ destination) seed the transcript of the accepted
+   proof.
+3. The Pool's transfer moves `amount` from the vault of that pool and deployment
+   to that `destination_token_account`.
+
+The proof is bound to the statement by the transcript seed, so 1–3 put the
+payment's destination, pool and domain under the proof.
+
+**Source-level statements needed (all OPEN).**
+- **E1, entry.** At r1_pool_adapter_owned.rs, the one-transaction block of
+  `stage2_owned`, `validate_asq8`, `authenticate_asq8_accounts` and
+  `reconstruct_asq8_statement` (r1_pool_adapter.rs): the statement passed to
+  `verify_summed_format` is `reconstruct(decode(request), authenticated
+  accounts, candidate prefix)`. Its `semantic_public().public_bytes()` carries
+  `request.public`'s pool, deployment domain and destination
+  (pair_forest_semantic_terminal.rs:2020-2090). The emitted result is a function
+  of that statement (`emit_result`).
+- **P1, Pool request to verifier.** In `process_pair_forest_terminal_with_verifier_v1`
+  (pair_forest.rs, `request_bytes` split and decoded around :1642) and in the
+  verifier CPI plan (pair_forest_dispatch.rs:157 `encode(request)`, :342
+  `data: plan.request_bytes`), the verifier's instruction data equals the
+  encoding of the request the Pool decoded. This needs encode ∘ decode = id on
+  accepted bytes (canonical codec).
+- **P2, Pool payout.** The withdrawal plan
+  (`plan_legacy_withdrawal_transfer_from_identity_v1`, vault.rs:387; called
+  from pair_forest.rs around :1700 with `public.destination_token_account` and
+  `public.amount` of the same decoded request) does three things:
+  - it refuses unless the passed destination account is that key (vault.rs:454)
+    and the vault is the Pool vault of the master named in the request;
+  - it invokes `TransferChecked` with that amount (vault.rs:~505);
+  - `validate_exact_withdrawal_delta_v1` (vault.rs:551) checks the vault and
+    destination balances after the call.
+
+  Nothing else in the transaction moves tokens out of the vault.
+- **P3, result admission.** The Pool admits the payout only after reading the
+  verifier's result and validating it against the request
+  (`validate_authenticated_terminal_result_v1`, pair_forest.rs around :1750).
+
+**R1 Pool settlement models: reuse or realise.**
+
+| Model | Content (read) | For Aspis |
+|---|---|---|
+| `NGK_NFO_ReadModel.run` | The Pool's read of the verifier's return data: CPI result, program check, 792 bytes, decode | **reusable** if the Pool's read path is unchanged at the Aspis Pool pin (to check) |
+| `NGK_NFR_CSettlement.run` | Post-verifier settlement cut: validate, lane, encode. Lane images are arbitrary. **No token transfer** | **reusable as the frame**; needs an extension with the withdrawal transfer (P2) |
+| `NIB_ReadToSettlement.read_to_settlement` | Model composition emit → read → settle under `RuntimeReturnData`: `authenticated.value = ResultAdmission.value s` | **reusable** (one CPI, no checkpoint); it ties the Pool's admitted value to the verifier's emitted statement `s` |
+| `NGP_L159.{History_statement, Carrier_statement, L159_statement}` | Two-transaction history (adjacent transactions, checkpoint copy, 1,768 saved bytes) and the TX1/TX2 carrier equality, or E_rec | **not reusable** (two-transaction). For Aspis, R1's `History_statement` disappears. The carrier part is replaced by E1 + P1, with no hash step: the same request bytes in one transaction |
+
+None of them includes the token transfer or the destination. The result the
+verifier emits (`PoolV1PairForestTerminalResultV1`: transition kind, master,
+lane, output lane, nullifier, afterstate) does not carry the destination or
+amount. So the destination join cannot go through the return data. It must go
+through P1: the Pool pays from the same request it sends to the verifier.
+
+**Trust row for the token transfer (accepted by the owner as runtime-class; exact text proposed).**
+- **Name:** `SplTokenTransferChecked` (pinned SPL Token program id
+  `LEGACY_SPL_TOKEN_PROGRAM_ID`, pinned version).
+- **Statement:** an invoke of `TransferChecked { source, mint, destination,
+  authority, amount, decimals }` by the Pool, signed for the vault authority PDA,
+  that returns Ok has exactly these effects:
+  - it debits `amount` from `source`'s token balance;
+  - it credits `amount` to `destination`'s token balance;
+  - it changes no other account's token balance, owner or mint.
+
+  It returns an error, with no effect, when `source`'s balance is below
+  `amount`, the mints differ, `decimals` is wrong, or `authority` is not
+  `source`'s owner.
+- **Nothing more is assumed:** no fee and no hook behaviour, and nothing about
+  any other instruction.
+- **Possible narrowing (for the lead, not decided).** The Pool re-reads both
+  balances after the call and checks the exact deltas (vault.rs:551). So the
+  two-balance effect is checked by the Pool's own reads, assuming post-CPI
+  account data is the post-state, which is runtime-class. The row could then be
+  reduced to "no other account changes". Narrowing a row is the owner's call.
+
+**How the conjunct joins the rest of the outcome.**
+1. `Runs1.trace` already associates the Pool's actions with the recorded
+   actions.
+2. E1 and P1 give: statement verified = statement rebuilt from the Pool's
+   request.
+3. The outcome's public object (form (A)) is that statement.
+4. P2 plus the trust row give: payment = (request.amount → request.destination).
+
+Together these give PayoutBound against the same public object, with no new
+probabilistic event. The only probabilistic content stays in the existing
+failure event (the proof bound to that public object).
+
+**Size and hardest item (estimate).** About 6–10 model and source-statement
+files:
+- E1 statement and its extraction target (1–2);
+- P1 and P2 statements over an extracted Pool payout path (2–3, needing the
+  Pool payout functions extracted at the Aspis pin);
+- the trust-row structure (1);
+- extensions of `NGK_NFR_CSettlement` and `NIB_ReadToSettlement` with the
+  transfer (1–2);
+- the conjunct and its composition into the one-phase headline (1–2).
+
+**Hardest item: P1 + P2 as source statements on the actual Pool code.** They
+require extraction of the Pool's request split, codec round trip, withdrawal
+plan and CPI. R1 never extracted the payout path: none of R1's models contains
+the transfer. P1's codec round trip (re-encoding the decoded request) is the
+precise point where a mismatch would let the verifier and the Pool see
+different destinations.
