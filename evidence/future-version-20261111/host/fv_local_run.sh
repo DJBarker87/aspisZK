@@ -12,6 +12,12 @@ step rent; curl -s $URL -X POST -H 'Content-Type: application/json' -d '{"jsonrp
 step deploy; bash $D/FV_deploy.sh $URL $CLI/solana $L/keys/payer.json $L/keys/verifier.json $L/keys/buffer.json $W/out/$2/artifacts/aspis_r1_cost_probe_program.so > $L/out/deploy.log 2>&1 || { tail -30 $L/out/deploy.log; exit 11; }
 tail -12 $L/out/deploy.log
 step config; python3 $W/fv_local_config.py $1 $2 || exit 12
+# The preflight reads at finalized commitment: wait until the deployment is finalized.
+V=$($CLI/solana-keygen pubkey $L/keys/verifier.json)
+for i in $(seq 1 60); do
+  curl -s $URL -X POST -H 'Content-Type: application/json' -d '{"jsonrpc":"2.0","id":1,"method":"getAccountInfo","params":["'$V'",{"encoding":"base64","commitment":"finalized","dataSlice":{"offset":0,"length":0}}]}' | grep -q '"executable":true' && break
+  sleep 2
+done
 step preflight; python3 $D/FV_preflight.py $L/out/FV_local.json $L/out/FV_PREFLIGHT.json || exit 13
 step spend; python3 $D/FV_spend.py $L/out/FV_local.json $L/out/FV_spend || exit 14
 step cleanup; python3 $D/FV_cleanup.py $L/out/FV_local.json $L/out/FV_spend || exit 15

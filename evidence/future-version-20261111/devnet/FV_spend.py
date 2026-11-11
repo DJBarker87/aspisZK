@@ -10,7 +10,8 @@ withdrawal). Differences, per payment:
     and checked there with the verifier's own function; proof account 56,503 bytes;
   * no statement account, no stage 1: verification and settlement are ONE transaction;
   * open: ONE transaction [create proof account, create checkpoint account, write the
-    58-byte tail], then 15 full 3,763-byte writes (the frozen chunk);
+    58-byte tail], then 15 full 3,763-byte writes (the frozen chunk), signed against one
+    blockhash and sent together (config "uploads_together", default true);
   * the unchanged Pool still passes a verifier-owned 1,768-byte checkpoint account to the
     verifier, which does not read it; it is created zeroed and closed afterwards;
   * negatives BEFORE the settlement: one byte changed in the certificate, then one byte in a
@@ -52,6 +53,45 @@ def create_keyed(name, address, owner, size, signer):
     rent = rpc(URL, 'getMinimumBalanceForRentExemption', [size])
     data = (0).to_bytes(4, 'little') + rent.to_bytes(8, 'little') + size.to_bytes(8, 'little') + b58(owner)
     return L.send(name, [ix(L.SYSTEM, [[C['payer'], True, True], [address, True, True]], data)], [L.PAYER_KEY, signer])
+
+
+def send_together(label, names, instructions):
+    """Send independent single-instruction transactions at once and wait once.
+
+    All are signed against one blockhash and sent without waiting for one another; the time
+    until every one is confirmed is recorded. Each signed transaction is retained as an attempt
+    record before it is sent, so L.send then reconciles it by name (waits for finality, fetches
+    the metadata) and, if one never landed, sends that one again by itself. Used for the proof
+    writes only: they touch distinct byte ranges of one account, so their order does not matter,
+    and the whole account is read back afterwards.
+    """
+    todo = [(n, i) for n, i in zip(names, instructions) if not (O / (n + '.json')).exists() and not list(O.glob(n + '-attempt-*.json'))]
+    timing = None
+    if todo:
+        bh = rpc(URL, 'getLatestBlockhash', [{'commitment': 'confirmed'}])['value']
+        signed = [(n, L.invoke({'keys': [L.PAYER_KEY], 'instructions': [i], 'blockhash': bh['blockhash']})) for n, i in todo]
+        started = time.time()
+        for n, t in signed:
+            L.write(f'{n}-attempt-0', {'signature': t['signature'], 'blockhash': bh, 'simulation_error': None, 'serialized_bytes': t['bytes'],
+                                       'started_unix': started, 'sent_together': True})
+        t0 = time.monotonic(); errors = {}
+        for n, t in signed:
+            try:
+                rpc(URL, 'sendTransaction', [base64.b64encode(bytes.fromhex(t['hex'])).decode(), {'encoding': 'base64', 'skipPreflight': True, 'maxRetries': 5}])
+            except Exception as e:
+                errors[n] = str(e)
+        sent = time.monotonic() - t0
+        sigs = [t['signature'] for _, t in signed]; confirmed = None; slots = []
+        while time.monotonic() - t0 < 90:
+            st = rpc(URL, 'getSignatureStatuses', [sigs])['value']
+            if all(x and x['confirmationStatus'] in ('confirmed', 'finalized') for x in st):
+                confirmed = time.monotonic() - t0; slots = [x['slot'] for x in st]; break
+            time.sleep(0.4)
+        timing = {'count': len(signed), 'send_wall_seconds': sent, 'all_confirmed_wall_seconds': confirmed, 'send_errors': errors,
+                  'slots': sorted(set(slots)), 'note': 'wall time from the first send until every write is confirmed; None if not all confirmed within 90 s'}
+        L.write(label + '-sent-together', timing)
+    results = [L.send(n, [i]) for n, i in zip(names, instructions)]
+    return results, timing
 
 
 L.write('retained-payer', require_key(L.PAYER_KEY, L.CLI, C['payer']))
@@ -129,12 +169,15 @@ for n, label in enumerate(['transfer', 'withdrawal']):
     send(label + '-open', [mk_proof['instruction'], mk_cp['instruction'], tail['instructions'][0]])
     w = plan('pin2_writes', seed=proof_entry['seed'], body=proof[:full].hex())
     assert w['address'] == proof_entry['address'] and w['chunk'] == L.CHUNK and w['count'] == 15
-    ups = [send(f'{label}-proof-upload-{i}', [one]) for i, one in enumerate(w['instructions'])]
+    if C.get('uploads_together', True):
+        ups, together = send_together(label + '-proof-upload', [f'{label}-proof-upload-{i}' for i in range(15)], w['instructions'])
+    else:
+        ups, together = [send(f'{label}-proof-upload-{i}', [one]) for i, one in enumerate(w['instructions'])], None
     assert bytes.fromhex(L.readhex(proof_entry['address'], UP)) == proof, 'upload readback differs'
     cpv = L.account(verifiercp)['value']
     assert cpv['owner'] == P['verifier'] and not any(base64.b64decode(cpv['data'][0])), 'checkpoint account is not a zeroed verifier-owned account'
     L.write(label + '-uploads-phase', {'proof_count': len(ups), 'tail_bytes_in_open': len(proof) - full, 'compute_units': sum(s['compute_units'] for s in ups),
-                                       'transaction_wall_seconds_sum': sum(s['wall_seconds'] for s in ups)})
+                                       'sent_together': together, 'slots': sorted({s['slot'] for s in ups})})
     # 3. Negatives before the settlement: a changed byte must make the ONE transaction fail and leave state alone.
     protected = [p['marker'], p['output_lane'], p['page'], setup['vault'], dest, setup['master'], verifiercp]
     before = {a: L.account(a)['value'] for a in protected}
@@ -209,6 +252,7 @@ for n, label in enumerate(['transfer', 'withdrawal']):
     assert -production['payer_delta_lamports'] == production['fees_lamports'] + left
     payments[label] = {'settle': {k: settled[k] for k in ('signature', 'slot', 'compute_units', 'fee', 'serialized_bytes', 'explorer')},
                        'settle_margin_compute_units': CU_LIMIT - settled['compute_units'],
+                       'uploads': json.loads((O / (label + '-uploads-phase.json')).read_text()),
                        'production_path': production, 'transactions': len(names), 'fees_lamports': fees, 'payer_delta_lamports': delta,
                        'rent_closed_lamports': rent_closed, 'recovered_lamports': recovered,
                        'left_live': {a: {'owner': v['owner'], 'lamports': v['lamports'], 'role': 'nullifier marker' if a == p['marker'] else 'root page'} for a, v in live.items()},
