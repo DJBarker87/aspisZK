@@ -593,3 +593,32 @@ D1 and D2 are exact changes to this branch's stage D evaluator. E4b is an
 exact change to the Merkle traversal (same hash inputs in the same order) and
 adds a provided method to the digest trait and a direct syscall call in the
 measurement program.
+
+### Round 3, second set: result
+
+Cumulative program CU of the summed verifier (source `11212d3e6b9`):
+
+| Build | transfer-13 | transfer-255 | transfer-1023 | withdrawal-13 | withdrawal-255 | withdrawal-1023 | Saving on the previous build |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| W10 | 1,285,779 | 1,289,389 | 1,287,371 | 1,286,131 | 1,287,485 | 1,287,505 | |
+| W11 = W10 + D1 | 1,274,910 | 1,278,522 | 1,276,512 | 1,275,313 | 1,276,606 | 1,276,628 | 10,818 to 10,879 |
+| W12 = W11 + D2 | 1,260,414 | 1,264,024 | 1,262,017 | 1,260,814 | 1,262,111 | 1,262,131 | 14,495 to 14,499 |
+| W13 = W12 + E4b | 1,226,151 | 1,229,212 | 1,227,553 | 1,226,317 | 1,227,376 | 1,227,416 | 34,263 to 34,812 |
+
+Predicted 11k, 17k and 26k; all three kept. W13 is ELF `63591cc2…d6966be`.
+
+**In the wording fixed beforehand: the verifier fits the hard-cap budget on six
+fixtures** (1,226,151 to 1,229,212 against 1,275,000). This is not an
+all-input bound, not a measurement of a transaction that includes the Pool,
+and not a release claim. What it rests on that is unproved: stage C (batched
+first fold), stage D (final-message sumcheck), and source correspondence of
+every changed kernel.
+
+Still to establish before "one transaction" means anything:
+
+1. A measured transaction that contains the Pool settlement, the adapter and
+   this verifier, at the real 1,400,000 limit.
+2. An all-input cost argument with margin. The 20 October argument put its
+   bounds 7 to 8% above fixture maxima.
+3. The soundness rows for stages C and D, and the prover and proof format
+   carrying the 384-byte certificate.
