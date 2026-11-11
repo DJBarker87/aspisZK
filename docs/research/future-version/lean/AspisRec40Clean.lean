@@ -1,4 +1,5 @@
 import AspisRec40CleanA
+import AspisRec40FinalShape
 import AspisRec40CleanB
 import AspisRec40CleanTag
 import AspisRec40CleanWords
@@ -85,6 +86,7 @@ theorem clean40 (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
           (eval H (AspisRec40.ChargePrefix.base D P)).1 →
       RWireCheckedFormat.Format (eval H (AspisRec40.ChargePrefix.base D P)).2.1.2 →
       (eval H (AspisRec40.ChargePrefix.base D P)).2.1.1.tag = 2 →
+      AspisRec40.FinalShape.LatePayload (eval H (AspisRec40.ChargePrefix.base D P)).2.1.2 →
       AspisRec40.CleanStatement.FinalDecodes D H (eval H (AspisRec40.ChargePrefix.charged D P))) :
     AspisRec40.CleanStatement.CleanAcceptedModel40 D
       (AspisRec40.HitMass.projected D AspisOneTx.dV_aspis P)
@@ -114,8 +116,15 @@ theorem clean40 (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
     change hitsBad _ emptyTable (eval H (AspisRec40.HitMass.projected D AspisOneTx.dV_aspis P)).1
     rw [htail, AspisRec40.ChargePrefix.charged_eval]
     exact TraceAppend.hitsBad_of_prefix _ _ _ _ h
+  have hlate : AspisRec40.FinalShape.LatePayload (eval H (AspisRec40.ChargePrefix.base D P)).2.1.2 := by
+    have h0 := AspisRec40.FinalShape.latePayload_of_checks D H _ _ checks
+    have h1 : (eval H (AspisRec40.HitMass.projected D AspisOneTx.dV_aspis P)).2.1.2 =
+        (eval H (AspisRec40.ChargePrefix.charged D P)).2.1.2 :=
+      congrArg (fun x => x.2) (AspisRec40.CleanA.same_transcript D AspisOneTx.dV_aspis P H)
+    rw [h1, AspisRec40.ChargePrefix.charged_eval] at h0
+    exact (AspisRec40.FinalShape.latePayload_enrich _ _).1 h0
   have hd := AspisRec40.CleanRun.decodes40 D P H (Q+1111) hQ hout fmt tag
-    (hfinal H hQ hout fmt tag)
+    (hfinal H hQ hout fmt tag hlate)
   refine ⟨?_, ?_⟩
   · rw [fixed]; exact checks
   · rw [fixed]
@@ -149,6 +158,7 @@ theorem hit_in_prefix_of (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat
           (eval H (AspisRec40.ChargePrefix.base D P)).1 →
       RWireCheckedFormat.Format (eval H (AspisRec40.ChargePrefix.base D P)).2.1.2 →
       (eval H (AspisRec40.ChargePrefix.base D P)).2.1.1.tag = 2 →
+      AspisRec40.FinalShape.LatePayload (eval H (AspisRec40.ChargePrefix.base D P)).2.1.2 →
       AspisRec40.CleanStatement.FinalDecodes D H (eval H (AspisRec40.ChargePrefix.charged D P)))
     (H : Bytes → State)
     (ha : (eval H (AspisRec40.HitMass.projected D AspisOneTx.dV_aspis P)).2.2 = true)
@@ -180,8 +190,15 @@ theorem hit_in_prefix_of (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat
     change hitsBad _ emptyTable (eval H (AspisRec40.HitMass.projected D AspisOneTx.dV_aspis P)).1
     rw [htail, AspisRec40.ChargePrefix.charged_eval]
     exact TraceAppend.hitsBad_of_prefix _ _ _ _ h
+  have hlate : AspisRec40.FinalShape.LatePayload (eval H (AspisRec40.ChargePrefix.base D P)).2.1.2 := by
+    have h0 := AspisRec40.FinalShape.latePayload_of_checks D H _ _ checks
+    have h1 : (eval H (AspisRec40.HitMass.projected D AspisOneTx.dV_aspis P)).2.1.2 =
+        (eval H (AspisRec40.ChargePrefix.charged D P)).2.1.2 :=
+      congrArg (fun x => x.2) (AspisRec40.CleanA.same_transcript D AspisOneTx.dV_aspis P H)
+    rw [h1, AspisRec40.ChargePrefix.charged_eval] at h0
+    exact (AspisRec40.FinalShape.latePayload_enrich _ _).1 h0
   have hd := AspisRec40.CleanRun.decodes40 D P H (Q+1111) hQ hout fmt tag
-    (hfinal H hQ hout fmt tag)
+    (hfinal H hQ hout fmt tag hlate)
   have hit' : GenericNoHit.hitFrom (AspisAcceptance.bad AspisOneTx.decodePairS)
       (eval H (AspisRec40.ChargePrefix.charged D P)).2.1.1 []
       ((pr D).transcript H (eval H (AspisRec40.ChargePrefix.charged D P)).2.1.1

@@ -15,9 +15,22 @@ follows from it while `FinalDecoding40` is open.
 
 `FinalDecoding40 D P Q` is that hypothesis, named: on the charged run of the
 40-row experiment, under R1's four premises (first reads at most `Q + 1111`,
-no collision event at `Q + 1111`, the wire format, statement tag 2), the Aspis
-decoder recovers rows 33 to 39 (`CleanStatement.FinalDecodes`). It is a
-statement about the model only; it is to be proved, not assumed. -/
+no collision event at `Q + 1111`, the wire format, statement tag 2) AND the
+premise that rows 33 to 39 of the proof are payload messages
+(`FinalShape.LatePayload`), the Aspis decoder recovers rows 33 to 39
+(`CleanStatement.FinalDecodes`). It is a statement about the model only; it
+is to be proved, not assumed.
+
+Second form. The first form of this file (LDJ-01, LDJ-05) had no premise on
+rows 33 to 39. That hypothesis is false for a prover that sends `.initial` at
+a late row: `AspisRec40.FinalShape.finalDecodes_fails_initial` (found by the
+soundness lead's reviewer; R1's four premises read only rows 0 to 32, the
+statement and the trace). The theorem was therefore vacuous for such provers.
+The added premise is not an assumption of the bound: inside
+`AspisRec40.Clean.hit_in_prefix_of` it is derived from the acceptance checks
+(`FinalShape.latePayload_of_checks`), and the hit-in-prefix step is only
+used on accepted runs. That an honest run meets all five premises is argued
+in RECORDED-EXPERIMENT-40.md section 11.4, not compiled. -/
 set_option autoImplicit false
 noncomputable section
 namespace AspisFailureBound.Joined
@@ -38,6 +51,7 @@ def FinalDecoding40 (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat) : P
         (eval H (AspisRec40.ChargePrefix.base D P)).1 →
     RWireCheckedFormat.Format (eval H (AspisRec40.ChargePrefix.base D P)).2.1.2 →
     (eval H (AspisRec40.ChargePrefix.base D P)).2.1.1.tag = 2 →
+    AspisRec40.FinalShape.LatePayload (eval H (AspisRec40.ChargePrefix.base D P)).2.1.2 →
     AspisRec40.CleanStatement.FinalDecodes D H (eval H (AspisRec40.ChargePrefix.charged D P))
 
 /-- Form (P) with one open hypothesis. -/

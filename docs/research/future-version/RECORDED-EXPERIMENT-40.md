@@ -1029,3 +1029,127 @@ Copies `RWireRawLiteralDecoderRestore.decodes_and_follows`
 PSD-71 failed, exit 1: an unfilled existential witness in `trace_r1_prefix`.
 PSD-73 failed, exit 1: an unqualified `Context.Context`. No `sorry` and no new
 axioms in the compiled files.
+
+## 11. Retained counterexample to `hfinal`, the missing premise, and corrections
+
+### 11.1 The counterexample (soundness lead's reviewer, on ef4cd439a53): confirmed
+
+The earlier `hfinal` / `FinalDecoding40` required rows 33–39 to decode on
+every run meeting R1's four premises (`hQ`, `hout`, `format`, `tag`).
+`RWireCheckedFormat.Format` constrains rows 0–32 only. Take a prover with tag
+2, rows 0–32 in Format, and `.initial` at row 35. The run is as follows:
+- R16's canonicalisation and the word enrichment keep `.initial`
+  (`R16CanonReduction.lean:14–18`, `CanonicalCutEnrichedTranscript.lean:150–151`).
+- On `.initial` past row 0, `UnifiedSampler.samp` is `invalid p`
+  (`R1UnifiedSampler.lean:44–46, 67`), whose first cell is the squeeze frame of
+  the initial vector.
+
+`decFinal` never decodes a squeeze frame (`Starts.aspis_squeeze`), so
+`FinalDecodes` fails on that run. This is even simpler than the reviewer's
+two-row argument. R1's four premises can still hold. The hypothesis was
+therefore unsatisfiable for such a prover, and the bound conditional on it
+said nothing for it.
+
+Compiled: `AspisRec40.FinalShape.finalDecodes_fails_initial (D H v r w) (h35 : v.2.1.2 35 = .initial r w) : ¬ FinalDecodes D H v` (PSD-76).
+
+### 11.2 The missing premise, defined once (`AspisRec40FinalShape`, PSD-76)
+
+```
+def LatePayload (pf : LiteralProtocol.Proof) : Prop :=
+  ∀ i, 33 ≤ i → i < 40 → ∃ b, LiteralTranscript.erase (pf i) = .payload b
+theorem latePayload_of_checks (D H pub pf)
+  (c : AspisAcceptance.AspisChecks AspisOneTx.decodePairS pub ((pr D).transcript H pub pf 40).rounds) :
+  LatePayload pf
+theorem latePayload_enrich (w pf) : LatePayload (RawCutTranscriptRun.proof w pf) ↔ LatePayload pf
+theorem latePayload_of_payloads (pf) (h : ∀ i, 33 ≤ i → i < 40 → ∃ b, pf i = .payload b) : LatePayload pf
+```
+
+This is the weakest form the decoding uses: each late row is a payload row
+of the sampler. The 64-byte frame and canonical decoding are not used by the
+decoding. They follow from `checks`, but they are not part of the premise.
+Derivation: `c.entry33`/`c.decode33` and `c.entryRound b` give
+`decodePairS (pf i) = some _` for i = 33..39. `decodePairS` reads
+`payloadOf (erase m)`, which is `none` on `.initial` (`payload_of_decode`).
+
+### 11.3 Restated binders
+
+`hfinal` (in `AspisRec40.Clean.clean40`, `hit_in_prefix_of`, and
+`AspisRec40.CleanJoin.hit_in_prefix40`; PSD-77, PSD-78) is now:
+
+```
+(hfinal : ∀ H : Bytes → State,
+  firstReads emptyTable (eval H (AspisRec40.ChargePrefix.base D P)).1 ≤ Q+1111 →
+  ¬ hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv
+      BinRawByteCollisionTargets.pred (Q+1111)) emptyTable
+      (eval H (AspisRec40.ChargePrefix.base D P)).1 →
+  RWireCheckedFormat.Format (eval H (AspisRec40.ChargePrefix.base D P)).2.1.2 →
+  (eval H (AspisRec40.ChargePrefix.base D P)).2.1.1.tag = 2 →
+  AspisRec40.FinalShape.LatePayload (eval H (AspisRec40.ChargePrefix.base D P)).2.1.2 →
+  AspisRec40.CleanStatement.FinalDecodes D H (eval H (AspisRec40.ChargePrefix.charged D P)))
+```
+
+In `hit_in_prefix_of` and `clean40` the new premise is supplied from
+`checks`: `latePayload_of_checks` on the full run, then `same_transcript`,
+then `charged_eval`, then `latePayload_enrich`.
+
+The other definitions:
+- `FollowClaim` and `AspisRec40FinalRun` do not need the premise. They are
+  stated over the typed payload function `payload : Nat → M` of R1's unified
+  run, whose rows `i ≥ 1` are `.payload (payload i)` by construction.
+- The premise enters at the byte-to-address bridge W4. That is where the
+  literal proof is mapped to `(c1, payload)`, and `LatePayload` gives that
+  rows 33–39 erase to payloads. W4's statement in §10.3 gains the premise
+  `(hlate : AspisRec40.FinalShape.LatePayload pf)` next to `hvalid`.
+- W1 and W3 are stated on the address-level run or on R1-shaped premises
+  and do not need it. The second worker may import `AspisRec40FinalShape` if
+  a statement needs it.
+
+### 11.4 Non-vacuity of the restated premise list
+
+The premise list of the restated `hfinal`, i.e. R1's four together with
+`LatePayload` on the base run, is satisfied together on an honest run:
+- R1's four premises hold on R1's honest runs. R1's completeness side builds
+  runs with rows 0–32 in Format and tag 2, and `hQ`/`hout` are the budget and
+  the no-collision event.
+- The honest Aspis prover puts `.payload (Protocol.finalMessage …)` at rows
+  33–39, so `LatePayload` holds by `latePayload_of_payloads`.
+- None of the five premises constrains the others' rows: Format reads rows
+  0–32, `LatePayload` reads rows 33–39, `tag` reads the statement, and
+  `hQ`/`hout` read the trace.
+
+This is an argument; no compiled honest-run instance exists. Building one
+needs a model of the honest prover, which is not cheap. The counterexample
+of 11.1 violates exactly `LatePayload`.
+
+### 11.5 Corrections to earlier sections
+
+- §8.2's final paragraph ("None of these needs … an extra premise") is
+  withdrawn for the decoding of rows 33–39: it needs `LatePayload` (11.2),
+  which is derivable from `checks` and so is not an assumption of the final
+  bound.
+- §8.1's statement that the lift to the full experiment does not go through
+  the C7 module is withdrawn. The lift uses `fibre_checks40`, which is stated
+  at C7's `pairProver`, and C7 is in the constant walk. Only R1's
+  `annotated_selected` itself is unused.
+- The tag step (§8.1, `AspisRec40CleanTag`) uses `admitS` through
+  `admitted_aspis` and `accepted_guardS`, keeps only the guard's tag
+  conjunct, and uses no validity of rows 33–39.
+- Stale headers in `AspisRec40CleanWords` and `AspisRec40CleanTag`: their
+  module comments are copied from the old single-file `AspisRec40Clean`
+  header. To be corrected at the coherent rebuild, not now.
+
+### 11.6 Validation
+
+| Attempt | Module | Source sha256 | Exit | Wall | Peak RSS (time) | cgroup peak | Axioms |
+|---|---|---|---|---|---|---|---|
+| PSD-75 | AspisRec40FinalBefore (fact (a)) | 60c8544c9bde7eea682f829538cda07bdb7587197138426a54a395ab6e9cbb57 | 0 | 2.32 s | 3,485,348 KB | 365,322,240 B | 3× [propext, Classical.choice, Quot.sound] |
+| PSD-76 | AspisRec40FinalShape | 461354d6becedef1b8c329e2803e345cce6e5dc81bad1d9a86777b343fa6a609 | 0 | 2.57 s | 4,248,128 KB | 425,824,256 B | 6× [propext, Classical.choice, Quot.sound] |
+| PSD-77 | AspisRec40Clean | 638ab4794bdef025e4e2b87c9dd132b959c4a8fddd71dda9d6fe3c3d035f765e | 0 | 3.12 s | 4,256,564 KB | 427,728,896 B | 3× [propext, Classical.choice, Quot.sound] |
+| PSD-78 | AspisRec40CleanJoin | ee8551f5e46bcde1146a0e9510ca4dfbeed3e0434853a7e3762e2a9182f0f899 | 0 | 2.89 s | 4,252,004 KB | 421,691,392 B | 4× [propext, Classical.choice, Quot.sound] |
+
+`AspisRec40FinalBefore` (fact (a) of §10.2: `step_before`, `chain_before`,
+`run_cells`) is the file the second worker imports for W1. Its `run_cells`
+gives, for 32 ≤ j < n < 40 on the 40-row run under R1's `badColl` premise,
+`Before tr (address j) (address n)`, `Before tr (advance (absorbed j)) (address n)`,
+and the table before row n's frame at those two cells (`absorbed j`,
+`previous (j+1)`).

@@ -60,6 +60,7 @@ theorem hit_in_prefix40 (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
           (eval H (AspisRec40.ChargePrefix.base D P)).1 →
       RWireCheckedFormat.Format (eval H (AspisRec40.ChargePrefix.base D P)).2.1.2 →
       (eval H (AspisRec40.ChargePrefix.base D P)).2.1.1.tag = 2 →
+      AspisRec40.FinalShape.LatePayload (eval H (AspisRec40.ChargePrefix.base D P)).2.1.2 →
       AspisRec40.CleanStatement.FinalDecodes D H (eval H (AspisRec40.ChargePrefix.charged D P))) :
     AspisFailureBound.HitInPrefix40 D P Q := by
   intro H ha hc hit

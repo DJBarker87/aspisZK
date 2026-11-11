@@ -397,7 +397,43 @@ Other points of the same review, recorded:
 - Stale headers in `AspisRec40CleanWords` and `AspisRec40CleanTag`, to be
   corrected at the coherent rebuild.
 
-The text below is the section as first written.
+**Restated and recompiled, same day.** The counterexample is confirmed and kept as a compiled
+theorem, in a simpler form than the reviewer's: one `.initial` at row 35 is enough, because the
+decoder never decodes the squeeze frame that such a row starts with
+(`AspisRec40.FinalShape.finalDecodes_fails_initial`). The missing premise is defined once:
+
+```lean
+def AspisRec40.FinalShape.LatePayload (pf : LiteralProtocol.Proof) : Prop :=
+  ∀ i, 33 ≤ i → i < 40 → ∃ b, LiteralTranscript.erase (pf i) = .payload b
+theorem latePayload_of_checks (D H pub pf)
+  (c : AspisAcceptance.AspisChecks AspisOneTx.decodePairS pub ((pr D).transcript H pub pf 40).rounds) :
+  LatePayload pf
+```
+
+`FinalDecoding40` now carries it as a fifth premise, after the tag premise:
+`AspisRec40.FinalShape.LatePayload (eval H (AspisRec40.ChargePrefix.base D P)).2.1.2 →`.
+`hit_in_prefix_of` and `clean40` supply it from the acceptance checks, so it is not an assumption
+of the bound. The conclusion of `failure_bound40P_of_final` is unchanged.
+
+Status after the restatement: form (P) is a conditional model theorem whose one open hypothesis
+is now false for no prover that I or the reviewer know of. That it holds for every prover is
+exactly what remains to be proved. That an honest run meets the five premises together is argued
+(RECORDED-EXPERIMENT-40.md section 11.4: the premises read disjoint parts of the run, and the
+honest prover sends payloads at rows 33 to 39); it is not compiled, because that needs a model of
+the honest prover.
+
+| Attempt | Module | Source sha256 | Exit | Wall | Peak RSS (time) | cgroup peak | Axioms |
+|---|---|---|---|---|---|---|---|
+| PSD-76 | AspisRec40FinalShape | 461354d6becedef1b8c329e2803e345cce6e5dc81bad1d9a86777b343fa6a609 | 0 | 2.57 s | 4,248,128 KB | 425,824,256 B | standard three |
+| PSD-77 | AspisRec40Clean (restated) | 638ab4794bdef025e4e2b87c9dd132b959c4a8fddd71dda9d6fe3c3d035f765e | 0 | 3.12 s | 4,256,564 KB | 427,728,896 B | standard three |
+| PSD-78 | AspisRec40CleanJoin (restated) | ee8551f5e46bcde1146a0e9510ca4dfbeed3e0434853a7e3762e2a9182f0f899 | 0 | 2.89 s | 4,252,004 KB | 421,691,392 B | standard three |
+| LDJ-06 | AspisFailureBoundJoined (restated) | f8ee9045b9c4006f6259ee9bfb9194385903e097cda495fac09679d16f600bd0 | 0 | 2.23 s | 4,251,504 KB | 421,347,328 B | [propext, Classical.choice, Quot.sound] |
+| LDM-05 | AspisJoinedMeasure, on the restated bound | 29e932021ac8d32d0fa24545a1ce5b04fd39c18022c9586862c12e694ba3d49a | 0 | 9.27 s | 4,311,708 KB | 426,356,736 B | none (no theorems) |
+
+LDM-05: 1,004 project modules, 11,966 project constants, no class iii module.
+
+The text below is the section as first written. Its Lean block shows the first form of
+`FinalDecoding40`, without the fifth premise.
 
 The three hypotheses of section 0 are now reduced to one.
 
