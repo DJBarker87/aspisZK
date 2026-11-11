@@ -72,7 +72,11 @@ pub fn verify_batched<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, ob
         return Err(Error::Query);
     }
     let mut pending = BatchedWeights::new(&a.weights)?;
-    accumulate_weights(&p, &mut a, &geometry, &mut pending);
+    if cfg!(feature = "future-tight-weights") {
+        accumulate_weights_tight(&p, &mut a, &geometry, &mut pending)?;
+    } else {
+        accumulate_weights(&p, &mut a, &geometry, &mut pending);
+    }
     pending.finish(&mut a.weights);
     a.rhs = sums.rhs2;
     mark(obs, Phase::QueryPart(0, 4));
@@ -223,19 +227,32 @@ fn fold_sums(openings: &[u8], queries: &[u32; 22], rho: K, alpha: &[E; 2], g: &[
     // First fold, left side: accumulate over the queries in QM31 lane by
     // lane, then contract each lane once with its gamma power.
     let mut first = [EbyKDot::new(), EbyKDot::new(), EbyKDot::new(), EbyKDot::new()];
-    for lane in 0..26 {
-        let h = base_lane(openings, &c.circle, lane);
-        for k in 0..4 {
-            first[k].push(g[lane], h[k]).map_err(|_| Error::Parse)?;
+    if cfg!(feature = "future-tight-base") {
+        let h = base_lanes_tight(openings, &c.circle)?;
+        for lane in 0..26 {
+            for k in 0..4 {
+                first[k].push(g[lane], h[lane][k]).map_err(|_| Error::Parse)?;
+            }
+        }
+    } else {
+        for lane in 0..26 {
+            let h = base_lane(openings, &c.circle, lane);
+            for k in 0..4 {
+                first[k].push(g[lane], h[k]).map_err(|_| Error::Parse)?;
+            }
         }
     }
     mark(obs, Phase::QueryPart(0, 1));
+    let extension = if cfg!(feature = "future-tight-ext") {
+        extension_lanes_tight(openings, &c.circle)?
+    } else {
+        [extension_lane(openings, &c.circle, 0)?, extension_lane(openings, &c.circle, 1)?, extension_lane(openings, &c.circle, 2)?]
+    };
     for which in 0..3 {
-        let h = extension_lane(openings, &c.circle, which)?;
         // Pinned gamma indices: C2 lanes 26 and 27, C1 tail lane 28.
         let power = g[if which == 2 { 28 } else { 26 + which }];
         for k in 0..4 {
-            first[k].push(power, h[k]).map_err(|_| Error::Parse)?;
+            first[k].push(power, extension[which][k]).map_err(|_| Error::Parse)?;
         }
     }
     let [f0, f1, f2, f3] = first;
@@ -293,6 +310,150 @@ fn accumulate_weights(p: &Prepared, a: &mut Accumulator, geometry: &QueryGeometr
         a.power = a.power.mul(p.rho);
         a.next += 1;
     }
+}
+
+#[inline(always)]
+fn k_of(limbs: [u64; 4]) -> K {
+    let [a, b, c, d] = limbs.map(M31::reduce_u64);
+    K { c0: aspis_core::field::CM31 { a, b }, c1: aspis_core::field::CM31 { a: c, b: d } }
+}
+
+/// E5: all 26 base-field lanes in one pass, queries outermost. Same sums as
+/// `base_lane` for every lane.
+///
+/// Precondition as for `base_lane` (canonical limbs, from the caller's scan).
+/// Bounds: each signed sum is nonnegative below `2^33` and folded once to at
+/// most `P + 3`; a product with a canonical limb is at most
+/// `(P-1)(P+3) = 2^62 - 4`; the accumulators are folded after every third
+/// query, so each holds at most three products plus a folded residue below
+/// `2^34`, which is below `2^64`.
+#[inline(never)]
+fn base_lanes_tight(openings: &[u8], circle: &[[K; 4]]) -> Result<Vec<[K; 4]>, Error> {
+    let mut acc = aspis_core::r0::heap::filled(26 * 16, 0u64).map_err(|_| Error::Allocation)?;
+    {
+        let acc: &mut [u64; 416] = (&mut acc[..]).try_into().map_err(|_| Error::Allocation)?;
+        for i in 0..QUERIES {
+            let q: &[u8; 480] = openings[i * OPENING..i * OPENING + 480].try_into().map_err(|_| Error::Parse)?;
+            let c = &circle[i];
+            let mut l = [0u64; 16];
+            for k in 0..4 {
+                l[4 * k] = u64::from(c[k].c0.a.0);
+                l[4 * k + 1] = u64::from(c[k].c0.b.0);
+                l[4 * k + 2] = u64::from(c[k].c1.a.0);
+                l[4 * k + 3] = u64::from(c[k].c1.b.0);
+            }
+            for lane in 0..26 {
+                let at = 4 * lane;
+                let read = |o: usize| u64::from(u32::from_le_bytes([q[o], q[o + 1], q[o + 2], q[o + 3]]));
+                let (v0, v1, v2, v3) = (read(at), read(120 + at), read(240 + at), read(360 + at));
+                let u = v0 + v1;
+                let w = v2 + v3;
+                let x = v0 + P64 - v1;
+                let y = v3 + P64 - v2;
+                let fold = |z: u64| (z & P64) + (z >> 31);
+                let signed = [fold(u + w), fold(x + y), fold(u + 2 * P64 - w), fold(x + 2 * P64 - y)];
+                let base = 16 * lane;
+                for k in 0..4 {
+                    for j in 0..4 {
+                        acc[base + 4 * k + j] += l[4 * k + j] * signed[k];
+                    }
+                }
+            }
+            if i % 3 == 2 {
+                for limb in acc.iter_mut() {
+                    *limb = (*limb & P64) + (*limb >> 31);
+                }
+            }
+        }
+    }
+    let mut out = aspis_core::r0::heap::filled(26, [K::ZERO; 4]).map_err(|_| Error::Allocation)?;
+    for lane in 0..26 {
+        for k in 0..4 {
+            let at = 16 * lane + 4 * k;
+            out[lane][k] = k_of([acc[at], acc[at + 1], acc[at + 2], acc[at + 3]]);
+        }
+    }
+    Ok(out)
+}
+
+/// E6: the three QM31 lanes with the four signed sums formed on raw limbs and
+/// reduced once, in place of four checked decodes and eight canonical QM31
+/// additions per lane and query. Same sums as `extension_lane`. Precondition:
+/// canonical limbs, from the caller's scan.
+#[inline(never)]
+fn extension_lanes_tight(openings: &[u8], circle: &[[K; 4]]) -> Result<[[K; 4]; 3], Error> {
+    let mut dots: [[KbyKDot; 4]; 3] = core::array::from_fn(|_| core::array::from_fn(|_| KbyKDot::new()));
+    for i in 0..QUERIES {
+        let q: &[u8; 608] = openings[i * OPENING..i * OPENING + 608].try_into().map_err(|_| Error::Parse)?;
+        for which in 0..3 {
+            let offset = |s: usize| if which == 2 { s * 120 + 104 } else { 480 + s * 32 + which * 16 };
+            let mut signed = [[0u64; 4]; 4];
+            for j in 0..4 {
+                let read = |s: usize| {
+                    let o = offset(s) + 4 * j;
+                    u64::from(u32::from_le_bytes([q[o], q[o + 1], q[o + 2], q[o + 3]]))
+                };
+                let (v0, v1, v2, v3) = (read(0), read(1), read(2), read(3));
+                let u = v0 + v1;
+                let w = v2 + v3;
+                let x = v0 + P64 - v1;
+                let y = v3 + P64 - v2;
+                signed[0][j] = u + w;
+                signed[1][j] = x + y;
+                signed[2][j] = u + 2 * P64 - w;
+                signed[3][j] = x + 2 * P64 - y;
+            }
+            for k in 0..4 {
+                dots[which][k].push(circle[i][k], k_of(signed[k])).map_err(|_| Error::Parse)?;
+            }
+        }
+    }
+    let [d0, d1, d2] = dots;
+    let finish = |d: [KbyKDot; 4]| {
+        let [a, b, c, e] = d;
+        [a.finish(), b.finish(), c.finish(), e.finish()]
+    };
+    Ok([finish(d0), finish(d1), finish(d2)])
+}
+
+/// E7: `accumulate_weights` with the residue rows updated in a fixed-size
+/// loop. Same products, same fold after every fourth query, same final state.
+#[inline(never)]
+fn accumulate_weights_tight(p: &Prepared, a: &mut Accumulator, geometry: &QueryGeometry, weights: &mut BatchedWeights) -> Result<(), Error> {
+    let raw: &mut [[u64; 4]; 64] = (&mut weights.raw[..]).try_into().map_err(|_| Error::Parse)?;
+    for i in 0..QUERIES {
+        let z = geometry.line_z[i - geometry.start];
+        let mut node = z.mul(z).double().sub(M31::ONE);
+        let mut basis = [M31::ONE; 64];
+        let mut n = 1;
+        while n < 64 {
+            for j in 0..n {
+                basis[n + j] = basis[j].mul(node);
+            }
+            node = node.mul(node).double().sub(M31::ONE);
+            n *= 2;
+        }
+        let power = [u64::from(a.power.c0.a.0), u64::from(a.power.c0.b.0), u64::from(a.power.c1.a.0), u64::from(a.power.c1.b.0)];
+        for j in 0..64 {
+            let b = u64::from(basis[j].0);
+            let row = &mut raw[j];
+            row[0] += power[0] * b;
+            row[1] += power[1] * b;
+            row[2] += power[2] * b;
+            row[3] += power[3] * b;
+        }
+        if weights.terms & 3 == 3 {
+            for row in raw.iter_mut() {
+                for limb in row {
+                    *limb = (*limb & P64) + (*limb >> 31);
+                }
+            }
+        }
+        weights.terms += 1;
+        a.power = a.power.mul(p.rho);
+        a.next += 1;
+    }
+    Ok(())
 }
 
 /// MEASUREMENT PROBE ONLY: it verifies nothing and its result has no meaning.
@@ -800,5 +961,127 @@ mod tests {
             }
             assert_eq!(values, compact::SEMANTIC_COMPACT_VALUES);
         }
+    }
+
+    #[test]
+    fn tight_lane_kernels_equal_the_first_kernels_on_arbitrary_and_edge_inputs() {
+        let mut state = 0x0123_4567_89ab_cdefu64;
+        for case in 0..30 {
+            let queries = distinct_queries(&mut state);
+            let geometry = QueryGeometry::for_range(&queries, 0, 22).unwrap();
+            let openings = random_openings(&mut state, case % 5);
+            let rho = random_k(&mut state, if case < 4 { case } else { 3 });
+            let c = coefficients(rho, &geometry).unwrap();
+            let tight = base_lanes_tight(&openings, &c.circle).unwrap();
+            for lane in 0..26 {
+                assert_eq!(tight[lane], base_lane(&openings, &c.circle, lane), "case {case} lane {lane}");
+            }
+            let tight = extension_lanes_tight(&openings, &c.circle).unwrap();
+            for which in 0..3 {
+                assert_eq!(tight[which], extension_lane(&openings, &c.circle, which).unwrap(), "case {case} lane {which}");
+            }
+        }
+        // Maximal limbs everywhere: values, and coefficients forced to P - 1.
+        let queries = distinct_queries(&mut state);
+        let geometry = QueryGeometry::for_range(&queries, 0, 22).unwrap();
+        let openings = random_openings(&mut state, 2);
+        let top = random_k(&mut state, 2);
+        let circle = vec![[top; 4]; QUERIES];
+        let tight = base_lanes_tight(&openings, &circle).unwrap();
+        for lane in 0..26 {
+            assert_eq!(tight[lane], base_lane(&openings, &circle, lane));
+        }
+        let tight = extension_lanes_tight(&openings, &circle).unwrap();
+        for which in 0..3 {
+            assert_eq!(tight[which], extension_lane(&openings, &circle, which).unwrap());
+        }
+        let _ = geometry;
+    }
+
+    #[test]
+    fn tight_weight_accumulation_equals_the_first_form() {
+        for (name, proof, public) in FIXTURES {
+            let (p, _) = prepared(proof, public);
+            let geometry = QueryGeometry::for_range(&p.queries, 0, 22).unwrap();
+            let run = |tight: bool| {
+                let mut a = Accumulator::new(Variant::S2).unwrap();
+                let mut pending = BatchedWeights::new(&a.weights).unwrap();
+                if tight {
+                    accumulate_weights_tight(&p, &mut a, &geometry, &mut pending).unwrap();
+                } else {
+                    accumulate_weights(&p, &mut a, &geometry, &mut pending);
+                }
+                pending.finish(&mut a.weights);
+                (a.weights, a.power, a.next, pending.terms)
+            };
+            assert_eq!(run(true), run(false), "{name}");
+        }
+    }
+
+    /// E4a: the single-pass tail returns the same result as the two-pass
+    /// tail, error kind included, on every slot of every fixture and under a
+    /// changed node, changed padding, both, and a slot too short for the set.
+    #[test]
+    fn single_pass_merkle_tail_equals_the_two_pass_tail() {
+        let mut compared = 0;
+        for (name, proof, public) in FIXTURES {
+            let (p, _) = prepared(proof, public);
+            let folded_root: [u8; 32] = proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();
+            let roots = [p.roots[0], p.roots[1], folded_root];
+            for batch in 0..2 {
+                for tree in 0..3 {
+                    let (lo, hi) = if batch == 0 { (0, SPLIT) } else { (SPLIT, 22) };
+                    let n = hi - lo;
+                    let keys = sort_batch_keys(batch_keys(&p.queries, lo, n, tree), n);
+                    let mut idx = [0u32; multiproof::MAX_BATCH];
+                    let mut val = [[0u8; 32]; multiproof::MAX_BATCH];
+                    let mut d = 0;
+                    for position in 0..n {
+                        let key = keys[position];
+                        let index = (key >> 8) as u32;
+                        let leaf = batch_leaf(Sha, tree, opening(proof, lo + (key & 0xff) as usize));
+                        if d > 0 && idx[d - 1] == index {
+                            continue;
+                        }
+                        idx[d] = index;
+                        val[d] = leaf;
+                        d += 1;
+                    }
+                    let nodes = slot(proof, 3 * batch + tree).to_vec();
+                    let count = multiproof::node_count(Arity::Two, &idx[..d]).unwrap();
+                    let mut variants = vec![nodes.clone()];
+                    let mut node_changed = nodes.clone();
+                    node_changed[32 * (count / 2) + 5] ^= 1;
+                    variants.push(node_changed.clone());
+                    if 32 * count < nodes.len() {
+                        let mut padding = nodes.clone();
+                        padding[32 * count + 9] ^= 0x80;
+                        variants.push(padding);
+                        node_changed[nodes.len() - 1] ^= 1;
+                        variants.push(node_changed);
+                    }
+                    variants.push(nodes[..32 * (count - 1)].to_vec());
+                    variants.push(nodes[..32 * count].to_vec());
+                    for (v, bytes) in variants.iter().enumerate() {
+                        let (mut i1, mut v1, mut i2, mut v2) = (idx, val, idx, val);
+                        let two = merkle_tail_two_pass(Sha, &roots[tree], &mut i1, &mut v1, d, bytes);
+                        let one = merkle_tail_single_pass(Sha, &roots[tree], &mut i2, &mut v2, d, bytes);
+                        assert_eq!(one, two, "{name} batch {batch} tree {tree} variant {v}");
+                        if v == 0 {
+                            assert_eq!(two, Ok(()), "{name} batch {batch} tree {tree}");
+                        }
+                        compared += 1;
+                    }
+                }
+            }
+            // A malformed index set (not strictly increasing).
+            let mut idx = [0u32; multiproof::MAX_BATCH];
+            idx[0] = 7;
+            idx[1] = 7;
+            let (mut i2, mut v1, mut v2) = (idx, [[0u8; 32]; multiproof::MAX_BATCH], [[0u8; 32]; multiproof::MAX_BATCH]);
+            let nodes = slot(proof, 0);
+            assert_eq!(merkle_tail_single_pass(Sha, &roots[0], &mut i2, &mut v2, 2, nodes), merkle_tail_two_pass(Sha, &roots[0], &mut idx, &mut v1, 2, nodes));
+        }
+        assert!(compared >= 6 * 6 * 5);
     }
 }

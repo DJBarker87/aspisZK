@@ -193,16 +193,54 @@ fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], bat
         val[d] = leaf;
         d += 1;
     }
-    let count = multiproof::node_count(Arity::Two, &idx[..d]).ok_or(Error::Merkle)?;
     let nodes = slot(proof, s);
+    debug_assert_eq!(nodes.len(), 32 * SLOT_NODES[s]);
+    #[cfg(feature = "future-merkle-single-pass")]
+    {
+        merkle_tail_single_pass(hash, &root, idx, val, d, nodes)
+    }
+    #[cfg(not(feature = "future-merkle-single-pass"))]
+    {
+        merkle_tail_two_pass(hash, &root, idx, val, d, nodes)
+    }
+}
+
+/// The pinned tail of `batch_tree`: count the sibling nodes, check the slot's
+/// padding, then verify the counted prefix. `nodes` is the whole fixed slot
+/// (its length is `32 * SLOT_NODES[s]`).
+#[inline(always)]
+fn merkle_tail_two_pass<H: Digest32>(hash: H, root: &[u8; 32], idx: &mut [u32; multiproof::MAX_BATCH], val: &mut [[u8; 32]; multiproof::MAX_BATCH], d: usize, nodes: &[u8]) -> Result<(), Error> {
+    let count = multiproof::node_count(Arity::Two, &idx[..d]).ok_or(Error::Merkle)?;
     // Padding is whole 32-byte words: scan it 8 bytes at a time.
-    if count > SLOT_NODES[s] || nodes[32 * count..].chunks_exact(8).any(|w| u64::from_le_bytes(w.try_into().unwrap()) != 0) {
+    if 32 * count > nodes.len() || nodes[32 * count..].chunks_exact(8).any(|w| u64::from_le_bytes(w.try_into().unwrap()) != 0) {
         return Err(Error::Parse);
     }
-    if !multiproof::verify_in_place(hash, Arity::Two, &root, idx, val, d, &nodes[..32 * count]) {
+    if !multiproof::verify_in_place(hash, Arity::Two, root, idx, val, d, &nodes[..32 * count]) {
         return Err(Error::Merkle);
     }
     Ok(())
+}
+
+/// FUTURE-VERSION EXPERIMENT E4a: one traversal. The verdict is deferred so
+/// that every input gets the same result as the two-pass tail, error kind
+/// included: malformed indices, then too many nodes for the slot or nonzero
+/// padding, then a root mismatch.
+#[allow(dead_code)]
+#[inline(always)]
+fn merkle_tail_single_pass<H: Digest32>(hash: H, root: &[u8; 32], idx: &mut [u32; multiproof::MAX_BATCH], val: &mut [[u8; 32]; multiproof::MAX_BATCH], d: usize, nodes: &[u8]) -> Result<(), Error> {
+    match multiproof::verify_counting(hash, root, idx, val, d, nodes) {
+        multiproof::Counted::Malformed => Err(Error::Merkle),
+        multiproof::Counted::Short => Err(Error::Parse),
+        multiproof::Counted::Done { root_ok, used } => {
+            if nodes[used..].chunks_exact(8).any(|w| u64::from_le_bytes(w.try_into().unwrap()) != 0) {
+                Err(Error::Parse)
+            } else if !root_ok {
+                Err(Error::Merkle)
+            } else {
+                Ok(())
+            }
+        }
+    }
 }
 
 /// The shipped per-query folding and accumulation, reading the candidate

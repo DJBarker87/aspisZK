@@ -193,6 +193,62 @@ pub fn verify_in_place<H: Digest32>(
     n == 1 && index_at(idx, 0) == 0 && root_matches(val, root) && at == nodes.len()
 }
 
+/// FUTURE-VERSION EXPERIMENT E4a: outcome of `verify_counting`.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Counted {
+    /// The index set is not well formed (what `node_count` reports as `None`).
+    Malformed,
+    /// The traversal needs more sibling nodes than the slot holds (what the
+    /// two-pass form sees as `node_count > slot nodes`).
+    Short,
+    /// Traversal complete: whether the recomputed root matches, and the bytes
+    /// of the slot consumed (`32 * node_count`).
+    Done { root_ok: bool, used: usize },
+}
+
+/// FUTURE-VERSION EXPERIMENT E4a (binary trees only): `verify_in_place` over a
+/// whole fixed slot, counting the sibling nodes it consumes instead of taking
+/// a pre-counted prefix. Same hash inputs in the same order as
+/// `verify_in_place` on the first `node_count` nodes; the number consumed
+/// equals `node_count` because both are functions of the index set alone.
+#[inline(always)]
+pub fn verify_counting<H: Digest32>(
+    hash: H,
+    root: &[u8; 32],
+    idx: &mut [u32; MAX_BATCH],
+    val: &mut [[u8; 32]; MAX_BATCH],
+    mut n: usize,
+    slot: &[u8],
+) -> Counted {
+    if n == 0 || n > MAX_BATCH || !well_formed(&idx[..n]) {
+        return Counted::Malformed;
+    }
+    let mut at = 0usize;
+    for _ in 0..Arity::Two.levels() {
+        let mut w = 0;
+        let mut i = 0;
+        while i < n {
+            let parent = index_at(idx, i) >> 1;
+            let digest = if i + 1 < n && index_at(idx, i + 1) == index_at(idx, i) ^ 1 {
+                let d = occupied_binary_parent(hash, val, i);
+                i += 2;
+                d
+            } else {
+                let Some(sibling) = slot.get(at..at + 32) else { return Counted::Short };
+                at += 32;
+                let d = sibling_binary_parent(hash, val, i, sibling, index_at(idx, i) & 1 == 0);
+                i += 1;
+                d
+            };
+            idx[w] = parent;
+            val[w] = digest;
+            w += 1;
+        }
+        n = w;
+    }
+    Counted::Done { root_ok: n == 1 && index_at(idx, 0) == 0 && root_matches(val, root), used: at }
+}
+
 /// Prover side: emit the canonical node sequence. `node(level, index)` returns
 /// the stored digest of node `index` at `level` (0 = leaves).
 pub fn generate(

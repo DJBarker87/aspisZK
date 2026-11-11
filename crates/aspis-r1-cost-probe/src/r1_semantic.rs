@@ -80,8 +80,61 @@ fn mark(obs: crate::verifier::Observer, i: u8) {
 }
 
 fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {
+    // FUTURE-VERSION EXPERIMENT E8 (default off): the same sum
+    // `p[0] + (p[0] + ... + p[27])` with one reduction per limb. The 29
+    // canonical limbs sum below 2^36.
+    #[cfg(feature = "future-lazy-boundary")]
+    {
+        use aspis_core::field::{CM31, M31};
+        let first = polynomial[0];
+        let mut sums = [u64::from(first.c0.a.0), u64::from(first.c0.b.0), u64::from(first.c1.a.0), u64::from(first.c1.b.0)];
+        for c in polynomial {
+            sums[0] += u64::from(c.c0.a.0);
+            sums[1] += u64::from(c.c0.b.0);
+            sums[2] += u64::from(c.c1.a.0);
+            sums[3] += u64::from(c.c1.b.0);
+        }
+        let [a, b, c, d] = sums.map(M31::reduce_u64);
+        return QM31 { c0: CM31 { a, b }, c1: CM31 { a: c, b: d } };
+    }
+    #[cfg(not(feature = "future-lazy-boundary"))]
+    {
         let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
     boundary
+    }
+}
+
+#[cfg(test)]
+mod future_boundary_tests {
+    use super::*;
+    use aspis_core::field::{CM31, M31, P};
+
+    /// E8: with `future-lazy-boundary` on, the lazy sum against the pinned
+    /// fold; with it off, the pinned fold against itself.
+    #[test]
+    fn boundary_sum_equals_the_pinned_fold() {
+        let mut state = 0x6a09_e667_f3bc_c908u64;
+        let mut next = move || {
+            state ^= state << 13;
+            state ^= state >> 7;
+            state ^= state << 17;
+            state
+        };
+        for case in 0..2_000usize {
+            let mut limb = || match case % 4 {
+                0 => 0,
+                1 => P - 1,
+                2 => 1,
+                _ => (next() % u64::from(P)) as u32,
+            };
+            let polynomial: [QM31; 28] = core::array::from_fn(|_| QM31 {
+                c0: CM31 { a: M31(limb()), b: M31(limb()) },
+                c1: CM31 { a: M31(limb()), b: M31(limb()) },
+            });
+            let pinned = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+            assert_eq!(semantic_boundary(&polynomial), pinned, "case {case}");
+        }
+    }
 }
 
 fn semantic_value(polynomial: &[QM31; 28], alpha: &[QM31; 10], round: usize) -> QM31 {
