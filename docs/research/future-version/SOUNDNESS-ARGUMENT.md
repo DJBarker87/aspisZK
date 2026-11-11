@@ -171,6 +171,14 @@ frame and 42 starts; its proofs and the new format's proofs are not valid for ea
 ELF has been built or measured for this change. Finding 1 is unaffected in kind: 41 starts at
 the common envelope are `615/2^109`, about `1.2 · 2^-100`.
 
+**Owner decision on the accounting, 2026-11-11 ("for 2 yes").** For Aspis, a bound proved by
+charging each transcript start its own row's cap, with the adversary's `Q` starts still charged
+the largest cap, is acceptable. It was put to the owner as: same adversary, same quantity, same
+target, counted per step; the formula of the stated bound changes; nothing is quoted until it is
+proved. The stated alternative was a 23rd query. The decision concerns Aspis only and changes
+nothing in the R1 claim. It makes the three pieces listed in the independent review above the next
+deliverable; none of them exists yet, and until they do Aspis has no per-attempt figure.
+
 ### Finding 5: envelopes
 
 The verifier core issues at most 1,112 digest calls (section 6.3), below
