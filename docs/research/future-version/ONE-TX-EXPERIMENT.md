@@ -306,3 +306,53 @@ the same 20 single-byte mutations; the batched sums equal the pinned per-query
 kernels on 40 random and edge cases and on maximal limbs; the batched equality
 alone rejects single opening changes; the cancellation vector; the probes equal
 their naive forms.
+
+## Round 2: pre-registration (written and committed before any round-2 measurement)
+
+Round 1 above was measured without pre-registered criteria. This round fixes
+them first.
+
+**Question.** How much of the remaining cost is removable by exact changes
+(same acceptance predicate, same proof bytes, same hash inputs in the same
+order), and does that, with the batched first fold, bring the verifier inside
+the one-transaction budget?
+
+**Baseline W0.** Fused + batched + `future-fast-kmul`, ELF B6
+(`2aeb5c5d…ca73b67`, source `9c82845beab`): 1,602,695 to 1,606,608 CU on the
+six fixtures. Every saving in this round is measured against W0, cumulatively,
+not against the deployed verifier.
+
+**Budget lines.** Verifier core at most 1,275,000 CU (the 1.4M limit less
+125,000 for the Pool and adapter) and at most 1,175,000 (a 1.3M target), on
+all six fixtures.
+
+**Inventory first.** One register trace of W0 per fixture for transfer-13 and
+withdrawal-255, with executed instructions attributed to source lines of an
+ELF whose instruction stream is identical to B6's. The inventory is used only
+if at least 95% of executed instructions map to a source line and the
+instruction count plus the syscall charge reproduces the program CU.
+
+**Candidates.** All exact:
+
+- E1: `PreparedQm31Multiplier::mul` through the sixteen-product kernel.
+- E2: `QM31::square` through a delayed-reduction form.
+- E3: decode already-validated semantic records without re-validating.
+- E4: one Merkle traversal per tree (count while verifying, zero check after)
+  and one index schedule shared by C1 and C2.
+- Any further exact candidate the inventory exposes. Each is added to this
+  list, with its predicted saving written as executions times saving per
+  execution less new overhead, before its ELF is measured.
+
+**Keep or drop.** Candidates are applied cumulatively in the order listed. One
+is kept if it lowers program CU by at least 3,000 on every one of the six
+fixtures, and dropped on a smaller saving or a regression. A kept candidate
+must also pass the existing host tests with its feature on, an equivalence
+test against the form it replaces on edge and random inputs, and acceptance of
+the six fixtures with rejection of the 20 mutations.
+
+**Outcome wording, fixed now.** If the final cumulative build exceeds
+1,275,000 on any fixture: "one transaction is not supported by exact changes
+plus batching", with the measured gap. If it is within 1,275,000 on all six:
+"fits the hard-cap budget on six fixtures", which is still not an all-input
+bound and not a release claim. Only measured savings count; no estimate is
+added to a total.
