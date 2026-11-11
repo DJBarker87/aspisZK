@@ -458,6 +458,20 @@ impl PreparedQm31Multiplier {
 
     #[inline(always)]
     pub fn mul(self, rhs: QM31) -> QM31 {
+        // FUTURE-VERSION EXPERIMENT E1 (default off): the stored components
+        // already hold the multiplicand's four coordinates; rebuild it and use
+        // the sixteen-product `QM31::mul`. The prepared representation and its
+        // dot kernels are unchanged.
+        #[cfg(feature = "future-fast-prepared")]
+        {
+            return QM31 {
+                c0: CM31 { a: self.components[0][0], b: self.components[0][1] },
+                c1: CM31 { a: self.components[1][0], b: self.components[1][1] },
+            }
+            .mul(rhs);
+        }
+        #[cfg(not(feature = "future-fast-prepared"))]
+        {
         let multiply = |left: [M31; 3], right: CM31| {
             let m0 = left[0].mul(right.a);
             let m1 = left[1].mul(right.b);
@@ -473,6 +487,7 @@ impl PreparedQm31Multiplier {
         QM31 {
             c0: m0.add(mul_by_r(m1)),
             c1: m2.sub(m0).sub(m1),
+        }
         }
     }
 }
@@ -979,11 +994,37 @@ impl QM31 {
     pub fn square(self) -> QM31 {
         #[cfg(feature = "r0-op-count")]
         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KSquare);
+        // FUTURE-VERSION EXPERIMENT E2 (default off): the sixteen-product form
+        // specialised to equal operands (ten products, one reduction per
+        // limb). Canonical limbs assumed, as in the fast `mul`; every
+        // intermediate is nonnegative and below 2^64.
+        #[cfg(feature = "future-fast-square")]
+        {
+            const PP: u64 = (P as u64) * (P as u64);
+            let p = P as u64;
+            let (a, b, c, d) = (self.c0.a.0 as u64, self.c0.b.0 as u64, self.c1.a.0 as u64, self.c1.b.0 as u64);
+            let partial = |x: u64| (x & p).wrapping_add(x >> 31);
+            let u = partial((c * c).wrapping_add(PP).wrapping_sub(d * d));
+            let v = partial(2 * (c * d));
+            return QM31 {
+                c0: CM31 {
+                    a: M31(reduce_u64((a * a).wrapping_add(PP).wrapping_sub(b * b).wrapping_add(2 * u).wrapping_add(3 * p).wrapping_sub(v))),
+                    b: M31(reduce_u64((2 * (a * b)).wrapping_add(u).wrapping_add(2 * v))),
+                },
+                c1: CM31 {
+                    a: M31(reduce_u64((2 * (a * c)).wrapping_add(2 * PP).wrapping_sub(2 * (b * d)))),
+                    b: M31(reduce_u64(2 * (a * d) + 2 * (b * c))),
+                },
+            };
+        }
+        #[cfg(not(feature = "future-fast-square"))]
+        {
         let c0_square = self.c0.square();
         let c1_square = self.c1.square();
         QM31 {
             c0: c0_square.add(mul_by_r(c1_square)),
             c1: self.c0.mul(self.c1).double(),
+        }
         }
     }
 
@@ -3332,5 +3373,33 @@ mod future_fast_kmul_tests {
         }
         let top = QM31 { c0: CM31 { a: M31(P - 1), b: M31(P - 1) }, c1: CM31 { a: M31(P - 1), b: M31(P - 1) } };
         assert_eq!(top.mul(top), karatsuba(top, top));
+    }
+
+    /// E1 and E2: the prepared multiply and the square against the Karatsuba
+    /// product, on every pattern of edge limbs and on random limbs.
+    #[test]
+    fn prepared_multiply_and_square_equal_the_karatsuba_product() {
+        let mut state = 0x2545_f491_4f6c_dd1du64;
+        let mut next = move || {
+            state ^= state << 13;
+            state ^= state >> 7;
+            state ^= state << 17;
+            state
+        };
+        let edges = [0u32, 1, 2, P - 2, P - 1, P / 2, P / 2 + 1];
+        let mut limb = |i: usize| if i < 7 { edges[i] } else { (next() % u64::from(P)) as u32 };
+        for case in 0..60_000usize {
+            let pick = |k: usize| (case / 9usize.pow(k as u32)) % 9;
+            let mut value = |k: usize| QM31 {
+                c0: CM31 { a: M31(limb(pick(k))), b: M31(limb(pick(k + 1))) },
+                c1: CM31 { a: M31(limb(pick(k + 2))), b: M31(limb(pick(k + 3))) },
+            };
+            let (x, y) = (value(0), value(1));
+            assert_eq!(x.square(), karatsuba(x, x), "square case {case}");
+            assert_eq!(PreparedQm31Multiplier::new(x).mul(y), karatsuba(x, y), "prepared case {case}");
+        }
+        let top = QM31 { c0: CM31 { a: M31(P - 1), b: M31(P - 1) }, c1: CM31 { a: M31(P - 1), b: M31(P - 1) } };
+        assert_eq!(top.square(), karatsuba(top, top));
+        assert_eq!(PreparedQm31Multiplier::new(top).mul(top), karatsuba(top, top));
     }
 }

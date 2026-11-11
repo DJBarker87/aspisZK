@@ -155,6 +155,18 @@ impl<'a> ValidatedRecord<'a> {
             .get(byte_offset..end)
             .ok_or(Error::Length { row: self.row })?;
         let mut out = [QM31::ZERO; N];
+        // FUTURE-VERSION EXPERIMENT E3: the token was issued by `Prefix::parse`
+        // over these same immutable bytes, which already checked every limb
+        // canonical and the high half zero; load the four limbs directly.
+        #[cfg(feature = "future-validated-decode")]
+        for (value, part) in bytes.chunks_exact(32).enumerate() {
+            let limb = |at: usize| aspis_core::field::M31(u32::from_le_bytes([part[at], part[at + 1], part[at + 2], part[at + 3]]));
+            out[value] = QM31 {
+                c0: aspis_core::field::CM31 { a: limb(0), b: limb(4) },
+                c1: aspis_core::field::CM31 { a: limb(8), b: limb(12) },
+            };
+        }
+        #[cfg(not(feature = "future-validated-decode"))]
         for (value, part) in bytes.chunks_exact(32).enumerate() {
             out[value] = QM31::from_le_bytes(&part[..16]).ok_or(Error::NonCanonical {
                 row: self.row,

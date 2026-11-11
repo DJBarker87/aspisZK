@@ -778,4 +778,27 @@ mod tests {
         }
         unit_cost_probe(FIXTURES[0].1, None).unwrap();
     }
+
+    /// E3: on every validated semantic row of every fixture, the decoder
+    /// returns what the checked QM31 decoder returns on the same bytes. With
+    /// `future-validated-decode` off this compares the pinned decoder with
+    /// itself; with it on, the direct limb load with the pinned decoder.
+    #[test]
+    fn validated_decode_equals_the_checked_decoder_on_every_semantic_row() {
+        for (name, proof, _) in FIXTURES {
+            let mut logical = vec![0u8; compact::LOGICAL_SEMANTIC];
+            compact::expand_semantic(&proof[compact::OFF_SEMANTIC..compact::OFF_Y1], &mut logical).unwrap();
+            let prefix = crate::r1_wire::Prefix::parse(&logical).unwrap();
+            let mut values = 0;
+            for row in 14u8..=26 {
+                let record = prefix.validated_record(row).unwrap();
+                let payload = record.payload();
+                for j in 0..payload.len() / 32 {
+                    assert_eq!(record.decode_k::<1>(j).unwrap()[0], K::from_le_bytes(&payload[32 * j..32 * j + 16]).unwrap(), "{name} row {row} value {j}");
+                    values += 1;
+                }
+            }
+            assert_eq!(values, compact::SEMANTIC_COMPACT_VALUES);
+        }
+    }
 }
