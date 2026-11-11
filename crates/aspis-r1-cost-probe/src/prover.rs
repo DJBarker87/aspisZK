@@ -125,7 +125,10 @@ pub fn prove_masked_fixture(
         fixture_secret(hash,b"UNPROVED:R1:fixture-leaf-seed",fixture_seed,&public_bytes,variant)?,
     );
     let mut nonce_store=InMemoryStateOnlyMaskNonceStore::default();
-    prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,&mut nonce_store)
+    // pv-aspis-rw: this function is the outermost shell here; the check times of
+    // the call reach this thread's store when `times` is dropped.
+    let mut times=CheckTimesShell::default();
+    prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,&mut nonce_store,&mut times.log)
 }
 
 /// Secure-source P3 host API. Callers must supply OS-generated attempt
@@ -140,10 +143,53 @@ pub fn prove_masked_attempt(
     attempt:StateOnlyAttemptSecrets,
     nonce_store:&mut DurableStateOnlyMaskNonceStore,
 )->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
+    // pv-aspis-rw: shell of `prove_masked_attempt_timed`. The check times of the
+    // call reach this thread's store when `times` is dropped (on return, and on
+    // unwinding).
+    let mut times=CheckTimesShell::default();
+    prove_masked_attempt_timed(public,compiled,variant,hash,attempt,nonce_store,&mut times.log)
+}
+
+/// pv-aspis-rw: `prove_masked_attempt` without thread-local state: the former
+/// body, with the durations of the P_R1 checks it runs appended to `times`
+/// (with the feature `r1p-check`; `times` is `()` without it) in place of the
+/// push to this thread's store that `public_check` made at the pin. Same proof
+/// bytes, same audit, same errors in the same order
+/// (evidence/pv-aspis-rewrite-20261111/notes/06-record_check_times.md).
+pub fn prove_masked_attempt_timed(
+    public:Public<'_>,
+    compiled:&PoolV1PairForestMergedC1CompilationV1,
+    variant:Variant,
+    hash:HashFn,
+    attempt:StateOnlyAttemptSecrets,
+    nonce_store:&mut DurableStateOnlyMaskNonceStore,
+    times:&mut CheckTimesLog,
+)->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
     let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;
     let context=StateOnlyHidingContext::pool_v1_pair_forest_v1(hash(&[&public_bytes]),attempt.mask_nonce());
     let binding=hash(&[b"UNPROVED:R1:P3:PRIVATE-ATTEMPT",&public_bytes,&[variant.tag()],&context.encode()]);
-    prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,nonce_store)
+    prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,nonce_store,times)
+}
+
+/// pv-aspis-rw: the durations of the P_R1 checks of one proving call, in check
+/// order. Without the feature `r1p-check` no check runs and there is nothing
+/// to carry.
+#[cfg(feature="r1p-check")]
+pub type CheckTimesLog=Vec<R1CheckTimes>;
+#[cfg(not(feature="r1p-check"))]
+pub type CheckTimesLog=();
+
+/// pv-aspis-rw telemetry shell, NOT part of the extraction: owned only by the
+/// outermost public entry points. Dropping it appends `log` to this thread's
+/// `CHECK_TIMES` (read only by `take_check_times`), in order; no other effect.
+/// Nothing returned by the prover depends on it.
+#[derive(Default)]
+pub struct CheckTimesShell { pub log:CheckTimesLog }
+impl Drop for CheckTimesShell {
+    fn drop(&mut self) {
+        #[cfg(feature="r1p-check")]
+        CHECK_TIMES.with(|v| v.borrow_mut().append(&mut self.log));
+    }
 }
 
 fn prove_masked_with_attempt(
@@ -155,6 +201,7 @@ fn prove_masked_with_attempt(
     binding:[u8;32],
     attempt:StateOnlyAttemptSecrets,
     nonce_store:&mut impl StateOnlyMaskNonceStore,
+    times:&mut CheckTimesLog,
 )->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
     let (reserved,material)=attempt.reserve_and_build_pool_v1_pair_forest_mask_material_v1(hash,binding,context,nonce_store).map_err(mask_error)?;
     #[cfg(all(test,feature="r1p-check"))]
@@ -190,7 +237,7 @@ fn prove_masked_with_attempt(
     let h1_total_balanced=aspis_statement::state_only_copy_helper_sum(&sem.columns[26])==Some(K::ZERO);
     if !h1_total_balanced { return Err(Error::Semantic); }
     let audit=MaskedFixtureAudit{h1_total_balanced,..audit};
-    let proof=prove_from_semantics(public,variant,hash,backend,sem,(&reserved,context))?;
+    let proof=prove_from_semantics(public,variant,hash,backend,sem,(&reserved,context),times)?;
     Ok((proof,audit))
 }
 
@@ -235,8 +282,11 @@ fn derive_private_salts(reserved:&ReservedStateOnlyAttemptSecrets,context:StateO
 /// compact stored format of `crate::compact` (57,607 bytes). Every transcript
 /// message is the logical byte string of the retired eight-way format; only
 /// the roots (binary trees) and the stored encoding differ. R1 is variant S2.
-fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics<LegacyHashFn>,salts:(&ReservedStateOnlyAttemptSecrets,StateOnlyHidingContext))->Result<Vec<u8>,Error> {
+fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics<LegacyHashFn>,salts:(&ReservedStateOnlyAttemptSecrets,StateOnlyHidingContext),times:&mut CheckTimesLog)->Result<Vec<u8>,Error> {
     use crate::{compact,multiproof};
+    // pv-aspis-rw: `times` receives the duration record of the P_R1 check below.
+    #[cfg(not(feature="r1p-check"))]
+    let _=times;
     // pv-rw-e: same statements in the same order; every iterator chain, closure,
     // fold and range loop moved into a counted-loop helper below. The locals that
     // own secrets (`folded_salts`, and the parameters `backend`/`salts`) stay in
@@ -271,7 +321,7 @@ fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Ba
     public_check(variant,&R1PublicChallenges{
         alpha:sem.alpha,z:[[sem.z[0].x,sem.z[0].y],[sem.z[1].x,sem.z[1].y]],
         gamma,kappa,alpha0,alpha1,queries:queries.to_vec(),
-    },sem.roots[0])?;
+    },sem.roots[0],times)?;
     publish_compact(&LogicalProof{
         variant,semantic:&sem.bytes,y1:&y1,inactive,c0bytes:&c0bytes,root,c1bytes:&c1bytes,fbytes:&fbytes,
         queries:&queries,c1:&backend.c1,c2:&backend.c2,folded_word:&folded_word,folded_salts:&folded_salts,tree:&tree,
@@ -495,7 +545,7 @@ pub fn take_check_times() -> Vec<R1CheckTimes> {
 
 /// P_R1 on one attempt. R1 is variant S2; P_R1 is not defined for the others.
 #[cfg(feature="r1p-check")]
-fn public_check(variant:Variant,challenges:&R1PublicChallenges,c1_root:[u8;32])->Result<(),Error> {
+fn public_check(variant:Variant,challenges:&R1PublicChallenges,c1_root:[u8;32],times:&mut CheckTimesLog)->Result<(),Error> {
     if variant!=Variant::S2 { return Err(Error::Semantic); }
     #[cfg(test)]
     test_hooks::observe_challenges(challenges);
@@ -504,20 +554,14 @@ fn public_check(variant:Variant,challenges:&R1PublicChallenges,c1_root:[u8;32])-
         return if accepted {Ok(())} else {Err(Error::Rejected)};
     }
     let _=c1_root;
-    let (accepted,times)=aspis_z4b_probe::p_r1_check(challenges);
-    record_check_times(times);
+    // pv-aspis-rw: the duration record goes to the caller's log, before the
+    // verdict is turned into a result (so a rejected check is recorded too, as
+    // at the pin); the former `record_check_times`, which pushed it to this
+    // thread's store here, is now the drop of `CheckTimesShell` in the
+    // outermost entry point.
+    let (accepted,check_times)=aspis_z4b_probe::p_r1_check(challenges);
+    times.push(check_times);
     if accepted {Ok(())} else {Err(Error::Rejected)}
-}
-
-/// pv-rw-e telemetry shell, kept OPAQUE in the extraction. Contract (lead
-/// request R3): no effect on any returned value of the prover. It appends
-/// `times` to this thread's `CHECK_TIMES` (read only by `take_check_times`);
-/// no other effect, no return value, never panics except on a re-entrant
-/// `RefCell` borrow (impossible here: no callback runs inside `with`). The
-/// verdict of `public_check` does not depend on it.
-#[cfg(feature="r1p-check")]
-fn record_check_times(times:R1CheckTimes) {
-    CHECK_TIMES.with(|v| v.borrow_mut().push(times));
 }
 
 /// One published proof from the retry loop.
@@ -561,8 +605,29 @@ pub fn prove_masked_retrying_with(
     nonce_store:&mut DurableStateOnlyMaskNonceStore,
     mut next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,
 )->Result<RetriedProof,Error> {
+    // pv-aspis-rw: shell of `prove_masked_retrying_from_timed` (same variant
+    // test first, then the same loop from attempt 0); the check times of the
+    // call reach this thread's store when `times` is dropped.
+    let mut times=CheckTimesShell::default();
+    prove_masked_retrying_from_timed(public,compiled,variant,hash,nonce_store,&mut next_attempt,&mut times.log)
+}
+
+/// pv-aspis-rw: the D38.3 retry loop for an explicit secrets provider, without
+/// thread-local state: the former body of `prove_masked_retrying_with`, with
+/// the durations of the P_R1 checks of all attempts appended to `times` in
+/// attempt order.
+#[cfg(feature="r1p-check")]
+pub fn prove_masked_retrying_from_timed<P:AttemptSecretsProvider>(
+    public:Public<'_>,
+    compiled:&PoolV1PairForestMergedC1CompilationV1,
+    variant:Variant,
+    hash:HashFn,
+    nonce_store:&mut DurableStateOnlyMaskNonceStore,
+    provider:&mut P,
+    times:&mut CheckTimesLog,
+)->Result<RetriedProof,Error> {
     if variant!=Variant::S2 { return Err(Error::Semantic); }
-    retry_attempt(public,compiled,variant,hash,nonce_store,&mut next_attempt,0)
+    retry_attempt(public,compiled,variant,hash,nonce_store,provider,0,times)
 }
 
 /// pv-rw-e (lead request R2): the explicit per-attempt secrets provider of the
@@ -593,12 +658,15 @@ fn retry_attempt<P:AttemptSecretsProvider>(
     nonce_store:&mut DurableStateOnlyMaskNonceStore,
     provider:&mut P,
     k:usize,
+    times:&mut CheckTimesLog,
 )->Result<RetriedProof,Error> {
     if k>=ATTEMPT_CAP { return Err(Error::AttemptsExhausted); }
     let attempt=provider.attempt_secrets(k)?;
-    match prove_masked_attempt(public,compiled,variant,hash,attempt,nonce_store) {
+    // pv-aspis-rw: the attempt runs through `prove_masked_attempt_timed` (the
+    // body of `prove_masked_attempt`), so this loop touches no thread-local state.
+    match prove_masked_attempt_timed(public,compiled,variant,hash,attempt,nonce_store,times) {
         Ok((proof,audit))=>Ok(RetriedProof{proof,audit,attempts:k+1}),
-        Err(Error::Rejected)=>retry_attempt(public,compiled,variant,hash,nonce_store,provider,k+1),
+        Err(Error::Rejected)=>retry_attempt(public,compiled,variant,hash,nonce_store,provider,k+1,times),
         Err(e)=>Err(e),
     }
 }
