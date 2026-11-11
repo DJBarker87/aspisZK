@@ -623,6 +623,18 @@ quarters of them are copies.
 
 ## 5. Decisions for the owner
 
+> **Owner's answer, 2026-11-11:** "i agree to all recommendations as long as they dont push CU
+> up, soundness down or risk privacy". Recorded as: D1 adopted (one-phase game, same adversary,
+> metric, averaging and failure event); D2 adopted (the split-B failure event and an account term
+> are kept); D3 confirmed (the same normalisation rule for the single phase); D4 to be decided
+> together with R1's pending item, no new rule; D0 not decided: Aspis stays an experimental
+> candidate. Check against the owner's three conditions, by the lead: none of D1 to D4 changes any
+> code, so compute units are unchanged; none weakens the adversary, the metric or the failure
+> event, D1 removes runtime hypotheses and adds none, and D2 keeps the stronger failure event, so
+> soundness is not lowered; none touches the prover or anything published, so privacy is
+> unaffected. These are decisions about the statement to be proved for Aspis. They establish
+> nothing by themselves and change nothing in the R1 claim.
+
 - **D0. Aspis as a release target.** The contract fixes R1's frozen two-transaction
   path. Everything here treats Aspis as an experimental candidate (AGENTS.md
   section 6). Adopting it is outside this note.
