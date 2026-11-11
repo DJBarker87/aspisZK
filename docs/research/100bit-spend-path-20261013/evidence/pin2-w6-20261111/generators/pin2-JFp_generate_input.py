@@ -42,7 +42,7 @@ text+='''theorem native :
     JFs_SerializedBytes.bytes,JFs_SerializedBytes.chunks,id_eq,
     List.map_map,Function.comp_def,decodeByte,
 '''+','.join(f'    cast{i:02}' for i in range(len(segs)))+''',numeric]
-  simp only [n01,n03,n10]
+  simp only [n01,n03,n10,n55]
 #print axioms native
 end AspisR1.JFp_InitBytes
 '''

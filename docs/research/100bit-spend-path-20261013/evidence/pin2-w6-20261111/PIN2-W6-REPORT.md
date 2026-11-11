@@ -197,7 +197,17 @@ No regenerated module source lives anywhere else. Three locations hold files tha
 
 Two objects in overlay-PIN2-W4 come from unchanged release sources: `NDO_JFu_Q26Aggregate` (W5 C0097, research blob `cce65c76`) and `NDO_JFr_HornerTrace` (W5 C0076, research blob `30958560`). W5 compiled them because their imports changed. Neither is in objs, since both are outside the release closure, so there is no release object to compare them against. Copies of their research sources are now in `pin2-w6-20261111/sources/` and are listed in the manifest with status "unchanged release source". The manifest therefore has 493 entries.
 
-## 10. Next concrete deliverable
+## 10. Host failure fixed: NDO_JFp_InitBytes
+
+The host compiled the first InitBytes draft (sha256 `4d0122a9…`) and it failed with exit 1 (`pin2-w7-20261111/host-failures/NDO_JFp_InitBytes.txt`). The failure reproduced locally with overlay-HOST-P1 first on the path (probe P006).
+
+- **What failed.** Theorem `native` ends in an unsolved goal. Its `simp only` evaluates every single-byte `[0#u8].map val` to `[0]` directly; the cast lemmas `cast01`, `cast03` and `cast10` go unused. The original generator's last step, `simp only [n01,n03,n10]`, unfolds those three zero segments on the `numeric` side. The PIN2 binding tail adds a fourth zero segment, `n55` (has_destination = 0), and that one was left folded.
+- **Fix.** A generator parametrization, `single-zero segments in native` in `tools/PIN2W6_subs.py`, adds `n55` to that list. It is a proof-text change with no value change; it was not a hand edit.
+- **Check mode.** The 26 October run still reproduces the release text byte for byte.
+- **Result.** The new source is sha256 `9cfb9a42d0c0fc22ae1fdb724be44ffbc44ccaaec1f9bad350808d6950e3f0d8`. Probe P007 (overlay-HOST-P1 first) and the credited compile C0404 both exit 0, with 84 `#print axioms` results, all standard, and no sorry.
+- **Records.** The change is in `LITERAL-CHANGES.tsv`, `CHANGE-NOTES.tsv` and `SOURCE-MANIFEST.json`, which keeps `previous_sha256`.
+
+## 11. Next concrete deliverable
 
 The host compiles the 137 uncompiled regenerated sources (83 from W5 and 54 from W6) and the rest of the fixture-downstream closure from the sources in §9.
 

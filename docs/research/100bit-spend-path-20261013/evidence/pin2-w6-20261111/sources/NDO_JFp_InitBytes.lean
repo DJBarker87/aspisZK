@@ -318,6 +318,6 @@ theorem native :
     JFs_SerializedBytes.bytes,JFs_SerializedBytes.chunks,id_eq,
     List.map_map,Function.comp_def,decodeByte,
     cast00,    cast01,    cast02,    cast03,    cast04,    cast05,    cast06,    cast07,    cast08,    cast09,    cast10,    cast11,    cast12,    cast13,    cast14,    cast15,    cast16,    cast17,    cast18,    cast19,    cast20,    cast21,    cast22,    cast23,    cast24,    cast25,    cast26,    cast27,    cast28,    cast29,    cast30,    cast31,    cast32,    cast33,    cast34,    cast35,    cast36,    cast37,    cast38,    cast39,    cast40,    cast41,    cast42,    cast43,    cast44,    cast45,    cast46,    cast47,    cast48,    cast49,    cast50,    cast51,    cast52,    cast53,    cast54,    cast55,    cast56,numeric]
-  simp only [n01,n03,n10]
+  simp only [n01,n03,n10,n55]
 #print axioms native
 end AspisR1.JFp_InitBytes

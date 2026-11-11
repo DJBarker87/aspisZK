@@ -38,5 +38,10 @@ PARAM = {
    ('last rest', rep("theorem last : rest23=JFp_SeedHash.tail := by\\n  simp only [rest23,", "theorem last : rest23=JFp_SeedHash.tail := by\\n  simp only [rest23,", "theorem last : rest24=JFp_SeedHash.tail := by\\n  simp only [rest24,")),
    ('regroup steps', rep("for i in range(23))+',last]", "for i in range(23))+',last]", "for i in range(24))+',last]")),
    ('native length word', rep("root 1455#u32)).map Fin.val = numeric", "root 1455#u32)).map Fin.val = numeric", "root 1520#u32)).map Fin.val = numeric")),
+   # host failure 2026-11-11 (W7 host-failures/NDO_JFp_InitBytes.txt, reproduced locally as probe P006):
+   # `native`'s final step unfolds the single-zero-byte segments n01,n03,n10 (simp evaluates
+   # `[0#u8].map val` to `[0]` directly, so cast01/03/10 are unused).  The PIN2 binding tail
+   # adds a fourth such segment, n55 = has_destination [0#u8]; it must be unfolded too.
+   ('single-zero segments in native', rep("  simp only [n01,n03,n10]\n", "  simp only [n01,n03,n10]\n", "  simp only [n01,n03,n10,n55]\n")),
  ],
 }
