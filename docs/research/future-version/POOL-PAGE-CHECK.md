@@ -398,8 +398,16 @@ head's verifier ELF `out/BASE2/artifacts/aspis_r1_cost_probe_program.so`
    rejected with no state change. **Two settle under both Pools:** master byte 320 (low byte of the
    first last-sequence value) and checkpoint byte 112 (low byte of the first lane-sequence value). The
    payment completes and the post-state is identical under old and new. This behaviour predates
-   tonight's change. These fields are not checked against this payment, and someone should confirm
-   that this is intended. The decoders' own oracle tests (about 1.2 million single-byte corruptions)
+   tonight's change. Confirmed the same night by the soundness lead from the pinned source: the
+   spend does not depend on these two fields by design. `last_checkpoint_lane_sequences` (master)
+   and `lane_sequences` (checkpoint) are consumed only by the forest-checkpoint instruction (the
+   next checkpoint must not fall below the master's values and must progress); a spend decodes
+   them for the capacity bound only, copies the checkpoint's array into its plan and never compares
+   it with lane state. A spend is bound to the lane by the lane account's own tree and by the
+   proof-bound anchor and frontier. Both accounts are program-owned, so a value within the bound
+   cannot be written from outside, and a value above it is rejected by the decoder. If a spend were
+   ever to bind the checkpoint's lane sequence to the lane snapshot, that would be a design
+   addition, not a repair. The decoders' own oracle tests (about 1.2 million single-byte corruptions)
    stand as recorded by their worker.
 4. **Replays and redirect attempts,** old and new Pool with BASE2:
    - same outcomes, and every state-difference list is empty for both, including the control against
