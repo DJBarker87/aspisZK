@@ -586,7 +586,7 @@ the privacy stream's pre-pass, which has not been run here):
 |---|---|---|---|
 | `crates/aspis-r1-cost-probe/src/sampler.rs:61` | `quotient.iter_mut().rev()` | `low_base_p_digits` | Pinned R1 code, unchanged in Aspis, on the verifier's path. It is R1's known site; R1's closure does not use that emission (finding 27). Aspis reuses the sampler unchanged, so it inherits R1's treatment and needs nothing new, but the function stays in the cannot-extract class for Aspis too. |
 | `sampler.rs:140`, `:155` | `rank.iter_mut().rev()` | `old_sample`, `old_pass` | Inside the test module; not compiled into the program. |
-| `crates/aspis-core/src/r0_transcript.rs:129` | `rank.iter_mut().rev()` | `base_p_digits` | Pinned code. The soundness lead's audit gives `low_base_p_digits` as R1's only verifier-path site; I did not re-derive that for this function. |
+| `crates/aspis-core/src/r0_transcript.rs:129` | `rank.iter_mut().rev()` | `base_p_digits` | Pinned code. Confirmed by the soundness lead the same day: its audit covered this function, it has the same shape, it is not on the verifier's path, and it is not to be extracted with the current tools. |
 | Functions changed for Aspis (`fused.rs`, `multiproof.rs`, `weights.rs`, `fast_pairing.rs`, `r1_wire.rs`, `r1_semantic.rs`, the field kernels, the adapter) and the rewrite patch | none | | No reversed mutable iteration anywhere. |
 | Pool payout path | none | | No `iter_mut` at all in the emitted functions. |
 
@@ -608,6 +608,10 @@ Consequences for the freeze:
   Charon's declaration list (finding 2 of section 7), it must run the privacy stream's
   erased-region pre-pass (branch `codex/pv-itermut-20261111`, `src/MutInst.ml`) over every LLBC
   file, or scan the LLBC structurally for mutable-borrow type arguments with an erased region.
+- The silent omission of `PreparedQm31Multiplier::mul` and `CM31::mul` (finding 2 of section 7) is
+  now on the translator lane's list beside the write drop, and the soundness lead states the
+  completeness check against Charon's declaration list as a hard requirement for any release
+  emission on both streams.
 - `base_lanes_tight` is the one changed function with a mutable iterator. Rewriting its loop over
   an index would remove the iterator and may also let its Lean elaborate. That is a source change
   with a compute cost to measure, so it is a proposal, not something done here.
