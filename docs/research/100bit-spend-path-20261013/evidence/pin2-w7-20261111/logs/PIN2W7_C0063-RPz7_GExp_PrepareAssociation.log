@@ -1,0 +1,72 @@
+RPz7_GExp_PrepareAssociation.lean:34:4: error: Tactic `apply` failed: could not unify the conclusion of `S1SemanticCode.verify_associated`
+  SdkD_PrepareLower.Associated ?hashv
+    (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish ?R ?B) ?D ?pub ?bytes ?hash ?obs)
+with the goal
+  SdkD_PrepareLower.Associated hashv
+    (S1SemanticCode.verifyPIN2 (fun {H} => S1SemanticCode.finish R (S1SemanticRootCopy.install B))
+      (InstalledPreparation.retainedDigest D) (FirstComposition.toRetainedPublic pub) bytes hash none)
+
+Note: The full type of `S1SemanticCode.verify_associated` is
+  ∀ (R : RoundModel.Boundaries) (B : FinishModel.Boundaries) {H : Type} (D : aspis_core.Digest32 H)
+    (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H)
+    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest),
+    (∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts) →
+      SdkD_PrepareLower.Associated hashv
+        (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes hash obs)
+
+case hp
+R : RoundModel.Boundaries
+B : FinishModel.Boundaries
+H : Type
+D : aspis_core.digest.Digest32 H
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+⊢ SdkD_PrepareLower.Associated hashv
+    (S1SemanticCode.verifyPIN2 (fun {H} => S1SemanticCode.finish R (S1SemanticRootCopy.install B))
+      (InstalledPreparation.retainedDigest D) (FirstComposition.toRetainedPublic pub) bytes hash none)
+RPz7_GExp_PrepareAssociation.lean:53:15: warning: 'apply semantic' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+RPz7_GExp_PrepareAssociation.lean:53:31: warning: 'exact law' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+RPz7_GExp_PrepareAssociation.lean:57:7: warning: 'association_then_for BorrowedClaimPrepared.closedPreparationCode' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+RPz7_GExp_PrepareAssociation.lean:58:11: warning: 'first
+|
+  (solve
+    | apply closed; exact law)
+| intro x' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+RPz7_GExp_PrepareAssociation.lean:53:31: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+RPz7_GExp_PrepareAssociation.lean:58:11: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'AspisR1.GExp_PrepareAssociation.closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GExp_PrepareAssociation.semantic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.GExp_PrepareAssociation.prepare' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        2.65 real         1.94 user         0.85 sys
+          4170465280  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              320393  page reclaims
+                  29  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                 662  involuntary context switches
+         33552209123  instructions retired
+         10694183305  cycles elapsed
+           616342904  peak memory footprint

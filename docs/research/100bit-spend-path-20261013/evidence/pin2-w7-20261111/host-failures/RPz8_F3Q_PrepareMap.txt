@@ -1,0 +1,27 @@
+/home/dombarker/project-offloads/codex-cx-replay-l187-20261109/src/RPz8_F3Q_PrepareMap.lean:26:2: error: Type mismatch
+  map_log ?m.17 ?m.18
+has type
+  (run do
+        let a ← ?m.17
+        pure (?m.18 a)).1 =
+    (run ?m.17).1
+but is expected to have type
+  (run do
+        let result ←
+          AspisR1PublicPreparation.S1SemanticCode.verifyPIN2
+              (fun {H} =>
+                AspisR1PublicPreparation.S1SemanticCode.finish R
+                  (AspisR1PublicPreparation.S1SemanticRootCopy.install B))
+              (retainedDigest D) (FirstComposition.toRetainedPublic pub) bytes hash none
+        pure
+            (match result with
+            | core.result.Result.Ok sem => core.result.Result.Ok (S1SemanticCarrier.currentSem sem)
+            | core.result.Result.Err error => core.result.Result.Err (S1SemanticCarrier.currentWireError error))).1 =
+    (run
+        (AspisR1PublicPreparation.S1SemanticCode.verify
+          (fun {H} =>
+            AspisR1PublicPreparation.S1SemanticCode.finish R (AspisR1PublicPreparation.S1SemanticRootCopy.install B))
+          (retainedDigest D) (FirstComposition.toRetainedPublic pub) bytes hash none)).1
+'AspisR1.F3Q_PrepareMap.map_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3Q_PrepareMap.semantic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3Q_PrepareMap.original' depends on axioms: [propext, Classical.choice, Quot.sound]
