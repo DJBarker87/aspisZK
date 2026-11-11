@@ -810,3 +810,7 @@ The Pool program (`programs/aspis-pool`) is not extracted (14q). It enters the t
 | `stage2` | 463-481 | HAND MODEL: ReviewedTranscription-TX2:240 (ruling (bn)), OPEN_TRANSCRIPTION. CANNOT-EXTRACT (PCXN_CANNOT_EXTRACT.json CE21): same guard-drop crash. Enters through root240. Clock::get is RuntimeClockSlotBinding; set_return_data(&[]) is RuntimeReturnDataClear. | yes |
 
 target not yet established
+
+## Correction (2026-11-12, lead)
+
+Column (c) "rewrite needed" is wrong wherever the status text says "non-frozen / detector-blind", "ReviewedTranscription" or "OPEN_TRANSCRIPTION": those models are not extractions of the frozen text by a standard tool pair, and the frozen function does not translate with either pair. Confirmed by the Aspis worker's translatability run under the deployed feature set (271 reachable verifier/program functions: 234 translate and elaborate, 9 translate without elaborating, 24 do not translate): `candidate::canonical_scan` ("Continue to outer loops"), `QueryGeometry::for_range` ("Could not match the contexts") and `wide_view` ("no bottoms in the value") are not translated by either pair; for them column (c) is "yes". `wide_view`'s construct is new to the CANNOT_EXTRACT table. The `aeneas-b59d5188-extended` fork named in some rows is not a credited tool. Eighty rows of the two crates are not reached in the one-transaction build (two-transaction code); `close_checkpoint` and the lifecycle functions are reached through `process`.
