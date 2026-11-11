@@ -307,15 +307,21 @@ What is not established from what I read: that the Aspis verifier's batched
 first-fold equation over the OPENED values equals `firstBatch` over the
 COMMITTED words. In the literal model the words are transcript messages; the
 link from Merkle-authenticated openings at the queried positions (C1, C2 and
-folded trees) to the recorded words is the commitment-recovery layer that
-R1's `OraclePortActualAcceptanceC6.accepted_checks` uses (via
-`OraclePortReachedRootsC6.targets` and `OraclePortRecoveredAcceptanceC6`). R1
+folded trees) to the recorded words is the commitment-recovery layer.
+(Correction, from the one-transaction game scoping note: R1's bound reaches
+that recovery through `OraclePortFrozenOrder.authenticated`
+(OraclePortFrozenOrderSelectedRecovery.lean) via an in-place slot program;
+`OraclePortAllSelectedRecoveryC6.authenticated` and
+`OraclePortRecoveredAcceptanceC6.accepted_checks`, named here first, are an
+earlier draft chain that is in the closure but not used by the bound.) R1
 already needs all three trees there, because its per-query `firstMatch`
 reads C1, C2 and folded openings; the Aspis counterpart (`accepted ⇒
 AspisChecks`) re-uses that recovery but feeds a batched instead of a
-per-query equation. That counterpart is a separate obligation, in the
-source/commitment layer, and is NOT the pair-binding piece as described
-above (which is model-level).
+per-query equation. Correction: in R1 this whole chain, including the
+three-tree recovery, is model-level and inside the closure of
+`failure_bound`; only the Rust-to-model join is source refinement. So plan
+item 15 is model work (being scoped by the one-transaction game agent,
+`AspisOneTx*`), not source refinement.
 
 ## 3. File plan, dependency-ordered
 
@@ -377,3 +383,66 @@ unchanged in form.
 Revised count for the bound layer of the 40-row instance, excluding the
 charged-experiment copies (item 13) and the source/commitment layer (item 15):
 about 15–20 files across PSA and PSD, plus PSB's done and PSC's in progress.
+
+
+## 4. Item 11 status (acceptance-to-extraction link): COMPILED
+
+Files: `lean/AspisAcceptanceAlgebra.lean` (generic algebra),
+`lean/AspisAcceptanceLink.lean` (the link on R1's literal carrier),
+`lean/AspisAcceptanceLinkR40.lean` (on the Aspis 40-row protocol). All
+model theorems; no hypothesis about another agent's piece is left:
+
+- the pair-binding piece is used directly (`AspisPairResidual.firstResiduals`,
+  `pairBad`, `firstResidual_eq_zero_iff`, `Row32.bad`); its shapes match what
+  section 2.3 asked for (`pair_all_zero` has exactly the shape written there
+  as `pair_queries_match`; the agent's `pair_queries_match` concludes the
+  matching-set membership instead, and the link does not need it because
+  `stageCD_sound` already gives both residual families zero);
+- the prefix lemma is `AspisRows40.Literal.transcript_take33`, which matches
+  the hypothesis `hprefix` of `aspis_relation_of_checks` exactly (second
+  conjunct, `n := 40`).
+
+Theorems: `link_model` (generic, AspisAcceptanceAlgebra), `not_pair32`,
+`not_lam33`, `not_rounds`, `r1_noHit33`, `checks_of`,
+`aspis_checks_noHit_r1_checks` (R1's `Checks` and R1's no-hit on `rs.take 33`),
+`aspis_relation_of_checks` (with `hprefix`, then R1's
+`checks_noHit_relation`), `aspis_relation` (with `transcript_take33`).
+
+Parameter, not a hypothesis: `decodePair : LiteralTranscript.Message →
+Option (WideExact × WideExact)`, the codec of the 64-byte payload of rows 33
+to 39 into two field values; it must be the verifier's canonical decoding
+(an obligation of the acceptance layer).
+
+Design point learned: concrete statements must be instances of generic
+definitions (`FirstBatch`, `FinalCheck`, `lamBadSet`, `roundBadSet`, as R1's
+`HchecksAccumulator` does); re-elaborating field arithmetic over the concrete
+tower and passing it to a generic theorem made the elaborator unfold the
+tower's field instance and time out (attempts PSA-d-04 to d-11, kept below).
+
+Receipts (build host, L187 objects, `fv_lean.sh`):
+
+| Attempt | Module | sha256 | Exit | Wall | RSS (time) | cgroup |
+|---|---|---|---|---|---|---|
+| PSA-d-12 | AspisAcceptanceAlgebra | 47ffafbb…856b97 | 0 | 3.43 s | 3,096,104 KB | — |
+| PSA-d-13 | AspisAcceptanceLink | 55b14b95…a256c2 | 0 | 20.39 s | 3,597,800 KB | 421,588,992 |
+| PSA-d-14 | AspisAcceptanceLinkR40 | 67dc5e5d…2311 | 0 | 1.65 s | 3,559,140 KB | 366,399,488 |
+
+All axiom lines `[propext, Classical.choice, Quot.sound]`. Failed attempts:
+PSA-d-01/02 (sign lemma: decidability instances in a filter), d-04 to d-11
+(unknown lemma names; a `simp` past R1's classifier; the instance timeouts
+above, localised by splitting the proof into lemmas). Two scratch probes
+(PSA-probe-01/02, `AspisProbeInst*`, not results) printed instance arguments.
+
+Plan changes taken from the other agents' notes:
+
+- item 9 (piece (b) for 40 rows): R1 frames through `decAspis_of_r1` and the
+  existing `AspisRowCharge` result; frames of rows 33 to 39 through
+  `AspisRows40Final.component_bound` with the bad sets supplied by
+  `lamBadSet` and `roundBadSet` above (row 33 size ≤ 1, rows 34 to 39 ≤ 2);
+  the charge for rows 33 to 39 must use the new public selection
+  `FinalByte.select n` (walk back to row 32);
+- item 10 (piece (c), 40 rows): combine `AspisRows40.Starts` with
+  `AspisRowStarts`; the weighted count needs only upper bounds, so "exactly
+  one start per new row in an honest run" is not needed; the reseed frame
+  (row 26) parses as a frame of any row 0 to 39 for some state values and is
+  charged the largest cap over all 40 rows.
