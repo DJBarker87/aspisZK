@@ -107,11 +107,11 @@ elif kind=='toolbuild':
  expected='Charon rust release build (about 5-10 min) then opam deps and charon-ml/Aeneas dune build in the image (about 10-30 min)'
 else:
  assert target and (E/(target+'.lean')).exists()
- n='PCXU_sources/'+target+'.lean';put(n,E/(target+'.lean'));sources=[n]
+ n='PCXQ_sources/'+target+'.lean';put(n,E/(target+'.lean'));sources=[n]
  paths=json.loads((E.parent/'ledger30-20261111/NNN_PATHS.json').read_text())
- command=[GATE_T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-DmaxErrors=100000','-R','PCXU_sources','-o','PCXU_exports/'+target+'.olean',n]
+ command=[GATE_T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-DmaxErrors=100000','-R','PCXQ_sources','-o','PCXQ_exports/'+target+'.olean',n]
  limits={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'};scope_p=['-p','MemoryHigh=6G','-p','MemoryMax=8G']
- env=dict(LEAN_SYSROOT=GATE_T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/PCXU_tmp',LEAN_PATH=':'.join([B+'/PCXU_exports','/home/dombarker/project-offloads/codex-cx-replay-l187-20261109/objs','/home/dombarker/project-offloads/codex-pc-prov-p3p-20261110/PCVP_exports','/home/dombarker/project-offloads/codex-pc-prov-p3w-20261110/PCVZ_exports']+paths+['/home/dombarker/project-offloads/codex-pc-prov-p2f-20261109/PCUF_exports','/home/dombarker/project-offloads/codex-pc-prov-p2j-20261110/PCUJ_exports','/home/dombarker/project-offloads/codex-pc-prov-p4e-20261109/PCWE_exports']));collect=[]
+ env=dict(LEAN_SYSROOT=GATE_T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/PCXQ_tmp',LEAN_PATH=':'.join([B+'/PCXQ_exports','/home/dombarker/project-offloads/codex-cx-replay-l187-20261109/objs','/home/dombarker/project-offloads/codex-pc-prov-p3p-20261110/PCVP_exports','/home/dombarker/project-offloads/codex-pc-prov-p3w-20261110/PCVZ_exports']+paths+['/home/dombarker/project-offloads/codex-pc-prov-p2f-20261109/PCUF_exports','/home/dombarker/project-offloads/codex-pc-prov-p2j-20261110/PCUJ_exports','/home/dombarker/project-offloads/codex-pc-prov-p4e-20261109/PCWE_exports']));collect=[]
  expected='Focused import elaboration of one generated equality module'
 config=dict(attempt=a,kind=kind,module=target or spec.get('spec_id'),sources=sources,command=command,env=env,timeout=(3000 if kind=='toolbuild' else 180),expected_limits=limits,source_revision=src_rev,source_tree_dirty=dirty,deps_fingerprint={},expected_time=expected)
 files[a+'.json']=base64.b64encode(json.dumps(config).encode()).decode()
@@ -121,7 +121,7 @@ import json,hashlib,re,shutil,base64
 b=Path({B!r});files=json.loads({json.dumps(files)!r})
 for n,t in files.items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(base64.b64decode(t))
-for n in ['PCXU_exports','PCXU_sources','PCXU_tmp']:(b/n).mkdir(exist_ok=True)
+for n in ['PCXQ_exports','PCXQ_sources','PCXQ_tmp']:(b/n).mkdir(exist_ok=True)
 w=Path('/home/dombarker/project-offloads/codex-cx-sound-int2-20261025')
 for n in ['lakefile.toml','lake-manifest.json','lean-toolchain']:
  if not (b/n).exists():shutil.copy2(w/n,b/n)
@@ -151,7 +151,7 @@ b=Path({B!r});a={a!r};names=[p for p in (b/a).rglob('*') if p.is_file()]+[b/(a+'
 for n in {collect!r}:
  p=b/n;names+=[q for q in p.rglob('*') if q.is_file()] if p.is_dir() else ([p] if p.exists() else [])
 if {kind!r}=='lean':
- p=b/'PCXU_exports'/({target!r}+'.olean')
+ p=b/'PCXQ_exports'/({target!r}+'.olean')
  if p.exists():
   q=b/(a+'-object.json');q.write_text(json.dumps(dict(module={target!r},path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size)));names.append(q)
 names=[p for p in names if p.suffix!='.llbc' and p.name not in ('metadata.json','metadata.stdout')]

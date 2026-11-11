@@ -12,7 +12,7 @@ inc=['core::option::Option','core::result::Result','core::option::_::ok_or','--s
 c=['cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or',
  '--start-from','crate::r1_semantic::public_transcript']
 for x in ['--start-from',R0+'::_::public_bytes']: c.append(x)
-for t in [R0,'aspis_core::field::P','aspis_core::state_only_prefix::r0::Error','crate::r1_wire::SemanticTranscript','crate::r1_wire::Error','crate::r1_wire::Challenges',
+for t in [R0,R0.rsplit('::',1)[0]+'::CompiledVariant',R0.rsplit('::',1)[0]+'::SemanticPublic',R0.rsplit('::',1)[0]+'::private_public',R0.rsplit('::',1)[0]+'::withdrawal_public','aspis_core::field::P','aspis_core::state_only_prefix::r0::Error','crate::r1_wire::SemanticTranscript','crate::r1_wire::Error','crate::r1_wire::Challenges',
  'aspis_core::field::M31','aspis_core::field::CM31','aspis_core::field::QM31','aspis_core::field::wide_exact::WideExact','aspis_core::circle::SecureCirclePoint']:
     c+=['--include',t]
 c+=['--dest-file',B+'/%s_emitted/repro.llbc'%run,'--','--manifest-path',B+'/PCXU_workspace/crates/aspis-r1-cost-probe/Cargo.toml','--locked','--offline','--release','--lib','--jobs','4','--features','private-leaf-salts,optimized-terminal,program-build']
