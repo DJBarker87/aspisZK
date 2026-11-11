@@ -1,0 +1,122 @@
+NKR_DigestRoot.lean:21:57: error: Application type mismatch: The argument
+  p
+has type
+  Public
+but is expected to have type
+  FIw_PublicModel.Public
+in the application
+  NKR_DigestOldPack.source p
+NKR_DigestRoot.lean:24:40: error: Application type mismatch: The argument
+  p
+has type
+  Public
+but is expected to have type
+  FIw_PublicModel.Public
+in the application
+  NKR_DigestAssociation.model p
+NKR_DigestRoot.lean:19:107: error: unsolved goals
+p : Public
+o : Openings
+s : Selectors
+hp : NKR_DigestChildren.Domain p
+ho : FIw_ArrayValue.canonical o.z
+hh : FIw_ArrayValue.canonical s.high
+hl : FIw_ArrayValue.canonical s.low
+c : NKR_DigestChildren.Children
+sums : NKR_DigestPrefix.Sums
+out : NKR_DigestChildren.Pair
+hc : NKR_DigestChildren.Clauses p o s c
+hcan : NKR_DigestChildren.Canonical c
+pc : NKR_DigestPrefix.run p o s = ok (c, sums)
+frame : NKR_DigestPrefix.Frame c sums
+oc : NKR_DigestComplete.reference p o s = ok out
+hout : ∀ (j : Fin 2), Canon (out j)
+values : ∀ (j : Fin 2), decode (out j) = NKR_DigestComplete.model s c j
+old : Std.Array FIq_Native.field.QM31 8#usize
+oldc :
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes (PIN2P.SemanticPublic.dropDestination sorry) o
+      s =
+    ok old
+hold : FIw_ArrayValue.canonical old
+oldv :
+  ∀ (g : Fin 2),
+    (NJB_PackLinearity.pack fun j => FIw_ArrayValue.decoded old (NJX_DigestGroups.index g j)) =
+      (List.map
+          (fun key =>
+            NKR_DigestOldPack.contribution (FIw_PublicModel.ofPublic sorry) (FIw_PublicModel.openings o)
+              (FIw_PublicModel.selector s) key g)
+          (R0P.digestKeys (FIw_PublicModel.ofPublic sorry))).sum
+g : Fin 2
+⊢ NKR_DigestComplete.model s c g =
+    NJB_PackLinearity.pack fun j => FIw_ArrayValue.decoded old (NJX_DigestGroups.index g j)
+theorem AspisR1.NKR_DigestRoot.source : ∀ (p : Public) (o : Openings) (s : Selectors),
+  NKR_DigestChildren.Domain p →
+    FIw_ArrayValue.canonical o.z →
+      FIw_ArrayValue.canonical s.high →
+        FIw_ArrayValue.canonical s.low →
+          ∃ c sums out old,
+            NKR_DigestChildren.Clauses p o s c ∧
+              NKR_DigestChildren.Canonical c ∧
+                NKR_DigestPrefix.run p o s = ok (c, sums) ∧
+                  NKR_DigestPrefix.Frame c sums ∧
+                    NKR_DigestComplete.reference p o s = ok out ∧
+                      (∀ (j : Fin 2), Canon (out j)) ∧
+                        FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes p o s = ok old ∧
+                          FIw_ArrayValue.canonical old ∧
+                            ∀ (g : Fin 2),
+                              decode (out g) =
+                                NJB_PackLinearity.pack fun j =>
+                                  FIw_ArrayValue.decoded old (NJX_DigestGroups.index g j) :=
+fun p o s hp ho hh hl =>
+  let ⟨c, h✝⟩ := NKR_DigestComplete.source p o s hp ho hh hl
+  let ⟨sums, h✝¹⟩ := h✝
+  let ⟨out, h✝²⟩ := h✝¹
+  let ⟨hc, right✝⟩ := h✝²
+  let ⟨hcan, right✝¹⟩ := right✝
+  let ⟨pc, right✝²⟩ := right✝¹
+  let ⟨frame, right✝³⟩ := right✝²
+  let ⟨oc, right✝⁴⟩ := right✝³
+  let ⟨hout, values⟩ := right✝⁴
+  let ⟨old, h✝³⟩ := NKR_DigestOldPack.source sorry o s sorry ho hh hl
+  let ⟨oldc, right✝⁵⟩ := h✝³
+  let ⟨hold, oldv⟩ := right✝⁵
+  Exists.intro c
+    (Exists.intro sums
+      (Exists.intro out
+        (Exists.intro old
+          ⟨hc,
+            ⟨hcan,
+              ⟨pc,
+                ⟨frame,
+                  ⟨oc,
+                    ⟨hout,
+                      ⟨sorry,
+                        ⟨hold, fun g =>
+                          Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  _a =
+                                    NJB_PackLinearity.pack fun j =>
+                                      FIw_ArrayValue.decoded old (NJX_DigestGroups.index g j))
+                                (values g)))
+                            sorry⟩⟩⟩⟩⟩⟩⟩⟩)))
+'AspisR1.NKR_DigestRoot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        5.24 real         3.62 user         1.58 sys
+          4874928128  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              370719  page reclaims
+                  21  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                2300  involuntary context switches
+         61040789464  instructions retired
+         18812737520  cycles elapsed
+           786360256  peak memory footprint

@@ -1,0 +1,31 @@
+theorem AspisR1.NKR_TermScalarCut.source : ∀ (pub : Public) (o : Openings) (s : Selectors) (before : Packed),
+  FIw_ArrayValue.canonical o.z →
+    FIw_ArrayValue.canonical s.high →
+      FIw_ArrayValue.canonical s.low →
+        FIw_ArrayValue.canonical before →
+          ↑pub.asset_id < 2147483647 →
+            ↑(amount pub) < 2147483647 →
+              ∃ p, FIw_ScalarSuffix.run pub o s before = ok p.out ∧ Cut pub o s before p (observations p) :=
+fun pub o s before hz hh hl hb ha hm =>
+  let ⟨p, call⟩ := NKR_TermScalarInvocation.source pub o s before hz hh hl hb ha hm
+  Exists.intro p
+    ⟨call, ⟨fun x => ⟨rfl, ⟨rfl, rfl⟩⟩, ⟨fun x => ⟨rfl, rfl⟩, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩
+'AspisR1.NKR_TermScalarCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+        3.89 real         2.06 user         1.63 sys
+          4963401728  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              376387  page reclaims
+                2870  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  16  voluntary context switches
+                4669  involuntary context switches
+         39161616037  instructions retired
+         13142506892  cycles elapsed
+           790553240  peak memory footprint
