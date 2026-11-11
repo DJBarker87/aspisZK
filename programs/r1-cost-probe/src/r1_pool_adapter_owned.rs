@@ -472,6 +472,16 @@ fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], cur
 }
 
 pub(super) fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
+    // FUTURE-VERSION EXPERIMENT (feature `future-one-tx-lean`, default off): the
+    // one-transaction verifier has no stage 1. Rejecting here leaves the stage 1
+    // pipeline unreachable, so it is not linked into the program.
+    #[cfg(feature = "future-one-tx-lean")]
+    {
+        let _ = (program_id, accounts, data);
+        return Err(ProgramError::InvalidInstructionData);
+    }
+    #[cfg(not(feature = "future-one-tx-lean"))]
+    {
     if !(data == &[3, 10] || data == &[3, 11]) || accounts.len() != 3 {
         return Err(ProgramError::InvalidInstructionData);
     }
@@ -485,6 +495,7 @@ pub(super) fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[
     #[cfg(feature="cu-profiling")]
     { msg!("r1:pool-adapter-stage1-checkpoint-written"); solana_program::log::sol_log_compute_units(); }
     Ok(())
+    }
 }
 
 pub(super) fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
