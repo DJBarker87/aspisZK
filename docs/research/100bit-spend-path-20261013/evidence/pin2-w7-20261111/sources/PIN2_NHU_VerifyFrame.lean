@@ -6,8 +6,8 @@ import PIN2_NEWGATE_verifyprefix
 `verify_success`: statement text identical except the digest trait path
 (`aspis_core.digest.Digest32`); the proof additionally unfolds the PCWN_NewLib
 `branch`/`from_residual` the emission uses.  New module; the frozen one stays.
-DRAFT against the research candidate blob f081b9c43cb9 until the lead confirms the
-release source. -/
+Release source: release-originals/NHU_VerifyFrame.lean (rebuilt against objs: identical up to
+the embedded source path). -/
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result AspisR1PublicPreparationPIN2
 namespace AspisR1.PIN2_NHU_VerifyFrame
@@ -66,15 +66,7 @@ theorem source (finish : VerifyPrefix.Finish) {H : Type} (D : aspis_core.digest.
          cases begun : r1_wire.begin D pre initial with
          | fail e => rfl
          | div => rfl
-         | ok pair =>
-           rcases pair with ⟨status,after⟩
-           cases status with
-           | Err e =>
-             simp only [bind_tc_ok, PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch,
-               PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual,
-               core.convert.FromSame.from]
-           | Ok challenges =>
-             simp only [bind_tc_ok, VerifyPrefix.mark, PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch]
+         | ok pair => rcases pair with ⟨status,after⟩; cases status <;> rfl
 
 /-- Every ambient and wire rejection before finish survives unchanged. -/
 theorem parse_error (finish : VerifyPrefix.Finish) {H : Type} (D : aspis_core.digest.Digest32 H)
