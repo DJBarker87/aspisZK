@@ -178,7 +178,9 @@ privacy. The current version has not been deployed to mainnet.
 The records are on the
 [`research`](https://github.com/DJBarker87/aspisZK/tree/research) branch. The
 source that the programs of 11 November were built from is on `main`, taken
-unchanged from the pinned commit `c7593d23fdc`. The run of 10 November is in
+unchanged from the pinned commit `c7593d23fdc`, and the run itself is in
+`evidence/devnet-pin2-20261111` at commit `4c8bb8df6e7`, which holds the
+signatures and a recording of every transaction. The run of 10 November is in
 `evidence/devnet-frozen-20261109` at commit `af8f9fd2f9d`,
 which holds the signatures of all 69 transactions, a recording of every
 transaction with full account images, the rent ledger and the local-validator
