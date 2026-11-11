@@ -125,7 +125,7 @@ fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pub
  // stage1 instruction stays in the plan so the retained-mapping checks are unchanged; this route
  // never sends it and never creates the statement account.
  let one_tx=q.get("one_tx").and_then(Value::as_bool).unwrap_or(false);
- let body:Vec<u8>=if one_tx{use aspis_r1_cost_probe::verifier::candidate::fused;let packed=fused::to_summed_format(statement.semantic_public(),&result.proof,HOST_HASH).map_err(err)?;fused::verify_summed_format(statement.semantic_public(),&packed,HOST_HASH,None).map_err(err)?;ensure!(packed.len()==fused::summed_format::PROOF_BYTES,"summed proof length");packed}else{result.proof.to_vec()};
+ let body:Vec<u8>=if one_tx{use aspis_r1_cost_probe::verifier::candidate::fused;let h=aspis_core::digest::LegacyHashFn(HOST_HASH);let packed=fused::to_summed_format(statement.semantic_public(),&result.proof,h).map_err(err)?;fused::verify_summed_format(statement.semantic_public(),&packed,h,None).map_err(err)?;ensure!(packed.len()==fused::summed_format::PROOF_BYTES,"summed proof length");packed}else{result.proof.to_vec()};
  let mut proof=encode_pool_v1_pair_verified_afterstate_v1(&compiled.public_statement.candidate_afterstate).map_err(err)?.to_vec();proof.extend_from_slice(&body);
  fs::write(dir.join("proof.bin"),&proof)?;fs::write(dir.join("statement.bin"),public)?;
  let request=PoolV1PairForestTerminalRequestV1{verifier_profile:PROFILE,verifier_release:RELEASE,pool_program:pool.to_bytes(),public:payment};
