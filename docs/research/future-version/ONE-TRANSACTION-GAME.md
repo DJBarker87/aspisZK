@@ -975,9 +975,9 @@ the compiled ones. The files are untracked on `future-version`.
 | PSE-06 | AspisOneTxDecision (first version) | e8e9e8fe…ff7473 | 1 | 5.00 s | 4.22 GB | 0.44 GB | 0 |
 | PSE-07 | AspisOneTxDecision | b1a127e1…b0aea7 | 0 | 6.02 s | 4.24 GB | 0.44 GB | 0 |
 | PSE-08, -09, -12, -13 | AspisOneTxChecks (versions) | ce032acd…, 481095e6…, 2f5d85f0…, f5071f10… | 1 | 20.8–39.6 s | ≤ 4.24 GB | ≤ 0.45 GB | 0 |
-| PSE-10 | AspisOneTxProbe (probe, scratch) | 8d00b43d…5dd0c | 1 | 20.5 s | 4.21 GB | 0.42 GB | 0 |
+| PSE-10 | AspisOneTxProbe (probe, scratch) | 8d00b43d738a171bb103365bc0bef5b25c88e8fe6b65ab8e567f542f5536dd0c | 1 | 20.5 s | 4.21 GB | 0.42 GB | 0 |
 | PSE-11 | AspisOneTxProbe2 (probe, scratch) | 6dfb5ce3…7814f | 0 | 7.11 s | 4.23 GB | 0.44 GB | 0 |
-| PSE-14 | AspisOneTxChecks (without admission) | aa4cc657…3c00b308 | 0 | 13.2 s | 4.26 GB | 0.47 GB | 0 |
+| PSE-14 | AspisOneTxChecks (without admission) | aa4cc657066b95e42b1999deaa170868b9307597654973a5d20a703c5c00b308 | 0 | 13.2 s | 4.26 GB | 0.47 GB | 0 |
 | PSE-15 | AspisOneTxChecks (admission, first version) | 983aa21e…1643c2d | 1 | 10.9 s | 4.24 GB | 0.45 GB | 0 |
 | PSE-16 | AspisOneTxChecks | 1f26406e…2f04d2 | 0 | 12.1 s | 4.26 GB | 0.46 GB | 0 |
 
@@ -1312,7 +1312,7 @@ final compiles. Local hashes equal the compiled ones. The files are untracked.
 | PSE-17 | AspisOneTxRun (first version) | 779a48de…69b800 | 1 | 4.35 s | 4.24 GB | 0.44 GB | 0 |
 | PSE-18 | AspisOneTxRun | 86a13f1e…742bfa8b | 0 | 8.20 s | 4.26 GB | 0.45 GB | 0 |
 | PSE-19 to PSE-22 | AspisOneTxCheckedAcceptance (versions) | 4308103a…, 6c723bc6…, 6cca8e18…, cfb4f0fa… | 1 | 4.5–66.7 s | ≤ 4.22 GB | ≤ 0.43 GB | 0 |
-| PSE-23 | AspisOneTxCheckedAcceptance | cf5d5b2c…bf68e9 | 0 | 4.66 s | 4.25 GB | 0.44 GB | 0 |
+| PSE-23 | AspisOneTxCheckedAcceptance | cf5d5b2c22d7f49ba6ee02e6a802effffcf54e74ea6929f3fa7f4a220297383b | 0 | 4.66 s | 4.25 GB | 0.44 GB | 0 |
 
 **Failures, and what changed (none is a mathematical change).**
 - PSE-17: a missing import, an `omega` goal with two forms of the same log, and
@@ -1376,6 +1376,51 @@ this file does not provide:
 - Source refinement of `dV_aspis`, the entry and the Pool path, outside this
   layer.
 
+### 10.5 Review of b39cfdd5d57 (soundness lead's reviewer, 2026-11-11)
+
+Verdict, from the source only: faithful to R1's route, with caveats.
+
+What the reviewer confirmed:
+- `CheckedAcceptance40` has the shape of R1's
+  `OraclePortConsumer.CheckedAcceptance` with 33 rows replaced by 40 and R1's
+  checks by `AspisChecks decodePairS`.
+- `fibre_checks40` has the binders, the one hypothesis `hq` and the proof steps
+  of R1's `OraclePortFrozen2Consumer.fibre_checks`, with the Aspis decision and
+  1,111 in place of 1,161. `pairProver` is R1's own constant.
+- `dV_aspis` follows R1's `dV_frozen` on the first 33 rows and adds a
+  length-40 check and the tie of rows 34 to 39 to the certificate bytes.
+- The adversary is the same: any stored proof, any prover with `hq`, pointwise
+  in the oracle. `Q + 1111` is derived (`distinct_bound40`, from `hq` and the
+  verifier's 136 + 975 calls), and agrees with the collision event of the
+  assembled bound.
+- No `sorry`, axiom, `opaque`, `native_decide` or raised limit in the two files
+  or their 13 dependencies. R1's tree is unchanged.
+
+Caveats, each recorded as it stands:
+- **Admission is not a conservative extension of R1's.** `admitS` and R1's
+  `admit` accept disjoint sets, because R1's schedule requires exactly 33
+  rounds. `fibre_checks40` does not use `admitS`. But the clean event's
+  decoding completeness for rows 33 to 39 cannot be obtained from admission.
+  It has to come from the shapes of those rows as the decision and the checks
+  constrain them (64-byte payload frame, canonical decoding, the certificate
+  tie). This was passed to the clean-event work the same day.
+- **Rows 33 to 39 have no validity predicate on this path.** The `late`
+  condition holds for every canonical prover, so it constrains nothing. That
+  is correct here: R1 uses validity only for the restoration identity, and
+  `rows_gen` takes that identity directly. `valid40` (AspisRows40Literal) is
+  defined and not used on this path.
+- **Scope.** Model level only: nothing ties `dV_aspis` to the Rust
+  `verify_summed_format`. The statement is for a fixed stored proof; the
+  40-row counterpart of R1's selection step (`annotated_selected`) is not
+  committed, and neither is the clean event that consumes `fibre_checks40`.
+- **Stale header.** `AspisOneTxMergedBudget.lean` still labels 136 and 1,111
+  "PAPER" in its header, though both are now proved. The header is corrected
+  at the coherent rebuild before the freeze, not now: changing the file
+  changes its hash under the modules already compiled against it.
+- **Mistyped hash.** The PSE-23 row carried a wrong tail. Fixed, with five
+  others found by `tools/check_note_hashes.py` (RECORDED-EXPERIMENT-40.md
+  section 5.5).
+
 ## 11. PayoutBound: the conjunct over a model of the Pool's withdrawal step (COMPILED, model level)
 
 One module, `lean/AspisPayoutModel.lean`, namespace `AspisPayout`. It has no
@@ -1410,8 +1455,8 @@ recur unnoticed:
   hypotheses can hold together. It is not evidence about the deployed
   programs.
 
-The hashes of PSF-01 to PSF-04 were abbreviated by hand and cannot be
-rechecked: the host copy of the source was replaced by the PSF-05 source.
+The hashes of PSF-01 to PSF-04 agree with the hashes the host recorded when
+it compiled them (first line of each receipt's `stdout.log`).
 
 PSF-01 to PSF-03 failed on `match` terms that needed `dsimp only` after a
 rewrite, and on two `rfl`s where named hypotheses were needed. None is a

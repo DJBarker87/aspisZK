@@ -383,10 +383,10 @@ are exactly `[propext, Classical.choice, Quot.sound]`; no `sorry`, `admit`,
 | PSA-b-02 | AspisRowCharge | 8ad22c16…547f1e8 | — | — | — | — | withdrawn before admission (host full; switch to the locked wrapper) |
 | PSA-b-03 | AspisRowCharge | 8ad22c16…547f1e8 | 1 | 9.51 s | 3,566,620 KB | 397,787,136 | one omega goal in `sem_le` |
 | PSA-b-04 | AspisRowCharge | 4e96e41d…ef590a2 | 0 | 5.73 s | 3,590,556 KB | 408,031,232 | 8 axiom lines |
-| PSA-c-01 | AspisRowStarts | fa51013e…7d436d | 1 | 82.53 s | 7,168,380 KB | 3,515,899,904 | `Byte` ambiguous; kernel "excessive memory" in `verifierCharge_eq` (a `simp` that expanded `List.range 33`) |
-| PSA-c-02 | AspisRowStarts | 6e61dfd9…c9d43 | 1 | 23.25 s | 4,201,508 KB | 444,694,528 | indicator-sum lemma only |
+| PSA-c-01 | AspisRowStarts | fa51013ee13e10deab144c391e60524340b334b0e0b1e55de580adf8801d436d | 1 | 82.53 s | 7,168,380 KB | 3,515,899,904 | `Byte` ambiguous; kernel "excessive memory" in `verifierCharge_eq` (a `simp` that expanded `List.range 33`) |
+| PSA-c-02 | AspisRowStarts | 6e61dfd9e351f6ca9da6f991e84deb84b41982ee0e9fef8d9cffaac2f90d9a43 | 1 | 23.25 s | 4,201,508 KB | 444,694,528 | indicator-sum lemma only |
 | PSA-c-03 | AspisRowStarts | 4b8aa6d9…be98c | 1 | 19.64 s | 4,200,348 KB | 444,157,952 | tactic order in the same lemma |
-| PSA-c-04 | AspisRowStarts | 90ec1d28…c530f | 0 | 21.62 s | 4,204,012 KB | 426,045,440 | 6 axiom lines |
+| PSA-c-04 | AspisRowStarts | 90ec1d2851a1971ec206ea6944d378d756ad629e3ff7b979356128afc127530f | 0 | 21.62 s | 4,204,012 KB | 426,045,440 | 6 axiom lines |
 | PSA-c-05 | AspisChargedWeight | 7fedf4f1…5f5dfd | 1 | 3.07 s | 4,202,980 KB | 417,923,072 | unresolved placeholders in a `have` |
 | PSA-c-06 | AspisChargedWeight | cbaad801…db3c37 | 0 | 2.98 s | 4,226,960 KB | 434,352,128 | 1 axiom line |
 | PSA-c-07 | AspisChargedHitMass | 17848dff…c31c7d | 0 | 2.00 s | 4,221,664 KB | 429,301,760 | 1 axiom line |

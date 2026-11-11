@@ -386,11 +386,21 @@ host:
 | AspisRowDensityCaps | PSB-06 | ROW-DENSITIES.md | d53896874901f9098e4e6930ceb78e334f12e81e51a104f95d79e90e730313ef |
 | AspisRows40Starts | PSD-13 | ROWS-33-39.md | f86ca401206c8b20e60f8f2dbe680b2360a6f3dcdbe853134d415538f9c7865d |
 
-The abbreviations were typed by hand. The receipts on the host do not record
-the source hash of an attempt, so a hash in a note can be checked only
-against the file as it now stands. The row for PSB-05 (an earlier source of
-`AspisRowDensityCaps`, replaced by PSB-06) cannot be rechecked for that
-reason.
+The abbreviations were typed by hand.
+
+Correction, same day: I first wrote here that the receipts do not record the
+source hash of an attempt. That was wrong. `fv_lean.sh` prints the sha256 of
+the source as the first line of each receipt's `stdout.log` (180 of the 448
+receipts have it; the others are older or are not Lean compiles). So every
+hash in a note can be checked against what the host compiled.
+`tools/check_note_hashes.py` does that for every table row in these notes
+that carries an attempt name and a hash. First run: 87 rows, 80 agree, 6
+disagree, 1 receipt (PSA-b-02) has no hash line. The 6 were further
+mistyped tails of the same kind, in ONE-TRANSACTION-GAME.md (PSE-10, PSE-14,
+PSE-23) and PER-STEP-ACCOUNTING.md (PSA-c-01, PSA-c-02, PSA-c-04); the PSE-23
+one was also reported by the reviewer of b39cfdd5d57. All 6 now carry the
+full hash from the receipt. The five rows above agree with their receipts,
+and so does PSB-05. After the fix: 86 agree, 0 disagree.
 
 **3. `AspisFinalSumcheckModel` is not a file name in this repository.** It is
 `lean/StageDSumcheck.lean`, copied to the host as
