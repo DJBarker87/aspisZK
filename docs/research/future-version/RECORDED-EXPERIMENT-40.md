@@ -1153,3 +1153,112 @@ gives, for 32 ≤ j < n < 40 on the 40-row run under R1's `badColl` premise,
 `Before tr (address j) (address n)`, `Before tr (advance (absorbed j)) (address n)`,
 and the table before row n's frame at those two cells (`absorbed j`,
 `previous (j+1)`).
+
+## 12. Second worker: W3 and W1
+
+(Numbered 12 because section 11 was already present when this was appended.)
+
+### 12.1 W1, context recovery at `T_n` (`lean/AspisRec40FinalContext.lean`)
+
+Both statements compiled as written in 10.3, with R1's premise list of
+`FollowStatement.FollowClaim` (`hprior hpub hl he Qtot hQ hold htail`) and
+`33 ≤ n < 40`. Typing only: the elided arguments are the run's
+`p hD extract decision H pub c1 payload prior`, and `T_n` is written out as
+`tableBefore emptyTable (AspisRec40.FinalRun.trace … prior) (UnifiedSteps.address … n)`.
+No premise on the late rows is needed: the run is typed over `payload : Nat → M`.
+
+```
+theorem AspisRec40.FinalContext.joint_at … (n) (hlo : 33 ≤ n) (hhi : n < 40) :
+  JointContext.parse p pub.pubBytes pub.tag 27 4 (UnifiedSteps.address … 32) T_n =
+    some (FollowStatement.jointCtx p hD H pub c1 payload)
+theorem AspisRec40.FinalContext.context_at … (n) (hlo : 33 ≤ n) (hhi : n < 40) :
+  AspisRows40.Context.parse p pub.pubBytes pub.tag n (UnifiedSteps.address … n) T_n =
+    some (FollowStatement.actualCtx p hD H pub c1 payload n)
+```
+
+Fact (a) is imported, not assumed: `AspisRec40FinalBefore.run_cells` (first
+worker) gives row 32's frame before row n's frame and the cells of rows
+32..n−1 in `T_n`.
+
+How `joint_at` differs from R1's `hcontext` step: the typed prefix comes from
+`OpeningPrefixAnchor.walk_before_anchor` with anchor row n's frame (order
+`a` before row 32's frame from `TableBeforeOrder.before_of_cell`, then
+`run_cells`), then `typed_of_walk` and `UnifiedPhaseRecords.ordinary_eq_records`.
+The query seek is `DuplexSeek.seek_of_noColl` at `T_n`; its cells are R1's
+`DuplexPrefixTable.table_cells` at row 32's frame, carried to `T_n` by
+`table_mono` (a cell of the table before `c` is a cell of the table before any
+later `d`). The selected index comes from `QueryFirstRead.recover_query_before_endpoint`
+at row 32's frame on the 40-row trace. Assembly by `JointContext.parse_of_checks`.
+
+`context_at`: `seek_row` (fuel-2 seek at `T_n` from the state before row j+1
+finds row j's frame, 32 ≤ j < n, from `seek_of_noColl` and `run_cells`),
+`back_run` (the walk back of `n − 33` rows), `readTail_run` (indexed messages
+of rows 33..n−1), then `joint_at`.
+
+### 12.2 W3, word choice for rows 33 to 39 (`lean/AspisRec40FinalWords.lean`)
+
+The work-order statement is false as written. Counterexample: the prover
+sends `.initial r w` at row n (33 ≤ n < 40) and reads `squeezeA iv` as its
+first query. Row n's sampler is `UnifiedSampler.invalid`, whose first cell is
+`squeezeA iv`, so row n's frame is that cell, its first occurrence is the
+prover's first read, and the table before it is empty. The chosen words are
+then read from the empty table, while `wordsFromRun` holds the committed maps;
+for an honest commitment with non-default leaves they differ. None of R1's
+premises (`hQ`, `hout`, `hvalid` for i < 33, the codec facts of rows 0, 2,
+30) constrains row n, and reading `squeezeA iv` first is not a collision
+event. This is the same case as the reviewer's counterexample to `hfinal`
+(section 11, `FinalShape.finalDecodes_fails_initial`).
+
+Compiled with one added hypothesis, the first worker's shared definition
+`AspisRec40.FinalShape.LatePayload run.2.1.2` (rows 33 to 39 erase to payload
+messages; derived from the acceptance checks by
+`FinalShape.latePayload_of_checks`). Nothing else changed:
+
+```
+theorem AspisRec40.FinalWords.constructed_components40 (decoder) (d) (prover) (H) (run)
+  (hrun : run = eval H (experiment prover (AspisRows40.Starts.verifier decoder d)))
+  (iv) (Q) (hQ) (hout) (hvalid : ∀ i < 33, LiteralTranscript.valid i (run.2.1.2 i))
+  (hshape : AspisRec40.FinalShape.LatePayload run.2.1.2)
+  (n) (hlo : 33 ≤ n) (hhi : n < 40)
+  (r1 w1 b2 w2 r2 b30 w30 v30 h0 h2 h30 hp2 hp30 — as in R1) :
+  let frame := RawCutWordsFromView.frame decoder H run.2.1.1 run.2.1.2 n
+  let w := LiteralTableWordChoiceBin.choose frame (tableBefore emptyTable run.1 frame)
+    (LiteralTranscript.erasePrefix ((AspisRows40.Protocol.protocol decoder).transcript H run.2.1.1 run.2.1.2 n))
+    (LiteralTranscript.erase (run.2.1.2 n))
+  w = BinCompiledRunWordStability.wordsFromRun decoder run
+```
+
+The proof uses only rows 32..n of `hshape` and `hvalid 32`. Route:
+- `split`: the 40-row run (any prover, any decision) is R1's run followed by
+  the chains of rows 33 to 39, with the same output.
+- `adjacent40`: for 32 ≤ i < 39 with rows i and i+1 in payload form, row i's
+  frame is read before row i+1's frame (frame before its advance, advance
+  before the next frame, both by R1's `duplex_state_before_frame`). Copies of
+  R1's `next_frame_prefix`, `ordinary_next_prefix_state` and
+  `ordinary_advance_read` with the payload form as premise in place of
+  `valid` (which is false at every row ≥ 33) and the 40-row verifier.
+- `adjacent_all`, `frames_before`: rows 0..32 from R1's
+  `all_adjacent_frame_order` carried to the longer trace (`before_append`).
+- the three table maps at row n's frame equal those at row 32's frame (both
+  equal the full-trace maps by R1's `recover_current_table_eq_full`), so the
+  chosen words equal R1's `atRun … 32`, which R1's `constructed_components`
+  equates with `wordsFromRun` of R1's run (`words_ext`); `words_run_eq` carries
+  that to the 40-row run.
+
+### 12.3 Validation
+
+| Attempt | Module | Source sha256 | Exit | Wall | Peak RSS (time) | cgroup peak | Axioms |
+|---|---|---|---|---|---|---|---|
+| PSG-01 | AspisRec40FinalContext (`joint_at` only) | 969b9708af1362356d07e1fe01a8d525a9e6f149b24f78bd563864b10fe86193 | 0 | 2.21 s | 3,522,132 KB | 368,386,048 B | 3 theorems, each a subset of [propext, Classical.choice, Quot.sound] |
+| PSG-02 | AspisRec40FinalContext | 325cc460571811932e2e926eec1cddadecbda7e1eb1d6056b61fc009ad66765d | 0 | 2.95 s | 3,533,104 KB | 378,290,176 B | 7 theorems, each a subset of the standard three |
+| PSG-05 | AspisRec40FinalWords | d41a005efe6bcde012b45f0e48aad31e9e6de98a9199bf71d5515c7d37fd9d4e | 0 | 3.44 s | 4,284,728 KB | 450,187,264 B | 12 theorems, each [propext, Classical.choice, Quot.sound] |
+
+Failed attempts:
+- PSG-03 (27efe861333c9b4975be99fb2baf5f33832596e6fb93ca55b88fa02781d350ed), exit 1: `recoverFromTable` unqualified (it lives in `RWireRawByteTableWords`).
+- PSG-04 (093fa08a527c12778d9bb57238690c2331407f9b90119008ea4cb587f6dd5d4e), exit 1: the public input of R1's root lemmas left as `_`, not inferable.
+
+Hashes copied from the first line of each receipt's stdout.log; the two
+compiled files in the repository have the same sha256. No `sorry`, `axiom`,
+`opaque` or `native_decide`; no limit raised. PSG-05 prints one linter
+warning (an unused `simp` argument in a copied R1 helper). The final
+`.olean`s are in `lean-out/`. Model level; nothing here concerns deployed code.
