@@ -53,6 +53,18 @@ pub struct Prepared {
 fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error> {
         let k=powers::<7>(kappa);
         let mut parts=[E::ZERO;7];parts[0]=inactive;
+        if cfg!(feature="future-claim-rows") {
+            // FUTURE-VERSION EXPERIMENT G5: the same 174 products, with each
+            // point's 29 scalars copied to one row first.
+            for point in 0..6 {
+                let row:[K;29]=match point {0..=2=>sem.claims[point],3=>sem.extra,4=>sem.before_z1,_=>core::array::from_fn(|l|field(y1,l).c0())};
+                let mut dot=crate::fast_pairing::EbyKDot::new();
+                for (power,scalar) in g.iter().zip(row.iter()) {
+                    dot.push(*power,*scalar).map_err(|_|Error::Parse)?;
+                }
+                parts[point+1]=dot.finish();
+            }
+        } else {
         for point in 0..6 {
             let mut dot=crate::fast_pairing::EbyKDot::new();
             for l in 0..29 {
@@ -60,6 +72,7 @@ fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inac
                 dot.push(g[l],scalar).map_err(|_|Error::Parse)?;
             }
             parts[point+1]=dot.finish();
+        }
         }
         let mut claim=E::ZERO;
         for i in 0..7 {crate::trace::value(14,i,parts[i]);claim=claim.add(k[i].mul(parts[i]));}

@@ -132,7 +132,12 @@ fn coefficients(rho: K, geometry: &QueryGeometry) -> Result<Coefficients, Error>
         let r = power.mul_m31(QUARTER);
         circle[i] = [r, r.mul_m31(iy), r.mul_m31(ix), r.mul_m31(ix.mul(iy))];
         let rz = r.mul_m31(lz);
-        line[i] = [r, r.mul_m31(lx), r.mul_m31(ly), rz, rz.mul_m31(lx), rz.mul_m31(ly).neg()];
+        line[i] = if cfg!(feature = "future-fold-shared") {
+            // G6 uses only the first and fourth entries.
+            [r, K::ZERO, K::ZERO, rz, K::ZERO, K::ZERO]
+        } else {
+            [r, r.mul_m31(lx), r.mul_m31(ly), rz, rz.mul_m31(lx), rz.mul_m31(ly).neg()]
+        };
         powers[i] = power;
         power = power.mul(rho);
     }
@@ -272,12 +277,25 @@ fn fold_sums(openings: &[u8], queries: &[u32; 22], rho: K, alpha: &[E; 2], g: &[
         let d2 = v[3].sub(v[2]);
         let l = &c.line[i];
         let mut push = |dot: &mut EbyKDot, value: E, scalar: K| dot.push(value, scalar).map_err(|_| Error::Parse);
-        push(&mut second[0], u.add(w), l[0])?;
-        push(&mut second[1], d1, l[1])?;
-        push(&mut second[1], d2, l[2])?;
-        push(&mut second[2], u.sub(w), l[3])?;
-        push(&mut second[3], d1, l[4])?;
-        push(&mut second[3], d2, l[5])?;
+        if cfg!(feature = "future-fold-shared") {
+            // G6: h1 and h3 share the two base-field edge products, so two
+            // pushes replace four: with p1 = d1 / x and p2 = d2 / y,
+            // h1 = (p1 + p2) / 4 and h3 = (p1 - p2) / (4 z).
+            let [_, _, lx, ly, _] = *geometry.for_query(i);
+            let p1 = d1.mul_m31(lx);
+            let p2 = d2.mul_m31(ly);
+            push(&mut second[0], u.add(w), l[0])?;
+            push(&mut second[1], p1.add(p2), l[0])?;
+            push(&mut second[2], u.sub(w), l[3])?;
+            push(&mut second[3], p1.sub(p2), l[3])?;
+        } else {
+            push(&mut second[0], u.add(w), l[0])?;
+            push(&mut second[1], d1, l[1])?;
+            push(&mut second[1], d2, l[2])?;
+            push(&mut second[2], u.sub(w), l[3])?;
+            push(&mut second[3], d1, l[4])?;
+            push(&mut second[3], d2, l[5])?;
+        }
         push(&mut right, v[queries[i] as usize % 4], c.rho[i])?;
     }
     let [t0, t1, t2, t3] = second;
@@ -1436,5 +1454,35 @@ mod tests {
         // Control: the true claims with honest rounds are accepted.
         let honest = stage_d_rounds(&p, claim, rhs2, f, &relation, &query, Sha);
         summed_final_checks(&p, final_message, claim, rhs2, &geometry, &honest, Sha, None).unwrap();
+    }
+
+    /// G3: the word-wise scan and the pinned scan agree on the fixtures and
+    /// under every tested bad limb value at positions in every scanned region
+    /// and in the regions the scan must ignore (salts and Merkle nodes).
+    #[test]
+    fn word_scan_equals_the_pinned_scan() {
+        let (_, proof, _) = FIXTURES[5];
+        assert_eq!(canonical_scan_words(proof), Ok(()));
+        assert_eq!(canonical_scan_pinned(proof), Ok(()));
+        let o = compact::OFF_OPENINGS;
+        let mut positions = vec![compact::OFF_Y1, compact::OFF_Y1 + 12, compact::OFF_INACTIVE - 4, compact::OFF_INACTIVE, compact::OFF_INACTIVE + 28,
+            compact::OFF_ROUND0, compact::OFF_ROUND0 + 220, compact::OFF_ROUND1, compact::OFF_FINAL, compact::OFF_FINAL + 4, compact::OFF_OPENINGS - 4,
+            compact::OFF_SEMANTIC + 40, compact::OFF_FOLDED_ROOT, compact::OFF_FOLDED_ROOT + 28, compact::OFF_NODES, compact::OFF_NODES + 100];
+        for i in [0usize, 7, 21] {
+            for at in [0usize, 4, 100, 104, 116, 120, 476, 480, 492, 604, 608, 636, 668, 672, 700, 796, 800, 828] {
+                positions.push(o + i * OPENING + at);
+            }
+        }
+        let mut rejected = 0;
+        for at in positions {
+            for bad in [aspis_core::field::P, aspis_core::field::P + 1, 1u32 << 31, u32::MAX, 0, aspis_core::field::P - 1] {
+                let mut changed = proof.to_vec();
+                changed[at..at + 4].copy_from_slice(&bad.to_le_bytes());
+                let pinned = canonical_scan_pinned(&changed);
+                assert_eq!(canonical_scan_words(&changed), pinned, "offset {at} value {bad}");
+                rejected += pinned.is_err() as usize;
+            }
+        }
+        assert!(rejected > 100);
     }
 }

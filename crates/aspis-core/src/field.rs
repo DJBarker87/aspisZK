@@ -987,6 +987,40 @@ impl QM31 {
         }
     }
 
+    /// FUTURE-VERSION EXPERIMENT G2: `self * rhs + addend`. With
+    /// `future-lazy-horner` the addend's limbs are added to the unreduced
+    /// sixteen-product limbs before the single reduction (canonical limbs
+    /// assumed; each sum stays below 2^64: the largest product limb is at most
+    /// `2^64 - 2^34 + 16` and an addend limb is below `2^31`). Otherwise it is
+    /// `mul` followed by `add`. Same field value either way.
+    #[inline(always)]
+    pub fn mul_add(self, rhs: QM31, addend: QM31) -> QM31 {
+        #[cfg(feature = "future-lazy-horner")]
+        {
+            const PP: u64 = (P as u64) * (P as u64);
+            let p = P as u64;
+            let (a, b, c, d) = (self.c0.a.0 as u64, self.c0.b.0 as u64, self.c1.a.0 as u64, self.c1.b.0 as u64);
+            let (e, f, g, h) = (rhs.c0.a.0 as u64, rhs.c0.b.0 as u64, rhs.c1.a.0 as u64, rhs.c1.b.0 as u64);
+            let partial = |x: u64| (x & p).wrapping_add(x >> 31);
+            let u = partial((c * g).wrapping_add(PP).wrapping_sub(d * h));
+            let v = partial((c * h).wrapping_add(d * g));
+            return QM31 {
+                c0: CM31 {
+                    a: M31(reduce_u64((a * e).wrapping_add(PP).wrapping_sub(b * f).wrapping_add(2 * u).wrapping_add(3 * p).wrapping_sub(v).wrapping_add(addend.c0.a.0 as u64))),
+                    b: M31(reduce_u64((a * f).wrapping_add(b * e).wrapping_add(u).wrapping_add(2 * v).wrapping_add(addend.c0.b.0 as u64))),
+                },
+                c1: CM31 {
+                    a: M31(reduce_u64((a * g).wrapping_add(c * e).wrapping_add(2 * PP).wrapping_sub(b * h).wrapping_sub(d * f).wrapping_add(addend.c1.a.0 as u64))),
+                    b: M31(reduce_u64((a * h).wrapping_add(b * g).wrapping_add(c * f).wrapping_add(d * e).wrapping_add(addend.c1.b.0 as u64))),
+                },
+            };
+        }
+        #[cfg(not(feature = "future-lazy-horner"))]
+        {
+            self.mul(rhs).add(addend)
+        }
+    }
+
     /// Quadratic-extension squaring. The two component squares use the
     /// specialized CM31 kernel and the cross term needs one generic CM31
     /// multiplication: seven M31 products rather than nine.
@@ -3396,10 +3430,13 @@ mod future_fast_kmul_tests {
             };
             let (x, y) = (value(0), value(1));
             assert_eq!(x.square(), karatsuba(x, x), "square case {case}");
+            let z = value(2);
+            assert_eq!(x.mul_add(y, z), karatsuba(x, y).add(z), "mul_add case {case}");
             assert_eq!(PreparedQm31Multiplier::new(x).mul(y), karatsuba(x, y), "prepared case {case}");
         }
         let top = QM31 { c0: CM31 { a: M31(P - 1), b: M31(P - 1) }, c1: CM31 { a: M31(P - 1), b: M31(P - 1) } };
         assert_eq!(top.square(), karatsuba(top, top));
+        assert_eq!(top.mul_add(top, top), karatsuba(top, top).add(top));
         assert_eq!(PreparedQm31Multiplier::new(top).mul(top), karatsuba(top, top));
     }
 }

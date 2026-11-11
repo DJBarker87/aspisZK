@@ -52,6 +52,47 @@ pub fn parse_shape(proof: &[u8]) -> Result<Variant, Error> {
 /// (the semantic prefix is checked by `Prefix::parse` after expansion).
 #[inline(never)]
 fn canonical_scan(proof: &[u8]) -> Result<(), Error> {
+    if cfg!(feature = "future-word-scan") {
+        return canonical_scan_words(proof);
+    }
+    canonical_scan_pinned(proof)
+}
+
+/// FUTURE-VERSION EXPERIMENT G3. Every check of the pinned scan is "this
+/// little-endian 32-bit limb is below P", over byte ranges whose lengths are
+/// multiples of eight, and every failure is `Error::Parse`. A 64-bit word `x`
+/// holds two canonical limbs exactly when
+/// `(x | (x + 0x0000000100000001)) & 0x8000000080000000 == 0`: bit 31 of a limb
+/// is clear, and adding one does not set it (which happens only for P). The
+/// low limb's increment cannot carry into the high limb unless the low limb
+/// already failed. Same verdict on every input.
+#[allow(dead_code)]
+#[inline(never)]
+fn canonical_scan_words(proof: &[u8]) -> Result<(), Error> {
+    #[inline(always)]
+    fn limbs_ok(bytes: &[u8]) -> bool {
+        const ONES: u64 = 0x0000_0001_0000_0001;
+        const HIGHS: u64 = 0x8000_0000_8000_0000;
+        let mut bad = 0u64;
+        for w in bytes.chunks_exact(8) {
+            let x = u64::from_le_bytes([w[0], w[1], w[2], w[3], w[4], w[5], w[6], w[7]]);
+            bad |= x | x.wrapping_add(ONES);
+        }
+        bytes.len() % 8 == 0 && bad & HIGHS == 0
+    }
+    let mut ok = limbs_ok(&proof[compact::OFF_Y1..compact::OFF_INACTIVE])
+        && limbs_ok(&proof[compact::OFF_INACTIVE..compact::OFF_INACTIVE + 32])
+        && limbs_ok(&proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT])
+        && limbs_ok(&proof[compact::OFF_ROUND1..compact::OFF_OPENINGS]);
+    for i in 0..22 {
+        let q = opening(proof, i);
+        ok = ok && limbs_ok(&q[..608]) && limbs_ok(&q[672..800]);
+    }
+    if ok { Ok(()) } else { Err(Error::Parse) }
+}
+
+#[inline(never)]
+fn canonical_scan_pinned(proof: &[u8]) -> Result<(), Error> {
     compact::check_values(&proof[compact::OFF_Y1..compact::OFF_INACTIVE])?;
     echeck(&proof[compact::OFF_INACTIVE..compact::OFF_INACTIVE + 32], false)?;
     echeck(&proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT], false)?;

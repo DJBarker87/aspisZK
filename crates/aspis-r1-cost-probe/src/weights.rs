@@ -383,7 +383,17 @@ impl Weights {
                 let value=dot.finish();
                 product=if d==0 {value} else {product.mul(value)};
             }
-            let scale=Self::scalar_factor(&self.factors[k][0],&ap0).mul(Self::scalar_factor(&self.factors[k][1],&ap1));
+            let scale=if cfg!(feature="future-dot-scale") {
+                // G4: the same four-term sums through the delayed-reduction accumulator.
+                let factor=|f:&[K;4],p:&[E;4]|->Result<E,Error> {
+                    let mut dot=crate::fast_pairing::EbyKDot::new();
+                    for s in 0..4 { match dot.push(p[PERM[s]],f[s]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) } }
+                    Ok(dot.finish().mul_m31(QUARTER))
+                };
+                factor(&self.factors[k][0],&ap0)?.mul(factor(&self.factors[k][1],&ap1)?)
+            } else {
+                Self::scalar_factor(&self.factors[k][0],&ap0).mul(Self::scalar_factor(&self.factors[k][1],&ap1))
+            };
             parts[kind]=scale.mul_qm31(product);
         }
         let mut groups=[K::ZERO;12];

@@ -138,10 +138,12 @@ mod future_boundary_tests {
 }
 
 fn semantic_value(polynomial: &[QM31; 28], alpha: &[QM31; 10], round: usize) -> QM31 {
+        // FUTURE-VERSION EXPERIMENT G2: `mul_add` is `mul` then `add` unless
+        // `aspis-core/future-lazy-horner` is on, when it reduces once.
         let value = polynomial
             .iter()
             .rev()
-            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+            .fold(QM31::ZERO, |a, &c| a.mul_add(alpha[round], c));
     value
 }
 

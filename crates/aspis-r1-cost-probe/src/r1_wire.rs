@@ -49,6 +49,13 @@ pub const fn row_shape(row: u8) -> Option<(u8, usize)> {
 }
 
 fn validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {
+    if cfg!(feature = "future-lean-parse") {
+        return validate_record_fields_lean(row, payload);
+    }
+    validate_record_fields_pinned(row, payload)
+}
+
+fn validate_record_fields_pinned(row: u8, payload: &[u8]) -> Result<(), Error> {
     for (value, bytes) in payload.chunks_exact(32).enumerate() {
         let x = WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;
         if x.c1() != QM31::ZERO {
@@ -56,6 +63,72 @@ fn validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {
         }
     }
     Ok(())
+}
+
+/// FUTURE-VERSION EXPERIMENT G1. A 32-byte value is a canonical WideExact with
+/// zero high component exactly when its low 16 bytes are a canonical QM31 and
+/// its high 16 bytes are zero (zero is the only canonical encoding of zero).
+/// Same verdict and same error, on every input.
+#[allow(dead_code)]
+fn validate_record_fields_lean(row: u8, payload: &[u8]) -> Result<(), Error> {
+    for (value, bytes) in payload.chunks_exact(32).enumerate() {
+        let high = u64::from_le_bytes([bytes[16], bytes[17], bytes[18], bytes[19], bytes[20], bytes[21], bytes[22], bytes[23]])
+            | u64::from_le_bytes([bytes[24], bytes[25], bytes[26], bytes[27], bytes[28], bytes[29], bytes[30], bytes[31]]);
+        if high != 0 || QM31::from_le_bytes(&bytes[..16]).is_none() {
+            return Err(Error::NonCanonical { row, value });
+        }
+    }
+    Ok(())
+}
+
+#[cfg(test)]
+mod future_lean_parse_tests {
+    use super::*;
+    use alloc::vec;
+    use aspis_core::field::P;
+
+    /// G1: the two validators agree on valid payloads and under every single
+    /// limb set to P, P + 1, 2^31 and 2^32 - 1, and every single high byte set.
+    #[test]
+    fn lean_record_validation_equals_the_pinned_validation() {
+        let mut state = 0xdead_beef_cafe_f00du64;
+        let mut next = move || {
+            state ^= state << 13;
+            state ^= state >> 7;
+            state ^= state << 17;
+            state
+        };
+        for values in [1usize, 28, 116] {
+            let mut payload = vec![0u8; 32 * values];
+            for v in 0..values {
+                for limb in 0..4 {
+                    let x = match (v + limb) % 4 { 0 => 0, 1 => P - 1, _ => (next() % u64::from(P)) as u32 };
+                    payload[32 * v + 4 * limb..32 * v + 4 * limb + 4].copy_from_slice(&x.to_le_bytes());
+                }
+            }
+            assert_eq!(validate_record_fields_lean(20, &payload), Ok(()));
+            assert_eq!(validate_record_fields_pinned(20, &payload), Ok(()));
+            for v in 0..values {
+                for limb in 0..8 {
+                    for bad in [P, P + 1, 1u32 << 31, u32::MAX, 1] {
+                        if limb < 4 && bad == 1 {
+                            continue;
+                        }
+                        let mut changed = payload.clone();
+                        changed[32 * v + 4 * limb..32 * v + 4 * limb + 4].copy_from_slice(&bad.to_le_bytes());
+                        let pinned = validate_record_fields_pinned(20, &changed);
+                        assert!(pinned.is_err());
+                        assert_eq!(validate_record_fields_lean(20, &changed), pinned, "value {v} limb {limb} bad {bad}");
+                    }
+                }
+                for byte in 16..32 {
+                    let mut changed = payload.clone();
+                    changed[32 * v + byte] = 1;
+                    assert_eq!(validate_record_fields_lean(20, &changed), validate_record_fields_pinned(20, &changed));
+                }
+            }
+        }
+    }
 }
 
 /// Reject malformed framing and every noncanonical E limb before hashing.
