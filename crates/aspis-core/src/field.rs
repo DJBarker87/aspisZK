@@ -935,12 +935,40 @@ impl QM31 {
     pub fn mul(self, rhs: QM31) -> QM31 {
         #[cfg(feature = "r0-op-count")]
         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMul);
+        // FUTURE-VERSION EXPERIMENT (default off): the sixteen-product form with
+        // one reduction per output limb, the same formulas as the verifier
+        // crate's private canonical `Q::mul`. Precondition: all eight limbs are
+        // canonical (`< P`); then every intermediate is nonnegative and below
+        // 2^64. Same field product as the Karatsuba form below.
+        #[cfg(feature = "future-fast-kmul")]
+        {
+            const PP: u64 = (P as u64) * (P as u64);
+            let p = P as u64;
+            let (a, b, c, d) = (self.c0.a.0 as u64, self.c0.b.0 as u64, self.c1.a.0 as u64, self.c1.b.0 as u64);
+            let (e, f, g, h) = (rhs.c0.a.0 as u64, rhs.c0.b.0 as u64, rhs.c1.a.0 as u64, rhs.c1.b.0 as u64);
+            let partial = |x: u64| (x & p).wrapping_add(x >> 31);
+            let u = partial((c * g).wrapping_add(PP).wrapping_sub(d * h));
+            let v = partial((c * h).wrapping_add(d * g));
+            return QM31 {
+                c0: CM31 {
+                    a: M31(reduce_u64((a * e).wrapping_add(PP).wrapping_sub(b * f).wrapping_add(2 * u).wrapping_add(3 * p).wrapping_sub(v))),
+                    b: M31(reduce_u64((a * f).wrapping_add(b * e).wrapping_add(u).wrapping_add(2 * v))),
+                },
+                c1: CM31 {
+                    a: M31(reduce_u64((a * g).wrapping_add(c * e).wrapping_add(2 * PP).wrapping_sub(b * h).wrapping_sub(d * f))),
+                    b: M31(reduce_u64((a * h).wrapping_add(b * g).wrapping_add(c * f).wrapping_add(d * e))),
+                },
+            };
+        }
+        #[cfg(not(feature = "future-fast-kmul"))]
+        {
         let m0 = self.c0.mul(rhs.c0);
         let m1 = self.c1.mul(rhs.c1);
         let m2 = self.c0.add(self.c1).mul(rhs.c0.add(rhs.c1));
         QM31 {
             c0: m0.add(mul_by_r(m1)),
             c1: m2.sub(m0).sub(m1),
+        }
         }
     }
 
@@ -3265,4 +3293,44 @@ fn r0_add_fallback(a: u32, b: u32) -> M31 {
 fn r0_sub_fallback(a: u32, b: u32) -> M31 {
     let s = a + P - b;
     M31(if s >= P { s - P } else { s })
+}
+
+#[cfg(test)]
+mod future_fast_kmul_tests {
+    use super::*;
+
+    /// The nested Karatsuba product, written out independently of `QM31::mul`.
+    fn karatsuba(x: QM31, y: QM31) -> QM31 {
+        let m0 = x.c0.mul(y.c0);
+        let m1 = x.c1.mul(y.c1);
+        let m2 = x.c0.add(x.c1).mul(y.c0.add(y.c1));
+        QM31 { c0: m0.add(mul_by_r(m1)), c1: m2.sub(m0).sub(m1) }
+    }
+
+    /// With `future-fast-kmul` on this compares the sixteen-product form with
+    /// the Karatsuba form; with it off it is a tautology kept so the same
+    /// test name runs in both configurations.
+    #[test]
+    fn qm31_mul_equals_the_karatsuba_product_on_edges_and_random_inputs() {
+        let mut state = 0x9e37_79b9_7f4a_7c15u64;
+        let mut next = move || {
+            state ^= state << 13;
+            state ^= state >> 7;
+            state ^= state << 17;
+            state
+        };
+        let edges = [0u32, 1, 2, P - 2, P - 1, P / 2, P / 2 + 1];
+        let mut limb = |i: usize| if i < 7 { edges[i] } else { (next() % u64::from(P)) as u32 };
+        for case in 0..20_000usize {
+            let pick = |k: usize| (case / 9usize.pow(k as u32)) % 9;
+            let mut value = |k: usize| QM31 {
+                c0: CM31 { a: M31(limb(pick(k))), b: M31(limb(pick(k + 1))) },
+                c1: CM31 { a: M31(limb(pick(k + 2))), b: M31(limb(pick(k + 3))) },
+            };
+            let (x, y) = (value(0), value(2));
+            assert_eq!(x.mul(y), karatsuba(x, y), "case {case}");
+        }
+        let top = QM31 { c0: CM31 { a: M31(P - 1), b: M31(P - 1) }, c1: CM31 { a: M31(P - 1), b: M31(P - 1) } };
+        assert_eq!(top.mul(top), karatsuba(top, top));
+    }
 }
