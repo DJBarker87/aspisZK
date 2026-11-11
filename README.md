@@ -26,22 +26,27 @@ deployed programs. The verifier is immutable. They settled a private transfer
 and a private withdrawal, each in two transactions of about 1.2 million
 compute units. The first transaction runs the opening stage of the proof and
 writes a checkpoint; the second finishes verification and settles the payment.
+A last transaction closes the accounts that held the proof and returns the
+SOL deposited for them, so a payment costs its sender about 0.002 SOL.
 
 - Private transfer:
-  [stage 1](https://explorer.solana.com/tx/pUEwuhuSNmr8PK159eVxZhwJGHAceLr8qLLcE4b3gdJ3qTuFz9NgoGXwhe6VrL646VhRj6AzmSXuyuQTq8Hz4i8?cluster=devnet),
-  [stage 2 and settlement](https://explorer.solana.com/tx/5bPwiKGmcXgRQnEJfbUrxHU1kuQgu3Q4GMrZ8V76jCHTxmqr3zVKkjcsk5JNmP9PXtimkrQBzvf5SQ4Chq4UBmCt?cluster=devnet)
+  [stage 1](https://explorer.solana.com/tx/57k7scVRsChfDvppGoj9UmX83BbUHmRm7jc7yVEwejJfipzJzcX4xBimouxk4kdfRKeHeUzSSXJKzxS62wjMkZ2R?cluster=devnet),
+  [stage 2 and settlement](https://explorer.solana.com/tx/4QKVyJYbyhmtN4EpPNnGukfrmF7dFyFWzgrXz12yxaHaptaJg6YV8oUJW2Gt6dLpYS2eo7tPgaAqB7rJpzsSEXKa?cluster=devnet)
 - Private withdrawal:
-  [stage 1](https://explorer.solana.com/tx/2QS4o2i1TpocPc4xeDh9KFBLuKaqBAbSTkiwiNbqecrNoTZvq1rjP8tVyu6BfBGuYFqJnpe4ueG3Ev5q7HvgjPpo?cluster=devnet),
-  [stage 2 and settlement](https://explorer.solana.com/tx/54t54tQ14sNpUxU6cQJoi4e1Vpbb8bZhwMrDxmnrUk9fgEPBCmcZi3Qzwmc4F9SjmgoeTXfLDDZ7TfA8QBUjW8EM?cluster=devnet)
+  [stage 1](https://explorer.solana.com/tx/2AGG8QQVaBVHJN8H1gvhKKzPATcPbRYHvELnRpztVYXCVnMSWNS1qyNWu4mPT5F9n6NFPEn9dYqeET5JMEZxMUsL?cluster=devnet),
+  [stage 2 and settlement](https://explorer.solana.com/tx/4pQ2aWTwHoS96Q1pUDSFfuQKF8rQBvMmkzUsWNhhF42DUMK7HtL4238EwyEQQJusm6HJp6S9x2R3JasRd2T6qqm1?cluster=devnet)
 
 The run also submitted a replay of each settlement and a tampered proof for
 each. All four were rejected, and no account changed.
 
-Both programs rebuild bit for bit from the source in this repository:
+The programs rebuild bit for bit from the source in this repository:
 [`37hdATMk…Db3Zt`](https://explorer.solana.com/address/37hdATMkskKX1hiCWhz4nnzkD7GauYwX8EQwcpUDb3Zt?cluster=devnet)
-(pool) and
-[`GqZzWuGT…nr5hy`](https://explorer.solana.com/address/GqZzWuGTojfsxYnDzmyWKhdPGkce19xN1Txu9Vgnr5hy?cluster=devnet)
-(verifier). The full record of the run is in
+(pool),
+[`BLgzrkDi…X3xNg`](https://explorer.solana.com/address/BLgzrkDiCs4f7bwWrP4EBSNN5nhi2snfoLopxs2X3xNg?cluster=devnet)
+(verifier) and
+[`9DYn3ykk…WqX5`](https://explorer.solana.com/address/9DYn3ykkW6JEgYVKst7y7Jd9SqxSjoSNUVTgnGCHWqx5?cluster=devnet)
+(the small program that holds a proof while it is uploaded). The full record
+of the run is in
 [`docs/r1/DEVNET-RUN.md`](docs/r1/DEVNET-RUN.md).
 
 ## The proof
@@ -73,7 +78,11 @@ see [the soundness theorem with a plain reading](docs/r1/TOP-THEOREM.md),
 
 Two things remain. For soundness, the last checks connect the proofs to the
 exact deployed bytes; they are listed in
-[`docs/r1/OPEN-GATES.md`](docs/r1/OPEN-GATES.md). For privacy, the prover's
+[`docs/r1/OPEN-GATES.md`](docs/r1/OPEN-GATES.md). The verifier deployed on
+11 November is a new build with a longer public statement and an instruction
+for closing a payment's accounts. The function-level proofs were completed
+for the build before it and are being recompiled against the new one, with
+the theorem statements unchanged. For privacy, the prover's
 Rust is being matched to the privacy theorem in the same way the verifier's
 was matched to the soundness theorem.
 
