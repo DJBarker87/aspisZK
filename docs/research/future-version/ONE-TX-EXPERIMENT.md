@@ -723,3 +723,18 @@ recorded devnet payments, in a local replay. It is not:
   devnet are unchanged.
 
 The release target stays as it was: not yet established.
+
+### Round 4: margin (predictions committed before measurement)
+
+Baseline: the kept set W13 + G2 + G6, measured inside the adapter at 1,231,228
+(transfer) and 1,231,240 (withdrawal) nested verifier CU in the replay.
+
+| Candidate | Basis | Predicted saving |
+|---|---|---:|
+| H1 leaner dot accumulators | `fast_pairing.rs` is 125,090 instructions in the W13 trace for about 1,120 QM31 products: about 45 in the product formulas, 17 accumulating, 5 re-checking the scalar canonical, 4 on the term counter and about 36 unattributed (operand moves). The lean form reads the limbs once, drops the per-push scalar check and term counter, and accumulates in place | 25k |
+
+H1 is exact for canonical scalars. It removes two defensive checks of the
+pinned accumulator (scalar canonicality at every push, and the 4,096-term
+limit), so adopting it needs the canonical-scalar fact and a static term bound
+at each call site; every current call site pushes at most 174 terms of values
+that are canonical by construction or by an earlier decode.
