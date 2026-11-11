@@ -485,7 +485,7 @@ Receipts (build host, L187 objects, `fv_lean.sh`):
 | PSA-e-02 | AspisClassifier40 | 3a7ffd96…f048ea | 0 | 7.07 s | 3,587,172 KB | 398,946,304 |
 | PSA-e-07 | AspisCharge40 | 0b0bf570…e4eb | 0 | 2.50 s | 4,221,984 KB | 442,785,792 |
 | PSA-e-10 | AspisRowStarts40 | e7a37a8b…c948 | 0 | 4.80 s | 4,230,920 KB | 458,129,408 |
-| PSA-e-12 | AspisChargedWeight40 | 934045c8…f404 | 0 | 3.63 s | 4,215,396 KB | 431,779,840 |
+| PSA-e-12 | AspisChargedWeight40 | 934045c899af9bcf4d369fd90aa94820b2ed208ba333aa514443bf7751f1e404 | 0 | 3.63 s | 4,215,396 KB | 431,779,840 |
 
 All axiom lines `[propext, Classical.choice, Quot.sound]`. Failed attempts:
 PSA-e-01 (rewrite under a binder), e-03 to e-06 (reserved identifier, a

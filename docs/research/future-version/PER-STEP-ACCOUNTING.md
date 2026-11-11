@@ -391,7 +391,7 @@ are exactly `[propext, Classical.choice, Quot.sound]`; no `sorry`, `admit`,
 | PSA-c-06 | AspisChargedWeight | cbaad801…db3c37 | 0 | 2.98 s | 4,226,960 KB | 434,352,128 | 1 axiom line |
 | PSA-c-07 | AspisChargedHitMass | 17848dff…c31c7d | 0 | 2.00 s | 4,221,664 KB | 429,301,760 | 1 axiom line |
 | PSA-c-08 | AspisChargedHitMassCheck | 7afab2bb…69d7 | 0 | 2.42 s | 4,230,180 KB | 428,130,304 | 4 axiom lines |
-| PSA-e-12 | AspisChargedWeight40 | 934045c8…f404 | 0 | 3.63 s | 4,215,396 KB | 431,779,840 | 1 axiom line (items 8 to 10: ASPIS-INSTANCE-PLAN.md section 5) |
+| PSA-e-12 | AspisChargedWeight40 | 934045c899af9bcf4d369fd90aa94820b2ed208ba333aa514443bf7751f1e404 | 0 | 3.63 s | 4,215,396 KB | 431,779,840 | 1 axiom line (items 8 to 10: ASPIS-INSTANCE-PLAN.md section 5) |
 | PSA-e-13 | AspisChargedHitMass40 | 20f7ae0c…c0f5 | 1 | 1.94 s | 4,193,592 KB | 421,072,896 | `Decision` ambiguous (two namespaces opened) |
 | PSA-e-14 | AspisChargedHitMass40 | 7b9954b4…4787 | 0 | 2.26 s | 4,213,072 KB | 429,793,280 | 1 axiom line |
 

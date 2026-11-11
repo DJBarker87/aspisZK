@@ -166,7 +166,7 @@ R1's statement, with protocol, decoder and row bound replaced, and nothing else:
 |---|---|---|---|---|---|---|---|
 | PSD-24 | AspisRec40Measure (measurement only) | 8bead73c…201a6ad42 | 0 | 4.86 s | 4,230,932 KB | 442,966,016 B | none printed |
 | PSD-25 | AspisRec40Compiler | 11c35103…9bee7536 | 0 | 2.57 s | 4,192,308 KB | 432,201,728 B | 1× [propext, Classical.choice, Quot.sound] |
-| PSD-26 | AspisRec40ChargePrefix | 862c6c83…7c9a9750 | 0 | 3.71 s | 4,208,628 KB | 430,391,296 B | 3× [propext, Classical.choice, Quot.sound] |
+| PSD-26 | AspisRec40ChargePrefix | 862c6c830439e2aed5535fca9a647af435095573ffeca78355a1587bfc9a9750 | 0 | 3.71 s | 4,208,628 KB | 430,391,296 B | 3× [propext, Classical.choice, Quot.sound] |
 
 No `sorry`, no new axioms.
 
@@ -320,7 +320,7 @@ not do.
 
 | Attempt | Module | Source sha256 | Exit | Wall | Peak RSS (time) | cgroup peak | Axioms |
 |---|---|---|---|---|---|---|---|
-| PSD-27 | AspisRec40Decision | c5f31e1e…6fce51d32 | 0 | 11.04 s | 4,238,408 KB | 471,560,192 B | 7× [propext, Classical.choice, Quot.sound] |
+| PSD-27 | AspisRec40Decision | c5f31e1eb34b970002963e133ce769bb9556bb3499e6923da488b6c5fce51d32 | 0 | 11.04 s | 4,238,408 KB | 471,560,192 B | 7× [propext, Classical.choice, Quot.sound] |
 | PSD-31 | AspisRec40HitMass | 8d4e0ec6…270c43563f | 0 | 2.64 s | 4,211,532 KB | 435,265,536 B | 9× [propext, Classical.choice, Quot.sound] |
 | PSD-32 | AspisRec40Measure2 (measurement only) | 8db994db…31328dc2 | 0 | 2.57 s | 4,227,160 KB | 444,956,672 B | none (no theorems) |
 
@@ -332,6 +332,88 @@ Earlier attempts on HitMass, all exit 1:
 No `sorry`, no new axioms, no option raised. Not started, as instructed: the
 clean event, the restricted union bound and the weighted composition (item
 14), and the honest-run copies.
+
+### 5.5 Follow-up to the review of 80e6a852d13 (2026-11-11)
+
+The soundness lead's reviewer read the source of the 40 files at 80e6a852d13.
+Its verdict: every group it checked follows R1's route, and its caveats
+concern provenance and measurement, not the mathematics. It gave no verdict
+on the one-transaction acceptance files, which are outside the closure of the
+composed bound. It also restated an open point already recorded here:
+`AspisChecks` is a hypothesis of the acceptance link, and that an accepted run
+of the full experiment supplies it is not yet proved.
+
+Four points needed action.
+
+**1. The constant walk was not rooted at the composed bound.** The walks of
+5.3 (PSD-32) and 6.4 (PSD-34) start from `hit_mass`, `starts` and
+`verifier_starts`. `AspisHeadlineMeasure.lean` starts from
+`restricted_union_bound_weighted40` itself, and from `decFinal_le_charge40`
+and `charged_weight40`. It uses no expansion list: it expands every constant
+whose module is outside the libraries (Mathlib, Lean core, Std, Batteries,
+Aesop, Qq, ProofWidgets, Plausible, ImportGraph, LeanSearchClient), and it
+reads proof terms as well as statements. Result (LDM-02):
+
+| Root | Project modules reached | Project constants | Class iii modules reached |
+|---|---|---|---|
+| `restricted_union_bound_weighted40` | 437 | 4,319 | 0 |
+| `decFinal_le_charge40` | 386 | 3,846 | 0 |
+| `charged_weight40` | 219 | 1,467 | 0 |
+
+The import closure of the same file has 6,977 modules, 1,541 of them outside
+the libraries, and contains the same 13 class iii modules that 5.3 lists. So
+the 13 are imported and none of their constants is used by the composed
+bound, in its statement or in its proof. The reviewer counted 1,346 modules
+in the closure by a different rule; the two counts are not reconciled here,
+and the 13 names agree. The module list is in `headline-measure.tsv`
+(1,478 lines, sha256 f799261777cf5d38cac3da9356ad2691b6fcea891a04336793afbdd71e887f1d).
+
+The same run checks the one declaration in the Aspis files that raises an
+option, `AspisFuture.StageD.perKind_margin` (`exponentiation.threshold 600`,
+`StageDSumcheck.lean:710`). It is in none of the three closures.
+
+**2. Five source hashes were mistyped in the notes.** The first eight
+characters were right and the abbreviated tail was wrong by one character
+(by a transposition for `AspisRows40Starts`). The rows now carry the full
+hash, recomputed from the files at 80e6a852d13, which equal the files on the
+host:
+
+| Module | Attempt | Note | sha256 |
+|---|---|---|---|
+| AspisChargedWeight40 | PSA-e-12 | PER-STEP-ACCOUNTING.md, ASPIS-INSTANCE-PLAN.md | 934045c899af9bcf4d369fd90aa94820b2ed208ba333aa514443bf7751f1e404 |
+| AspisRec40ChargePrefix | PSD-26 | this note, section 2 | 862c6c830439e2aed5535fca9a647af435095573ffeca78355a1587bfc9a9750 |
+| AspisRec40Decision | PSD-27 | this note, 5.4 | c5f31e1eb34b970002963e133ce769bb9556bb3499e6923da488b6c5fce51d32 |
+| AspisRowDensityCaps | PSB-06 | ROW-DENSITIES.md | d53896874901f9098e4e6930ceb78e334f12e81e51a104f95d79e90e730313ef |
+| AspisRows40Starts | PSD-13 | ROWS-33-39.md | f86ca401206c8b20e60f8f2dbe680b2360a6f3dcdbe853134d415538f9c7865d |
+
+The abbreviations were typed by hand. The receipts on the host do not record
+the source hash of an attempt, so a hash in a note can be checked only
+against the file as it now stands. The row for PSB-05 (an earlier source of
+`AspisRowDensityCaps`, replaced by PSB-06) cannot be rechecked for that
+reason.
+
+**3. `AspisFinalSumcheckModel` is not a file name in this repository.** It is
+`lean/StageDSumcheck.lean`, copied to the host as
+`lean-src/AspisFinalSumcheckModel.lean` so that the module has a plain name.
+The two are byte-identical: sha256
+5ce44cab5106e797e8bb53dcd3fa2c58355018b7b8aab4e8972607fe896cdd48. The
+namespace inside is still `AspisFuture.StageD`. The file is to be renamed in
+the repository with the other renames at the next build.
+
+**4. The reviewer did not check that the Rust follows the model's call
+order.** That is the point of 6.3: the Rust was changed so that Merkle
+authentication comes after rows 33 to 39, as in the model. The agreement is
+tested by replay of recorded settlements and is not proved; proving it is
+part of the source refinement, which has not started.
+
+| Attempt | Module | Source sha256 | Exit | Wall | Peak RSS (time) | cgroup peak | Axioms |
+|---|---|---|---|---|---|---|---|
+| LDM-01 | AspisHeadlineMeasure (measurement only), first form | 72ac14ffb7659fab31bec2c4f0e22605185a3027ca1b98b162e36be344d16687 | 0 | 12.48 s | 4,254,044 KB | 461,115,392 B | none (no theorems) |
+| LDM-02 | AspisHeadlineMeasure, with the `perKind_margin` check | b8479affda7421b914b5000ed8a2190f810dd2b321ee2cd0fb441609591dcabd | 0 | 6.67 s | 4,257,140 KB | 440,242,176 B | none (no theorems) |
+
+Both runs wrote the same module list. Input `headline-iii.txt` is the 178
+class iii rows of `aspis-instance-module-classes.tsv`, sha256
+8bc8c737f706ffaef2164dd9e25c01adab0bb341da4853264d5c4f9d79830616.
 
 ## 6. Digest-call budget of the 40-row transcript (and the Aspis total)
 

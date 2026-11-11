@@ -249,7 +249,7 @@ commits). Wall and peak RSS from `/usr/bin/time -v`; cgroup peak from
 | PSB-03 | AspisRowDensityQM31 | c0f466f7…8e68450c0926 | 0 | 4.52 s | 3,499,816 KB | 371,847,168 B | 24 × standard three |
 | PSB-04 | AspisRowDensitySampler | 556cd7d7…3ab8370ffd | 0 | 2.72 s | 3,533,132 KB | 370,606,080 B | 10 × standard three |
 | PSB-05 | AspisRowDensityCaps | 8aa5e4ab…99e3f3f | 0 | 1.85 s | 3,535,828 KB | 364,785,664 B | 6 × standard three; 2 linter warnings (unused fallback tactic) |
-| PSB-06 | AspisRowDensityCaps | d5389687…e30313ef | 0 | 1.74 s | 3,535,504 KB | 364,548,096 B | 6 × standard three, no warnings |
+| PSB-06 | AspisRowDensityCaps | d53896874901f9098e4e6930ceb78e334f12e81e51a104f95d79e90e730313ef | 0 | 1.74 s | 3,535,504 KB | 364,548,096 B | 6 × standard three, no warnings |
 
 Full hashes: Generic `f82ecabb6f783d431e652056e56968e276298511138099702f82e476cf74fa30`,
 QM31 `c0f466f74362fd81d2aaa3c8db1f2d945e0cf72354d6546936638e68450c0926`,
