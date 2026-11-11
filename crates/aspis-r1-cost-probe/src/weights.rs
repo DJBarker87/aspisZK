@@ -386,10 +386,25 @@ impl Weights {
             let scale=Self::scalar_factor(&self.factors[k][0],&ap0).mul(Self::scalar_factor(&self.factors[k][1],&ap1));
             parts[kind]=scale.mul_qm31(product);
         }
-        let mut low=[E::ZERO;16];
-        for s in 0..16 { low[s]=ap0[PERM[s%4]].mul(ap1[PERM[s/4]]).mul_m31(QUARTER.mul(QUARTER)); }
         let mut groups=[K::ZERO;12];
         for j in 0..64 { let g=S2_INACTIVE_GROUPS[j] as usize; groups[g]=groups[g].add(eq[j]); }
+        if cfg!(feature="future-d-inactive-tensor") {
+            // D1: group g weighs sum_{s in mask_g} low[s] and low[s] is
+            // ap0[PERM[s%4]] * ap1[PERM[s/4]] / 16, so the row's extension is
+            // (1/16) sum_b ap1[PERM[b]] * (sum_a ap0[PERM[a]] * m[a + 4 b]) with
+            // m[s] the sum of the group sums whose mask contains s.
+            let mut m=[K::ZERO;16];
+            for g in 0..12 { for bit in 0..16 { if S2_INACTIVE_MASKS[g]&(1<<bit)!=0 {m[bit]=m[bit].add(groups[g]);} } }
+            let mut total=E::ZERO;
+            for b in 0..4 {
+                let mut dot=crate::fast_pairing::EbyKDot::new();
+                for a in 0..4 { match dot.push(ap0[PERM[a]],m[a+4*b]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) } }
+                total=total.add(ap1[PERM[b]].mul(dot.finish()));
+            }
+            parts[0]=total.mul_m31(QUARTER.mul(QUARTER));
+        } else {
+        let mut low=[E::ZERO;16];
+        for s in 0..16 { low[s]=ap0[PERM[s%4]].mul(ap1[PERM[s/4]]).mul_m31(QUARTER.mul(QUARTER)); }
         let mut inactive=crate::fast_pairing::EbyKDot::new();
         for g in 0..12 {
             let mut weight=E::ZERO;
@@ -397,6 +412,7 @@ impl Weights {
             match inactive.push(weight,groups[g]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) }
         }
         parts[0]=inactive.finish();
+        }
         let libra=factored_s2_libra_weights(&ap0,&ap1,self.extra);
         let mut libra_dot=crate::fast_pairing::EbyKDot::new();
         for j in 0..4 { match libra_dot.push(libra[j],eq[j]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) } }

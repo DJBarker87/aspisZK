@@ -5,6 +5,14 @@
 
 pub trait Digest32: Copy {
     fn digest(&self, parts: &[&[u8]]) -> [u8; 32];
+
+    /// FUTURE-VERSION EXPERIMENT E4b: the same digest written into a
+    /// caller-owned buffer. The default goes through `digest`; a backend may
+    /// override it to avoid the by-value result. Must equal `digest`.
+    #[inline(always)]
+    fn digest_into(&self, parts: &[&[u8]], out: &mut [u8; 32]) {
+        *out = self.digest(parts);
+    }
 }
 
 /// Compatibility for retained R0 and host/prover function-pointer APIs.

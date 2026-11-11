@@ -228,7 +228,19 @@ fn merkle_tail_two_pass<H: Digest32>(hash: H, root: &[u8; 32], idx: &mut [u32; m
 #[allow(dead_code)]
 #[inline(always)]
 fn merkle_tail_single_pass<H: Digest32>(hash: H, root: &[u8; 32], idx: &mut [u32; multiproof::MAX_BATCH], val: &mut [[u8; 32]; multiproof::MAX_BATCH], d: usize, nodes: &[u8]) -> Result<(), Error> {
-    match multiproof::verify_counting(hash, root, idx, val, d, nodes) {
+    let counted = if cfg!(feature = "future-merkle-in-place") {
+        multiproof::verify_counting_direct(hash, root, idx, val, d, nodes)
+    } else {
+        multiproof::verify_counting(hash, root, idx, val, d, nodes)
+    };
+    merkle_verdict(counted, nodes)
+}
+
+/// The deferred verdict shared by the single-pass traversals.
+#[allow(dead_code)]
+#[inline(always)]
+fn merkle_verdict(counted: multiproof::Counted, nodes: &[u8]) -> Result<(), Error> {
+    match counted {
         multiproof::Counted::Malformed => Err(Error::Merkle),
         multiproof::Counted::Short => Err(Error::Parse),
         multiproof::Counted::Done { root_ok, used } => {

@@ -525,7 +525,7 @@ fn summed_final_checks<H: Digest32>(p: &Prepared, final_message: &[u8], claim: E
     let weights = Weights::new(p.variant, &p.semantic_alpha, &p.z)?;
     let w_at = weights.mle_at(&p.alpha[..2], p.kappa, &eq, &digits)?;
     mark(obs, Phase::QueryPart(5, 4));
-    let q_at = query_weight_mle(p, geometry, &r)?;
+    let q_at = if cfg!(feature = "future-d-pair-expansion") { query_weight_mle_pairs(p, geometry, &r)? } else { query_weight_mle(p, geometry, &r)? };
     mark(obs, Phase::QueryPart(5, 5));
     let combined = w_at.add(E::from_qm31(q_at.mul(lambda)));
     if f_at.mul(combined) != current {
@@ -580,6 +580,43 @@ fn query_weight_mle(p: &Prepared, geometry: &QueryGeometry, r: &[K; 6]) -> Resul
             let factor = K::ONE.add(r[b].mul_m31(node.sub(M31::ONE)));
             product = if b == 0 { factor } else { product.mul(factor) };
             node = node.mul(node).double().sub(M31::ONE);
+        }
+        dot.push(power, product).map_err(|_| Error::Parse)?;
+        power = power.mul(p.rho);
+    }
+    Ok(dot.finish())
+}
+
+/// D2: `query_weight_mle` with the six factors expanded in pairs,
+/// `(1 + r_b a_b)(1 + r_{b+1} a_{b+1}) = 1 + r_b a_b + r_{b+1} a_{b+1} +
+/// (r_b r_{b+1}) a_b a_{b+1}` with `a = t - 1` in the base field: per limb,
+/// three products of canonical limbs (each below `2^62`) and one reduction.
+#[inline(never)]
+fn query_weight_mle_pairs(p: &Prepared, geometry: &QueryGeometry, r: &[K; 6]) -> Result<K, Error> {
+    let limbs = |k: K| [u64::from(k.c0.a.0), u64::from(k.c0.b.0), u64::from(k.c1.a.0), u64::from(k.c1.b.0)];
+    let pairs: [[[u64; 4]; 3]; 3] = core::array::from_fn(|q| [limbs(r[2 * q]), limbs(r[2 * q + 1]), limbs(r[2 * q].mul(r[2 * q + 1]))]);
+    let mut dot = KbyKDot::new();
+    let mut power = K::ONE;
+    for i in 0..QUERIES {
+        let z = geometry.line_z[i - geometry.start];
+        let mut node = z.mul(z).double().sub(M31::ONE);
+        let mut product = K::ONE;
+        for q in 0..3 {
+            let a0 = node.sub(M31::ONE);
+            node = node.mul(node).double().sub(M31::ONE);
+            let a1 = node.sub(M31::ONE);
+            if q < 2 {
+                node = node.mul(node).double().sub(M31::ONE);
+            }
+            let (x0, x1, x01) = (u64::from(a0.0), u64::from(a1.0), u64::from(a0.mul(a1).0));
+            let [l0, l1, l01] = &pairs[q];
+            let factor = k_of([
+                1 + l0[0] * x0 + l1[0] * x1 + l01[0] * x01,
+                l0[1] * x0 + l1[1] * x1 + l01[1] * x01,
+                l0[2] * x0 + l1[2] * x1 + l01[2] * x01,
+                l0[3] * x0 + l1[3] * x1 + l01[3] * x01,
+            ]);
+            product = if q == 0 { factor } else { product.mul(factor) };
         }
         dot.push(power, product).map_err(|_| Error::Parse)?;
         power = power.mul(p.rho);
@@ -1261,6 +1298,11 @@ mod tests {
                         let two = merkle_tail_two_pass(Sha, &roots[tree], &mut i1, &mut v1, d, bytes);
                         let one = merkle_tail_single_pass(Sha, &roots[tree], &mut i2, &mut v2, d, bytes);
                         assert_eq!(one, two, "{name} batch {batch} tree {tree} variant {v}");
+                        let (mut i3, mut v3, mut i4, mut v4) = (idx, val, idx, val);
+                        let counting = merkle_verdict(multiproof::verify_counting(Sha, &roots[tree], &mut i3, &mut v3, d, bytes), bytes);
+                        let direct = merkle_verdict(multiproof::verify_counting_direct(Sha, &roots[tree], &mut i4, &mut v4, d, bytes), bytes);
+                        assert_eq!(counting, two, "{name} batch {batch} tree {tree} variant {v} counting");
+                        assert_eq!(direct, two, "{name} batch {batch} tree {tree} variant {v} direct");
                         if v == 0 {
                             assert_eq!(two, Ok(()), "{name} batch {batch} tree {tree}");
                         }
@@ -1316,6 +1358,13 @@ mod tests {
                 assert_eq!(weights.mle_at(&p.alpha[..2], p.kappa, &eq, &digits).unwrap(), direct, "{name} case {case}");
                 let direct = (0..64).fold(K::ZERO, |a, j| a.add(query[j].mul(eq[j])));
                 assert_eq!(query_weight_mle(&p, &geometry, &r).unwrap(), direct, "{name} case {case}");
+                assert_eq!(query_weight_mle_pairs(&p, &geometry, &r).unwrap(), direct, "{name} pairs case {case}");
+                if case == 3 {
+                    // Maximal limbs in the challenge.
+                    let top = random_k(&mut state, 2);
+                    let r = [top; 6];
+                    assert_eq!(query_weight_mle_pairs(&p, &geometry, &r).unwrap(), query_weight_mle(&p, &geometry, &r).unwrap());
+                }
             }
         }
     }

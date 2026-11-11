@@ -249,6 +249,52 @@ pub fn verify_counting<H: Digest32>(
     Counted::Done { root_ok: n == 1 && index_at(idx, 0) == 0 && root_matches(val, root), used: at }
 }
 
+/// FUTURE-VERSION EXPERIMENT E4b: `verify_counting` with each parent digest
+/// written straight into the next level's buffer. Two buffers alternate, so an
+/// output never overlaps its inputs. Same hash inputs in the same order.
+#[inline(always)]
+pub fn verify_counting_direct<H: Digest32>(
+    hash: H,
+    root: &[u8; 32],
+    idx: &mut [u32; MAX_BATCH],
+    val: &mut [[u8; 32]; MAX_BATCH],
+    mut n: usize,
+    slot: &[u8],
+) -> Counted {
+    if n == 0 || n > MAX_BATCH || !well_formed(&idx[..n]) {
+        return Counted::Malformed;
+    }
+    let mut other = [[0u8; 32]; MAX_BATCH];
+    let (mut cur, mut nxt): (&mut [[u8; 32]; MAX_BATCH], &mut [[u8; 32]; MAX_BATCH]) = (val, &mut other);
+    let tag = [BINARY_NODE_TAG];
+    let mut at = 0usize;
+    for _ in 0..Arity::Two.levels() {
+        let mut w = 0;
+        let mut i = 0;
+        while i < n {
+            let index = idx[i];
+            if i + 1 < n && idx[i + 1] == index ^ 1 {
+                hash.digest_into(&[&tag, &cur[i], &cur[i + 1]], &mut nxt[w]);
+                i += 2;
+            } else {
+                let Some(sibling) = slot.get(at..at + 32) else { return Counted::Short };
+                at += 32;
+                if index & 1 == 0 {
+                    hash.digest_into(&[&tag, &cur[i], sibling], &mut nxt[w]);
+                } else {
+                    hash.digest_into(&[&tag, sibling, &cur[i]], &mut nxt[w]);
+                }
+                i += 1;
+            }
+            idx[w] = index >> 1;
+            w += 1;
+        }
+        n = w;
+        core::mem::swap(&mut cur, &mut nxt);
+    }
+    Counted::Done { root_ok: n == 1 && idx[0] == 0 && cur[0] == *root, used: at }
+}
+
 /// Prover side: emit the canonical node sequence. `node(level, index)` returns
 /// the stored digest of node `index` at `level` (0 = leaves).
 pub fn generate(

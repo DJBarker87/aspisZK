@@ -13,6 +13,21 @@ impl aspis_core::Digest32 for SolanaDigest {
     fn digest(&self, parts: &[&[u8]]) -> [u8; 32] {
         hashv(parts).to_bytes()
     }
+    /// FUTURE-VERSION EXPERIMENT E4b: the SHA-256 syscall writing straight
+    /// into the caller's buffer (what `hashv` does into a local it then
+    /// returns by value).
+    #[inline(always)]
+    fn digest_into(&self, parts: &[&[u8]], out: &mut [u8; 32]) {
+        #[cfg(target_os = "solana")]
+        #[allow(deprecated)]
+        unsafe {
+            solana_program::syscalls::sol_sha256(parts as *const _ as *const u8, parts.len() as u64, out.as_mut_ptr());
+        }
+        #[cfg(not(target_os = "solana"))]
+        {
+            *out = hashv(parts).to_bytes();
+        }
+    }
 }
 #[cfg(target_os="solana")]
 #[global_allocator]
