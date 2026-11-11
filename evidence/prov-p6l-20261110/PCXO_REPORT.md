@@ -1,0 +1,20 @@
+# PCXO_ (P6l): recount v3, HM-O withdrawal, parse_blocks audit, citation re-points
+
+**Result: settled 1055 / not settled 405 / other 247 of 1707; rows settled-only 99 of 599.**
+- Settled: EQUALITY_PROVED 848, RECEIPTED_SELECTED_MASK_PROBE 38, OFF_EMISSION_WRAPPING_ACCEPTED 23, EQUALITY_PROVED_JOB 66, EQUALITY_PROVED_P1N 13, RECEIPTED_PIN_EQUAL 67.
+- Not settled: OPEN_TRANSCRIPTION 32, OPEN 277, RECEIPTED_TEXT_DIFFERS 34, OPEN_NOT_REDERIVABLE 40, CANNOT_EXTRACT 13, NO_FROZEN_COUNTERPART 4, HAND_ADAPTED 5.
+- Other: CONDITIONAL_ON_BINDING 139, EQUALITY_DOMAIN 7, DEPENDS_ON_LIBRARY_TRUST 37, REFINEMENT_THROUGH_TYPE_MAP 3, TYPE_ISOMORPHISM 49, REFINEMENT_LOOP_RETURN 4, GATE_ONLY_HELPER 8.
+
+**Reproduction first.** The PCXN_ chain is reproduced exactly (asserted against the committed PCXN_COUNTS.json): 1127 / 441 / 139, rows 122, with the same OPEN_TRANSCRIPTION and CANNOT_EXTRACT lines. Script work on the Mac, 0 Lean, 0 extraction, 0 host scopes; reads research 9dacef194c40.
+
+**Jobs merged after the PCXN pin, in merge order** (stage, settled/not settled/other, rows): p5g 1128/417/162 rows 122; p7a 1130/417/160 rows 122; p5i 1131/408/168 rows 126; p8a 1132/405/170 rows 126. P5g, P7a and P5i apply their lead_classes / lead_class (P5g: putK equal, 23 conditional on binding; P7a: 2 equalities, 12 library-row, 34 conditional; P5i: 4 NJS OFF-emission equalities, 10 conditional, 1 library-row, 3 type isomorphisms, 13 CANNOT_EXTRACT). P8a (PCWU_) has no lead_classes: its four credited records are applied as given. P5j, P5k, P5l are paused with no credit; P6m (PCXP_) is an audit with 0 credited keys affected. Every change is listed per key in PCXO_COUNTS.json.
+
+**Overlay A, HM-O withdrawn.** 77 credited keys move from settled to CONDITIONAL_ON_BINDING (settled -77, other +77, rows -27). Rule: the proving closure of the key, in the file of the job that credited it, reaches a fresh Aeneas external of a cross-crate Aspis item (aspis_core, aspis_statement) that resolves by name to the gate constant, and the emission does not carry the item as a definition. The queue by module (PCXO_HMO.json has all of it): NFN_ExtractedGeometry 30, AspisR1TerminalDecoder.Funs 12, AspisR1AdapterReconstruct.Funs 7, NFS_AccumPart00 4, NFY_Part043 4, RPz7_FIo_NativeFuns 4. 878 keys are cleared (no such external); 177 are HMO_UNDETERMINED, not cleared: 111 credited by receipt of a text equality or without a recorded proving job, the rest with no recorded proof of the crediting job that the scan can read, 6 with by-name externals that are own-crate items only (moving them would give 1049 settled). The externals come from generator reports and a free-name scan, not from re-extraction.
+
+**Overlay B, generator parse_blocks audit.** Demotions: 0. Fixed generator PCWP_gen_equalities.py, sha256 e8de7f08befbfe2cba83fdb031e814451078d5cca9fa3b712e75f2e72209a114. 471 (generator, module) pairs checked against saved gate sources (5 rows use the l187 plan source); 75 gate rows drop a declaration, 9 dropped declarations are keys, 6 are credited, and each of those has an exit-0 standard-axioms theorem naming it (PCXO_PARSE_BLOCKS_AUDIT.json). Finding: PCWR_, PCWS_ and PCWT_ generators still carry the unfixed parse_blocks (only PCWP_ and PCWW_ have the fix).
+
+**Blocking lines on the final map.** OPEN_TRANSCRIPTION keys (32): rows alone 0, among other blockers 20 (178 item-mapped keys: alone 1, among 67). CANNOT_EXTRACT (72 keys, 7 added by P5i): rows alone 2 (TX1:132, TX1:135), among 134 (136 touched); PCXN_ had alone 6, among 123 before overlay A.
+
+**Citations (item C).** The 18 source-citation differences are re-pointed to the l187_plan.json source (20 module entries read by one read-only ssh): 4 are the sha256 of a proving file, not a gate source (all 39 theorem right-hand sides resolve to plan-source declarations); 14 compare generator-input or path copies with the plan source and differ in 54 declaration entries, 26 of them keys and 18 credited keys (PCXO_CITATIONS.json). These are citation differences against an older copy, not proof errors: the theorems state against compiled gate constants.
+
+Target not yet established.
