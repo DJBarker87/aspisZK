@@ -26,7 +26,7 @@ AFTER=$( [ -f $OV/$M.olean ] && shasum -a 256 $OV/$M.olean | cut -c1-16 || echo 
 WALL=$(grep -E ' real ' $LOG | tail -1 | awk '{print $1}')
 RSS=$(grep 'maximum resident set size' $LOG | awk '{print $1}')
 AX=$(grep -c "depends on axioms\|does not depend on any axioms" $LOG)
-BAD=$(grep "depends on axioms" $LOG | grep -c 'sorryAx\|native\|ofReduceBool\|trustCompiler')
+BAD=$(grep "depends on axioms" $LOG | sed 's/.*depends on axioms//' | grep -c 'sorryAx\|ofReduceBool\|trustCompiler\|Lean.reduceBool')
 [ -s $TSV ] || printf 'id\ttarget\texit\twall_s\tmax_rss_bytes\tsource_sha256\trevision\taxioms\tolean_before16\tolean_after16\tnote\n' > $TSV
 printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s #print axioms lines; %s with sorryAx/other\t%s\t%s\t%s\n' $ID $M $EXIT "$WALL" "$RSS" $SHA $REV $AX $BAD $BEFORE $AFTER "$NOTE" >> $TSV
 echo "$ID $M exit=$EXIT wall=$WALL rss=$RSS axioms=$AX bad=$BAD"
