@@ -15,7 +15,7 @@ OV = ('overlay-PIN2', 'overlay-PIN2-W4', 'overlay-HOST-P1')
 MT = ('overlay-PIN2', 'overlay-PIN2-W4')   # mtime order is checked for locally built layers;
 # overlay-HOST-P1 holds host-built copies (host receipts, copy mtimes) and is checked only
 # as an import target: a local object must be newer than every HOST-P1 import.
-bad, shadow = [], []
+bad, shadow, same = [], [], []
 for x in sorted(allm):
     px = G.path(x)
     if px is None: bad.append((x, 'no object')); continue
@@ -24,7 +24,13 @@ for x in sorted(allm):
         mt = os.path.getmtime(px)
         for d in G.imp.get(x, []):
             pd = G.path(d)
-            if pd and os.path.getmtime(pd) > mt: bad.append((x, 'older than import ' + d))
+            if pd and os.path.getmtime(pd) > mt:
+                # a HOST-P1 copy byte-identical to the release object the importer was built
+                # against is a copy-mtime artifact, recorded separately, not an incoherence
+                rp = f'{G.C}/objs/{d.replace(".", "/")}.olean'
+                if G.layer.get(d) == 'overlay-HOST-P1' and os.path.isfile(rp) and open(rp, 'rb').read() == open(pd, 'rb').read():
+                    same.append((x, d))
+                else: bad.append((x, 'older than import ' + d))
     elif L not in OV:
         ovi = [d for d in G.imp.get(x, []) if G.layer.get(d) in OV]
         if ovi: shadow.append((x, ovi[:3]))
@@ -32,7 +38,7 @@ rows = {}
 for t in T:
     p = G.path(t)
     rows[t] = dict(layer=G.layer.get(t, 'base'), olean_sha256=hashlib.sha256(open(p, 'rb').read()).hexdigest() if p else None)
-print('targets', len(T), 'closure', len(allm), 'incoherent overlay objects', len(bad), 'shadow-stale release objects', len(shadow))
+print('targets', len(T), 'closure', len(allm), 'incoherent overlay objects', len(bad), 'shadow-stale release objects', len(shadow), 'older-than-identical-HOST-P1-copy', len(same))
 for b in bad[:20]: print('  INCOHERENT', *b)
 for s in shadow[:20]: print('  SHADOW', *s)
-json.dump(dict(targets=len(T), closure=len(allm), incoherent=bad, shadow_stale=shadow, objects=rows), open(sys.argv[2], 'w'), indent=1)
+json.dump(dict(targets=len(T), closure=len(allm), incoherent=bad, older_than_identical_host_copy=same, shadow_stale=shadow, objects=rows), open(sys.argv[2], 'w'), indent=1)
