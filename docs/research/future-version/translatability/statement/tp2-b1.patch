@@ -1,0 +1,390 @@
+diff -ruN a/crates/aspis-statement/src/lib.rs b/crates/aspis-statement/src/lib.rs
+--- a/crates/aspis-statement/src/lib.rs	2026-11-11 09:26:16
++++ b/crates/aspis-statement/src/lib.rs	2026-11-11 21:33:58
+@@ -11,6 +11,22 @@
+ #[cfg(test)]
+ extern crate std;
+ 
++/// Extraction-only safe fixed-array constructor for Copy outputs.
++/// Calls f in increasing index order and threads the FnMut state normally.
++#[inline(always)]
++pub(crate) fn array_from_fn_copy<T: Copy, const N: usize>(
++    init: T,
++    mut f: impl FnMut(usize) -> T,
++) -> [T; N] {
++    let mut out = [init; N];
++    let mut i = 0usize;
++    while i < N {
++        out[i] = f(i);
++        i += 1;
++    }
++    out
++}
++
+ #[cfg(not(target_os = "solana"))]
+ pub mod atomic_state_only_registry;
+ pub mod atomic_state_only_terminal;
+diff -ruN a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs	2026-11-11 09:26:16
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs	2026-11-11 21:34:57
+@@ -276,6 +276,24 @@
+     result
+ }
+ 
++/// One eight-limb window of `pattern_values_windowed`: the former local
++/// closure `window`, as a function of the values it read (translatability).
++#[cfg(any(test, feature = "pool-v1-pair-forest-pattern-window-audit"))]
++#[inline(always)]
++fn pattern_window(
++    prepared: &[PreparedQm31Multiplier; 8],
++    openings: &[QM31; POSEIDON2_WIDTH],
++    start: usize,
++) -> QM31 {
++    let mut value = QM31::ZERO;
++    let mut slot = 0usize;
++    while slot < 8 {
++        value = value.add(prepared[slot].mul(openings[start + slot]));
++        slot += 1;
++    }
++    value
++}
++
+ /// Exact CSE for the frozen fourteen-pattern table. Pattern 0 is the two
+ /// adjacent eight-limb windows, patterns 2 and 3 are exact six-limb prefixes,
+ /// and pattern 10 differs from pattern 13 only by its final public offset.
+@@ -293,19 +311,10 @@
+         slot += 1;
+     }
+     let prepared: [PreparedQm31Multiplier; 8] = powers.map(PreparedQm31Multiplier::new);
+-    let window = |start: usize| {
+-        let mut value = QM31::ZERO;
+-        let mut slot = 0usize;
+-        while slot < 8 {
+-            value = value.add(prepared[slot].mul(openings[start + slot]));
+-            slot += 1;
+-        }
+-        value
+-    };
+-    let window_0 = window(0);
+-    let window_1 = window(1);
+-    let window_2 = window(2);
+-    let window_8 = window(8);
++    let window_0 = pattern_window(&prepared, openings, 0);
++    let window_1 = pattern_window(&prepared, openings, 1);
++    let window_2 = pattern_window(&prepared, openings, 2);
++    let window_8 = pattern_window(&prepared, openings, 8);
+     let mut result = [QM31::ZERO; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1];
+     result[0] = window_0.add(prepared[7].mul(window_8));
+     result[1] = window_0;
+@@ -1539,5 +1548,118 @@
+             ),
+             None,
+         );
++    }
++}
++
++/// Translatability pass (2026-11-11): the pinned form of `pattern_values_windowed`, kept verbatim
++/// as a differential oracle for the form with the named `pattern_window` helper.
++#[cfg(test)]
++mod tp2_pattern_values_windowed_oracle {
++    use super::*;
++
++    fn pattern_values_windowed_old(
++        openings: &[QM31; POSEIDON2_WIDTH],
++        lambda: QM31,
++    ) -> [QM31; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1] {
++        let mut powers = [QM31::ZERO; 8];
++        let mut power = lambda;
++        let mut slot = 0usize;
++        while slot < powers.len() {
++            powers[slot] = power;
++            power = power.mul(lambda);
++            slot += 1;
++        }
++        let prepared: [PreparedQm31Multiplier; 8] = powers.map(PreparedQm31Multiplier::new);
++        let window = |start: usize| {
++            let mut value = QM31::ZERO;
++            let mut slot = 0usize;
++            while slot < 8 {
++                value = value.add(prepared[slot].mul(openings[start + slot]));
++                slot += 1;
++            }
++            value
++        };
++        let window_0 = window(0);
++        let window_1 = window(1);
++        let window_2 = window(2);
++        let window_8 = window(8);
++        let mut result = [QM31::ZERO; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1];
++        result[0] = window_0.add(prepared[7].mul(window_8));
++        result[1] = window_0;
++        result[2] = window_2
++            .sub(prepared[6].mul(openings[8]))
++            .sub(prepared[7].mul(openings[9]));
++        result[3] = window_0
++            .sub(prepared[6].mul(openings[6]))
++            .sub(prepared[7].mul(openings[7]));
++        result[4] = prepared[0]
++            .mul(openings[0])
++            .add(prepared[1].mul(openings[1]));
++        result[5] = prepared[0]
++            .mul(openings[6])
++            .add(prepared[1].mul(openings[7]));
++        result[6] = prepared[0].mul(openings[0]);
++        result[7] = prepared[0].mul(openings[10]);
++        result[8] = prepared[0].mul(openings[1]);
++        result[9] = prepared[0].mul(openings[2]);
++        result[10] = window_8.add(prepared[7].mul(lift_m31(M31(1_051_521_018))));
++        result[11] = window_2;
++        result[12] = window_1;
++        result[13] = window_8;
++        result
++    }
++
++    fn next(state: &mut u64) -> u64 {
++        *state = state.wrapping_add(0x9e37_79b9_7f4a_7c15);
++        let mut z = *state;
++        z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
++        z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
++        z ^ (z >> 31)
++    }
++
++    fn element(state: &mut u64, edge: bool) -> QM31 {
++        let p = aspis_core::field::P;
++        let mut limbs = [0u32; 4];
++        let mut k = 0usize;
++        while k < 4 {
++            let r = next(state);
++            limbs[k] = if edge {
++                let choices = [0u32, 1, 2, p - 1, p - 2, p / 2];
++                choices[(r % choices.len() as u64) as usize]
++            } else {
++                (r % u64::from(p)) as u32
++            };
++            k += 1;
++        }
++        QM31 {
++            c0: CM31::new(M31(limbs[0]), M31(limbs[1])),
++            c1: CM31::new(M31(limbs[2]), M31(limbs[3])),
++        }
++    }
++
++    #[test]
++    fn rewritten_pattern_values_windowed_equals_pinned_form() {
++        let mut seed = 0x5450_325f_5057_494eu64;
++        let mut case = 0u32;
++        while case < 120_000 {
++            let edge = case % 4 == 0;
++            let mut openings = [QM31::ZERO; POSEIDON2_WIDTH];
++            let mut lane = 0usize;
++            while lane < POSEIDON2_WIDTH {
++                openings[lane] = element(&mut seed, edge);
++                lane += 1;
++            }
++            let lambda = match case {
++                0 => QM31::ZERO,
++                1 => QM31::ONE,
++                _ => element(&mut seed, edge),
++            };
++            assert!(
++                pattern_values_windowed(&openings, lambda)
++                    == pattern_values_windowed_old(&openings, lambda),
++                "case {case}"
++            );
++            case += 1;
++        }
+     }
+ }
+diff -ruN a/crates/aspis-statement/src/state_only_poseidon.rs b/crates/aspis-statement/src/state_only_poseidon.rs
+--- a/crates/aspis-statement/src/state_only_poseidon.rs	2026-11-11 09:26:16
++++ b/crates/aspis-statement/src/state_only_poseidon.rs	2026-11-11 21:34:09
+@@ -139,6 +139,24 @@
+     }
+ }
+ 
++#[inline(always)]
++fn external_linear_lazy_row(input: [[u32; 4]; 4], output: usize) -> QM31 {
++            let raw = crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
++                let a = u64::from(input[0][limb]);
++                let b = u64::from(input[1][limb]);
++                let c = u64::from(input[2][limb]);
++                let d = u64::from(input[3][limb]);
++                match output {
++                    0 => 2 * a + 3 * b + c + d,
++                    1 => a + 2 * b + 3 * c + d,
++                    2 => a + b + 2 * c + 3 * d,
++                    3 => 3 * a + b + c + 2 * d,
++                    _ => unreachable!(),
++                }
++            });
++    extension_from_raw_limbs(raw)
++}
++
+ /// Addition-only Poseidon external layer with one reduction per output limb.
+ #[inline(never)]
+ fn external_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
+@@ -152,28 +170,14 @@
+             state[start + 3],
+         ];
+         let input = input.map(extension_limbs);
+-        let mut output = 0usize;
+-        while output < 4 {
+-            let raw = core::array::from_fn(|limb| {
+-                let a = u64::from(input[0][limb]);
+-                let b = u64::from(input[1][limb]);
+-                let c = u64::from(input[2][limb]);
+-                let d = u64::from(input[3][limb]);
+-                match output {
+-                    0 => 2 * a + 3 * b + c + d,
+-                    1 => a + 2 * b + 3 * c + d,
+-                    2 => a + b + 2 * c + 3 * d,
+-                    3 => 3 * a + b + c + 2 * d,
+-                    _ => unreachable!(),
+-                }
+-            });
+-            state[start + output] = extension_from_raw_limbs(raw);
+-            output += 1;
+-        }
++        state[start] = external_linear_lazy_row(input, 0);
++        state[start + 1] = external_linear_lazy_row(input, 1);
++        state[start + 2] = external_linear_lazy_row(input, 2);
++        state[start + 3] = external_linear_lazy_row(input, 3);
+         group += 1;
+     }
+-    let sums: [[u64; 4]; 4] = core::array::from_fn(|column| {
+-        core::array::from_fn(|limb| {
++    let sums: [[u64; 4]; 4] = crate::array_from_fn_copy::<_, 4>([0u64; 4], |column| {
++        crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+             u64::from(extension_limbs(state[column])[limb])
+                 + u64::from(extension_limbs(state[4 + column])[limb])
+                 + u64::from(extension_limbs(state[8 + column])[limb])
+@@ -183,7 +187,7 @@
+     let mut index = 0usize;
+     while index < POSEIDON2_WIDTH {
+         let limbs = extension_limbs(state[index]);
+-        state[index] = extension_from_raw_limbs(core::array::from_fn(|limb| {
++        state[index] = extension_from_raw_limbs(crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+             u64::from(limbs[limb]) + sums[index & 3][limb]
+         }));
+         index += 1;
+@@ -1237,5 +1241,120 @@
+             STATE_ONLY_POSEIDON_ORACLE_INDIVIDUAL_DEGREE
+                 <= STATE_ONLY_POSEIDON_ZEROCHECK_INDIVIDUAL_DEGREE
+         );
++    }
++}
++
++/// Translatability pass (2026-11-11): the pinned form of `external_linear_lazy`, kept verbatim as a
++/// differential oracle for the rewritten form above (probe-crate text of R1's RPu_FIq_Native06).
++#[cfg(test)]
++mod tp2_external_linear_lazy_oracle {
++    use super::*;
++
++    fn external_linear_lazy_old(state: &mut [QM31; POSEIDON2_WIDTH]) {
++        let mut group = 0usize;
++        while group < 4 {
++            let start = 4 * group;
++            let input = [
++                state[start],
++                state[start + 1],
++                state[start + 2],
++                state[start + 3],
++            ];
++            let input = input.map(extension_limbs);
++            let mut output = 0usize;
++            while output < 4 {
++                let raw = core::array::from_fn(|limb| {
++                    let a = u64::from(input[0][limb]);
++                    let b = u64::from(input[1][limb]);
++                    let c = u64::from(input[2][limb]);
++                    let d = u64::from(input[3][limb]);
++                    match output {
++                        0 => 2 * a + 3 * b + c + d,
++                        1 => a + 2 * b + 3 * c + d,
++                        2 => a + b + 2 * c + 3 * d,
++                        3 => 3 * a + b + c + 2 * d,
++                        _ => unreachable!(),
++                    }
++                });
++                state[start + output] = extension_from_raw_limbs(raw);
++                output += 1;
++            }
++            group += 1;
++        }
++        let sums: [[u64; 4]; 4] = core::array::from_fn(|column| {
++            core::array::from_fn(|limb| {
++                u64::from(extension_limbs(state[column])[limb])
++                    + u64::from(extension_limbs(state[4 + column])[limb])
++                    + u64::from(extension_limbs(state[8 + column])[limb])
++                    + u64::from(extension_limbs(state[12 + column])[limb])
++            })
++        });
++        let mut index = 0usize;
++        while index < POSEIDON2_WIDTH {
++            let limbs = extension_limbs(state[index]);
++            state[index] = extension_from_raw_limbs(core::array::from_fn(|limb| {
++                u64::from(limbs[limb]) + sums[index & 3][limb]
++            }));
++            index += 1;
++        }
++    }
++
++    fn next(state: &mut u64) -> u64 {
++        // splitmix64
++        *state = state.wrapping_add(0x9e37_79b9_7f4a_7c15);
++        let mut z = *state;
++        z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
++        z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
++        z ^ (z >> 31)
++    }
++
++    fn canonical(state: &mut u64, edge: bool) -> M31 {
++        let r = next(state);
++        if edge {
++            let choices = [0u32, 1, 2, P - 1, P - 2, P / 2, P / 2 + 1, P, P + 1, u32::MAX];
++            M31(choices[(r % choices.len() as u64) as usize])
++        } else {
++            M31((r % u64::from(P)) as u32)
++        }
++    }
++
++    fn sample(state: &mut u64, edge: bool) -> [QM31; POSEIDON2_WIDTH] {
++        let mut out = [QM31::ZERO; POSEIDON2_WIDTH];
++        let mut lane = 0usize;
++        while lane < POSEIDON2_WIDTH {
++            out[lane] = QM31 {
++                c0: CM31::new(canonical(state, edge), canonical(state, edge)),
++                c1: CM31::new(canonical(state, edge), canonical(state, edge)),
++            };
++            lane += 1;
++        }
++        out
++    }
++
++    #[test]
++    fn rewritten_external_linear_lazy_equals_pinned_form() {
++        let mut seed = 0x5450_325f_454c_4cu64;
++        let mut fixed = [
++            [QM31::ZERO; POSEIDON2_WIDTH],
++            [QM31::ONE; POSEIDON2_WIDTH],
++            [QM31 { c0: CM31::new(M31(P - 1), M31(P - 1)), c1: CM31::new(M31(P - 1), M31(P - 1)) }; POSEIDON2_WIDTH],
++        ];
++        for state in fixed.iter_mut() {
++            let mut a = *state;
++            let mut b = *state;
++            external_linear_lazy(&mut a);
++            external_linear_lazy_old(&mut b);
++            assert!(a == b);
++        }
++        let mut case = 0u32;
++        while case < 200_000 {
++            let input = sample(&mut seed, case % 4 == 0);
++            let mut a = input;
++            let mut b = input;
++            external_linear_lazy(&mut a);
++            external_linear_lazy_old(&mut b);
++            assert!(a == b, "case {case}");
++            case += 1;
++        }
+     }
+ }
