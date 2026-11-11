@@ -14,6 +14,8 @@ c = {'schema': 'aspis.fv.one-tx-spend-config.v1', 'note': 'local validator rehea
      'upload_program': '9DYn3ykkW6JEgYVKst7y7Jd9SqxSjoSNUVTgnGCHWqx5',
      'payer_key': str(L / 'keys/payer.json'), 'key_dir': str(L / 'keys'), 'proof_key_dir': str(L / 'keys'), 'key_namespace': 'FV_local',
      'cli_dir': str(CLI), 'signer': str(W / 'target/native/release/devnet_spend'),
+     # Observed in the first rehearsal (local2) and pinned from the second on.
+     'expected_negative_errors': {'cert': {'InstructionError': [0, 'InvalidInstructionData']}, 'node': {'InstructionError': [0, 'InvalidInstructionData']}},
      'release_artifacts': {'devnet_verifier': art(W / 'out' / sys.argv[2] / 'artifacts/aspis_r1_cost_probe_program.so'), 'pool': art(W / 'devnet/pool.so'),
                            'registry': art(W / 'devnet/registry.so'), 'upload': art(W / 'devnet/aspis_upload.so')}}
 assert c['release_artifacts']['pool']['sha256'].startswith('e0e49c34') and c['release_artifacts']['registry']['sha256'].startswith('7ad46f0d') and c['release_artifacts']['upload']['sha256'].startswith('9b2ab3d4')

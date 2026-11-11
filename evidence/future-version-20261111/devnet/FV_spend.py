@@ -17,8 +17,13 @@ withdrawal). Differences, per payment:
   * negatives BEFORE the settlement: one byte changed in the certificate, then one byte in a
     Merkle node; each settlement attempt must fail and change no protected account; the
     byte is restored after each. After the settlement: a replay must fail;
-  * close: ONE transaction [upload CLOSE proof, verifier close checkpoint].
-Production path per payment: 1 + 15 + 1 + 1 = 18 transactions.
+  * close: ONE transaction [upload CLOSE proof, verifier close checkpoint, transfer of
+    everything the session key holds back to the payer];
+  * ONE approval: the payer (standing for the user's wallet) signs exactly one transaction
+    per payment, the open, which also funds a fresh session key. The session key is the base
+    of the seed-derived accounts and signs every other transaction of the payment; the close
+    empties it. Nothing but the nullifier marker rent and the fees stays spent.
+Production path per payment: 1 + 15 + 1 + 1 = 18 transactions, one of them signed by the payer.
 Never deploys. Run against devnet only with the owner's go.
 """
 import base64, json, os, pathlib, re, subprocess, sys, time
@@ -55,7 +60,7 @@ def create_keyed(name, address, owner, size, signer):
     return L.send(name, [ix(L.SYSTEM, [[C['payer'], True, True], [address, True, True]], data)], [L.PAYER_KEY, signer])
 
 
-def send_together(label, names, instructions):
+def send_together(label, names, instructions, keys, sender):
     """Send independent single-instruction transactions at once and wait once.
 
     All are signed against one blockhash and sent without waiting for one another; the time
@@ -69,7 +74,7 @@ def send_together(label, names, instructions):
     timing = None
     if todo:
         bh = rpc(URL, 'getLatestBlockhash', [{'commitment': 'confirmed'}])['value']
-        signed = [(n, L.invoke({'keys': [L.PAYER_KEY], 'instructions': [i], 'blockhash': bh['blockhash']})) for n, i in todo]
+        signed = [(n, L.invoke({'keys': keys, 'instructions': [i], 'blockhash': bh['blockhash']})) for n, i in todo]
         started = time.time()
         for n, t in signed:
             L.write(f'{n}-attempt-0', {'signature': t['signature'], 'blockhash': bh, 'simulation_error': None, 'serialized_bytes': t['bytes'],
@@ -90,7 +95,7 @@ def send_together(label, names, instructions):
         timing = {'count': len(signed), 'send_wall_seconds': sent, 'all_confirmed_wall_seconds': confirmed, 'send_errors': errors,
                   'slots': sorted(set(slots)), 'note': 'wall time from the first send until every write is confirmed; None if not all confirmed within 90 s'}
         L.write(label + '-sent-together', timing)
-    results = [L.send(n, [i]) for n, i in zip(names, instructions)]
+    results = [sender(n, [i]) for n, i in zip(names, instructions)]
     return results, timing
 
 
@@ -136,15 +141,29 @@ cp = plan('checkpoint', sequence=0); L.send('forest-checkpoint', [cp['instructio
 
 pkdir = pathlib.Path(C['proof_key_dir']); ns = C['key_namespace']
 payments = {}; observed_errors = {}
+FEE1, FEE2 = 15000, 20000     # one and two signatures at the client's fixed priority fee; asserted on every landed transaction
+MARKER_BYTES = 208
+balance = lambda a: rpc(URL, 'getBalance', [a, {'commitment': 'finalized'}])['value']
+transfer = lambda src, dst, lamports: ix(L.SYSTEM, [[src, True, True], [dst, False, True]], (2).to_bytes(4, 'little') + lamports.to_bytes(8, 'little'))
 for n, label in enumerate(['transfer', 'withdrawal']):
-    send = L.send
+    # 0. The session key: retained (0600) before anything is proved or funded. It is the base of the
+    # payment's seed-derived accounts, the fee payer of every transaction after the open, and is emptied by the close.
+    sessionkey, session = key(f'{label}-session')
+    splan = lambda action, **kw: plan(action, **{**kw, 'payer': session})
+
+    def send(name, ixs, negative=False):
+        saved = L.C; L.C = {**saved, 'payer': session}     # the recorder snapshots the fee payer it is told
+        try:
+            return L.send(name, ixs, [sessionkey], negative=negative)
+        finally:
+            L.C = saved
     # 1. Per-payment seed tag, retained privately before anything is proved or funded.
-    seeds = allocate(pkdir / f'{ns}-{label}-pin2-seeds.json', {'label': label, 'payer': C['payer'], 'upload_program': UP, 'verifier': P['verifier'], 'pool': P['pool'], 'mint': mint})
+    seeds = allocate(pkdir / f'{ns}-{label}-pin2-seeds.json', {'label': label, 'payer': session, 'upload_program': UP, 'verifier': P['verifier'], 'pool': P['pool'], 'mint': mint})
     tag = seeds['pin2_tag']
-    lay = check_layout(plan('pin2_layout', pin2_tag=tag), C['payer'], UP, P['verifier'], tag); L.write(label + '-pin2-layout', lay)
+    lay = check_layout(splan('pin2_layout', pin2_tag=tag), session, UP, P['verifier'], tag); L.write(label + '-pin2-layout', lay)
     # 'public_account' is the seed-derived statement address. It is never created on this route;
     # it is named only because the retained-mapping check compares the (unsent) stage 1 roles.
-    identity = {**P, 'payer': C['payer'], 'mint': mint, 'action': 'prove', 'note': n, 'withdrawal': n == 1, 'destination': dest,
+    identity = {**P, 'payer': session, 'mint': mint, 'action': 'prove', 'note': n, 'withdrawal': n == 1, 'destination': dest,
                 'checkpoint': cp['checkpoint'], 'public_account': lay['statement']['address'], 'verifier_checkpoint': lay['checkpoint']['address'],
                 'upload_program': UP, 'pin2_tag': tag, 'one_tx': True}
     root = pkdir / f'{ns}-{label}-client64-proof-private'
@@ -160,17 +179,29 @@ for n, label in enumerate(['transfer', 'withdrawal']):
     # 2. Open: both accounts and the tail in one transaction, then the 15 full chunks.
     full = (len(proof) // L.CHUNK) * L.CHUNK
     assert (full, len(proof) - full) == (15 * L.CHUNK, 58)
-    rent_proof = rpc(URL, 'getMinimumBalanceForRentExemption', [len(proof)]); rent_cp = rpc(URL, 'getMinimumBalanceForRentExemption', [L.CHECKPOINT_BYTES])
-    mk_proof = plan('pin2_create', owner=proof_entry['owner'], seed=proof_entry['seed'], lamports=rent_proof, space=len(proof))
-    mk_cp = plan('pin2_create', owner=cpe['owner'], seed=cpe['seed'], lamports=rent_cp, space=L.CHECKPOINT_BYTES)
+    rent_proof, rent_cp, rent_marker = (rpc(URL, 'getMinimumBalanceForRentExemption', [size]) for size in (len(proof), L.CHECKPOINT_BYTES, MARKER_BYTES))
+    assert not p.get('needs_zero_page'), 'this fixture never creates a root page in the settlement; the funding below does not cover one'
+    mk_proof = splan('pin2_create', owner=proof_entry['owner'], seed=proof_entry['seed'], lamports=rent_proof, space=len(proof))
+    mk_cp = splan('pin2_create', owner=cpe['owner'], seed=cpe['seed'], lamports=rent_cp, space=L.CHECKPOINT_BYTES)
     assert (mk_proof['address'], mk_cp['address']) == (proof_entry['address'], verifiercp), 'planner create address differs'
-    tail = plan('pin2_writes', seed=proof_entry['seed'], body=proof[full:].hex(), offset=full)
+    tail = splan('pin2_writes', seed=proof_entry['seed'], body=proof[full:].hex(), offset=full)
     assert tail['address'] == proof_entry['address'] and tail['count'] == 1
-    send(label + '-open', [mk_proof['instruction'], mk_cp['instruction'], tail['instructions'][0]])
-    w = plan('pin2_writes', seed=proof_entry['seed'], body=proof[:full].hex())
+    # The one transaction the payer signs. It funds the session key with: the two refundable rents, the marker
+    # rent the settlement spends, the fees of the session key's transactions (15 writes, settlement, close; plus
+    # this run's seven test transactions), and a margin that keeps the key rent-exempt in between. All but the
+    # marker rent and the fees returns in the close.
+    session_transactions = 15 + 1 + 1 + 7; margin = 3_000_000
+    fund = rent_proof + rent_cp + rent_marker + session_transactions * FEE1 + margin
+    started = O / (label + '-payer-before.json')
+    if not started.exists():
+        assert L.account(session)['value'] is None, 'session key already has an account'
+        L.write(label + '-payer-before', {'payer_lamports': balance(C['payer']), 'fund_lamports': fund})
+    payer_before = json.loads(started.read_text())['payer_lamports']
+    L.send(label + '-open', [transfer(C['payer'], session, fund), mk_proof['instruction'], mk_cp['instruction'], tail['instructions'][0]], [L.PAYER_KEY, sessionkey])
+    w = splan('pin2_writes', seed=proof_entry['seed'], body=proof[:full].hex())
     assert w['address'] == proof_entry['address'] and w['chunk'] == L.CHUNK and w['count'] == 15
     if C.get('uploads_together', True):
-        ups, together = send_together(label + '-proof-upload', [f'{label}-proof-upload-{i}' for i in range(15)], w['instructions'])
+        ups, together = send_together(label + '-proof-upload', [f'{label}-proof-upload-{i}' for i in range(15)], w['instructions'], [sessionkey], send)
     else:
         ups, together = [send(f'{label}-proof-upload-{i}', [one]) for i, one in enumerate(w['instructions'])], None
     assert bytes.fromhex(L.readhex(proof_entry['address'], UP)) == proof, 'upload readback differs'
@@ -183,7 +214,7 @@ for n, label in enumerate(['transfer', 'withdrawal']):
     before = {a: L.account(a)['value'] for a in protected}
     assert before[p['marker']] is None, 'nullifier marker exists before the settlement'
     for name, at in [('cert', L.AFTERSTATE_BYTES + p['off_certificate']), ('node', L.AFTERSTATE_BYTES + p['off_nodes'])]:
-        change = plan('pin2_writes', seed=proof_entry['seed'], body=bytes([proof[at] ^ 1]).hex(), offset=at)['instructions'][0]
+        change = splan('pin2_writes', seed=proof_entry['seed'], body=bytes([proof[at] ^ 1]).hex(), offset=at)['instructions'][0]
         send(f'{label}-{name}-mutate', [change])
         bad = send(f'{label}-{name}-settle', [p['settle']], negative=True)
         assert bad['error'] is not None and {a: L.account(a)['value'] for a in protected} == before, f'{name}: changed proof was accepted or changed state'
@@ -191,7 +222,7 @@ for n, label in enumerate(['transfer', 'withdrawal']):
         if EXPECTED is not None:
             assert bad['error'] == EXPECTED[name], f'{name}: rejected for an unexpected reason: {bad["error"]}'
         assert bad['error'] == observed_errors[name], f'{name}: the two payments were rejected for different reasons'
-        undo = plan('pin2_writes', seed=proof_entry['seed'], body=proof[at:at + 1].hex(), offset=at)['instructions'][0]
+        undo = splan('pin2_writes', seed=proof_entry['seed'], body=proof[at:at + 1].hex(), offset=at)['instructions'][0]
         send(f'{label}-{name}-restore', [undo])
         L.write(f'{label}-{name}-validation', {'offset_in_account': at, 'error': bad['error'], 'compute_units': bad['compute_units'], 'protected_accounts_unchanged': True})
     assert bytes.fromhex(L.readhex(proof_entry['address'], UP)) == proof, 'proof not restored'
@@ -213,50 +244,57 @@ for n, label in enumerate(['transfer', 'withdrawal']):
     assert replay['error'] == {'InstructionError': [0, {'Custom': 0x41532026}]}, 'replay did not reject as NullifierAlreadyConsumed'
     assert all(readback[a]['value'] == L.account(a)['value'] for a in readback), 'replay changed protected state'
     L.write(label + '-replay-validation', {'error_name': 'NullifierAlreadyConsumed', 'custom_code': 0x41532026, 'protected_accounts_unchanged': True})
-    # 6. Close: one transaction, fixed order [proof, checkpoint].
+    # 6. Close and sweep: one transaction, fixed order [proof, checkpoint, everything back to the payer].
     closing = [proof_entry['address'], verifiercp]
     held = O / (label + '-close-before.json')
     if not held.exists():
         live = {a: L.account(a)['value'] for a in closing}
         assert all(v and v['lamports'] for v in live.values()), 'an account to close is missing before the close'
-        L.write(label + '-close-before', {a: v['lamports'] for a, v in live.items()})
-    held_lamports = json.loads(held.read_text()); rent_closed = sum(held_lamports.values())
+        L.write(label + '-close-before', {'accounts': {a: v['lamports'] for a, v in live.items()}, 'session_lamports': balance(session)})
+    held_state = json.loads(held.read_text()); rent_closed = sum(held_state['accounts'].values())
     assert rent_closed == rent_proof + rent_cp
-    send(label + '-close', [plan('pin2_close_one', kind='upload', owner=UP, seed=proof_entry['seed']),
-                            plan('pin2_close_one', kind='checkpoint', owner=P['verifier'], seed=cpe['seed'])])
-    after = {a: L.account(a)['value'] for a in closing}
-    assert all(v is None or v['lamports'] == 0 for v in after.values()), 'closed account still funded'
-    # 7. Accounting from finalized getTransaction meta (fee payer = account 0).
+    sweep = held_state['session_lamports'] + rent_closed - FEE1
+    send(label + '-close', [splan('pin2_close_one', kind='upload', owner=UP, seed=proof_entry['seed']),
+                            splan('pin2_close_one', kind='checkpoint', owner=P['verifier'], seed=cpe['seed']),
+                            transfer(session, C['payer'], sweep)])
+    after = {a: L.account(a)['value'] for a in closing + [session]}
+    assert all(v is None or v['lamports'] == 0 for v in after.values()), 'closed account or session key still funded'
+    payer_after = balance(C['payer'])
+    # 7. Accounting. The payer signs nothing else during the payment, so its balance change is the payment's whole cost.
     txs = {f.name[:-len('-transaction.json')]: json.loads(f.read_text()) for f in O.glob(label + '-*-transaction.json')}
     names = sorted(txs, key=lambda k: (txs[k]['slot'], k))
-    for t in txs.values():
-        k0 = t['transaction']['message']['accountKeys'][0]; assert (k0 if isinstance(k0, str) else k0['pubkey']) == C['payer']
-    pdelta = lambda t: t['meta']['postBalances'][0] - t['meta']['preBalances'][0]
-    fees = sum(t['meta']['fee'] for t in txs.values()); delta = sum(pdelta(t) for t in txs.values())
-    recovered = pdelta(txs[label + '-close']) + txs[label + '-close']['meta']['fee']
-    assert recovered == rent_closed, 'the close did not return exactly the rent'
+    keys_of = lambda t: [k if isinstance(k, str) else k['pubkey'] for k in t['transaction']['message']['accountKeys']]
+    signers_of = lambda t: keys_of(t)[:t['transaction']['message']['header']['numRequiredSignatures']]
+    for k, t in txs.items():
+        assert keys_of(t)[0] == (C['payer'] if k == label + '-open' else session), f'{k}: unexpected fee payer'
+        assert t['meta']['fee'] == (FEE2 if k == label + '-open' else FEE1), f'{k}: unexpected fee'
+    payer_signed = sorted(k for k, t in txs.items() if C['payer'] in signers_of(t))
+    assert payer_signed == [label + '-open'], f'the payer signed more than the open: {payer_signed}'
+    fees = sum(t['meta']['fee'] for t in txs.values()); delta = payer_after - payer_before
     created = set()
     for t in txs.values():
         created.update(created_accounts(t))
     live = {a: L.account(a)['value'] for a in sorted(created)}; live = {a: v for a, v in live.items() if v and v['lamports']}
-    expected_live = {p['marker']} | ({p['page']} if p.get('needs_zero_page') else set())
-    assert set(live) <= expected_live and p['marker'] in live, f'unexpected live accounts after close: {sorted(set(live) - expected_live)}'
+    assert set(live) == {p['marker']}, f'unexpected live accounts after close: {sorted(set(live) - {p["marker"]})}'
     left = sum(v['lamports'] for v in live.values())
-    assert -delta == fees + left, 'payer delta != fees + rent of accounts deliberately left'
+    assert left == rent_marker and -delta == fees + left, 'payer balance change != fees + marker rent'
+    recovered = fund - (-delta - FEE2)      # what came back of the funding
     tests = {f'{label}-{x}' for x in ('cert-mutate', 'cert-settle', 'cert-restore', 'node-mutate', 'node-settle', 'node-restore', 'replay')}
     prod = [k for k in names if k not in tests]
     assert len(prod) == 18 and set(tests) <= set(names), f'production path is not 18 transactions: {prod}'
-    production = {'transactions': len(prod), 'names': prod, 'fees_lamports': sum(txs[k]['meta']['fee'] for k in prod),
-                  'payer_delta_lamports': sum(pdelta(txs[k]) for k in prod),
-                  'note': 'the payment alone (open, 15 uploads, the one settlement transaction, close), without the negative tests'}
+    test_fees = sum(txs[k]['meta']['fee'] for k in tests)
+    production = {'transactions': len(prod), 'names': prod, 'signed_by_payer': payer_signed, 'fees_lamports': fees - test_fees,
+                  'payer_delta_lamports': delta + test_fees,
+                  'note': 'the payment alone (open, 15 writes, the one settlement transaction, close), without the negative tests'}
     assert -production['payer_delta_lamports'] == production['fees_lamports'] + left
     payments[label] = {'settle': {k: settled[k] for k in ('signature', 'slot', 'compute_units', 'fee', 'serialized_bytes', 'explorer')},
                        'settle_margin_compute_units': CU_LIMIT - settled['compute_units'],
                        'uploads': json.loads((O / (label + '-uploads-phase.json')).read_text()),
+                       'session_key': session, 'funded_lamports': fund, 'returned_lamports': recovered,
                        'production_path': production, 'transactions': len(names), 'fees_lamports': fees, 'payer_delta_lamports': delta,
-                       'rent_closed_lamports': rent_closed, 'recovered_lamports': recovered,
+                       'rent_closed_lamports': rent_closed,
                        'left_live': {a: {'owner': v['owner'], 'lamports': v['lamports'], 'role': 'nullifier marker' if a == p['marker'] else 'root page'} for a, v in live.items()},
-                       'left_lamports': left, 'check_payer_delta_eq_fees_plus_left': True, 'closed': closing,
+                       'left_lamports': left, 'check_payer_delta_eq_fees_plus_left': True, 'closed': closing + [session],
                        'negatives': {name: json.loads((O / f'{label}-{name}-validation.json').read_text()) for name in ('cert', 'node')}}
     L.write(label + '-close-accounting', payments[label])
 created = set()
