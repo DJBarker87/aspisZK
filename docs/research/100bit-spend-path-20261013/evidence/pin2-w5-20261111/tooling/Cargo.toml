@@ -1,0 +1,17 @@
+[package]
+name = "pin2-w5-dump"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "LEAD TOOLING (PIN2 W5), not shipped: runs the pinned R1 verifier library on recorded PIN2 inputs and prints every trace::value and every SHA-256 call in order"
+
+# Standalone; Cargo.lock is the root workspace lock (copied), so no new
+# versions are resolved. Features: the program's optimized-terminal plus the
+# host-only `prover` feature, which is the only switch that enables trace::value.
+[workspace]
+
+[dependencies]
+aspis-core = { path = "../../crates/aspis-core", features = ["r0"] }
+aspis-statement = { path = "../../crates/aspis-statement", features = ["r0", "pool-v1-kernel"] }
+aspis-r1-cost-probe = { path = "../../crates/aspis-r1-cost-probe", features = ["prover", "optimized-terminal"] }
+sha2 = "=0.10.9"
