@@ -26,7 +26,16 @@
 //!   specs: comma-separated `op:N:seed:mode`, op = transfer|withdrawal, N = the
 //!   lane's leaf count before the payment (0..=1023), seed = fixture proof seed
 //!   byte, mode = full (three marker states + below-limit run) | basic (marker
-//!   absent only) | genesis (N must be 0; page 0 left zeroed, full runs).
+//!   absent only) | genesis (N must be 0; page 0 left zeroed, full runs) |
+//!   neg-<where>-<at>: a NEGATIVE scenario (added for the Pool page zero check,
+//!   POOL-PAGE-CHECK.md): one non-zero byte (0x01) planted in a history page that the
+//!   Pool requires to be zero there, marker absent, one run at the real limit that
+//!   must fail and change nothing but the payer's fee. <where> = tail (unused tail
+//!   of the current page, same-page path only) | next (the next page at rollover,
+//!   rollover positions only) | genesis (page 0 zeroed except the planted byte,
+//!   N must be 0); <at> = first | mid | last position of that region.
+//!   Every run also records a sha256 of all watched accounts after the run
+//!   (`post_state_sha256`), so runs with different Pool ELFs can be compared.
 use anyhow::{anyhow, ensure, Context, Result};
 use aspis_core::field::{M31, P};
 use aspis_pool::{
@@ -187,8 +196,14 @@ fn parse_specs(s: &str) -> Result<Vec<Spec>> {
             };
             let leaves: u64 = f[1].parse()?;
             ensure!(leaves <= 1023, "N at most 1023");
-            ensure!(matches!(f[3], "full" | "basic" | "genesis"), "mode {}", f[3]);
-            ensure!(f[3] != "genesis" || leaves == 0, "genesis needs N = 0");
+            let negative = f[3].strip_prefix("neg-").and_then(|r| r.split_once('-'));
+            ensure!(
+                matches!(f[3], "full" | "basic" | "genesis")
+                    || matches!(negative, Some(("tail" | "next" | "genesis", "first" | "mid" | "last"))),
+                "mode {}",
+                f[3]
+            );
+            ensure!((f[3] != "genesis" && !f[3].starts_with("neg-genesis-")) || leaves == 0, "genesis needs N = 0");
             Ok(Spec { withdrawal, leaves, seed: f[2].parse()?, mode: f[3].to_string() })
         })
         .collect()
@@ -343,7 +358,8 @@ fn main() -> Result<()> {
         let current = root_history_location(lane.tree.next_leaf_index);
         let next = root_history_location(lane.tree.next_leaf_index + 1);
         let rollover = current.page_number != next.page_number;
-        let genesis = spec.mode == "genesis";
+        let genesis = spec.mode == "genesis" || spec.mode.starts_with("neg-genesis-");
+        let negative = spec.mode.strip_prefix("neg-").and_then(|r| r.split_once('-'));
         let page_key = pool_v1_root_page_address(&pool_program, &lane_key, current.page_number).0;
         let next_page_key = pool_v1_root_page_address(&pool_program, &lane_key, next.page_number).0;
         let mut page_image = vec![0u8; POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES];
@@ -354,12 +370,39 @@ fn main() -> Result<()> {
         // Expected images after a successful settlement.
         let mut expected_page = page_image.clone();
         let mut expected_next_page = vec![0u8; POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES];
+        // Pre-state of the next page at rollover (zero unless a negative scenario plants a byte).
+        let mut next_page_image = vec![0u8; POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES];
         if genesis {
             initialize_root_history_page_bytes_v1(&mut expected_page, lane_key.to_bytes(), 0, &[lane.tree.root, afterstate.next_root]).map_err(|e| anyhow!("genesis page: {e:?}"))?;
         } else if rollover {
             initialize_root_history_page_bytes_v1(&mut expected_next_page, lane_key.to_bytes(), next.page_number, &[afterstate.next_root]).map_err(|e| anyhow!("rollover page: {e:?}"))?;
         } else {
             append_root_history_page_bytes_v1(&mut expected_page, afterstate.next_pair_index, afterstate.next_root).map_err(|e| anyhow!("append page: {e:?}"))?;
+        }
+        // Negative scenarios: plant one non-zero byte where the Pool requires zero bytes.
+        let mut planted: Option<(&str, usize)> = None;
+        if let Some((place, at)) = negative {
+            let page_len = POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES;
+            let region_start = match place {
+                "tail" => {
+                    ensure!(!genesis && !rollover, "neg-tail needs a same-page position (N mod 256 != 255)");
+                    64 + 32 * (current.slot as usize + 1)
+                }
+                "next" => {
+                    ensure!(rollover, "neg-next needs a rollover position (N mod 256 = 255)");
+                    0
+                }
+                _ => 0,
+            };
+            let position = match at {
+                "first" => region_start,
+                "mid" => (region_start + page_len - 1) / 2,
+                _ => page_len - 1,
+            };
+            let image = if place == "next" { &mut next_page_image } else { &mut page_image };
+            ensure!(image[position] == 0, "planted position {position} is not zero before planting");
+            image[position] = 0x01;
+            planted = Some((if place == "next" { "next_page" } else { "current_page" }, position));
         }
         let next_lane = PoolV1PairForestLaneStateV1 { tree: IncrementalMerkleTreeV1 { next_leaf_index: afterstate.next_pair_index, root: afterstate.next_root, frontier: afterstate.next_frontier }, ..lane };
         let expected_lane = encode_pool_v1_pair_forest_lane_state_v1(&next_lane, &POOL_V1_PAIR_EMPTY_ROOTS).map_err(|e| anyhow!("lane encode: {e:?}"))?.to_vec();
@@ -406,7 +449,7 @@ fn main() -> Result<()> {
             svm.set_account(addr(&lane_key), pool_owned(encode_pool_v1_pair_forest_lane_state_v1(&lane, &POOL_V1_PAIR_EMPTY_ROOTS).map_err(|e| anyhow!("{e:?}"))?.to_vec())).map_err(|e| anyhow!("{e:?}"))?;
             svm.set_account(addr(&page_key), pool_owned(page_image.clone())).map_err(|e| anyhow!("{e:?}"))?;
             if rollover {
-                svm.set_account(addr(&next_page_key), pool_owned(vec![0u8; POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES])).map_err(|e| anyhow!("{e:?}"))?;
+                svm.set_account(addr(&next_page_key), pool_owned(next_page_image.clone())).map_err(|e| anyhow!("{e:?}"))?;
             }
             let proof_account = get(&proof_key)?;
             svm.set_account(addr(&proof_key), Account { lamports: rent_for(buffer.len()), data: buffer.clone(), ..proof_account }).map_err(|e| anyhow!("{e:?}"))?;
@@ -447,9 +490,35 @@ fn main() -> Result<()> {
             })
         };
 
+        let state_hash = |s: &Snapshot| -> String {
+            let mut h = Sha256::new();
+            for (k, a) in s {
+                h.update(k.to_bytes());
+                match a {
+                    Some(a) => {
+                        h.update([1u8]);
+                        h.update(a.lamports.to_le_bytes());
+                        h.update(a.owner.to_bytes());
+                        h.update([u8::from(a.executable)]);
+                        h.update((a.data.len() as u64).to_le_bytes());
+                        h.update(&a.data);
+                    }
+                    None => h.update([0u8]),
+                }
+            }
+            format!("{:x}", h.finalize())
+        };
         let mut elf_results = vec![];
         for (elabel, epath, elf) in &elfs {
             let mut runs = vec![];
+            if negative.is_some() {
+                let (o, pre) = run(elf, None, 1_400_000)?;
+                eprintln!("[{label}] {elabel} negative: {} CU, error {:?}", o.cu, o.error);
+                let unchanged = unchanged_but_fee(&o, &pre);
+                runs.push(json!({"variant": "negative-marker-absent", "planted": planted.map(|(page, position)| json!({"page": page, "position": position, "value": 1})), "error": o.error, "transaction_cu": o.cu, "pool_cu": consumed(&o.logs, &pool_id_s), "verifier_cu": consumed(&o.logs, &verifier_id_s), "rejected": o.error.is_some(), "unchanged_except_payer_fee": unchanged, "post_state_sha256": state_hash(&o.post), "pre_state_sha256": state_hash(&pre), "logs": o.logs}));
+                elf_results.push(json!({"elf": elabel, "path": epath, "elf_sha256": sha(elf), "runs": runs}));
+                continue;
+            }
             let variants: Vec<(&str, Option<u64>)> = if spec.mode == "basic" { vec![("marker-absent", None)] } else { vec![("marker-absent", None), ("marker-one-lamport", Some(1)), ("marker-full-rent", Some(marker_rent))] };
             let mut absent_cu = None;
             for (vname, prefund) in variants {
@@ -458,19 +527,20 @@ fn main() -> Result<()> {
                     absent_cu = Some(o.cu);
                 }
                 eprintln!("[{label}] {elabel} {vname}: {} CU, error {:?}", o.cu, o.error);
-                runs.push(json!({"variant": vname, "error": o.error, "transaction_cu": o.cu, "pool_cu": consumed(&o.logs, &pool_id_s), "verifier_cu": consumed(&o.logs, &verifier_id_s), "state": check_success(&o, &pre), "logs": o.logs}));
+                runs.push(json!({"variant": vname, "error": o.error, "transaction_cu": o.cu, "pool_cu": consumed(&o.logs, &pool_id_s), "verifier_cu": consumed(&o.logs, &verifier_id_s), "state": check_success(&o, &pre), "post_state_sha256": state_hash(&o.post), "logs": o.logs}));
             }
             if spec.mode != "basic" {
                 // One unit below the measured cost: the transaction must fail and change nothing but the fee.
                 let limit = (absent_cu.unwrap() - 1) as u32;
                 let (o, pre) = run(elf, None, limit)?;
-                runs.push(json!({"variant": "marker-absent-limit-one-below", "cu_limit": limit, "error": o.error, "transaction_cu": o.cu, "unchanged_except_payer_fee": unchanged_but_fee(&o, &pre), "log_tail": o.logs.iter().rev().take(4).collect::<Vec<_>>()}));
+                runs.push(json!({"variant": "marker-absent-limit-one-below", "cu_limit": limit, "error": o.error, "transaction_cu": o.cu, "unchanged_except_payer_fee": unchanged_but_fee(&o, &pre), "post_state_sha256": state_hash(&o.post), "log_tail": o.logs.iter().rev().take(4).collect::<Vec<_>>()}));
             }
             elf_results.push(json!({"elf": elabel, "path": epath, "elf_sha256": sha(elf), "runs": runs}));
         }
         results.push(json!({
             "scenario": label, "operation": op, "lane_leaves_before": spec.leaves, "seed": spec.seed, "mode": spec.mode,
             "page_path": if genesis { "genesis" } else if rollover { "rollover" } else { "same-page" },
+            "planted": planted.map(|(page, position)| json!({"page": page, "position": position})),
             "current_page": {"number": current.page_number, "filled_before": if genesis { 0 } else { current.slot as u64 + 1 }},
             "account_count": metas.len(), "prove_seconds": prove_seconds,
             "pinned_proof_sha256": sha(&pinned), "summed_proof_sha256": sha(&packed),

@@ -49,6 +49,26 @@ pub(crate) fn digest_is_canonical(digest: &Digest) -> bool {
     digest.iter().all(|limb| limb.0 < P)
 }
 
+/// Zero check of a region of a root history page: true iff every byte of
+/// `data` is zero, and true for the empty region. It decides the same
+/// predicate as `data.iter().all(|byte| *byte == 0)`.
+///
+/// Form: one SDK call, no loop. A non-empty region is all zero iff its first
+/// byte is zero and every byte equals the byte after it; the second part is
+/// one `sol_memcmp` of the region without its last byte against the region
+/// without its first byte (both of length `len - 1`, so the call reads only
+/// bytes of `data`).
+#[allow(deprecated)]
+pub(crate) fn page_bytes_are_zero(data: &[u8]) -> bool {
+    data.is_empty()
+        || (data[0] == 0
+            && solana_program::program_memory::sol_memcmp(
+                &data[..data.len() - 1],
+                &data[1..],
+                data.len() - 1,
+            ) == 0)
+}
+
 pub(crate) fn require_program_account(
     account: &AccountInfo,
     program_id: &Pubkey,
@@ -163,7 +183,7 @@ pub(crate) fn validate_root_page_bytes(
             .map_err(|_| ProgramError::InvalidAccountData)?;
     }
     let unused_start = PAGE_ROOTS_OFFSET + usize::from(filled) * 32;
-    if data[unused_start..].iter().any(|byte| *byte != 0) {
+    if !page_bytes_are_zero(&data[unused_start..]) {
         return Err(ProgramError::InvalidAccountData);
     }
     Ok(RootPageHeaderV1 {
@@ -290,7 +310,7 @@ pub(crate) fn validate_new_page_account(
     require_program_account(account, program_id, true)?;
     require_root_page_address(program_id, pool, page_number, account)?;
     let data = account.try_borrow_data()?;
-    if data.len() != POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES || data.iter().any(|byte| *byte != 0) {
+    if data.len() != POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES || !page_bytes_are_zero(&data) {
         return Err(ProgramError::InvalidAccountData);
     }
     Ok(())
@@ -342,5 +362,313 @@ mod invariant_tests {
 
         data[4] ^= 1;
         assert!(validate_root_page_bytes_from_program_invariant(&data, &pool, 0).is_err());
+    }
+}
+
+/// Differential tests of `page_bytes_are_zero` against the byte-by-byte checks
+/// it replaced, kept verbatim below as test-only oracles. On the host,
+/// `sol_memcmp` runs the SDK's Rust stub, not the SBF syscall; the syscall is
+/// exercised by the LiteSVM runs of the built ELF.
+#[cfg(test)]
+mod page_zero_check_tests {
+    use super::*;
+    use aspis_core::field::M31;
+    use aspis_statement::pool_v1::root_history::initialize_root_history_page_bytes_v1;
+    use solana_program::clock::Epoch;
+    use std::vec;
+    use std::vec::Vec;
+
+    const PAGE: usize = POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES;
+
+    // Oracle 1: the unused-tail check of `validate_root_page_bytes`, verbatim
+    // (true means "reject").
+    fn oracle_tail_has_nonzero(data: &[u8]) -> bool {
+        data.iter().any(|byte| *byte != 0)
+    }
+
+    // Oracle 2: the whole-page check of `account_is_zeroed_program_page`,
+    // verbatim.
+    fn oracle_all_zero(data: &[u8]) -> bool {
+        data.iter().all(|byte| *byte == 0)
+    }
+
+    // Oracle 3: `validate_root_page_bytes` before the change, verbatim.
+    fn oracle_validate_root_page_bytes(
+        data: &[u8],
+        expected_pool: &Pubkey,
+        expected_page_number: u64,
+    ) -> Result<RootPageHeaderV1, ProgramError> {
+        if data.len() != POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES
+            || data[..4] != POOL_V1_ROOT_HISTORY_PAGE_MAGIC
+            || data[4] != POOL_V1_ROOT_HISTORY_PAGE_VERSION
+            || data[5] != POOL_V1_ROOT_HISTORY_CAPACITY_LOG2
+            || data[6] != POOL_V1_DIGEST_ENCODING_VERSION
+            || data[7] != 0
+            || data[58..64] != [0u8; 6]
+        {
+            return Err(PoolV1ProgramError::InvalidAccountType.into());
+        }
+        let pool = Pubkey::new_from_array(
+            data[PAGE_POOL_OFFSET..PAGE_NUMBER_OFFSET]
+                .try_into()
+                .unwrap(),
+        );
+        let page_number = u64::from_le_bytes(
+            data[PAGE_NUMBER_OFFSET..PAGE_FIRST_SEQUENCE_OFFSET]
+                .try_into()
+                .unwrap(),
+        );
+        let first_sequence = u64::from_le_bytes(
+            data[PAGE_FIRST_SEQUENCE_OFFSET..PAGE_FILLED_OFFSET]
+                .try_into()
+                .unwrap(),
+        );
+        let filled = u16::from_le_bytes(data[PAGE_FILLED_OFFSET..58].try_into().unwrap());
+        let expected_first = page_number
+            .checked_mul(POOL_V1_ROOT_HISTORY_CAPACITY as u64)
+            .ok_or(PoolV1ProgramError::ArithmeticOverflow)?;
+        if pool != *expected_pool
+            || page_number != expected_page_number
+            || first_sequence != expected_first
+            || usize::from(filled) > POOL_V1_ROOT_HISTORY_CAPACITY
+        {
+            return Err(PoolV1ProgramError::StateHistoryMismatch.into());
+        }
+        for slot in 0..usize::from(filled) {
+            let start = PAGE_ROOTS_OFFSET + slot * 32;
+            decode_digest_canonical(data[start..start + 32].try_into().unwrap())
+                .map_err(|_| ProgramError::InvalidAccountData)?;
+        }
+        let unused_start = PAGE_ROOTS_OFFSET + usize::from(filled) * 32;
+        if data[unused_start..].iter().any(|byte| *byte != 0) {
+            return Err(ProgramError::InvalidAccountData);
+        }
+        Ok(RootPageHeaderV1 {
+            pool,
+            page_number,
+            first_sequence,
+            filled,
+        })
+    }
+
+    // Oracle 4: `validate_new_page_account` before the change, verbatim.
+    fn oracle_validate_new_page_account(
+        program_id: &Pubkey,
+        pool: &Pubkey,
+        page_number: u64,
+        account: &AccountInfo,
+    ) -> Result<(), ProgramError> {
+        require_program_account(account, program_id, true)?;
+        require_root_page_address(program_id, pool, page_number, account)?;
+        let data = account.try_borrow_data()?;
+        if data.len() != POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES || data.iter().any(|byte| *byte != 0) {
+            return Err(ProgramError::InvalidAccountData);
+        }
+        Ok(())
+    }
+
+    fn agree(data: &[u8]) -> bool {
+        let new = page_bytes_are_zero(data);
+        assert_eq!(new, !oracle_tail_has_nonzero(data), "tail oracle, len {}", data.len());
+        assert_eq!(new, oracle_all_zero(data), "page oracle, len {}", data.len());
+        new
+    }
+
+    // Region lengths the Pool checks: the unused tail for every fill
+    // (8,192 down to 0 bytes in steps of 32) and the whole page (8,256).
+    fn pool_lengths() -> Vec<usize> {
+        let mut lengths: Vec<usize> = (0..=POOL_V1_ROOT_HISTORY_CAPACITY)
+            .map(|filled| PAGE - PAGE_ROOTS_OFFSET - 32 * filled)
+            .collect();
+        lengths.push(PAGE);
+        lengths
+    }
+
+    struct Rng(u64);
+    impl Rng {
+        fn next(&mut self) -> u64 {
+            self.0 ^= self.0 << 13;
+            self.0 ^= self.0 >> 7;
+            self.0 ^= self.0 << 17;
+            self.0
+        }
+        fn below(&mut self, n: usize) -> usize {
+            (self.next() % n as u64) as usize
+        }
+        fn nonzero_byte(&mut self) -> u8 {
+            1 + (self.next() % 255) as u8
+        }
+    }
+
+    #[test]
+    fn empty_region_is_zero() {
+        assert!(agree(&[]));
+    }
+
+    #[test]
+    fn zero_regions_of_every_length_up_to_a_page() {
+        let zeros = vec![0u8; PAGE];
+        for len in 0..=PAGE {
+            assert!(agree(&zeros[..len]));
+        }
+        for len in pool_lengths() {
+            assert!(agree(&zeros[..len]));
+            // The same lengths at an odd offset inside a larger buffer.
+            let wide = vec![0u8; len + 3];
+            assert!(agree(&wide[3..]));
+        }
+    }
+
+    #[test]
+    fn one_nonzero_byte_at_every_position_of_a_page() {
+        let mut data = vec![0u8; PAGE];
+        for position in 0..PAGE {
+            for value in [1u8, 0x80, 0xff] {
+                data[position] = value;
+                assert!(!agree(&data), "position {position} value {value}");
+                data[position] = 0;
+            }
+        }
+        assert!(agree(&data));
+    }
+
+    #[test]
+    fn one_nonzero_byte_at_every_position_of_representative_tails() {
+        for filled in [0usize, 1, 2, 3, 4, 31, 127, 128, 200, 254, 255] {
+            let len = PAGE - PAGE_ROOTS_OFFSET - 32 * filled;
+            let mut data = vec![0u8; len];
+            for position in 0..len {
+                data[position] = 1 + (position % 255) as u8;
+                assert!(!agree(&data), "filled {filled} position {position}");
+                data[position] = 0;
+            }
+        }
+    }
+
+    #[test]
+    fn nonzero_first_and_last_byte_at_every_length() {
+        for len in 1..=PAGE {
+            let mut data = vec![0u8; len];
+            data[0] = 7;
+            assert!(!agree(&data), "first, len {len}");
+            data[0] = 0;
+            data[len - 1] = 0xff;
+            assert!(!agree(&data), "last, len {len}");
+        }
+    }
+
+    #[test]
+    fn uniform_nonzero_regions_are_rejected() {
+        // Every byte equal to its successor but the first byte non-zero: the
+        // case that the first-byte test alone excludes.
+        for len in [1usize, 2, 7, 8, 9, 32, 4128, 8192, PAGE] {
+            for value in [1u8, 0x55, 0xff] {
+                assert!(!agree(&vec![value; len]), "len {len} value {value}");
+            }
+        }
+    }
+
+    #[test]
+    fn pseudo_random_regions() {
+        let mut rng = Rng(0x9e37_79b9_7f4a_7c15);
+        let mut nonzero = 0usize;
+        let mut buffer = vec![0u8; PAGE];
+        for round in 0..100_000usize {
+            let len = match round % 4 {
+                0 => rng.below(PAGE + 1),
+                1 => rng.below(65),
+                2 => {
+                    let lengths = pool_lengths();
+                    lengths[rng.below(lengths.len())]
+                }
+                _ => PAGE,
+            };
+            buffer[..len].fill(0);
+            match round % 5 {
+                // all zero
+                0 => {}
+                // one to three non-zero bytes anywhere
+                1 | 2 => {
+                    if len > 0 {
+                        for _ in 0..1 + rng.below(3) {
+                            let position = rng.below(len);
+                            buffer[position] = rng.nonzero_byte();
+                        }
+                    }
+                }
+                // a non-zero byte near either end
+                3 => {
+                    if len > 0 {
+                        let offset = rng.below(len.min(9));
+                        let position = if rng.next() & 1 == 0 { offset } else { len - 1 - offset };
+                        buffer[position] = rng.nonzero_byte();
+                    }
+                }
+                // dense random bytes
+                _ => {
+                    for byte in buffer[..len].iter_mut() {
+                        *byte = rng.next() as u8;
+                    }
+                }
+            }
+            if !agree(&buffer[..len]) {
+                nonzero += 1;
+            }
+        }
+        // Both classes are well represented.
+        assert!(nonzero > 40_000 && nonzero < 90_000, "non-zero regions {nonzero}");
+    }
+
+    fn root(seed: u32) -> aspis_statement::poseidon2::Digest {
+        core::array::from_fn(|index| M31(seed + index as u32))
+    }
+
+    #[test]
+    fn validate_root_page_bytes_agrees_with_the_old_decoder_on_planted_tails() {
+        let pool = Pubkey::new_unique();
+        for filled in [0usize, 1, 2, 3, 4, 100, 254, 255, 256] {
+            let roots: Vec<_> = (0..filled).map(|index| root(1_000 + 9 * index as u32)).collect();
+            let mut data = vec![0u8; PAGE];
+            initialize_root_history_page_bytes_v1(&mut data, pool.to_bytes(), 0, &roots).unwrap();
+            let clean = validate_root_page_bytes(&data, &pool, 0);
+            assert_eq!(clean, oracle_validate_root_page_bytes(&data, &pool, 0));
+            assert_eq!(clean.unwrap().filled as usize, filled);
+            for position in PAGE_ROOTS_OFFSET + 32 * filled..PAGE {
+                data[position] = 0x5a;
+                let new = validate_root_page_bytes(&data, &pool, 0);
+                assert_eq!(new, oracle_validate_root_page_bytes(&data, &pool, 0));
+                assert_eq!(new, Err(ProgramError::InvalidAccountData), "filled {filled} position {position}");
+                data[position] = 0;
+            }
+        }
+    }
+
+    #[test]
+    fn validate_new_page_account_agrees_with_the_old_check() {
+        let program_id = Pubkey::new_unique();
+        let pool = Pubkey::new_unique();
+        let page_number = 3;
+        let key = pool_v1_root_page_address(&program_id, &pool, page_number).0;
+        let mut positions: Vec<Option<usize>> = vec![None, Some(0), Some(1), Some(PAGE / 2), Some(PAGE - 2), Some(PAGE - 1)];
+        let mut rng = Rng(77);
+        for _ in 0..64 {
+            positions.push(Some(rng.below(PAGE)));
+        }
+        for len in [PAGE, PAGE - 1, PAGE + 1, 0] {
+            for position in &positions {
+                let mut data = vec![0u8; len];
+                if let Some(position) = position {
+                    if *position < len {
+                        data[*position] = 1;
+                    }
+                }
+                let mut lamports = 1u64;
+                let info = AccountInfo::new(&key, false, true, &mut lamports, &mut data, &program_id, false, Epoch::default());
+                let new = validate_new_page_account(&program_id, &pool, page_number, &info);
+                let old = oracle_validate_new_page_account(&program_id, &pool, page_number, &info);
+                assert_eq!(new, old, "len {len} position {position:?}");
+                assert_eq!(new.is_ok(), len == PAGE && (position.is_none() || position.unwrap() >= len));
+            }
+        }
     }
 }

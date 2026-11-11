@@ -406,7 +406,7 @@ fn require_program_owned_zeroed(
     require_program_account(account, program_id, true)?;
     let data = account.try_borrow_data()?;
     if data.len() != exact_bytes
-        || data.iter().any(|byte| *byte != 0)
+        || !crate::history::page_bytes_are_zero(&data)
         || !rent.is_exempt(account.lamports(), exact_bytes)
     {
         return Err(PoolV1ProgramError::InvalidFreshAccount.into());
@@ -811,7 +811,7 @@ fn account_is_zeroed_program_page(
     {
         return Ok(false);
     }
-    Ok(account.try_borrow_data()?.iter().all(|byte| *byte == 0))
+    Ok(crate::history::page_bytes_are_zero(&account.try_borrow_data()?))
 }
 
 fn validate_lane_current_page(
@@ -5790,5 +5790,120 @@ mod tests {
             35
         );
         assert!(accounts[4].data.iter().any(|byte| *byte != 0));
+    }
+}
+
+/// Differential test of `account_is_zeroed_program_page` against its previous
+/// body, kept verbatim as a test-only oracle.
+#[cfg(test)]
+mod page_zero_check_tests {
+    use std::{vec, vec::Vec};
+
+    use solana_program::clock::Epoch;
+
+    use super::*;
+
+    fn oracle_account_is_zeroed_program_page(
+        account: &AccountInfo<'_>,
+        program_id: &Pubkey,
+    ) -> Result<bool, ProgramError> {
+        if account.owner != program_id || account.data_len() != POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES
+        {
+            return Ok(false);
+        }
+        Ok(account.try_borrow_data()?.iter().all(|byte| *byte == 0))
+    }
+
+    #[test]
+    fn account_is_zeroed_program_page_agrees_with_the_old_body() {
+        let program_id = Pubkey::new_unique();
+        let other_owner = Pubkey::new_unique();
+        let key = Pubkey::new_unique();
+        let page = POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES;
+        let mut cases: Vec<(usize, Option<usize>, bool)> = Vec::new();
+        for position in 0..page {
+            cases.push((page, Some(position), true));
+        }
+        for len in [page, page - 1, page + 1, 0, 1] {
+            cases.push((len, None, true));
+            cases.push((len, None, false));
+            if len > 0 {
+                cases.push((len, Some(0), true));
+                cases.push((len, Some(len - 1), true));
+                cases.push((len, Some(len / 2), false));
+            }
+        }
+        let mut seen = [0usize; 2];
+        for (len, position, own) in cases {
+            let mut data = vec![0u8; len];
+            if let Some(position) = position {
+                data[position] = 0x80;
+            }
+            let mut lamports = 1u64;
+            let owner = if own { program_id } else { other_owner };
+            let info = AccountInfo::new(&key, false, true, &mut lamports, &mut data, &owner, false, Epoch::default());
+            let new = account_is_zeroed_program_page(&info, &program_id);
+            assert_eq!(new, oracle_account_is_zeroed_program_page(&info, &program_id), "len {len} position {position:?} own {own}");
+            seen[usize::from(new == Ok(true))] += 1;
+        }
+        assert!(seen[0] > page && seen[1] == 1, "{seen:?}");
+    }
+
+    fn oracle_require_program_owned_zeroed(
+        account: &AccountInfo<'_>,
+        program_id: &Pubkey,
+        exact_bytes: usize,
+        rent: &Rent,
+    ) -> ProgramResult {
+        require_program_account(account, program_id, true)?;
+        let data = account.try_borrow_data()?;
+        if data.len() != exact_bytes
+            || data.iter().any(|byte| *byte != 0)
+            || !rent.is_exempt(account.lamports(), exact_bytes)
+        {
+            return Err(PoolV1ProgramError::InvalidFreshAccount.into());
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn require_program_owned_zeroed_agrees_with_the_old_body() {
+        let program_id = Pubkey::new_unique();
+        let other_owner = Pubkey::new_unique();
+        let key = Pubkey::new_unique();
+        let rent = Rent::default();
+        let mut ok = 0usize;
+        let mut total = 0usize;
+        for exact in [
+            POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES,
+            aspis_statement::pool_v1::POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES,
+            aspis_statement::pool_v1::POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES,
+            aspis_statement::pool_v1::POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES,
+        ] {
+            let mut positions: Vec<Option<usize>> = vec![None, Some(0), Some(exact / 2), Some(exact - 1)];
+            if exact == POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES {
+                positions.extend((0..exact).map(Some));
+            }
+            for len in [exact, exact - 1, exact + 1] {
+                for position in &positions {
+                    for (own, writable, funded) in [(true, true, true), (true, true, false), (false, true, true), (true, false, true)] {
+                        let mut data = vec![0u8; len];
+                        if let Some(position) = position {
+                            if *position < len {
+                                data[*position] = 0x01;
+                            }
+                        }
+                        let mut lamports = if funded { rent.minimum_balance(exact) } else { rent.minimum_balance(exact) - 1 };
+                        let owner = if own { program_id } else { other_owner };
+                        let info = AccountInfo::new(&key, false, writable, &mut lamports, &mut data, &owner, false, Epoch::default());
+                        let new = require_program_owned_zeroed(&info, &program_id, exact, &rent);
+                        assert_eq!(new, oracle_require_program_owned_zeroed(&info, &program_id, exact, &rent), "exact {exact} len {len} position {position:?}");
+                        total += 1;
+                        ok += usize::from(new.is_ok());
+                    }
+                }
+            }
+        }
+        assert!(ok == 4 && total > 4 * POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES, "{ok} {total}");
     }
 }
