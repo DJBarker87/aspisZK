@@ -121,6 +121,8 @@ mod canonical {
             }
         }
         pub fn finish(self)->Q {Q([reduce(self.sums[0]),reduce(self.sums[1]),reduce(self.sums[2]),reduce(self.sums[3])])}
+        /// `finish` without consuming the accumulator (same value).
+        pub fn value(&self)->Q {Q([reduce(self.sums[0]),reduce(self.sums[1]),reduce(self.sums[2]),reduce(self.sums[3])])}
 
         /// FUTURE-VERSION EXPERIMENT H1: `push` on limbs already widened by
         /// the caller, with no `Q` values built. Same product formulas and the
@@ -212,6 +214,14 @@ impl EbyKDot {
         // The private accumulator produces canonical coordinates already.
         E::from_limbs([a,b,c,d,e,f,g,h]).unwrap()
     }
+
+    /// `finish` without consuming the accumulator (same value).
+    #[inline(always)]
+    pub fn value(&self) -> E {
+        let [a,b,c,d]=self.c0.value().limbs();
+        let [e,f,g,h]=self.c1.value().limbs();
+        E::from_limbs([a,b,c,d,e,f,g,h]).unwrap()
+    }
 }
 
 /// Candidate exact accumulator for sums of `WideExact * WideExact`.
@@ -296,6 +306,12 @@ impl KbyKDot {
     #[inline(always)]
     pub fn finish(self) -> QM31 {
         qm31_of(self.dot.finish())
+    }
+
+    /// `finish` without consuming the accumulator (same value).
+    #[inline(always)]
+    pub fn value(&self) -> QM31 {
+        qm31_of(self.dot.value())
     }
 }
 

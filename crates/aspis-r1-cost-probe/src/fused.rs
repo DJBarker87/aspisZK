@@ -84,17 +84,19 @@ pub fn verify_batched<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, ob
     finish_relation(&relation_view(proof)?, &p, &a, obs)
 }
 
+const NO_BYTES: &[u8] = &[];
 fn relation_view(proof: &[u8]) -> Result<View<'_>, Error> {
+    let inactive = E::from_le_bytes(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?;
     Ok(View {
         variant: Variant::S2,
-        semantic: &[],
-        y1: &[],
-        inactive: E::from_le_bytes(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?,
+        semantic: NO_BYTES,
+        y1: NO_BYTES,
+        inactive,
         round0: &proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT],
         folded_root: None,
         round1: &proof[compact::OFF_ROUND1..compact::OFF_FINAL],
         final_message: &proof[compact::OFF_FINAL..compact::OFF_OPENINGS],
-        query_bytes: &[],
+        query_bytes: NO_BYTES,
     })
 }
 
@@ -207,12 +209,84 @@ fn extension_lane(openings: &[u8], circle: &[[K; 4]], which: usize) -> Result<[K
         let x = v0.sub(v1);
         let y = v3.sub(v2);
         let signed = [u.add(w), x.add(y), u.sub(w), x.sub(y)];
-        for k in 0..4 {
-            dots[k].push(circle[i][k], signed[k]).map_err(|_| Error::Parse)?;
-        }
+        push_k4(&mut dots, &circle[i], &signed)?;
     }
-    let [d0, d1, d2, d3] = dots;
-    Ok([d0.finish(), d1.finish(), d2.finish(), d3.finish()])
+    Ok([dots[0].value(), dots[1].value(), dots[2].value(), dots[3].value()])
+}
+
+#[inline(always)]
+fn push_k4(dots: &mut [KbyKDot; 4], c: &[K; 4], signed: &[K; 4]) -> Result<(), Error> {
+    for k in 0..4 {
+        match dots[k].push(c[k], signed[k]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) }
+    }
+    Ok(())
+}
+#[inline(always)]
+fn push_e4(dots: &mut [EbyKDot; 4], power: E, h: &[K; 4]) -> Result<(), Error> {
+    for k in 0..4 {
+        match dots[k].push(power, h[k]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) }
+    }
+    Ok(())
+}
+#[inline(always)]
+fn push_e(dot: &mut EbyKDot, value: E, scalar: K) -> Result<(), Error> {
+    match dot.push(value, scalar) { Ok(()) => Ok(()), Err(_) => Err(Error::Parse) }
+}
+#[inline(always)]
+fn finish_e4(dots: &[EbyKDot; 4]) -> [E; 4] {
+    [dots[0].value(), dots[1].value(), dots[2].value(), dots[3].value()]
+}
+/// First fold, left side, base lanes: each lane contracted once with its gamma power.
+#[inline(always)]
+fn first_fold_base(first: &mut [EbyKDot; 4], g: &[E; 29], h: &[[K; 4]]) -> Result<(), Error> {
+    for lane in 0..26 {
+        push_e4(first, g[lane], &h[lane])?;
+    }
+    Ok(())
+}
+/// First fold, left side, the three QM31 lanes. Pinned gamma indices: C2 lanes 26 and 27, C1 tail lane 28.
+#[inline(always)]
+fn first_fold_extension(first: &mut [EbyKDot; 4], g: &[E; 29], extension: &[[K; 4]; 3]) -> Result<(), Error> {
+    for which in 0..3 {
+        let power = g[if which == 2 { 28 } else { 26 + which }];
+        push_e4(first, power, &extension[which])?;
+    }
+    Ok(())
+}
+/// First fold, right side, and the second fold's four cubic coefficients (the per-query loop of `fold_sums`).
+#[inline(always)]
+fn second_fold(openings: &[u8], queries: &[u32; 22], c: &Coefficients, geometry: &QueryGeometry, second: &mut [EbyKDot; 4], right: &mut EbyKDot) -> Result<(), Error> {
+    for i in 0..QUERIES {
+        let q = &openings[i * OPENING..(i + 1) * OPENING];
+        let v: [E; 4] = core::array::from_fn(|s| field(&q[672..800], s));
+        let u = v[0].add(v[1]);
+        let w = v[2].add(v[3]);
+        let d1 = v[0].sub(v[1]);
+        let d2 = v[3].sub(v[2]);
+        let l = &c.line[i];
+        #[cfg(feature = "future-fold-shared")]
+        {
+            let [_, _, lx, ly, _] = *geometry.for_query(i);
+            let p1 = d1.mul_m31(lx);
+            let p2 = d2.mul_m31(ly);
+            push_e(&mut second[0], u.add(w), l[0])?;
+            push_e(&mut second[1], p1.add(p2), l[0])?;
+            push_e(&mut second[2], u.sub(w), l[3])?;
+            push_e(&mut second[3], p1.sub(p2), l[3])?;
+        }
+        #[cfg(not(feature = "future-fold-shared"))]
+        {
+            let _ = geometry;
+            push_e(&mut second[0], u.add(w), l[0])?;
+            push_e(&mut second[1], d1, l[1])?;
+            push_e(&mut second[1], d2, l[2])?;
+            push_e(&mut second[2], u.sub(w), l[3])?;
+            push_e(&mut second[3], d1, l[4])?;
+            push_e(&mut second[3], d2, l[5])?;
+        }
+        push_e(right, v[queries[i] as usize % 4], c.rho[i])?;
+    }
+    Ok(())
 }
 
 #[inline(always)]
@@ -229,77 +303,32 @@ fn fold_sums(openings: &[u8], queries: &[u32; 22], rho: K, alpha: &[E; 2], g: &[
     }
     let c = coefficients(rho, geometry)?;
     mark(obs, Phase::QueryPart(0, 0));
-
-    // First fold, left side: accumulate over the queries in QM31 lane by
-    // lane, then contract each lane once with its gamma power.
     let mut first = [EbyKDot::new(), EbyKDot::new(), EbyKDot::new(), EbyKDot::new()];
-    if cfg!(feature = "future-tight-base") {
+    #[cfg(feature = "future-tight-base")]
+    {
         let h = base_lanes_tight(openings, &c.circle)?;
+        first_fold_base(&mut first, g, &h)?;
+    }
+    #[cfg(not(feature = "future-tight-base"))]
+    {
+        let mut h = [[K::ZERO; 4]; 26];
         for lane in 0..26 {
-            for k in 0..4 {
-                first[k].push(g[lane], h[lane][k]).map_err(|_| Error::Parse)?;
-            }
+            h[lane] = base_lane(openings, &c.circle, lane);
         }
-    } else {
-        for lane in 0..26 {
-            let h = base_lane(openings, &c.circle, lane);
-            for k in 0..4 {
-                first[k].push(g[lane], h[k]).map_err(|_| Error::Parse)?;
-            }
-        }
+        first_fold_base(&mut first, g, &h)?;
     }
     mark(obs, Phase::QueryPart(0, 1));
-    let extension = if cfg!(feature = "future-tight-ext") {
-        extension_lanes_tight(openings, &c.circle)?
-    } else {
-        [extension_lane(openings, &c.circle, 0)?, extension_lane(openings, &c.circle, 1)?, extension_lane(openings, &c.circle, 2)?]
-    };
-    for which in 0..3 {
-        // Pinned gamma indices: C2 lanes 26 and 27, C1 tail lane 28.
-        let power = g[if which == 2 { 28 } else { 26 + which }];
-        for k in 0..4 {
-            first[k].push(power, extension[which][k]).map_err(|_| Error::Parse)?;
-        }
-    }
-    let [f0, f1, f2, f3] = first;
-    let lhs1 = cubic(alpha[0], [f0.finish(), f1.finish(), f2.finish(), f3.finish()]);
+    #[cfg(feature = "future-tight-ext")]
+    let extension = extension_lanes_tight(openings, &c.circle)?;
+    #[cfg(not(feature = "future-tight-ext"))]
+    let extension = [extension_lane(openings, &c.circle, 0)?, extension_lane(openings, &c.circle, 1)?, extension_lane(openings, &c.circle, 2)?];
+    first_fold_extension(&mut first, g, &extension)?;
+    let lhs1 = cubic(alpha[0], finish_e4(&first));
     mark(obs, Phase::QueryPart(0, 2));
-
-    // First fold, right side, and the second fold's four cubic coefficients.
     let mut second = [EbyKDot::new(), EbyKDot::new(), EbyKDot::new(), EbyKDot::new()];
     let mut right = EbyKDot::new();
-    for i in 0..QUERIES {
-        let q = &openings[i * OPENING..(i + 1) * OPENING];
-        let v: [E; 4] = core::array::from_fn(|s| field(&q[672..800], s));
-        let u = v[0].add(v[1]);
-        let w = v[2].add(v[3]);
-        let d1 = v[0].sub(v[1]);
-        let d2 = v[3].sub(v[2]);
-        let l = &c.line[i];
-        let mut push = |dot: &mut EbyKDot, value: E, scalar: K| dot.push(value, scalar).map_err(|_| Error::Parse);
-        if cfg!(feature = "future-fold-shared") {
-            // G6: h1 and h3 share the two base-field edge products, so two
-            // pushes replace four: with p1 = d1 / x and p2 = d2 / y,
-            // h1 = (p1 + p2) / 4 and h3 = (p1 - p2) / (4 z).
-            let [_, _, lx, ly, _] = *geometry.for_query(i);
-            let p1 = d1.mul_m31(lx);
-            let p2 = d2.mul_m31(ly);
-            push(&mut second[0], u.add(w), l[0])?;
-            push(&mut second[1], p1.add(p2), l[0])?;
-            push(&mut second[2], u.sub(w), l[3])?;
-            push(&mut second[3], p1.sub(p2), l[3])?;
-        } else {
-            push(&mut second[0], u.add(w), l[0])?;
-            push(&mut second[1], d1, l[1])?;
-            push(&mut second[1], d2, l[2])?;
-            push(&mut second[2], u.sub(w), l[3])?;
-            push(&mut second[3], d1, l[4])?;
-            push(&mut second[3], d2, l[5])?;
-        }
-        push(&mut right, v[queries[i] as usize % 4], c.rho[i])?;
-    }
-    let [t0, t1, t2, t3] = second;
-    let rhs2 = cubic(alpha[1], [t0.finish(), t1.finish(), t2.finish(), t3.finish()]);
+    second_fold(openings, queries, &c, geometry, &mut second, &mut right)?;
+    let rhs2 = cubic(alpha[1], finish_e4(&second));
     mark(obs, Phase::QueryPart(0, 3));
     Ok(FoldSums { lhs1, rhs1: right.finish(), rhs2 })
 }
@@ -346,44 +375,58 @@ fn k_of(limbs: [u64; 4]) -> K {
 /// `(P-1)(P+3) = 2^62 - 4`; the accumulators are folded after every third
 /// query, so each holds at most three products plus a folded residue below
 /// `2^34`, which is below `2^64`.
+#[inline(always)]
+fn base_query(acc: &mut [u64; 416], q: &[u8; 480], c: &[K; 4]) {
+    let mut l = [0u64; 16];
+    for k in 0..4 {
+        l[4 * k] = u64::from(c[k].c0.a.0);
+        l[4 * k + 1] = u64::from(c[k].c0.b.0);
+        l[4 * k + 2] = u64::from(c[k].c1.a.0);
+        l[4 * k + 3] = u64::from(c[k].c1.b.0);
+    }
+    for lane in 0..26 {
+        let at = 4 * lane;
+        let read = |o: usize| u64::from(u32::from_le_bytes([q[o], q[o + 1], q[o + 2], q[o + 3]]));
+        let (v0, v1, v2, v3) = (read(at), read(120 + at), read(240 + at), read(360 + at));
+        let u = v0 + v1;
+        let w = v2 + v3;
+        let x = v0 + P64 - v1;
+        let y = v3 + P64 - v2;
+        let fold = |z: u64| (z & P64) + (z >> 31);
+        let signed = [fold(u + w), fold(x + y), fold(u + 2 * P64 - w), fold(x + 2 * P64 - y)];
+        let base = 16 * lane;
+        for k in 0..4 {
+            for j in 0..4 {
+                acc[base + 4 * k + j] += l[4 * k + j] * signed[k];
+            }
+        }
+    }
+}
+#[inline(always)]
+fn base_fold(acc: &mut [u64; 416]) {
+    let mut t = 0;
+    while t < 416 {
+        acc[t] = (acc[t] & P64) + (acc[t] >> 31);
+        t += 1;
+    }
+}
+#[inline(always)]
+fn base_accumulate(acc: &mut [u64; 416], openings: &[u8], circle: &[[K; 4]]) -> Result<(), Error> {
+    for i in 0..QUERIES {
+        let q: &[u8; 480] = openings[i * OPENING..i * OPENING + 480].try_into().map_err(|_| Error::Parse)?;
+        base_query(acc, q, &circle[i]);
+        if i % 3 == 2 {
+            base_fold(acc);
+        }
+    }
+    Ok(())
+}
 #[inline(never)]
 fn base_lanes_tight(openings: &[u8], circle: &[[K; 4]]) -> Result<Vec<[K; 4]>, Error> {
     let mut acc = aspis_core::r0::heap::filled(26 * 16, 0u64).map_err(|_| Error::Allocation)?;
     {
         let acc: &mut [u64; 416] = (&mut acc[..]).try_into().map_err(|_| Error::Allocation)?;
-        for i in 0..QUERIES {
-            let q: &[u8; 480] = openings[i * OPENING..i * OPENING + 480].try_into().map_err(|_| Error::Parse)?;
-            let c = &circle[i];
-            let mut l = [0u64; 16];
-            for k in 0..4 {
-                l[4 * k] = u64::from(c[k].c0.a.0);
-                l[4 * k + 1] = u64::from(c[k].c0.b.0);
-                l[4 * k + 2] = u64::from(c[k].c1.a.0);
-                l[4 * k + 3] = u64::from(c[k].c1.b.0);
-            }
-            for lane in 0..26 {
-                let at = 4 * lane;
-                let read = |o: usize| u64::from(u32::from_le_bytes([q[o], q[o + 1], q[o + 2], q[o + 3]]));
-                let (v0, v1, v2, v3) = (read(at), read(120 + at), read(240 + at), read(360 + at));
-                let u = v0 + v1;
-                let w = v2 + v3;
-                let x = v0 + P64 - v1;
-                let y = v3 + P64 - v2;
-                let fold = |z: u64| (z & P64) + (z >> 31);
-                let signed = [fold(u + w), fold(x + y), fold(u + 2 * P64 - w), fold(x + 2 * P64 - y)];
-                let base = 16 * lane;
-                for k in 0..4 {
-                    for j in 0..4 {
-                        acc[base + 4 * k + j] += l[4 * k + j] * signed[k];
-                    }
-                }
-            }
-            if i % 3 == 2 {
-                for limb in acc.iter_mut() {
-                    *limb = (*limb & P64) + (*limb >> 31);
-                }
-            }
-        }
+        base_accumulate(acc, openings, circle)?;
     }
     let mut out = aspis_core::r0::heap::filled(26, [K::ZERO; 4]).map_err(|_| Error::Allocation)?;
     for lane in 0..26 {
@@ -521,7 +564,31 @@ fn summed_final_checks<H: Digest32>(p: &Prepared, final_message: &[u8], claim: E
     // The final sumcheck continues the opening transcript after rho; it does not start a new one.
     let mut t = Transcript::resume(hash, p.state);
     let lambda = t.scalar_k(ROW_CLAIMS, &claims_bytes(claim, rhs2));
-    let mut current = claim.add(rhs2.mul_qm31(lambda));
+    let (current, r) = final_rounds(&mut t, certificate, claim.add(rhs2.mul_qm31(lambda)))?;
+    mark(obs, Phase::QueryPart(5, 1));
+    let (eq, digits) = equality_tables(&r);
+    mark(obs, Phase::QueryPart(5, 2));
+    let f_at = final_message_at(final_message, &eq)?;
+    mark(obs, Phase::QueryPart(5, 3));
+    let weights = Weights::new(p.variant, &p.semantic_alpha, &p.z)?;
+    let w_at = weights.mle_at(&p.alpha[..2], p.kappa, &eq, &digits)?;
+    mark(obs, Phase::QueryPart(5, 4));
+    #[cfg(feature = "future-d-pair-expansion")]
+    let q_at = query_weight_mle_pairs(p, geometry, &r)?;
+    #[cfg(not(feature = "future-d-pair-expansion"))]
+    let q_at = query_weight_mle(p, geometry, &r)?;
+    mark(obs, Phase::QueryPart(5, 5));
+    let combined = w_at.add(E::from_qm31(q_at.mul(lambda)));
+    if f_at.mul(combined) != current {
+        return Err(Error::Relation);
+    }
+    Ok(())
+}
+
+/// The six rounds of the final sumcheck: the running claim and the six challenges.
+#[inline(always)]
+fn final_rounds<H: Digest32>(t: &mut Transcript<H>, certificate: &[u8], start: E) -> Result<(E, [K; 6]), Error> {
+    let mut current = start;
     let mut r = [K::ZERO; 6];
     for b in 0..6 {
         let bytes = &certificate[64 * b..64 * b + 64];
@@ -532,25 +599,15 @@ fn summed_final_checks<H: Digest32>(p: &Prepared, final_message: &[u8], claim: E
         let c1 = current.sub(c0).sub(c0).sub(c2);
         current = c0.add(c1.add(c2.mul_qm31(r[b])).mul_qm31(r[b]));
     }
-    mark(obs, Phase::QueryPart(5, 1));
-    let (eq, digits) = equality_tables(&r);
-    mark(obs, Phase::QueryPart(5, 2));
+    Ok((current, r))
+}
+#[inline(always)]
+fn final_message_at(final_message: &[u8], eq: &[K; 64]) -> Result<E, Error> {
     let mut f_dot = EbyKDot::new();
     for j in 0..64 {
-        f_dot.push(field(final_message, j), eq[j]).map_err(|_| Error::Parse)?;
+        match f_dot.push(field(final_message, j), eq[j]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) }
     }
-    let f_at = f_dot.finish();
-    mark(obs, Phase::QueryPart(5, 3));
-    let weights = Weights::new(p.variant, &p.semantic_alpha, &p.z)?;
-    let w_at = weights.mle_at(&p.alpha[..2], p.kappa, &eq, &digits)?;
-    mark(obs, Phase::QueryPart(5, 4));
-    let q_at = if cfg!(feature = "future-d-pair-expansion") { query_weight_mle_pairs(p, geometry, &r)? } else { query_weight_mle(p, geometry, &r)? };
-    mark(obs, Phase::QueryPart(5, 5));
-    let combined = w_at.add(E::from_qm31(q_at.mul(lambda)));
-    if f_at.mul(combined) != current {
-        return Err(Error::Relation);
-    }
-    Ok(())
+    Ok(f_dot.finish())
 }
 
 fn claims_bytes(claim: E, rhs2: E) -> [u8; 64] {
@@ -777,7 +834,7 @@ fn merged_tree<H: Digest32>(proof: &[u8], keys: &[u64; 22], root: &[u8; 32], tre
     let mut idx = [0u32; multiproof::MAX_MERGED];
     let mut val = [[0u8; 32]; multiproof::MAX_MERGED];
     let mut d = 0;
-    for key in keys {
+    for &key in keys {
         let index = (key >> 8) as u32;
         let leaf = batch_leaf(hash, tree, opening(proof, (key & 0xff) as usize));
         if d > 0 && idx[d - 1] == index {

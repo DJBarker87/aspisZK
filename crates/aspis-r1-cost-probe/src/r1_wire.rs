@@ -183,6 +183,26 @@ pub fn decode_values<const N: usize>(row: u8, payload: &[u8]) -> Result<[WideExa
     Ok(out)
 }
 
+/// E3: load `N` already-validated QM31 values (32 bytes each, low 16 used) from `bytes`.
+#[inline(always)]
+fn validated_values<const N: usize>(bytes: &[u8]) -> [QM31; N] {
+    let mut out = [QM31::ZERO; N];
+    let mut value = 0;
+    while value < N {
+        let part = &bytes[32 * value..32 * value + 32];
+        out[value] = QM31 {
+            c0: aspis_core::field::CM31 { a: validated_limb(part, 0), b: validated_limb(part, 4) },
+            c1: aspis_core::field::CM31 { a: validated_limb(part, 8), b: validated_limb(part, 12) },
+        };
+        value += 1;
+    }
+    out
+}
+#[inline(always)]
+fn validated_limb(part: &[u8], at: usize) -> aspis_core::field::M31 {
+    aspis_core::field::M31(u32::from_le_bytes([part[at], part[at + 1], part[at + 2], part[at + 3]]))
+}
+
 /// A record whose framing and every field limb were checked by
 /// `parse_record`. Tokens are issued only from a successfully parsed Prefix;
 /// callers cannot supply a row separately from its bytes.
@@ -232,12 +252,8 @@ impl<'a> ValidatedRecord<'a> {
         // over these same immutable bytes, which already checked every limb
         // canonical and the high half zero; load the four limbs directly.
         #[cfg(feature = "future-validated-decode")]
-        for (value, part) in bytes.chunks_exact(32).enumerate() {
-            let limb = |at: usize| aspis_core::field::M31(u32::from_le_bytes([part[at], part[at + 1], part[at + 2], part[at + 3]]));
-            out[value] = QM31 {
-                c0: aspis_core::field::CM31 { a: limb(0), b: limb(4) },
-                c1: aspis_core::field::CM31 { a: limb(8), b: limb(12) },
-            };
+        {
+            out = validated_values::<N>(bytes);
         }
         #[cfg(not(feature = "future-validated-decode"))]
         for (value, part) in bytes.chunks_exact(32).enumerate() {

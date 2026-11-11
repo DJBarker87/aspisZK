@@ -369,68 +369,72 @@ impl Weights {
     /// digits, so their extension is the product of three four-term sums. The
     /// inactive row is constant on twelve groups of positions. The Libra row
     /// is supported on positions 0..4.
+    fn row_product(&self,k:usize,digits:&[[K;4];3])->Result<K,Error> {
+        let mut product=K::ONE;
+        for d in 0..3 {
+            let value=digit_dot(&digits[d],&self.factors[k][d+2])?;
+            product=if d==0 {value} else {product.mul(value)};
+        }
+        Ok(product)
+    }
+    fn product_rows(&self,ap0:&[E;4],ap1:&[E;4],digits:&[[K;4];3],parts:&mut [E;7])->Result<(),Error> {
+        const KINDS:[usize;5]=[1,2,3,5,6];
+        for k in 0..5 {
+            let product=self.row_product(k,digits)?;
+            let scale=Self::scalar_factor(&self.factors[k][0],ap0).mul(Self::scalar_factor(&self.factors[k][1],ap1));
+            parts[KINDS[k]]=scale.mul_qm31(product);
+        }
+        Ok(())
+    }
+    /// D1 (feature future-d-inactive-tensor): the inactive row through its tensor form.
+    fn inactive_tensor(ap0:&[E;4],ap1:&[E;4],groups:&[K;12])->Result<E,Error> {
+        let mut m=[K::ZERO;16];
+        for g in 0..12 { for bit in 0..16 { if S2_INACTIVE_MASKS[g]&(1<<bit)!=0 {m[bit]=m[bit].add(groups[g]);} } }
+        let mut total=E::ZERO;
+        for b in 0..4 {
+            let inner=perm_dot(ap0,&m,4*b)?;
+            total=total.add(ap1[PERM[b]].mul(inner));
+        }
+        Ok(total.mul_m31(QUARTER.mul(QUARTER)))
+    }
     #[inline(never)]
     pub fn mle_at(&self,alpha:&[E],kappa:E,eq:&[K;64],digits:&[[K;4];3])->Result<E,Error> {
         if self.variant!=Variant::S2||alpha.len()!=2 {return Err(Error::Parse);}
         let ap0=powers::<4>(alpha[0]);
         let ap1=powers::<4>(alpha[1]);
         let mut parts=[E::ZERO;7];
-        for (kind,k) in [(1usize,0usize),(2,1),(3,2),(5,3),(6,4)] {
-            let mut product=K::ONE;
-            for d in 0..3 {
-                let mut dot=crate::fast_pairing::KbyKDot::new();
-                for m in 0..4 { match dot.push(digits[d][m],self.factors[k][d+2][m]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) } }
-                let value=dot.finish();
-                product=if d==0 {value} else {product.mul(value)};
-            }
-            let scale=if cfg!(feature="future-dot-scale") {
-                // G4: the same four-term sums through the delayed-reduction accumulator.
-                let factor=|f:&[K;4],p:&[E;4]|->Result<E,Error> {
-                    let mut dot=crate::fast_pairing::EbyKDot::new();
-                    for s in 0..4 { match dot.push(p[PERM[s]],f[s]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) } }
-                    Ok(dot.finish().mul_m31(QUARTER))
-                };
-                factor(&self.factors[k][0],&ap0)?.mul(factor(&self.factors[k][1],&ap1)?)
-            } else {
-                Self::scalar_factor(&self.factors[k][0],&ap0).mul(Self::scalar_factor(&self.factors[k][1],&ap1))
-            };
-            parts[kind]=scale.mul_qm31(product);
-        }
-        let mut groups=[K::ZERO;12];
-        for j in 0..64 { let g=S2_INACTIVE_GROUPS[j] as usize; groups[g]=groups[g].add(eq[j]); }
-        if cfg!(feature="future-d-inactive-tensor") {
-            // D1: group g weighs sum_{s in mask_g} low[s] and low[s] is
-            // ap0[PERM[s%4]] * ap1[PERM[s/4]] / 16, so the row's extension is
-            // (1/16) sum_b ap1[PERM[b]] * (sum_a ap0[PERM[a]] * m[a + 4 b]) with
-            // m[s] the sum of the group sums whose mask contains s.
-            let mut m=[K::ZERO;16];
-            for g in 0..12 { for bit in 0..16 { if S2_INACTIVE_MASKS[g]&(1<<bit)!=0 {m[bit]=m[bit].add(groups[g]);} } }
-            let mut total=E::ZERO;
-            for b in 0..4 {
-                let mut dot=crate::fast_pairing::EbyKDot::new();
-                for a in 0..4 { match dot.push(ap0[PERM[a]],m[a+4*b]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) } }
-                total=total.add(ap1[PERM[b]].mul(dot.finish()));
-            }
-            parts[0]=total.mul_m31(QUARTER.mul(QUARTER));
-        } else {
-        let mut low=[E::ZERO;16];
-        for s in 0..16 { low[s]=ap0[PERM[s%4]].mul(ap1[PERM[s/4]]).mul_m31(QUARTER.mul(QUARTER)); }
-        let mut inactive=crate::fast_pairing::EbyKDot::new();
-        for g in 0..12 {
-            let mut weight=E::ZERO;
-            for bit in 0..16 { if S2_INACTIVE_MASKS[g]&(1<<bit)!=0 {weight=weight.add(low[bit]);} }
-            match inactive.push(weight,groups[g]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) }
-        }
-        parts[0]=inactive.finish();
-        }
+        self.product_rows(&ap0,&ap1,digits,&mut parts)?;
+        let groups=inactive_groups(eq);
+        parts[0]=Self::inactive_tensor(&ap0,&ap1,&groups)?;
         let libra=factored_s2_libra_weights(&ap0,&ap1,self.extra);
-        let mut libra_dot=crate::fast_pairing::EbyKDot::new();
-        for j in 0..4 { match libra_dot.push(libra[j],eq[j]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) } }
-        parts[4]=libra_dot.finish();
-        let k=powers::<7>(kappa);let mut sum=E::ZERO;
-        for kind in 0..7 {sum=sum.add(k[kind].mul(parts[kind]));}
-        Ok(sum)
+        parts[4]=libra_at(&libra,eq)?;
+        Ok(kappa_sum(kappa,&parts))
     }
+}
+fn inactive_groups(eq:&[K;64])->[K;12] {
+    let mut groups=[K::ZERO;12];
+    for j in 0..64 { let g=S2_INACTIVE_GROUPS[j] as usize; groups[g]=groups[g].add(eq[j]); }
+    groups
+}
+fn kappa_sum(kappa:E,parts:&[E;7])->E {
+    let k=powers::<7>(kappa);let mut sum=E::ZERO;
+    for kind in 0..7 {sum=sum.add(k[kind].mul(parts[kind]));}
+    sum
+}
+fn digit_dot(digits:&[K;4],factors:&[K;4])->Result<K,Error> {
+    let mut dot=crate::fast_pairing::KbyKDot::new();
+    for m in 0..4 { match dot.push(digits[m],factors[m]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) } }
+    Ok(dot.finish())
+}
+fn perm_dot(ap:&[E;4],m:&[K;16],base:usize)->Result<E,Error> {
+    let mut dot=crate::fast_pairing::EbyKDot::new();
+    for a in 0..4 { match dot.push(ap[PERM[a]],m[a+base]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) } }
+    Ok(dot.finish())
+}
+fn libra_at(libra:&[E;4],eq:&[K;64])->Result<E,Error> {
+    let mut dot=crate::fast_pairing::EbyKDot::new();
+    for j in 0..4 { match dot.push(libra[j],eq[j]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) } }
+    Ok(dot.finish())
 }
 
 /// FUTURE-VERSION EXPERIMENT (profiling builds only): `Weights::pair` on the

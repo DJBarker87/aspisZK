@@ -301,10 +301,16 @@ pub const MAX_MERGED: usize = 22;
 
 /// Strictly increasing, inside the leaf domain, at most `MAX_MERGED` entries.
 fn well_formed_merged(indices: &[u32]) -> bool {
-    !indices.is_empty()
-        && indices.len() <= MAX_MERGED
-        && indices.windows(2).all(|w| w[0] < w[1])
-        && indices.iter().all(|&i| i < 1 << LEAF_BITS)
+    if indices.is_empty() || indices.len() > MAX_MERGED {
+        return false;
+    }
+    let mut ok = indices[0] < 1 << LEAF_BITS;
+    let mut i = 1;
+    while i < indices.len() {
+        ok = ok && indices[i - 1] < indices[i] && indices[i] < 1 << LEAF_BITS;
+        i += 1;
+    }
+    ok
 }
 
 /// `node_count` for a binary tree and an index set of up to `MAX_MERGED`
@@ -351,35 +357,65 @@ pub fn verify_counting_merged<H: Digest32>(
     if n == 0 || n > MAX_MERGED || !well_formed_merged(&idx[..n]) {
         return Counted::Malformed;
     }
+    // Eighteen levels as nine pairs: `val` to `other`, then `other` back to `val`. The same digests in the
+    // same order as exchanging two buffer references each level; the result is in `val`.
     let mut other = [[0u8; 32]; MAX_MERGED];
-    let (mut cur, mut nxt): (&mut [[u8; 32]; MAX_MERGED], &mut [[u8; 32]; MAX_MERGED]) = (val, &mut other);
-    let tag = [BINARY_NODE_TAG];
     let mut at = 0usize;
-    for _ in 0..Arity::Two.levels() {
-        let mut w = 0;
-        let mut i = 0;
-        while i < n {
-            let index = idx[i];
-            if i + 1 < n && idx[i + 1] == index ^ 1 {
-                hash.digest_into(&[&tag, &cur[i], &cur[i + 1]], &mut nxt[w]);
-                i += 2;
-            } else {
-                let Some(sibling) = slot.get(at..at + 32) else { return Counted::Short };
-                at += 32;
-                if index & 1 == 0 {
-                    hash.digest_into(&[&tag, &cur[i], sibling], &mut nxt[w]);
-                } else {
-                    hash.digest_into(&[&tag, sibling, &cur[i]], &mut nxt[w]);
+    let mut short = false;
+    let mut pair = 0;
+    while pair < 9 && !short {
+        match merged_level(hash, idx, val, &mut other, n, slot, at) {
+            None => short = true,
+            Some((w, a)) => match merged_level(hash, idx, &other, val, w, slot, a) {
+                None => short = true,
+                Some((w2, a2)) => {
+                    n = w2;
+                    at = a2;
                 }
-                i += 1;
-            }
-            idx[w] = index >> 1;
-            w += 1;
+            },
         }
-        n = w;
-        core::mem::swap(&mut cur, &mut nxt);
+        pair += 1;
     }
-    Counted::Done { root_ok: n == 1 && idx[0] == 0 && cur[0] == *root, used: at }
+    if short {
+        return Counted::Short;
+    }
+    Counted::Done { root_ok: n == 1 && idx[0] == 0 && val[0] == *root, used: at }
+}
+
+/// One level of the merged traversal, from `cur` into `nxt`: the new entry count and slot offset, or `None`
+/// when the slot holds too few sibling nodes.
+#[inline(always)]
+fn merged_level<H: Digest32>(
+    hash: H,
+    idx: &mut [u32; MAX_MERGED],
+    cur: &[[u8; 32]; MAX_MERGED],
+    nxt: &mut [[u8; 32]; MAX_MERGED],
+    n: usize,
+    slot: &[u8],
+    mut at: usize,
+) -> Option<(usize, usize)> {
+    let tag = [BINARY_NODE_TAG];
+    let mut w = 0;
+    let mut i = 0;
+    while i < n {
+        let index = idx[i];
+        if i + 1 < n && idx[i + 1] == index ^ 1 {
+            hash.digest_into(&[&tag, &cur[i], &cur[i + 1]], &mut nxt[w]);
+            i += 2;
+        } else {
+            let Some(sibling) = slot.get(at..at + 32) else { return None };
+            at += 32;
+            if index & 1 == 0 {
+                hash.digest_into(&[&tag, &cur[i], sibling], &mut nxt[w]);
+            } else {
+                hash.digest_into(&[&tag, sibling, &cur[i]], &mut nxt[w]);
+            }
+            i += 1;
+        }
+        idx[w] = index >> 1;
+        w += 1;
+    }
+    Some((w, at))
 }
 
 /// Prover side: emit the canonical node sequence. `node(level, index)` returns
