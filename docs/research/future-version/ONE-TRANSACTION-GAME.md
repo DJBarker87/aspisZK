@@ -1087,6 +1087,9 @@ composition is not written as one theorem here.
 
 ### 9.2 What is still open in this layer
 
+**Update:** M7 and the clean-event hypothesis (M9) are done; see section 10.
+The list below is kept as written.
+
 - **M7, the actual-run identification.** This means instantiating
   `accepted_checks_aspis` at the actual 40-row run, which needs copies of:
   - `OraclePortFrozen2Reached.{accepted, slots_read, consistent, distinct_bound,
@@ -1136,12 +1139,25 @@ payment's destination, pool and domain under the proof.
   `request.public`'s pool, deployment domain and destination
   (pair_forest_semantic_terminal.rs:2020-2090). The emitted result is a function
   of that statement (`emit_result`).
-- **P1, Pool request to verifier.** In `process_pair_forest_terminal_with_verifier_v1`
-  (pair_forest.rs, `request_bytes` split and decoded around :1642) and in the
-  verifier CPI plan (pair_forest_dispatch.rs:157 `encode(request)`, :342
-  `data: plan.request_bytes`), the verifier's instruction data equals the
-  encoding of the request the Pool decoded. This needs encode ∘ decode = id on
-  accepted bytes (canonical codec).
+- **P1, Pool request to verifier (made precise, lead 2026-11-11).** On the
+  deployed route (`dispatch_pair_forest_terminal_readonly_v1` →
+  `plan_pair_forest_terminal_dispatch_v1`):
+  - The Pool decodes `r := decode(request_bytes)` (pair_forest.rs:1642-1643).
+  - It pays from `r.public` (pair_forest.rs around :1700).
+  - It calls the verifier with `data := encode(r)` (pair_forest_dispatch.rs:157,
+    :342). The original bytes are not forwarded on this route. The route that
+    forwards the exact original 1,880 bytes is audit-only, behind
+    `pair-forest-full-asf8-audit` (pair_forest.rs:1843-1903).
+  - The verifier decodes `data` again (`validate_asq8`) and builds the statement
+    from `decode(encode(r))`.
+
+  So the obligation is **decode ∘ encode = id on the encoder's image**:
+  `∀ r b, encode r = ok b → decode b = ok r`, for
+  `encode_pool_v1_pair_forest_terminal_request_v1` and
+  `decode_pool_v1_pair_forest_terminal_request_v1`
+  (crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:432, :466). It is
+  not encode ∘ decode = id: the original request bytes need not equal their
+  re-encoding, and the proof is never checked against them.
 - **P2, Pool payout.** The withdrawal plan
   (`plan_legacy_withdrawal_transfer_from_identity_v1`, vault.rs:387; called
   from pair_forest.rs around :1700 with `public.destination_token_account` and
@@ -1172,7 +1188,67 @@ lane, output lane, nullifier, afterstate) does not carry the destination or
 amount. So the destination join cannot go through the return data. It must go
 through P1: the Pool pays from the same request it sends to the verifier.
 
-**Trust row for the token transfer (accepted by the owner as runtime-class; exact text proposed).**
+**Trust row for the token transfer: NARROWED (lead's decision 2026-11-11; supersedes the wider text below, which is kept for the record).**
+
+Why it narrows: the Pool checks the payout itself, around the call.
+- **Before the call** (vault.rs:387-540) it requires:
+  - the five account keys: mint = the pool's asset mint; vault = the pool's
+    vault PDA; destination = the statement's destination key (vault.rs:454);
+    authority = the vault-authority PDA; token program =
+    `LEGACY_SPL_TOKEN_PROGRAM_ID`, executable;
+  - parses of the mint, vault and destination token accounts, and their mints;
+  - vault authority = the PDA, and no delegate, close authority or native flag
+    on the vault;
+  - `vault_after = vault.amount − amount` and
+    `destination_after = destination.amount + amount`, overflow-checked.
+- **After the call** (`validate_exact_withdrawal_delta_v1`, vault.rs:551-580),
+  before the Pool persists any state, it re-reads the same five keys and both
+  token accounts. It requires vault and destination mint = the plan's mint,
+  vault authority = the plan's authority, `vault.amount = vault_after` and
+  `destination.amount = destination_after`.
+
+So the token-balance effect that PayoutBound states (exactly `amount` from the
+pool's vault to the statement's destination token account) is checked by the
+Pool's own reads. It is not assumed of the token program.
+
+**What is still assumed, in its narrowest correct form:**
+- **(R-a) Post-call visibility, runtime class.** After a cross-program invoke
+  returns Ok, the account data the caller reads through its `AccountInfo`s is
+  the data as the callee left it.
+- **(R-b) Writable set, runtime class.** A cross-program invoke can change only
+  accounts passed to it as writable. Here those are the vault and the
+  destination (`AccountMeta::new` at vault.rs:~508-511); mint and authority are
+  passed read-only. So no other account's token balance can move in this call.
+- **No assumption about SPL Token's behaviour is needed for PayoutBound.** If
+  the call does anything other than the exact transfer, either the Pool's
+  re-read rejects (the transaction fails) or the two balances moved exactly as
+  stated.
+
+**What the delta check does not cover (residual, not needed for PayoutBound):**
+- the vault's delegate, close authority and frozen state after the call;
+- the destination's owner, delegate and state after the call;
+- lamports of either account.
+
+The vault fields matter for **custody** of the remaining vault funds, which is
+a separate property (AGENTS.md section 1). A custody claim would need either:
+- the SPL-specific assumption "TransferChecked, at the pinned program id, does
+  not change the vault's delegate, close authority or state"; or
+- an extended post-call check in the Pool. That is a code change, so it is an
+  owner decision: compute units.
+
+The destination's fields are not part of PayoutBound as stated ("to the
+statement's destination token account"). The Pool does not check them before
+the call either.
+
+**Does the narrowing hold in every case?** Yes for PayoutBound, on the reading
+above. The only case it does not cover is custody, which the wider row did not
+fully cover either: it said nothing about delegates. R-a is the one assumption
+not already implied by the wider row's reading. It replaces "the token program
+debits and credits as documented", so the trade is a runtime-class
+data-visibility fact in place of a program-behaviour fact. The lead's call on
+whether that counts as "strictly less trust" for the report to the owner.
+
+**Wider row as first proposed (superseded by the above, kept for the record).**
 - **Name:** `SplTokenTransferChecked` (pinned SPL Token program id
   `LEGACY_SPL_TOKEN_PROGRAM_ID`, pinned version).
 - **Statement:** an invoke of `TransferChecked { source, mint, destination,
@@ -1221,3 +1297,81 @@ plan and CPI. R1 never extracted the payout path: none of R1's models contains
 the transfer. P1's codec round trip (re-encoding the decoded request) is the
 precise point where a mismatch would let the verifier and the Pool see
 different destinations.
+
+## 10. M7 and M9: accepted ⇒ AspisChecks on the actual 40-row run, and the clean event's hypothesis (COMPILED)
+
+Two modules, with the same compile set-up as section 8. Kind of result: model
+theorems in R1's stored-decision and binary commitment model. They are not
+source refinements, and no two-transaction module is imported. Every `#print
+axioms` is a subset of `[propext, Classical.choice, Quot.sound]`. There is no
+`sorry`, `axiom`, `native_decide` or raised heartbeats, and no warnings in the
+final compiles. Local hashes equal the compiled ones. The files are untracked.
+
+| Attempt | Module | sha256 (source) | Exit | Wall | Peak RSS | cgroup peak | Swaps |
+|---|---|---|---|---|---|---|---|
+| PSE-17 | AspisOneTxRun (first version) | 779a48de…69b800 | 1 | 4.35 s | 4.24 GB | 0.44 GB | 0 |
+| PSE-18 | AspisOneTxRun | 86a13f1e…742bfa8b | 0 | 8.20 s | 4.26 GB | 0.45 GB | 0 |
+| PSE-19 to PSE-22 | AspisOneTxCheckedAcceptance (versions) | 4308103a…, 6c723bc6…, 6cca8e18…, cfb4f0fa… | 1 | 4.5–66.7 s | ≤ 4.22 GB | ≤ 0.43 GB | 0 |
+| PSE-23 | AspisOneTxCheckedAcceptance | cf5d5b2c…bf68e9 | 0 | 4.66 s | 4.25 GB | 0.44 GB | 0 |
+
+**Failures, and what changed (none is a mathematical change).**
+- PSE-17: a missing import, an `omega` goal with two forms of the same log, and
+  a local irreducibility attribute that blocked an R1 `change`. Each was fixed
+  by scoping or restating.
+- PSE-19 to PSE-22: an ambiguous identifier (`input`), and whnf timeouts. Lean
+  evaluated the 40-round transcript while elaborating `rounds[n]'bound` and
+  `statement`. The fix is R1's own `Frozen2CanonicalChecks` attribute (local
+  irreducible `LiteralByteProtocol.protocol`, `LiteralByteSampler.samp`,
+  `FS2.Protocol.transcript`), plus the row identity restated over abstract
+  public input and proof (`ok_gen`).
+
+### 10.1 M7 (AspisOneTxRun), next to R1
+
+| Aspis (run `run40 D P H := eval H (AspisRec40.HitMass.original D dV_aspis P)`) | R1 | Difference |
+|---|---|---|
+| `reached_take33 : take33 (reached40 D P H) = OraclePortReachedRunC6.reached D P H` | — | the 40-row reached prefix's first 33 rounds ARE R1's reached prefix on the same proof (`AspisRows40.Literal.transcript_take33`); this is what lets R1's 33-round lemmas apply unchanged |
+| `accepted40`, `decision_read40`, `slots_read40`, `consistent40` | `OraclePortFrozen2Reached.{accepted, decision_read, slots_read, consistent}` | 40-row verifier evaluation (`AspisRec40.Decision.verifier_eval`); the merged Merkle program |
+| `distinct_bound40 : firstReads emptyTable (run40 D P H).1 ≤ Q+1111` | `distinct_bound` (Q + 1161) | from the rows agent's `verifier_issued` (≤ 1,111 per verifier call) |
+| `chain_reads40`, `transcript_eq_of_chains`, `frame_eq40` (n ≤ 40), `frame_read40` (row < 40) | `OraclePortStoredProjectionC4.frame_eq`, `OraclePortReplay.frameFromView_eq`, `RawCutWordsFromView.frame_read`, `OracleProgramReplay.transcript_eq_of_agrees` | re-proved for rows below 40, from the 40-row verifier's evaluation and `Protocol.chain_eq`. The agreement hypothesis is stated on the chains' reads, not on R1's 33-row verifier |
+| `targets40` | `OraclePortFrozen2Roots.targets` (body as `OraclePortReachedRootsC6.targets`) | `accepted_detailsS`, `parsedS` and `verifyS_accepted` in place of R1's; then R1's `erased_index`, `ParsedRootsC6` and `FrameShapesC6` lemmas on R1's reached prefix (through `reached_take33`) |
+| `maps_eq_builder40` | `OraclePortFrozen2ActualChecks.maps_eq_builder` | the 40-row run's frames |
+| `accepted_checks40` | `OraclePortFrozen2ActualChecks.accepted_checks` | conclusion `AspisChecks decodePairS` on `reword (wordsFromRun D (view run40)) (typedRows p q (reached40 D P H))`; collision event at `Q + 1111` |
+
+### 10.2 M9 (AspisOneTxCheckedAcceptance), next to R1
+
+| Aspis | R1 | Difference |
+|---|---|---|
+| `verifier_enrich40`, `recorded_eval40`, `original_view40`, `recorded_view40`, `original_fixed40`, `annotated_fixed40` | `OraclePortStoredExperimentC4.{verifier_enrich, recorded_eval}`, `OraclePortStoredProjectionC4.{original_view, recorded_view}`, `OraclePortStoredReductionC7.{original_fixed, annotated_fixed}` | 40-row experiment |
+| `canonical_valid40` | `OraclePortFrozen2CanonicalChecks.canonical_valid` | from `accepted_detailsS` and `reached_take33`. Uses `message_idem` (R1's canonical retagging is idempotent) because the guard is read on the canonical run directly |
+| `rows_gen`, `ok_gen`, `rows_eq40` | `OraclePortRowsCanonicalC6.rows`, `OraclePortFrozen2CanonicalChecks.rows_eq` | R1's `rows` takes `LiteralTranscript.valid` on every row, but `valid` admits payload rows only below 33. Rows 33..39 use `restore_canon_late` instead, which holds because the canonical retagging never produces a `.c2` or `.second` message at rows ≥ 33 |
+| `accepted_checks_canon40` | `OraclePortFrozen2CanonicalChecks.accepted_checks` | `AspisChecks` on `rows40` (the recorded run's 40 rows) |
+| `CheckedAcceptanceC4_40`, `original_clean40`, `checked_acceptance40` | `OraclePortStoredChecksC4.CheckedAcceptance`, `OraclePortFrozen2C6.{original_clean, checked_acceptance}` | 40 rows, `dV_aspis`, `Q + 1111` |
+| **`fibre_checks40 D s P Q hq : AspisRec40.CleanStatement.CheckedAcceptance40 D (dV_aspis s) (pairProver s P) (Q+1111)`** | `OraclePortFrozen2Consumer.fibre_checks` | **exactly the rows agent's hypothesis `hchecks`**, discharged |
+
+### 10.3 Against the rows agent's list (RECORDED-EXPERIMENT-40.md section 7)
+
+Every item it named is supplied, in the shape named:
+
+| Item | Supplied by |
+|---|---|
+| `parsed`, `query`, `accepted` | `accepted_detailsS`, `accepted40` |
+| run trace as `log`, `consistent`, `contains` | `(run40 D P H).1`, `consistent40`, `slots_read40` |
+| `frameRead` | `frame_read40` |
+| `frames` = the first cells of rows 0, 2, 30, with `rootRead` | `frames40`, `targets40` |
+| `maps_eq_builder` to the recorded rows | `maps_eq_builder40`, then `rows_eq40` to `rows40` (= `compiledRows40` through `annotated_fixed40`) |
+| `bound` | `distinct_bound40` (from the rows agent's `verifier_issued`) |
+| `clean` | `original_clean40`, from `CheckedAcceptance40`'s own no-collision hypothesis |
+| the hypothesis itself | `fibre_checks40` |
+
+Nothing could not be supplied. Two things the clean event's copies need, which
+this file does not provide:
+1. the admission identity is `admitted_aspis` (`admitS`), not R1's `admit`
+   (section 9.1);
+2. the clean event needs the format and tag facts (`format40`, `tag40`, rows
+   agent's list) on `AspisChecks`. Those are the rows agent's copies.
+
+### 10.4 What remains in this layer
+
+- PayoutBound (9.3): statements next.
+- Source refinement of `dV_aspis`, the entry and the Pool path, outside this
+  layer.
