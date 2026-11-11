@@ -112,8 +112,14 @@ Every rejected attempt left every account unchanged apart from the fee. The fift
 design: the proof authorises the payment, not the submitter, so anyone can relay a settlement and
 nobody can move where it pays.
 
-**Limits of this.** It is a test on one recorded withdrawal with the devnet build (the format
-before the transcript change of commit a63f0dfc35c); the same test has to be rerun on the frozen
+**Rerun at the branch head (2026-11-11).** The same six attempts against a build of the branch
+head 4045ecbdda3 (transcript continuation, Merkle authentication last; ELF `5dd5b2b1…`, 967,120
+bytes; result `replays-redirect/A6-withdrawal.json`) give the same outcomes: the honest and the
+relayed settlement pay the recorded destination at 1,320,803 compute units, the redirect in request
+and accounts is rejected by the verifier after 181,561, the redirect in either alone by the Pool
+after 71,323, with no state change.
+
+**Limits of this.** It is a test on one recorded withdrawal; it has to be rerun on the frozen
 Aspis build, and the devnet run script should make the same attempts on chain before each
 settlement (not added yet). It is not a proof. In the formal argument the destination is bound
 through the public-statement bytes, which belong to the source-refinement layer at the PIN2 pin;

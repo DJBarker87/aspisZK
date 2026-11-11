@@ -947,3 +947,21 @@ Pool are unmeasured), the soundness rows of the changed verifier, the source cor
 changed kernels. The release target is unchanged and not yet established. A separate agent is
 working through the soundness argument; its note will be
 `docs/research/future-version/SOUNDNESS-ARGUMENT.md`.
+
+### Round 6, after the devnet runs: branch-head build (transcript continuation, Merkle check last)
+
+Two changes were made to the verifier after the devnet deployment, both for the proof and both
+recorded with their reasons in SOUNDNESS-ARGUMENT.md and RECORDED-EXPERIMENT-40.md: the final
+sumcheck continues the opening transcript (one transcript start fewer), and the Merkle
+authentication runs after the final sumcheck rows (the order the formal model has). Build A6 of
+the branch head 4045ecbdda3 (`5dd5b2b16c00…a003b`, 967,120 bytes, the A5 feature set), replayed on
+the recorded devnet settlements (`replays-v4/`):
+
+| Payment | A5, deployed on devnet | A6, branch head | Difference |
+|---|---:|---:|---:|
+| Transfer, whole transaction | 1,314,472 | 1,314,308 | -164 |
+| Withdrawal, whole transaction | 1,320,977 | 1,320,803 | -174 |
+
+Final state equal to the control in both; a changed certificate byte is rejected with no state
+change. Neither change raises compute units on these two payments. A6 is not deployed.
+
