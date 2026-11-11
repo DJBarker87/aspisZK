@@ -10,5 +10,11 @@ L=/home/dombarker/project-offloads/codex-cx-replay-l187-20261109
 M=$1
 mkdir -p $W/lean-out
 sha256sum $W/lean-src/$M.lean
-exec env PATH=/usr/bin:/bin LEAN_SYSROOT=$SYS LEAN_PATH=$W/lean-out:$L/objs:$L/base_ref \
-  timeout 180 $SYS/bin/lean -j1 -M7000 -DElab.async=false -R $W/lean-src -o $W/lean-out/$M.olean $W/lean-src/$M.lean
+# The object is written under a temporary name and moved into place only on success, so a
+# concurrent compile never reads a half-written object.
+T=$W/lean-out/.partial.$$.$M.olean
+env PATH=/usr/bin:/bin LEAN_SYSROOT=$SYS LEAN_PATH=$W/lean-out:$L/objs:$L/base_ref \
+  timeout 180 $SYS/bin/lean -j1 -M7000 -DElab.async=false -R $W/lean-src -o $T $W/lean-src/$M.lean
+rc=$?
+if [ $rc -eq 0 ] && [ -f $T ]; then mv -f $T $W/lean-out/$M.olean; else rm -f $T; fi
+exit $rc
