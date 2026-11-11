@@ -17,6 +17,17 @@
 //!       must not exist: a nonce ledger is never reused). `attempts` is the number of attempts
 //!       entered, `checks` the number of check timings the call left for `take_check_times`.
 //!       No timing value is printed in this mode, so the output is comparable byte for byte.
+//!   pv_bytes_gate fail <first-seed> <count> <ledger-root>
+//!       FAIL lines (feature `r1p-check`): failing paths that can be forced from outside the
+//!       crate, each with the visible error, the attempts entered, the number of check
+//!       timings left, and the count and sha256 of the nonce-ledger records written (the only
+//!       bytes a failed call produces): the entropy source failing at attempt 0; failing at
+//!       attempt 1 (reached only when attempt 0 is rejected, otherwise the row shows the
+//!       accepted proof); a variant other than S2 (semantic rejection before any attempt);
+//!       a reused nonce (semantic rejection at the reservation); and the fixture prover with a
+//!       variant other than S2. "Attempts exhausted" cannot be forced from here: it needs
+//!       eight rejected checks, and verdicts can be forced only by the crate's own
+//!       `cfg(test)` hooks (its library tests `prover_retry_tests` do that).
 //!   pv_bytes_gate time <seed> <iterations>
 //!       TIME lines: wall seconds of `prove_masked_fixture` alone (fixture preparation is
 //!       outside the interval), per operation and iteration.
@@ -126,9 +137,101 @@ fn retry_rows(root: &std::path::Path, first: u8, count: u8) {
     }
 }
 
+#[cfg(feature = "r1p-check")]
+fn ledger_digest(directory: &std::path::Path) -> String {
+    let mut records: Vec<(String, Vec<u8>)> = std::fs::read_dir(directory)
+        .expect("ledger directory")
+        .map(|entry| {
+            let entry = entry.expect("ledger entry");
+            (entry.file_name().to_string_lossy().into_owned(), std::fs::read(entry.path()).expect("ledger record"))
+        })
+        .collect();
+    records.sort();
+    let mut d = Sha256::new();
+    for (name, bytes) in &records {
+        d.update(name.as_bytes());
+        d.update([0u8]);
+        d.update(bytes);
+    }
+    format!("ledger_records={} ledger_sha256={}", records.len(), hex(&d.finalize()))
+}
+
+#[cfg(feature = "r1p-check")]
+fn fail_rows(root: &std::path::Path, first: u8, count: u8) {
+    use aspis_prover::state_only_entropy::{DurableStateOnlyMaskNonceStore, StateOnlyAttemptSecrets};
+    use aspis_r1_cost_probe::verifier::Error;
+    assert!(!root.exists(), "refusing to reuse a nonce ledger root: {}", root.display());
+    for (name, withdrawal) in OPERATIONS {
+        let fixture = r0_fixture::prepare(withdrawal);
+        for seed in first..first + count {
+            let secret = |domain: &[u8], k: usize| -> [u8; 32] {
+                let mut d = Sha256::new();
+                d.update(b"pv-bytes-gate fail v1");
+                d.update(domain);
+                d.update(name.as_bytes());
+                d.update([seed, k as u8]);
+                d.finalize().into()
+            };
+            // (case, variant, attempt at which the secrets source fails, reuse the nonce of attempt 0)
+            let cases: [(&str, Variant, Option<usize>, bool); 4] = [
+                ("entropy-at-0", Variant::S2, Some(0), false),
+                ("entropy-at-1", Variant::S2, Some(1), false),
+                ("variant-s1", Variant::S1, None, false),
+                ("reused-nonce", Variant::S2, None, true),
+            ];
+            for (case, variant, fail_at, reuse) in cases {
+                let directory = root.join(format!("{name}-{seed}-{case}"));
+                let mut ledger = DurableStateOnlyMaskNonceStore::open(&directory).expect("ledger");
+                if reuse {
+                    // First call burns the nonces of the attempts it enters; its result is not the subject.
+                    let _ = prover::prove_masked_retrying_with(fixture.public(), &fixture.compiled, Variant::S2, HOST_HASH, &mut ledger, |k| {
+                        Ok(StateOnlyAttemptSecrets::deterministic_spend_fixture(secret(b"nonce", k), secret(b"field", k), secret(b"leaf", k)))
+                    });
+                }
+                let mut entered = Vec::new();
+                let _ = prover::take_check_times();
+                let result = prover::prove_masked_retrying_with(fixture.public(), &fixture.compiled, variant, HOST_HASH, &mut ledger, |k| {
+                    entered.push(k);
+                    if fail_at == Some(k) {
+                        return Err(Error::Entropy);
+                    }
+                    Ok(StateOnlyAttemptSecrets::deterministic_spend_fixture(secret(b"nonce", k), secret(b"field", k), secret(b"leaf", k)))
+                });
+                let checks = prover::take_check_times().len();
+                let entered: Vec<String> = entered.iter().map(|k| k.to_string()).collect();
+                let outcome = match &result {
+                    Ok(retried) => format!("result=ok attempts={} {}", retried.attempts, describe(&fixture, &retried.proof)),
+                    Err(e) => format!("result=err:{e:?}"),
+                };
+                println!(
+                    "FAIL op={name} seed={seed} case={case} {outcome} entered={} checks={checks} {}",
+                    entered.join("."),
+                    ledger_digest(&directory)
+                );
+            }
+            let _ = prover::take_check_times();
+            let fixture_s1 = prover::prove_masked_fixture(
+                r0_fixture::statement_public(&fixture.statement),
+                &fixture.compiled,
+                Variant::S1,
+                HOST_HASH,
+                &[seed; 32],
+            );
+            println!(
+                "FAIL op={name} seed={seed} case=fixture-variant-s1 result={} checks={}",
+                match &fixture_s1 {
+                    Ok((proof, _)) => format!("ok pinned_len={} pinned_sha256={}", proof.len(), sha(proof)),
+                    Err(e) => format!("err:{e:?}"),
+                },
+                prover::take_check_times().len()
+            );
+        }
+    }
+}
+
 fn main() {
     let args: Vec<String> = std::env::args().collect();
-    let usage = "usage: pv_bytes_gate table <first-seed> <count> [<ledger-root>] | time <seed> <iterations>";
+    let usage = "usage: pv_bytes_gate table <first-seed> <count> [<ledger-root>] | fail <first-seed> <count> <ledger-root> | time <seed> <iterations>";
     match args.get(1).map(String::as_str) {
         Some("table") => {
             let first: u8 = args.get(2).expect(usage).parse().expect("first seed");
@@ -171,6 +274,15 @@ fn main() {
             }
             #[cfg(not(feature = "r1p-check"))]
             println!("RETRY not built (feature r1p-check off)");
+        }
+        Some("fail") => {
+            let first: u8 = args.get(2).expect(usage).parse().expect("first seed");
+            let count: u8 = args.get(3).expect(usage).parse().expect("count");
+            println!("PV_BYTES_GATE fail first={first} count={count} r1p_check={}", cfg!(feature = "r1p-check"));
+            #[cfg(feature = "r1p-check")]
+            fail_rows(std::path::Path::new(args.get(4).expect(usage)), first, count);
+            #[cfg(not(feature = "r1p-check"))]
+            println!("FAIL not built (feature r1p-check off)");
         }
         Some("time") => {
             let seed: u8 = args.get(2).expect(usage).parse().expect("seed");
