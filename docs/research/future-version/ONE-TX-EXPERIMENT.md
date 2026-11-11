@@ -556,3 +556,40 @@ correspondence of the new evaluator.
 - Outcome wording: if W10 exceeds 1,275,000 on any fixture, "one transaction
   not yet supported; gap N"; if within, "fits the hard-cap budget on six
   fixtures", which is not an all-input bound and not a release claim.
+
+### Stage D: result
+
+Measured on W10 (W9 features with the stage D path, source `a708dd7ec58`, ELF
+`33f81522…d7092ea`), honest certificates computed on the host from the public
+proof data:
+
+| | transfer-13 | transfer-255 | transfer-1023 | withdrawal-13 | withdrawal-255 | withdrawal-1023 |
+|---|---:|---:|---:|---:|---:|---:|
+| W9, batched | 1,438,749 | 1,442,350 | 1,440,343 | 1,439,115 | 1,440,422 | 1,440,480 |
+| W10, summed | 1,285,779 | 1,289,389 | 1,287,371 | 1,286,131 | 1,287,485 | 1,287,505 |
+| Saving | 152,970 | 152,961 | 152,972 | 152,984 | 152,937 | 152,975 |
+
+Predicted 150k; kept. **One transaction not yet supported; gap 10,779 to
+14,389** against the 1,275,000 line. The verifier alone now completes inside a
+real 1,400,000 CU transaction on all six fixtures (the acceptance runs, not
+only the diagnostic ones), and a certificate with one flipped byte is rejected
+on chain.
+
+Stage D phases (profiled build, transfer-13): relation round checks 11,938;
+`lambda` and six rounds 12,477; equality tables 12,828; `f~(r)` 20,830;
+`Weights::new` and `W~(r)` 104,493; `w~(r)` 42,741.
+
+### Round 3, second set: predictions (committed before measurement)
+
+Baseline W10. Applied cumulatively in this order, same keep-or-drop rule.
+
+| Candidate | Basis | Predicted saving |
+|---|---|---:|
+| D1 inactive row of `W~` through its tensor form | the row's weight is a subset sum of `ap0 x ap1` products; fold the group sums into sixteen QM31 values and contract with `ap0`, then `ap1`: sixteen WideExact-by-QM31 products and four WideExact products in place of sixteen WideExact products, 81 WideExact additions and twelve products | 11k |
+| D2 `w~(r)` with the six factors expanded in pairs | each pair is `1 + r_b a_b + r_{b+1} a_{b+1} + r_b r_{b+1} a_b a_{b+1}` with base-field `a`: twelve limb products and one reduction per limb in place of two QM31-by-M31 products and a QM31 product; about 1.15k per query against 1.94k | 17k |
+| E4b Merkle parent loop writing each digest straight into the next level's buffer through the syscall, with no by-value digest | about 908 parents; 17 instructions of copies and about 12 of wrapper each | 26k |
+
+D1 and D2 are exact changes to this branch's stage D evaluator. E4b is an
+exact change to the Merkle traversal (same hash inputs in the same order) and
+adds a provided method to the digest trait and a direct syscall call in the
+measurement program.
