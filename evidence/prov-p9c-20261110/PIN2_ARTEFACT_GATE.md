@@ -11,13 +11,15 @@ head d7142292c480303e90c9c96e7f4c60dde9a87961
 - cumulative changed paths 4bb3b3f..head (whole tree): 93; changed within build scope: 44; build-scope files hashed: 3871
 - 43919c0a9f2: 1 paths, classes {'W1': 1}
 - 271869c946d: 4 paths, classes {'W1': 4}
-- c7593d23fdc: 54 paths, classes {'STREAM_B_SHIPPED': 17, 'STREAM_B_SHIPPED_WORKSPACE_MANIFEST_FLAG': 1, 'DOCS_NOT_SHIPPED': 6, 'STREAM_B_TEST': 15, 'POOL_LINE': 15}
+- c7593d23fdc: 54 paths, classes {'STREAM_B_SHIPPED': 18, 'DOCS_NOT_SHIPPED': 6, 'STREAM_B_TEST': 15, 'POOL_LINE': 15}
 - d7142292c48: 34 paths, classes {'tools': 34}
 - tools commit paths outside evidence/scripts/tools: 0; pin..head paths outside evidence/scripts/tools: 0
 - build-scope changes not explained by a per-commit class: 0
 
-## Flag
-Root Cargo.toml changes by one line (workspace member programs/aspis-upload) and Cargo.lock adds package aspis-upload (deps solana-program, solana-sdk-ids only). Classified STREAM_B_SHIPPED_WORKSPACE_MANIFEST_FLAG because Cargo.toml is not literally in the named shipped set; lead to confirm.
+## Strict manifest check (mechanical)
+- Cargo.toml exactly the one-line aspis-upload member (pin, head): True, True
+- Cargo.lock exactly the aspis-upload entry with solana-program, solana-sdk-ids (pin, head): True, True
+- Failure of either makes the file NOT_NAMED and stops the pin.
 
 ## Changed build-scope paths (4bb3b3f..head)
 

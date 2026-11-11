@@ -15,6 +15,16 @@ W1_FILES={"programs/r1-cost-probe/src/pool_v1/pair_forest_semantic_terminal.rs",
  "programs/r1-cost-probe/src/close_checkpoint_tests.rs","programs/r1-cost-probe/src/r1_checkpoint_tests.rs"}
 # W1 named files exactly as in git diff 4bb3b3f 271869c946d
 W1_FILES=set(g("diff","--name-only",BASE,W1_COMMITS[1]).split())
+def pm(path, ref):
+    out=g("diff","-U0",BASE,ref,"--",path).splitlines()
+    return [l for l in out if l[:1] in "+-" and not l.startswith(("+++","---"))]
+EXPECT_TOML=['+    "programs/aspis-upload",']
+EXPECT_LOCK=['+[[package]]','+name = "aspis-upload"','+version = "0.1.0"','+dependencies = [',
+ '+ "solana-program",','+ "solana-sdk-ids",','+]','+']
+def strict_ok(ref):
+    t,l=pm("Cargo.toml",ref),pm("Cargo.lock",ref)
+    return {"Cargo.toml":t==EXPECT_TOML,"Cargo.lock":l==EXPECT_LOCK,"toml_diff":t,"lock_diff":l}
+STRICT_PIN=strict_ok(PIN); STRICT_HEAD=strict_ok(HEAD)
 Z4_SRC={"probe.rs","r1p_lib.rs","z9.rs","z9b.rs","z9c.rs","z9d.rs","z9e.rs"}
 Z4="docs/research/v8-r0-zk-20261009/z4/"
 def cls(p, commit_kind):
@@ -28,8 +38,8 @@ def cls(p, commit_kind):
     if p.startswith("programs/r1-cost-probe/"): return "STREAM_B_SHIPPED"
     if p.startswith("programs/aspis-upload/"): return "STREAM_B_SHIPPED"
     if p.startswith("programs/aspis-pool/"): return "POOL_LINE"
-    if p=="Cargo.lock": return "STREAM_B_SHIPPED"
-    if p=="Cargo.toml": return "STREAM_B_SHIPPED_WORKSPACE_MANIFEST_FLAG"
+    if p in ("Cargo.lock","Cargo.toml"):
+        return "STREAM_B_SHIPPED" if (STRICT_PIN[p] and STRICT_HEAD[p]) else "NOT_NAMED"
     if p.startswith(Z4):
         r=p[len(Z4):]
         if r in Z4_SRC: return "STREAM_B_SHIPPED"
@@ -99,7 +109,7 @@ res={"base":BASE,"pin":PIN,"head":HEAD,"pool_ref":POOLREF,
    "scope_files_listed":len(files),"notnamed":len(notnamed),"pool_files_differing":len(pool_diff),
    "per_commit":{c:v["n"] for c,v in per_commit.items()}},
  "NOT_NAMED":notnamed,
- "flags":{"root_Cargo_toml_workspace_member_added":"programs/aspis-upload (class STREAM_B_SHIPPED_WORKSPACE_MANIFEST_FLAG; not literally in the named shipped list; lead to confirm)"},
+ "strict_manifest_check":{"pin":STRICT_PIN,"head":STRICT_HEAD,"rule":"Cargo.toml diff vs 4bb3b3f is exactly the one-line member programs/aspis-upload; Cargo.lock diff is exactly the aspis-upload package entry with solana-program and solana-sdk-ids; anything else is NOT_NAMED"},
  "pool_line":{"tree_pin":pool_t_pin,"tree_head":pool_t_head,"tree_b936275":pool_t_ref,"tree_equal_pin":pool_t_pin==pool_t_ref,"files_compared":len(pool_files),"differing":pool_diff,
     "note":"c7593d23fdc itself shows changes under programs/aspis-pool versus its parent 271869c946d (parent differed from b936275); versus b936275 the tree is identical"},
  "tools_commit_non_tools_paths":tools_ship,"pin_to_head_non_tools_paths":ph_non,
@@ -119,7 +129,7 @@ L.append(f"- cumulative changed paths 4bb3b3f..head (whole tree): {len(cum)}; ch
 for c,v in per_commit.items(): L.append(f"- {c}: {v['n']} paths, classes {v['by_class']}")
 L.append(f"- tools commit paths outside evidence/scripts/tools: {len(tools_ship)}; pin..head paths outside evidence/scripts/tools: {len(ph_non)}")
 L.append(f"- build-scope changes not explained by a per-commit class: {len(unexpl)}")
-L.append("\n## Flag\nRoot Cargo.toml changes by one line (workspace member programs/aspis-upload) and Cargo.lock adds package aspis-upload (deps solana-program, solana-sdk-ids only). Classified STREAM_B_SHIPPED_WORKSPACE_MANIFEST_FLAG because Cargo.toml is not literally in the named shipped set; lead to confirm.")
+L.append(f"\n## Strict manifest check (mechanical)\n- Cargo.toml exactly the one-line aspis-upload member (pin, head): {STRICT_PIN['Cargo.toml']}, {STRICT_HEAD['Cargo.toml']}\n- Cargo.lock exactly the aspis-upload entry with solana-program, solana-sdk-ids (pin, head): {STRICT_PIN['Cargo.lock']}, {STRICT_HEAD['Cargo.lock']}\n- Failure of either makes the file NOT_NAMED and stops the pin.")
 L.append("\n## Changed build-scope paths (4bb3b3f..head)\n")
 for p in changed_in_scope: L.append(f"- {p}")
 open(OUT+".md","w").write("\n".join(L)+"\n")
