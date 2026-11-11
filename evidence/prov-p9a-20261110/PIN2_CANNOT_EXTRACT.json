@@ -1,0 +1,31 @@
+{
+ "schema": "PIN2_CANNOT_EXTRACT/1",
+ "items": [
+  {
+   "fn": "crate::r1_pool_adapter::close_checkpoint",
+   "source": "programs/r1-cost-probe/src/r1_pool_adapter.rs 968:8-968:26 (let [checkpoint, base] = accounts else { return Err(NotEnoughAccountKeys) })",
+   "attempts": [
+    {
+     "run": "PCXQ_E003",
+     "tool": "original Charon daad69be + Aeneas 959659a6",
+     "exit": 2,
+     "error": "[Error] Inconsistent projection: pe PtrMetadata, v VBorrow(VSharedBorrow), ty TRef(TSlice(TAdt id 1)); Compiler source: interp/InterpPaths.ml line 236, uncaught exception"
+    },
+    {
+     "run": "PCXQ_E004",
+     "tool": "second tool",
+     "exit": 101,
+     "error": "INFRA, not shape: rust linker thread abort in a build script (crunchy) under TasksMax=64 with a cold dependency build; fixed by CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_CODEGEN_UNITS=2 (jobs unchanged)"
+    },
+    {
+     "run": "PCXQ_E005",
+     "tool": "second tool Charon 454586e9 + Aeneas 0d21a9ec",
+     "exit": 1,
+     "error": "[Error] Inconsistent projection (same PtrMetadata on shared slice borrow at the same span); the partial emission carries a placeholder body for close_checkpoint; Funs.lean dropped (contains the placeholder), sha256 in PCXQ_E005_DROPPED_PLACEHOLDER_HASHES.txt"
+    }
+   ],
+   "classification": "two failed shapes (E003, E005) on the same slice-pattern construct: retired. No write-dropping emission exists and none is presented as a model.",
+   "tool_route": "Aeneas fix for PtrMetadata on a shared slice borrow in a slice pattern (InterpPaths.access_place), or a source rewrite to accounts.get(0)/get(1), which would change the frozen source (not done; trust/pin matter for the lead)"
+  }
+ ]
+}
