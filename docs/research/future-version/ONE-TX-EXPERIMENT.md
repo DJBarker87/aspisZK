@@ -622,3 +622,31 @@ Still to establish before "one transaction" means anything:
    bounds 7 to 8% above fixture maxima.
 3. The soundness rows for stages C and D, and the prover and proof format
    carrying the 384-byte certificate.
+
+### Round 3, third set: inventory of W13 and predictions (committed before measurement)
+
+Trace of the W13 feature set (debug-line build, transfer-13, summed path):
+1,063,192 instructions and 162,155 CU of syscall charges, program CU
+1,225,347. Inclusive instructions: semantic layer 354,633 (terminal 254,444;
+ten rounds 57,583; record parse 16,509); batched folds 326,236 (base lanes
+123,266); stage D final checks 162,356 (`W~` 75,172; `Weights::new` 17,553;
+`w~` 27,551; equality tables 12,086); preparation 84,833; Merkle 76,723;
+canonical scan 16,879; query geometry 16,207.
+
+The Pool's own cost was 97k to 106k on the 13-pair devnet payments and up to
+about 154k on the 255- and 1,023-pair fixtures of 19 October (settlement minus
+nested verifier). With about 21k of adapter work that makes the 125k allowance
+too small for the larger cases, so more margin is wanted before a Pool-fused
+build is attempted.
+
+Baseline W13. Applied cumulatively in this order, same keep-or-drop rule. All
+exact.
+
+| Candidate | Basis | Predicted saving |
+|---|---|---:|
+| G1 record validation as "low half canonical QM31 and high half zero" | 15,342 instructions in `parse_record`, which decodes eight limbs and then compares the high half | 7k |
+| G2 sumcheck round evaluation with one reduction per Horner step | 270 steps at about 171 (multiply 136, canonical add 35) | 8k |
+| G3 canonical scan two limbs per 64-bit word, four words per branch | 4,796 limbs at about 3.5 | 6k |
+| G4 stage D scale factors through the dot accumulator | ten calls at about 1.9k, four WideExact-by-QM31 products each | 7k |
+| G5 claim dots over one copied row per point | 174 pushes at about 340, of which the per-term match and bounds work is about 40 | 7k |
+| G6 second fold with the two edge products shared | per query two WideExact-by-M31 products and four pushes in place of six pushes and five coefficient products | 7k |

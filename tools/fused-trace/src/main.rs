@@ -19,7 +19,7 @@ use std::{env, fs};
 fn main() -> Result<()> {
     ensure!(!cfg!(debug_assertions), "release build only");
     let args: Vec<_> = env::args().collect();
-    ensure!(args.len() == 6, "usage: aspis-fused-trace <elf> <proof> <public> <tag> <trace-dir>");
+    ensure!(args.len() == 6 || args.len() == 7, "usage: aspis-fused-trace <elf> <proof> <public> <tag> <trace-dir> [third-account-prefix-file]");
     let elf = fs::read(&args[1])?;
     let proof = fs::read(&args[2])?;
     let public = fs::read(&args[3])?;
@@ -35,7 +35,14 @@ fn main() -> Result<()> {
     let mut svm = LiteSVM::new().with_compute_budget(ComputeBudget { compute_unit_limit: 200_000_000, heap_size: 256 * 1024, ..ComputeBudget::new_with_defaults(nesting) });
     svm.airdrop(&payer.pubkey(), 1_000_000_000).map_err(|e| anyhow!("airdrop: {e:?}"))?;
     svm.add_program(program, &elf).map_err(|e| anyhow!("load: {e:?}"))?;
-    for (key, data) in [(keys[0], proof), (keys[1], public), (keys[2], vec![0u8; 744 + 16 * 64])] {
+    // Optional prefix of the third account (the stage D certificate).
+    let mut third = vec![0u8; 744 + 16 * 64];
+    if let Some(path) = args.get(6) {
+        let prefix = fs::read(path)?;
+        ensure!(prefix.len() <= third.len(), "third-account prefix too long");
+        third[..prefix.len()].copy_from_slice(&prefix);
+    }
+    for (key, data) in [(keys[0], proof), (keys[1], public), (keys[2], third)] {
         svm.set_account(key, Account { lamports: 100_000_000, data, owner: program, executable: false, rent_epoch: 0 })?;
     }
     let ix = Instruction { program_id: program, accounts: vec![AccountMeta::new_readonly(keys[0], false), AccountMeta::new_readonly(keys[1], false), AccountMeta::new(keys[2], false)], data: vec![tag] };

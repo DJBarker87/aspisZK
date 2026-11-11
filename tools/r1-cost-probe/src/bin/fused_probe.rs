@@ -88,6 +88,8 @@ fn main()->Result<()> {
         impl aspis_core::Digest32 for Sha { fn digest(&self,parts:&[&[u8]])->[u8;32]{let mut d=Sha256::new();for p in parts {d.update(p);}d.finalize().into()} }
         let statement=aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1(&public).map_err(|e|anyhow!("statement: {e:?}"))?;
         let certificate=aspis_r1_cost_probe::verifier::candidate::fused::final_message_certificate(statement.semantic_public(),&proof,Sha).map_err(|e|anyhow!("certificate: {e:?}"))?;
+        // Kept beside the record so the trace driver can replay the same run.
+        fs::write(out.with_extension("cert"),&certificate)?;
         let mut account=zero.clone();account[..certificate.len()].copy_from_slice(&certificate);
         let diagnostic=send(vec![13],account.clone(),true)?;
         if diagnostic.error.is_none() {
