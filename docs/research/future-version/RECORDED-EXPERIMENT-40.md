@@ -1262,3 +1262,70 @@ compiled files in the repository have the same sha256. No `sorry`, `axiom`,
 `opaque` or `native_decide`; no limit raised. PSG-05 prints one linter
 warning (an unused `simp` argument in a copied R1 helper). The final
 `.olean`s are in `lean-out/`. Model level; nothing here concerns deployed code.
+
+### 12.4 W2, public selection at `T_n` (`lean/AspisRec40FinalSelect.lean`)
+
+The work-order statement ("R1 premises" read as `FollowClaim`'s list) is
+missing R1's tag premise. Compiled with one added hypothesis, `htag : pub.tag = 2`,
+which is in R1's list: R1's own row-32 selection carries it
+(`RawPublicRhoRecovery.select_before_rho`, `RWireRawFullPublicRun.select_actual_run`),
+and at the join it is R1's `tag` premise. Why it is needed: the selector
+(`FullPublicSelection.select` → `RawLatePublicSelector.select p T 2 4`) looks
+for the reseed frame with the fixed tag 2, while the run writes it with
+`pub.tag`. With `pub.tag ≠ 2` and a prover that reads nothing, no cell of `T_n`
+is a reseed frame with tag 2, so the opening walk finds no reseed and
+selection does not return `pub`. This counterexample is argued, not
+formalised.
+
+```
+theorem AspisRec40.FinalSelect.select_at {W} (hD : 5 ≤ p.D) (extract) (decision)
+  (H) (pub) (c1) (payload) (prior) (hprior) (hpub) (htag : pub.tag = 2) (hl) (he)
+  (Qtot) (hQ) (hold) (htail) (n) (hlo : 33 ≤ n) (hhi : n < 40) :
+  AspisRows40.FinalByte.select n (UnifiedSteps.address p hD H pub c1 payload n) T_n = some pub
+```
+with `p := SelectedTranscriptParams.params` (fixed by `FinalByte.select`) and
+`T_n` written out. No premise on the late rows' messages: the address-level run
+is typed over `payload : Nat → M`, and selection reads only the parsed bytes of
+row n's frame and the table. No literal constructor of any row is read, so the
+`.c2`/`.second` issue raised for W4 does not arise here.
+
+Proof: a copy of `select_before_rho` with the table before row n's frame.
+- R1's row-32 context at `T_n` is `FinalContext.joint_at`.
+- The public opening walk at `T_n` is R1's `RawPublicOpeningAnchor.walk_before_anchor`
+  with anchor row n's frame. The order is the query address before row 32's frame
+  (R1's route) and row 32's frame before row n's frame (`FinalBefore.run_cells`).
+- Then `RawLatePublicSelector.select_of_joint_context` and
+  `FullPublicSelection.after_query` (label 32 by `rfl` at R1's parameters).
+- `FinalByte.select`'s walk back of `n − 33` rows is `FinalContext.back_run`.
+
+### 12.5 W4, statement only (`lean/AspisRec40FinalBridgeStatement.lean`)
+
+`AspisRec40.FinalBridgeStatement.DecodesAndFollows40 : Prop` compiled, with
+`rawTrace40` (copy of R1's `rawTrace` with the 40-row protocol). Not proved.
+Changes from 10.3:
+- `hwords` is the full equality `choose raw T P m = W`, with `P` and `m` the
+  erased prefix and message of row n (the `…` of 10.3).
+- The late-row premise is on the literal constructor,
+  `∀ i, 33 ≤ i → i < 40 → ∃ b, pf i = .payload b`, as the coordinator directed.
+  `LatePayload` is on the erased message, and a literal `.c2` or `.second` at a
+  late row breaks the byte-level restore.
+- `pub.tag = 2` was added, for the reason given in 12.4: `fin` selects the
+  statement itself.
+
+If the first worker's statement differs, theirs takes precedence.
+
+### 12.6 Validation (second round)
+
+| Attempt | Module | Source sha256 | Exit | Wall | Peak RSS (time) | cgroup peak | Axioms |
+|---|---|---|---|---|---|---|---|
+| PSG-06 | AspisRec40FinalSelect | b155ebabc45d99e8ff96c57d5615ac1a3045d760a247ece48e5bc41ffef3f8f5 | 0 | 2.18 s | 3,593,648 KB | 383,455,232 B | `select_at`: [propext, Classical.choice, Quot.sound]; `triple_fst_eq`: none |
+| PSG-08 | AspisRec40FinalBridgeStatement | 2ff0f7c18b7fd3bfe179f1d03006085f94966cc363a2a44dfec8676692c6bed4 | 0 | 1.62 s | 3,565,808 KB | 365,461,504 B | definitions only |
+
+Failed: PSG-07 (f09c61e035ff03f8f8c43fa77164959333c8f6b9410e06be964a0e499a98944e),
+exit 1. `AspisRows40Protocol` was not imported, and `eval`'s namespace was not
+opened.
+
+Hashes are copied from the first line of each receipt's stdout.log and match
+the repository files. No `sorry`, `axiom`, `opaque` or `native_decide`, and no
+limit was raised. PSG-06 prints one linter note (a `change` that does nothing).
+The files from round one are unchanged.
