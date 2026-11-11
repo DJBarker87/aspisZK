@@ -870,3 +870,162 @@ New proof:
 Order, as instructed: the generic follow lemma first, compiled alone; then
 row 33 end to end; then general n; then the bridge; then `final_decoding40`;
 then `AspisFailureBoundModel` and the constant walk.
+
+## 10. Step 2, round 1: run model and follow statement compiled; parallel work order
+
+### 10.1 Compiled
+
+- `AspisRec40FinalRun` (PSD-72). The 40-row address-level run model.
+  R1's `UnifiedRun`, `UnifiedRecords`, `UnifiedSteps` and `UnifiedChainReads`
+  are total in the row number and are reused unchanged. Copied with
+  `r := 40` / `i < 40`: `protocol`, `transcript_eq`, `chain_eq`, `verifier`,
+  `reads`, `trace` (prior ++ verifier trace), `mem_trace`, `trace_consistent`,
+  `ordinary_reads`, `initial_read`, `reseed_read`, `query_reads`. New:
+  `verifier_split` (the 40-row verifier trace is R1's 33-row verifier trace
+  followed by the chains of rows 33–39), `trace_r1_prefix`, `final_reads`
+  (rows 32–39), `final_state_step` (`previous (i+1) = H (advance (absorbed i))`
+  for `i ≥ 32`), `final_address`.
+- `AspisRec40FollowStatement` (PSD-74). The follow STATED, no proof: `jointCtx`
+  (R1's actual row-32 context), `actualCtx n`, and
+  `FollowClaim p hD extract decision : Prop`. It reads: for every run
+  satisfying R1's premises of `UnifiedRhoInjection.decodes_and_follows`
+  (prior consistent, public length, row-0 codec, `firstReads ≤ Qtot`,
+  `¬ badColl`, `¬ ParsedStateCollision`), and every `33 ≤ n < 40`,
+  `bfollow (Final.output p pub T n (actualCtx n)) (traceFrom tr c) (QueryNextLaw.own p c) ((Final.missing p T (actualCtx n)).map (·, none)) T = some (UnifiedRun.transcript n, UnifiedRun.message n, UnifiedRun.challenge n)`,
+  with `c` = row n's frame and `T = tableBefore emptyTable tr c`.
+
+### 10.2 The follow under the prover-first ordering: where it stands
+
+No counterexample has been found, and the proof is not written. Against my
+own definitions in `AspisRows40Final`, the statement needs three facts about
+the trace before `c_n`'s first occurrence. Each is covered by R1's `badColl`
+(a fresh answer equal to the initial state, to an earlier answer, or to the
+32-byte prefix of an address already read):
+
+(a) Every frame `address j` (32 ≤ j < n), and every advance cell between
+them, is read before `c_n`. Otherwise `squeezes` would read
+`(T a_j).getD default`, i.e. the squeeze of the default state, and the
+pending cell would never be read, so `bfollow` would return `none`. Why
+`badColl` covers it: the first 32 bytes of `c_n` are `previous n = H (advance (absorbed (n-1)))`.
+If `c_n` is read before `address (n-1)` or before that advance, then the
+advance's fresh answer equals the 32-byte prefix of an address already
+read, which is `badColl`; this applies inductively down to row 32.
+
+(b) The squeeze cells of rows 32..n−1 and R1's joint missing cells that are
+absent from `T_n` are read after `c_n`. The verifier reads all of them, and
+any read before `c_n`'s first occurrence would be in `T_n`. No collision
+event is needed.
+
+(c) Row n's own advance and squeeze cells are not read before `c_n`, and no
+pending cell coincides with them. By `badColl`: reading `advance (H c_n)`
+or `squeeze (H c_n)` before `c_n` makes `H c_n` the prefix of an address
+already read, and a coincidence of squeeze cells means equal states.
+
+`bfollow` accepts the pending answers in any order and keeps following after
+the own program finishes, so interleavings of prover and verifier reads do
+not break the statement. R1's row-32 follow
+(`JointNextTrace.follows_after_prefix_query`) uses the same events. The
+statement as written is expected to hold with R1's premises only. The next
+deliverable is its proof: `AspisRec40FollowProof`, first the generic lemma
+for (a) at `T_n`, then the bfollow induction for n = 33, then general n.
+
+### 10.3 Parallel work order (for a second worker)
+
+Shared context for every item:
+- **Run.** The address-level run is `AspisRec40.FinalRun.trace p hD extract decision H pub c1 payload prior`. Row j's frame is `UnifiedSteps.address p hD H pub c1 payload j`, its absorbed state `UnifiedRecords.absorbed … j`, and the state before row j `UnifiedRecords.previous … j`.
+- **Read facts.** Use `FinalRun.{trace_consistent, initial_read, reseed_read, ordinary_reads, query_reads, final_reads, final_state_step, final_address, trace_r1_prefix}`.
+- **Premises.** Use R1's premise list exactly as in `FollowStatement.FollowClaim`: `hprior hpub hl he Qtot hQ hold htail` and `33 ≤ n < 40`.
+- **Table.** `T_n := tableBefore emptyTable tr (UnifiedSteps.address … n)`.
+- **Files and rules.** New files prefixed `AspisRec40Final…`; R1 sources are in the L187 flat directory (file names below).
+
+**W1. Context recovery at `T_n`.** Independent of the other items.
+
+```
+theorem AspisRec40.FinalContext.joint_at (…R1 premises…) (n) (hlo : 33 ≤ n) (hhi : n < 40) :
+  JointContext.parse p pub.pubBytes pub.tag 27 4 (UnifiedSteps.address … 32) T_n =
+    some (FollowStatement.jointCtx p hD H pub c1 payload)
+theorem AspisRec40.FinalContext.context_at (…same…) :
+  AspisRows40.Context.parse p pub.pubBytes pub.tag n (UnifiedSteps.address … n) T_n =
+    some (FollowStatement.actualCtx p hD H pub c1 payload n)
+```
+
+Copies the context half of `UnifiedRhoInjection.decodes_and_follows`
+(`R1UnifiedRhoInjection.lean:22`, the `hcontext` step at lines 47–100).
+
+- **What changes from R1.** R1 obtains the typed prefix from `OpeningQueryTrace.recover_and_follow` (`R1OpeningQueryTrace.lean:20`) and the seek from `QueryFirstRead.recover_query_before_endpoint` (`R1QueryFirstRead.lean:24`). Both fix the table at row 32's frame. Re-derive them at `T_n`:
+  - the typed walk from `OpeningPrefixAnchor.walk_before_anchor` (`R1OpeningPrefixAnchor.lean:17`), with anchor `c := address n` and `hac : Before tr a c` from `TableBeforeOrder.before_of_cell`, then `OpeningPrefixCompletion.typed_of_walk`;
+  - the seeks from `DuplexSeek.seek_of_noColl` (`R1DuplexSeek.lean:54`): fuel 9 for the query chain from row 32's endpoint, fuel 2 for each plain step 32..n−1, with `DuplexAbsorb.{unique_absorb, absCells_advance_empty}` and `DuplexRewind.unique_advance`.
+- **Assembly.** Assemble with `JointContext.parse_of_checks` and `IndexedMessage.read_encoded`. Unfold `Context.parse`/`back`/`readTail` with `AspisRows40.Context.{parse_row33, parse_sound}` as models.
+- **Includes fact (a) of 10.2** (frames and advances of rows 32..n−1 are in `T_n`). It can be shared with the follow proof.
+
+**W2. Public selection at `T_n`.** Depends on W1's `joint_at`.
+
+```
+theorem AspisRec40.FinalSelect.select_at (p := SelectedTranscriptParams.params) (…R1 premises…) (n) (hlo : 33 ≤ n) (hhi : n < 40) :
+  AspisRows40.FinalByte.select n (UnifiedSteps.address … n) T_n = some pub
+```
+
+Copies `RWireRawFullPublicRun.select_actual_run` (`RWireRawFullPublicRun.lean:42`, row 32).
+- **Main tools.** `RawLatePublicSelector.select_of_joint_context` (`RawLatePublicSelector.lean:23`), with `RawPublicOpeningWalk.select` at `T_n` from `RawPublicOpeningAnchor.walk_before_anchor` (`RawPublicOpeningAnchor.lean:20`; anchor parameter `c := address n`).
+- **First step.** `FinalByte.select` first walks back with `AspisRows40.Context.back` to row 32's frame (W1 gives that walk), then calls `FullPublicSelection.select p (address 32) T_n`. That reduces to `RawLatePublicSelector.select p T_n 2 4 (address 32)` by `FullPublicSelection.after_query` (label row 32).
+
+**W3. Word choice for 33 ≤ n < 40.** Independent of the other items.
+
+```
+theorem AspisRec40.FinalWords.constructed_components40 (decoder) (d) (prover) (H) (run)
+  (hrun : run = eval H (RawCutProverCompiler.experiment prover (AspisRows40.Starts.verifier decoder d)))
+  (iv) (Q) (hQ : firstReads emptyTable run.1 ≤ Q)
+  (hout : ¬ hitsBad (AllAddressCollision.bad iv BinRawByteCollisionTargets.pred Q) emptyTable run.1)
+  (hvalid : ∀ i < 33, LiteralTranscript.valid i (run.2.1.2 i)) (n) (hlo : 33 ≤ n) (hhi : n < 40)
+  (r1 w1 b2 w2 r2 b30 w30 v30 h0 h2 h30 hp2 hp30 — as in R1) :
+  let frame := RawCutWordsFromView.frame decoder H run.2.1.1 run.2.1.2 n
+  let w := LiteralTableWordChoiceBin.choose frame (tableBefore emptyTable run.1 frame)
+    (LiteralTranscript.erasePrefix ((AspisRows40.Protocol.protocol decoder).transcript H run.2.1.1 run.2.1.2 n))
+    (LiteralTranscript.erase (run.2.1.2 n))
+  w = BinCompiledRunWordStability.wordsFromRun decoder run
+```
+
+Copies `RWireLiteralTableChoiceWords.constructed_components` (`:80`) and
+`components` (`:25`), which carry `hn : n < 33`.
+- **Run.** The run is the 40-row base run.
+- **Lemmas to use.**
+  - `AspisRec40.Frames.{frame_read, frameFromView_eq, base_lift}`;
+  - `AspisRec40.CleanRun.base_split`: R1's base run is a prefix, so the R1 cut facts transfer by `OracleProgramRecording.cut_append_of_read`;
+  - `RWireConstructedWords.buildWords_eq_full_from_messages`.
+- **Equality.** The equality of all three words is needed, because n ≥ 30.
+
+**W4. Byte-to-address bridge for 40 rows.** Depends on W1, W2, W3 and the
+follow proof. Its statement can be compiled now; its proof comes last.
+
+```
+theorem AspisRec40.FinalBridge.decodes_and_follows40 (decoder) (draw) (H) (pub) (pf)
+  (hvalid : ∀ i < 33, LiteralTranscript.valid i (pf i)) (prior) (hprior) (Q)
+  (hQ : firstReads emptyTable tr ≤ Q) (hout : ¬ hitsBad (AllAddressCollision.bad …iv… pred Q) emptyTable tr)
+  (n) (hlo : 33 ≤ n) (hhi : n < 40) (raw) (hfirst : firstCell ((AspisRows40.Protocol.protocol decoder).chain H pub pf n) = some raw)
+  (W) (hwords : LiteralTableWordChoiceBin.choose raw T … = W) :
+  -- tr := prior ++ (eval H (FS2.verifier (AspisRows40.Protocol.protocol decoder) draw pub pf)).1,  T := tableBefore emptyTable tr raw
+  ∃ own pend g, AspisRows40.FinalByte.fin n raw T = some (own,pend,g) ∧
+    bfollow g (traceFrom tr raw) own pend T =
+      some (enrichPrefix W ((AspisRows40.Protocol.protocol decoder).transcript H pub pf n),
+        enrichMessage W (pf n), (AspisRows40.Protocol.protocol decoder).chal H pub pf n)
+```
+
+Copies `RWireRawLiteralDecoderRestore.decodes_and_follows`
+(`RWireRawLiteralDecoderRestore.lean:15`) and
+`RWireLiteralLegacyDecoderCompletion.decodes_and_follows`
+(`RWireLiteralLegacyDecoderCompletion.lean:40`, the `legacyProtocol` /
+`RawBoundedTrace` map from bytes to addresses and the translation of
+`AllAddressCollision.bad` into `badColl` and `ParsedStateCollision`).
+- **What it consumes.** W1, W2 and `FollowClaim` at the address level, in place of R1's `UnifiedRhoInjection.decodes_and_follows`, plus `FinalByte.atCanonical_of_component`/`fin_isSome`.
+- **Instantiation.** At the recorded run it is the copy of `RWireRawLiteralRecordedDecoder.actual_run_decodes_and_follows` (`:47`). `final_decoding40` then follows, as `CleanRun.decodes_r1rows` does for rows 0–32, with `Starts.decAspis_final` (`decFinal = fin n` on these frames).
+
+### 10.4 Validation
+
+| Attempt | Module | Source sha256 | Exit | Wall | Peak RSS (time) | cgroup peak | Axioms |
+|---|---|---|---|---|---|---|---|
+| PSD-72 | AspisRec40FinalRun | 12a729f23a1ad9a0580b5db4cac105ad3d96ffd11bd3baf729eb10176a9c8335 | 0 | 2.72 s | 3,477,788 KB | 361,304,064 B | 15 theorems, each a subset of [propext, Classical.choice, Quot.sound] |
+| PSD-74 | AspisRec40FollowStatement | 63e7b9599c8ad43ab40b411dda79e304f569f95a539822c0aa4601ef8ace65f8 | 0 | 1.80 s | 3,499,536 KB | 353,583,104 B | definitions only |
+
+PSD-71 failed, exit 1: an unfilled existential witness in `trace_r1_prefix`.
+PSD-73 failed, exit 1: an unqualified `Context.Context`. No `sorry` and no new
+axioms in the compiled files.
