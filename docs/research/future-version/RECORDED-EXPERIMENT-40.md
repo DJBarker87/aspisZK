@@ -447,3 +447,172 @@ PSD-34 walks the constant dependencies of `projected_first_reads`,
 `first_reads`, `sampler_verifier_length` and `hit_mass`: 250 modules and
 1,166 constants, with **0 class (iii) modules**. `R19BudgetSamplerReads`
 (class ii) is reached, through R1's `sampler_length`.
+
+## 7. The clean event: measurement and statement (step 2; nothing in step 3 is copied yet)
+
+### 7.1 Measurement
+
+R1's clean event is `Frozen2StartChargeClean.clean`; `failure_bound`
+consumes it through `CleanAcceptedModel`. Two measurement files (each proves
+nothing) walk the constant dependencies, expanding through the 555
+changed-dependent or class (iii) modules:
+- `AspisRec40Measure4.lean` (PSD-36) walks the whole event.
+- `AspisRec40Measure5.lean` (PSD-37) walks each ingredient of R1's proof
+  separately. Every module is assigned to the first ingredient that reaches
+  it, in the order listed below.
+
+Result: `clean` reaches 251 modules, 237 class (ii) and 14 class (iii).
+`failure_bound` reaches 39 more, all class (ii) (extractor, envelope and
+density modules, which belong to the acceptance-link agent's assembly).
+
+| Ingredient of R1's proof | Modules (exclusive) | Disposition for Aspis |
+|---|---:|---|
+| H. Definitions: `CleanAcceptedModel`, `bad`, `projected`, and through `dV_frozen2` its decision | 99 (10 iii) | **(i)** 75: R1's decoder chain inside `decFinal`, the classifier-density modules, the `R1Literal*`/`R1Unified*` decoders, `D0*`, `Literal*`, word builders. **Done elsewhere**: `projected` (AspisRec40HitMass), `dec`→`decFinal`, classifier→`classifier40` (PSA), `Checks`→`AspisChecks` (PSA), `admit`/`D0ScheduleAdmission`→`admitS` (game), `OraclePortStoredDecisionDraftC4`/`ParserC4`→`parseReachedS` (game), `dV_frozen2`→`dV_aspis` (game). **(ii)** 3: `CleanAcceptedModel`, `bad` and `clean` → `CleanAcceptedModel40`, `bad40`, `clean40`. **(iii)** 10, below |
+| E. Prefix: `same_transcript`, `chronological_prefix`, `recovered_eval`, `first_reads` | 15 (3 iii) | **Done**: `chronological_prefix`, `recovered_eval` (HitMass); `first_reads` → `projected_first_reads` (CallBudget, `Q + 1111`). **(ii)** 1: `same_transcript` (it needs `words_prefix`, i.e. the frame lemmas `OraclePortReplay.frameFromView_eq`, `RawCutWordsFromView.{frameFromView_eq, frame_read}` for the 40-row run; only rows 0, 2 and 30 are read, delegation through `chain_eq`). **(iii)** 3, below |
+| D. Format: `RWireCheckedFormat.format_of_checks`, `format_of_enrich` | 11 | **(i)** 10. **(ii)** 1: `format_of_checks` from `AspisChecks`. R1's needs R1's `Checks`, but it uses only `data`, `matchingRead`, the row-31/32 entries and their validity (`checks_force_constructor_schedule`), and `AspisChecks` has each of these on `rs.take 33`. This copy matters: R1's `Checks` can be had from `AspisChecks` only together with no-hit (`aspis_checks_noHit_r1_checks`), and the format is needed before the no-hit is known |
+| C. Tag: `OraclePortAdmission.accepted_tag`, `admitted_dV` | 1 | **(i)** `InitialTagDecision`. **(ii)** 1: `accepted_tag` with `admitS` (game: `admitted_aspis`, `accepted_guardS` give `Guard (take33 tr)`) |
+| B. Words: `OraclePortCleanModel.extractor_word_alignment` | 8 | **(ii)** 1: the alignment for the 40-row run (`wordsFromRun` of the recorded run equals that of the original, and the words are fixed). It reads rows 0, 2 and 30; the frame modules (`RawCutCommitmentFrames`, `RawCutLiteral*Successor`, …) are **(i)** |
+| G. Hit: `Frozen2StartChargeCompletion.hit_in_prefix` | 1 | **(ii)** 1: 40 rows (`StartChargeHit.hit_implies_chain` is generic in the protocol, **(i)**). It needs `transcript_start_read` for 40 rows (frame read of the charged run) |
+| F. Decodes: `Frozen2StartChargeCompletion.decodes` (`RWireRawFullPublicRun.adaptive_run_decodes_and_follows`, rows < 33) | 82 | Rows 0–32: **(i)** 82, plus **(ii)** 1 transport lemma. The Aspis base trace is R1's base trace followed by the chains of rows 33–39 (`FS2.verifier_eval` and `chain_eq`), so R1's no-collision and query hypotheses pass to the prefix, and `decFinal = dec` wherever `dec` decodes (`decAspis_of_r1`). Rows 33–39: **(iv) new content**, below |
+| A. Checks: `OraclePortFrozen2Consumer.fibre_checks` through `OraclePortFrozen2C6.checked_acceptance` | 34 (1 iii) | **Game agent**: M6 and M8 done (`accepted_checks_aspis`); M7 (`Reached`, `Roots.targets`, `maps_eq_builder` on `AspisRec40.Decision.original`) and M9 (`CheckedAcceptance40`, `fibre_checks`) in progress. The clean event takes M9's result as a hypothesis (7.2) |
+
+**Class (iii), all 14**, with what each is used for and what replaces it:
+
+| Module | Used for (constants reached) | Aspis |
+|---|---|---|
+| `OraclePortFrozen2Decision` | `dV_frozen2`, `batch`, `batch0`, `afterBatch0`, `stage2`, `batch1` | `dV_aspis` (game, done) |
+| `OraclePortFrozen2Checkpoint` | `checkpoint`, `finish`, `checkpoint_reads` inside `afterBatch0` | none: no checkpoint |
+| `OraclePortCheckpointStateC3`, `…AbiC5`, `…OracleC5`, `…PreparedC5`, `…ResumeC5` | the saved-state ABI, writer/resumer and query decoding used by `dV_frozen2`'s checkpoint step | none |
+| `OraclePortCheckpointSlicesC5` | checkpoint slice lemmas used by `OraclePortFrozen2.decision_budget` | none |
+| `R16DecisionCheckpoint`, `R16DecisionQueryModel` | the TX2 decision and query model in `dV_frozen2`'s definition | none (`dV_aspis` is direct) |
+| `OraclePortAcceptedContextC6` | `context`, `coordinates` of the stage-2 decision | none (`parseReachedS`) |
+| `OraclePortFrozen2Bounds` | `decision_budget` 1,046 | `decision_budgetS` 975 (game, done) |
+| `R1VerifierCallBudget` | `firstReads_le_length` | re-proved in AspisRec40CallBudget (done) |
+| `OraclePortFrozen2Trace` | `accepted_trace`, `old_read`: the accepted run's reads, in `fibre_checks` | M7 (`Reached` on `Decision.original`) |
+
+**Counts, Aspis side.**
+- (i) reused unchanged: about 180 of the 237 class (ii) modules.
+- (ii) copies, mine: 7–9 modules, namely `clean40` with `accepted_facts40` and
+  `CleanAcceptedModel40`/`bad40`, `same_transcript40` with the frame lemmas,
+  `format40`, `tag40`, `wordAlignment40`, `hit_in_prefix40`/`decodes40`, and the
+  rows-0–32 transport.
+- Copies or new content by the game agent: 34 (M7, M9).
+- (iii) counterparts: none to copy. 13 are replaced by `dV_aspis` or by
+  nothing; `OraclePortFrozen2Trace` is replaced by M7.
+- (iv) new content, mine: the decoding completeness of rows 33–39 (estimated
+  4–8 modules, section 7.3).
+
+### 7.2 The statement
+
+Definitions compiled in `AspisRec40CleanStatement.lean` (PSD-38, exit 0):
+`CheckedAcceptance40`, `compiledRows40`, `CleanAcceptedModel40`, `bad40`,
+`FinalDecodes`.
+
+R1:
+
+```
+theorem Frozen2StartChargeClean.clean (D) (P) (Q) (hq : ∀ H, (eval H P).1.length ≤ Q) :
+  CleanAcceptedModel D (projected D P) (bad D P Q)
+CleanAcceptedModel D exp hit := ∀ H, let run := eval H exp; run.2.2 = true → ¬ hit run →
+  ∃ _ : LiteralAcceptanceTerminal.Checks run.2.1.1 ((LiteralByteProtocol.protocol D).transcript H run.2.1.1
+      (proof (wordsFromRun run) run.2.1.2) 33).rounds,
+    ¬ GenericNoHit.hitFrom LiteralClassifier.bad run.2.1.1 [] (… 33).rounds
+bad D P Q run := binaryCollision (Q+1161) run ∨ prefixHit D P run
+```
+
+Aspis (to be proved in `AspisRec40Clean`):
+
+```
+theorem clean40 (D) (P) (Q) (hq : ∀ H, (eval H P).1.length ≤ Q)
+    (hchecks : ∀ s, CheckedAcceptance40 D (AspisOneTx.dV_aspis s)
+        (OraclePortStoredReductionC7.pairProver s P) (Q+1111))                 -- from the game agent (M9)
+    (hfinal : ∀ H,                                                          -- mine, section 7.3
+        firstReads emptyTable (eval H (AspisRec40.ChargePrefix.base D P)).1 ≤ Q+1111 →
+        ¬ hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv
+            BinRawByteCollisionTargets.pred (Q+1111)) emptyTable (eval H (AspisRec40.ChargePrefix.base D P)).1 →
+        RWireCheckedFormat.Format (eval H (AspisRec40.ChargePrefix.base D P)).2.1.2 →
+        (eval H (AspisRec40.ChargePrefix.base D P)).2.1.1.tag = 2 →
+        FinalDecodes D H (eval H (AspisRec40.ChargePrefix.charged D P))) :
+  -- the four premises of hfinal are exactly those of R1's
+  -- Frozen2StartChargeCompletion.decodes (hQ, hout, format, tag)
+  CleanAcceptedModel40 D (AspisRec40.HitMass.projected D AspisOneTx.dV_aspis P) (bad40 D P Q)
+```
+
+Every difference from R1:
+1. `Checks` on 33 rounds becomes `AspisChecks decodePairS` on 40 rounds, and
+   `LiteralClassifier.bad` becomes `AspisAcceptance.bad decodePairS`. This is
+   the form `AspisAcceptance.aspis_relation` consumes, with
+   `pf := proof (wordsFromRun run) run.2.1.2`.
+2. `projected D P`, with R1's fixed `dV_frozen2`, becomes
+   `HitMass.projected D dV_aspis P`.
+3. `Q + 1161` becomes `Q + 1111` (`CallBudgetAspis.projected_first_reads`).
+4. The prefix hit uses `decFinal` and `classifier40 decodePairS`.
+5. **Two hypotheses that R1's statement does not have:**
+   - `hchecks` is R1's `fibre_checks` (proved inside R1 from the
+     two-transaction chain). For Aspis it is the game agent's M9 result, with
+     exactly the shape of R1's `OraclePortConsumer.CheckedAcceptance`
+     (definition `CheckedAcceptance40`): no collision on the recorded run plus
+     acceptance of the original run give `AspisChecks` on the recorded run's
+     40 rows. It is a hypothesis only until M9 lands; then it is discharged,
+     not kept.
+   - `hfinal` is the rows-33–39 part of R1's `Frozen2StartChargeCompletion.decodes`.
+     It is mine (7.3) and is also discharged, not kept.
+
+   Neither is a new assumption of the final result. The final clean event is
+   R1's with no extra premise once M9 and 7.3 are in.
+
+**What M7 must give for `hchecks`.** M9 builds `hchecks` from
+`accepted_checks_aspis` instantiated at the actual run. The hypotheses of
+`accepted_checks_aspis` that M7 supplies, on the run
+`eval H (AspisRec40.Decision.original D (dV_aspis s) (pairProver s P))`:
+- `parsed : parseReachedS stored tr = some p` and
+  `query : queries (take33 tr) = some q`, for the run's erased 40-round
+  transcript `tr`, and `accepted`. These are copies of
+  `OraclePortFrozen2Reached.accepted`.
+- `log` = the run's trace, with `consistent` and `contains` (the merged slot
+  reads are in the log). Copies of `Reached.{slots_read, consistent}`.
+- `bound : firstReads emptyTable log ≤ Q + 1111`. This is
+  `CallBudget.first_reads` / `projected_first_reads`, mine and done.
+- `clean`: no collision on the log, from the hypothesis of `CheckedAcceptance40`.
+- `frames k` = first cells of rows 0, 2 and 30, with `frameRead` and
+  `rootRead`. Copies of `OraclePortFrozen2Roots.targets` and
+  `Reached.frame_read`.
+- To turn the conclusion's
+  `reword (maps log frames p) (typedRows p q tr)` into `compiledRows40`:
+  a copy of `OraclePortFrozen2ActualChecks.maps_eq_builder` (recovered maps =
+  `wordsFromRun`).
+
+### 7.3 New content: decoding completeness of rows 33 to 39
+
+R1's clean event charges a classifier hit at a submitted row to the decoded
+start of that row (`hit_in_prefix` through `Decodes`). For Aspis, a hit at
+rows 33–39 has to be charged the same way. That needs: on the actual charged
+run, with no collision, the absorb frame of row n (33 ≤ n < 40) is decoded
+by `decFinal` at the table before it, and `bfollow` of its output follows the
+trace to the true (prefix, message, challenge).
+
+Ingredients:
+- `FinalByte.select n` and `Context.parse` succeed on the actual table. This
+  uses `DuplexSeek.seek_of_noColl` for the one-step walks, and R1's row-32
+  facts at the actual run: `JointContext.parse` with 31 records and
+  `FullPublicSelection.select` at row 32's frame, which R1 obtains inside
+  `adaptive_run_decodes_and_follows`. These must be shown to persist at the
+  larger table before row n's frame, under no collision.
+- The follow of `Final.output`: the pending squeeze answers of rows 32..n−1 are
+  recorded from the trace, and R1's 32-round prefix completion is R1's
+  (`R1JointActualView`, `RWireRawLiteralDecoderCompletion`).
+
+This was earlier deferred as "honest-run copies". The clean event cannot do
+without it: without it a classifier hit at rows 33–39 is not charged. It is
+not a weaker event and not an assumption; it is a proof obligation in my own
+files.
+
+### 7.4 Validation
+
+| Attempt | Module | Source sha256 | Exit | Wall | Peak RSS (time) | cgroup peak |
+|---|---|---|---|---|---|---|
+| PSD-36 | AspisRec40Measure4 (measurement) | e96b4633…6b208cb | 0 | 4.34 s | 4,223,240 KB | 428,572,672 B |
+| PSD-37 | AspisRec40Measure5 (measurement) | 862f3cea…bc8721 | 0 | 4.62 s | 4,225,668 KB | 429,907,968 B |
+| PSD-38 | AspisRec40CleanStatement (definitions) | 3c3fcfb2…53dd837 | 0 | 2.95 s | 4,218,656 KB | 429,699,072 B |
+
+No theorems in these three files, so no axioms printed.
