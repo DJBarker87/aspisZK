@@ -332,3 +332,118 @@ Earlier attempts on HitMass, all exit 1:
 No `sorry`, no new axioms, no option raised. Not started, as instructed: the
 clean event, the restricted union bound and the weighted composition (item
 14), and the honest-run copies.
+
+## 6. Digest-call budget of the 40-row transcript (and the Aspis total)
+
+### 6.1 R1's statements, and the copies
+
+R1 (`OracleDecisionPrereqSampler`, class ii; it does not use
+`R1VerifierCallBudget` at constant level):
+
+```
+rowBudget n = 3 + [n = 0] + [n = 26] + 14·[n = 31]
+sampler_length : (eval H (UnifiedSampler.samp p _ n P m).toProgram).1.length ≤ rowBudget n   -- every n, every message
+row_length     : (eval H ((LiteralByteProtocol.protocol D).chain H pub pf n).toProgram).1.length ≤ rowBudget n
+budget_sum     : ((List.range 33).map rowBudget).sum = 115
+transcript_length : (chains 0..32).flatten.length ≤ 115
+verifier_length   : (terminal ≤ B) → (eval H (OracleDecisionFeasibilityCore.verifier D dO pub pf)).1.length ≤ 115 + B
+OraclePortExperiment.Budget dO := ∀ H p m, (eval H (dO p m)).1.length ≤ 1046
+OraclePortExperiment.verifier_budget : Budget dO → … ≤ 1161
+OraclePortExperiment.first_reads : AdversaryQueries P Q → Budget dO → firstReads emptyTable (eval H (recorded D dO P)).1 ≤ Q + 1161
+```
+
+Aspis (`AspisRec40CallBudget`):
+
+```
+row_length        : (eval H ((AspisRows40.Protocol.protocol D).chain H pub pf n).toProgram).1.length ≤ rowBudget n
+                    -- R1's row_length through Protocol.chain_eq; not re-proved
+budget_sum        : ((List.range 40).map rowBudget).sum = 136
+budget_split      : … = ((List.range 33).map rowBudget).sum + 7 * 3
+transcript_length : (chains 0..39).flatten.length ≤ 136
+sampler_verifier_length : (eval H (AspisRows40.Starts.verifier D d pub pf)).1.length ≤ 136
+verifier_length   : (terminal ≤ B) → (eval H (AspisRec40.Decision.verifier D dO pub pf)).1.length ≤ 136 + B
+Budget dO B := ∀ H p m, (eval H (dO p m)).1.length ≤ B            -- R1's, with the bound a parameter
+verifier_budget   : Budget dO B → … ≤ 136 + B
+firstReads_le_length                                              -- re-proof of R1's generic lemma
+                                                                  -- (which is in R1VerifierCallBudget, class iii)
+firstReads_eq     : copy of OracleDecisionFeasibilityCompiler.firstReads_eq (40-row verifier)
+first_reads       : AdversaryQueries P Q → Budget dO B →
+                    firstReads emptyTable (eval H (AspisRec40.Decision.recorded D dO P)).1 ≤ Q + (136 + B)
+projected_first_reads : (∀ s, Budget (d s) B) → (∀ H, (eval H P).1.length ≤ Q) →
+                    firstReads emptyTable (eval H (AspisRec40.HitMass.projected D d P)).1 ≤ Q + (136 + B)
+```
+
+`projected_first_reads` is new in form. It is the bound for the full
+stored-input experiment with the decision as a parameter. R1 states its
+counterpart only inside the two-transaction module (`OraclePortFrozen2.distinct_bound`).
+The proof here is direct. The full trace is the prover's trace, one verifier
+run, and the same run again (`projected_trace_eq`, via the decision
+verifier's enrichment invariance). The repeat adds no distinct reads
+(`OracleProgramRecording.firstReads_repeat_suffix`).
+
+Instance at the one-transaction game agent's decision (`AspisRec40CallBudgetAspis`).
+Its `AspisOneTx.decision_budgetS` is exactly `∀ s, Budget (dV_aspis s) 975`
+(`dV_aspis_budget`). So:
+
+```
+AspisRec40.CallBudgetAspis.verifier_issued       : (eval H (Decision.verifier D (dV_aspis s) pub pf)).1.length ≤ 1111
+AspisRec40.CallBudgetAspis.projected_first_reads : firstReads emptyTable (eval H (projected D dV_aspis P)).1 ≤ Q + 1111
+```
+
+These were compiled against the `AspisOneTxDecision` object present on the
+build host at PSD-35.
+
+### 6.2 The count, and how the parts add up
+
+The paper count of 136 is confirmed: 33 × 3 + 1 (row 0's initialization
+frame) + 1 (row 26's opening reseed frame) + 14 (row 31's query chain: eight
+squeeze/advance pairs after the absorb, 17 calls) + 7 × 3 (rows 33–39, each
+absorb, squeeze and advance) = 136. Every row bound holds on every input,
+malformed messages included (R1's `sampler_length`).
+
+R1: 1,161 = 115 (transcript) + 1,046 (decision), and the decision is
+477 (batch 0) + 563 (batch 1) + 6 (checkpoint reads).
+Aspis: 1,111 = 136 (transcript) + 975 (decision). The decision is the three
+merged multiproofs only (`mergedAll_budget`), and there are no checkpoint
+reads, because `dV_aspis` reads no checkpoint and the one-transaction verifier
+has none. The seven new rows move from "after the checkpoint" into the
+transcript part: they add 21 to the transcript count, and the decision no
+longer contains them. Nothing else issues digest calls in the model verifier.
+The bound needed for the terminal decision is `∀ s, Budget (d s) 975`, which
+`decision_budgetS` provides.
+
+### 6.3 A refinement point found while doing this: call order
+
+In the model (R1's and this copy), the verifier first runs all transcript
+rows and then the terminal decision. In R1 that is also the source order.
+In Aspis it is not. `fused.rs::verify_summed` (lines 495–512) runs
+`prepare` (rows 0–32), then `batch_merkle(…, 0)` and `batch_merkle(…, 1)`
+(the merged Merkle digests), then `summed_final_checks` (rows 33–39). So the
+Rust issues the Merkle digests before rows 33–39, and the 40-row model issues
+them after.
+
+The counts above do not depend on the order: they are sums over the same
+calls. The prefix and start arguments do depend on it. `chronological_prefix`,
+`hit_mass` and the charged experiment assume that the 40 sampler rows come
+before every terminal read. A source refinement of the Aspis verifier
+therefore needs one of two things:
+- a transport argument for that reordering, i.e. that the transcript rows
+  33–39 do not depend on the Merkle digests' answers (AGENTS.md §4 requires
+  this to be proved, not assumed);
+- or a model with the Rust order.
+
+Nothing here assumes either. The point is recorded for the one-transaction
+game agent and the source-refinement work.
+
+### 6.4 Validation
+
+| Attempt | Module | Source sha256 | Exit | Wall | Peak RSS (time) | cgroup peak | Axioms |
+|---|---|---|---|---|---|---|---|
+| PSD-33 | AspisRec40CallBudget | efae0c78…42a68189 | 0 | 2.72 s | 4,212,008 KB | 431,751,168 B | 10× [propext, Classical.choice, Quot.sound], 1× [propext, Quot.sound], 2× [propext] |
+| PSD-34 | AspisRec40Measure3 (measurement only) | aeb94a43…a1f981 | 0 | 2.16 s | 4,228,104 KB | 443,543,552 B | none (no theorems) |
+| PSD-35 | AspisRec40CallBudgetAspis | c6bf2d24…dcf88d9 | 0 | 3.54 s | 4,215,524 KB | 417,832,960 B | 3× [propext, Classical.choice, Quot.sound] |
+
+PSD-34 walks the constant dependencies of `projected_first_reads`,
+`first_reads`, `sampler_verifier_length` and `hit_mass`: 250 modules and
+1,166 constants, with **0 class (iii) modules**. `R19BudgetSamplerReads`
+(class ii) is reached, through R1's `sampler_length`.
