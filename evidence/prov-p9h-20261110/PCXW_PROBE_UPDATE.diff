@@ -1,0 +1,207 @@
+--- a/src/statement/pool_v1/pair_forest_semantic_terminal.rs
++++ b/src/statement/pool_v1/pair_forest_semantic_terminal.rs
+@@ -94,6 +94,9 @@
+     recipient: Option<Digest>,
+     change: Digest,
+     withdrawal_amount: Option<u32>,
++    // Read only by the R0 public-input serializer.
++    #[cfg_attr(not(feature = "r0"), allow(dead_code))]
++    destination: Option<[u8; 32]>,
+     transition: &'a PoolV1PairLatePublicStatementV1,
+ }
+ 
+@@ -1338,6 +1341,7 @@
+         recipient: Some(public.recipient_commitment),
+         change: public.change_commitment,
+         withdrawal_amount: None,
++        destination: None,
+         transition,
+     }
+ }
+@@ -1356,6 +1360,7 @@
+         recipient: None,
+         change: public.change_commitment,
+         withdrawal_amount: Some(public.amount),
++        destination: Some(public.destination_token_account),
+         transition,
+     }
+ }
+@@ -2011,8 +2016,12 @@
+         pub fn transition(self) -> &'a PoolV1PairLatePublicStatementV1 {
+             self.semantic().transition
+         }
+-        /// SPEC §9 declaration order. Pool/domain/sequence and source current
+-        /// root are not fields of R0P.Public and are not silently hashed here.
++        /// SPEC §9 declaration order, followed by an appended binding tail:
++        /// pool (32 bytes), deployment domain (32 bytes), one has-destination
++        /// byte (1 iff withdrawal), then the withdrawal destination token
++        /// account (32 bytes) iff present. These are hashed into the
++        /// transcript through these bytes. The source sequence number and the
++        /// source current root are still not serialized and not hashed here.
+         /// Existing reject-only public guards remain in the terminal.
+         pub fn public_bytes(self) -> Result<Vec<u8>, Error> {
+             fn fields(out: &mut Vec<u8>, values: &[M31]) -> Result<(), Error> {
+@@ -2073,6 +2082,12 @@
+             frontier(&mut out, &source.frontier)?;
+             fields(&mut out, &after.next_root)?;
+             frontier(&mut out, &after.next_frontier)?;
++            out.extend_from_slice(&p.pool);
++            out.extend_from_slice(&p.deployment_domain);
++            out.push(u8::from(p.destination.is_some()));
++            if let Some(destination) = p.destination {
++                out.extend_from_slice(&destination);
++            }
+             Ok(out)
+         }
+         /// Fast K path. D is deliberately absent from the terminal formula,
+@@ -2208,7 +2223,8 @@
+ 
+     // Retain the previous loop implementation as a differential oracle. The
+     // fixture performs no proof generation or Merkle-tree construction.
+-    fn loop_reference(public: r0::Public<'_>) -> Result<Vec<u8>, Error> {
++    // This is the frozen (4bb3b3f) layout verbatim, without the binding tail.
++    fn old_layout_reference(public: r0::Public<'_>) -> Result<Vec<u8>, Error> {
+         fn fields(out: &mut Vec<u8>, values: &[M31]) -> Result<(), Error> {
+             for value in values {
+                 if value.0 >= P {
+@@ -2252,6 +2268,33 @@
+         Ok(out)
+     }
+ 
++    // The frozen layout followed by the appended binding tail, written from
++    // the public input structs rather than from SemanticPublic.
++    fn loop_reference(public: r0::Public<'_>) -> Result<Vec<u8>, Error> {
++        let mut out = old_layout_reference(public)?;
++        let (pool, domain, destination) = match public {
++            r0::Public::Transfer(p, _) => (p.pool, p.deployment_domain, None),
++            r0::Public::Withdrawal(p, _) => {
++                (p.pool, p.deployment_domain, Some(p.destination_token_account))
++            }
++        };
++        out.extend_from_slice(&pool);
++        out.extend_from_slice(&domain);
++        out.push(u8::from(destination.is_some()));
++        if let Some(destination) = destination {
++            out.extend_from_slice(&destination);
++        }
++        Ok(out)
++    }
++
++    // Frozen §9 lengths without the binding tail (transfer, withdrawal).
++    const OLD_TRANSFER_BYTES: usize = 1455;
++    const OLD_WITHDRAWAL_BYTES: usize = 1427;
++    // With pool[32] || deployment_domain[32] || has_destination[1]
++    // || destination[32] iff withdrawal.
++    const TRANSFER_BYTES: usize = OLD_TRANSFER_BYTES + 32 + 32 + 1;
++    const WITHDRAWAL_BYTES: usize = OLD_WITHDRAWAL_BYTES + 32 + 32 + 1 + 32;
++
+     fn rejects_like_reference(public: r0::Public<'_>) {
+         assert_eq!(loop_reference(public), Err(Error::Public));
+         assert_eq!(public.public_bytes(), Err(Error::Public));
+@@ -2270,7 +2313,10 @@
+                 let actual = public.public_bytes().unwrap();
+                 assert_eq!(actual, loop_reference(public).unwrap());
+                 assert_eq!(actual[0], variant as u8);
+-                assert_eq!(actual.len(), if variant == 0 { 1455 } else { 1427 });
++                assert_eq!(
++                    actual.len(),
++                    if variant == 0 { TRANSFER_BYTES } else { WITHDRAWAL_BYTES }
++                );
+             }
+         }
+     }
+@@ -2327,4 +2373,93 @@
+             rejects_like_reference(r0::Public::Withdrawal(&p, &transition));
+         }
+     }
+-}
++
++    #[test]
++    fn binding_tail_lengths_are_exact_for_both_variants() {
++        assert_eq!(TRANSFER_BYTES, 1520);
++        assert_eq!(WITHDRAWAL_BYTES, 1524);
++        let (transfer, withdrawal, transition) = fixture();
++        let t = r0::Public::Transfer(&transfer, &transition).public_bytes().unwrap();
++        let w = r0::Public::Withdrawal(&withdrawal, &transition).public_bytes().unwrap();
++        assert_eq!(t.len(), 1520);
++        assert_eq!(w.len(), 1524);
++        // Transfer tail: pool, domain, has_destination = 0, no destination.
++        assert_eq!(&t[1455..1487], &[1; 32]);
++        assert_eq!(&t[1487..1519], &[2; 32]);
++        assert_eq!(t[1519], 0);
++        // Withdrawal tail: pool, domain, has_destination = 1, destination.
++        assert_eq!(&w[1427..1459], &[1; 32]);
++        assert_eq!(&w[1459..1491], &[2; 32]);
++        assert_eq!(w[1491], 1);
++        assert_eq!(&w[1492..1524], &[7; 32]);
++    }
++
++    #[test]
++    fn withdrawal_destination_changes_public_bytes() {
++        let (_, withdrawal, transition) = fixture();
++        let base = r0::Public::Withdrawal(&withdrawal, &transition).public_bytes().unwrap();
++        for (byte, value) in [(0, 8), (17, 0), (31, 0xff)] {
++            let mut changed = withdrawal;
++            changed.destination_token_account[byte] = value;
++            let bytes = r0::Public::Withdrawal(&changed, &transition).public_bytes().unwrap();
++            assert_ne!(bytes, base);
++            assert_eq!(bytes.len(), base.len());
++            assert_eq!(bytes[..1492], base[..1492]);
++        }
++    }
++
++    #[test]
++    fn pool_and_deployment_domain_change_public_bytes_for_both_variants() {
++        let (transfer, withdrawal, transition) = fixture();
++        let t0 = r0::Public::Transfer(&transfer, &transition).public_bytes().unwrap();
++        let w0 = r0::Public::Withdrawal(&withdrawal, &transition).public_bytes().unwrap();
++        for field in 0..2 {
++            for byte in [0, 31] {
++                let mut t = transfer;
++                let mut w = withdrawal;
++                if field == 0 {
++                    t.pool[byte] ^= 0x80;
++                    w.pool[byte] ^= 0x80;
++                } else {
++                    t.deployment_domain[byte] ^= 0x80;
++                    w.deployment_domain[byte] ^= 0x80;
++                }
++                let t1 = r0::Public::Transfer(&t, &transition).public_bytes().unwrap();
++                let w1 = r0::Public::Withdrawal(&w, &transition).public_bytes().unwrap();
++                assert_ne!(t1, t0);
++                assert_ne!(w1, w0);
++                // Only the appended tail moves; the frozen prefix is unchanged.
++                assert_eq!(t1[..OLD_TRANSFER_BYTES], t0[..OLD_TRANSFER_BYTES]);
++                assert_eq!(w1[..OLD_WITHDRAWAL_BYTES], w0[..OLD_WITHDRAWAL_BYTES]);
++            }
++        }
++    }
++
++    #[test]
++    fn frozen_layout_prefix_is_unchanged() {
++        use sha2::{Digest as _, Sha256};
++        // SHA-256 of the frozen (4bb3b3f) public_bytes for this fixture,
++        // computed once by running the frozen r0::Public::public_bytes and pinned.
++        const TRANSFER_PREFIX_SHA256: &str = "b47ffcf2df84a8e21f500de3e726cc25537d525629c1d034a3c8a5e744339db6";
++        const WITHDRAWAL_PREFIX_SHA256: &str = "8a4ccb41d781aea403c268ee029749ccc1bdd7aac193988a5d6c06d1986eeb7f";
++        fn hex(bytes: &[u8]) -> alloc::string::String {
++            use core::fmt::Write as _;
++            let mut s = alloc::string::String::new();
++            for b in Sha256::digest(bytes) {
++                write!(s, "{b:02x}").unwrap();
++            }
++            s
++        }
++        let (transfer, withdrawal, transition) = fixture();
++        let t = r0::Public::Transfer(&transfer, &transition);
++        let w = r0::Public::Withdrawal(&withdrawal, &transition);
++        let (old_t, old_w) = (old_layout_reference(t).unwrap(), old_layout_reference(w).unwrap());
++        assert_eq!(old_t.len(), OLD_TRANSFER_BYTES);
++        assert_eq!(old_w.len(), OLD_WITHDRAWAL_BYTES);
++        let (new_t, new_w) = (t.public_bytes().unwrap(), w.public_bytes().unwrap());
++        assert_eq!(&new_t[..OLD_TRANSFER_BYTES], &old_t[..]);
++        assert_eq!(&new_w[..OLD_WITHDRAWAL_BYTES], &old_w[..]);
++        assert_eq!(hex(&new_t[..OLD_TRANSFER_BYTES]), TRANSFER_PREFIX_SHA256);
++        assert_eq!(hex(&new_w[..OLD_WITHDRAWAL_BYTES]), WITHDRAWAL_PREFIX_SHA256);
++    }
++}

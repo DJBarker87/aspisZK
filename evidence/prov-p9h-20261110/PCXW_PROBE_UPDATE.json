@@ -1,0 +1,25 @@
+{
+ "schema": "PCXW_PROBE_UPDATE/1",
+ "target_established": false,
+ "record_class": "PROBE_CRATE_EMISSION",
+ "probe_crate": "aspis-r1-mask-extraction-probe (lib name aspis_r1_mask_extraction_probe), NOT shipped source",
+ "probe_source_recorded_as": {
+  "evidence": "docs/research/100bit-spend-path-20261013/evidence/terminal-qm31-fromfn-copy-candidate-v4-aeneas-20261019/nuc-run/receipts/v4-input-source-snapshot.tar.gz",
+  "archive_sha256": "870b9c103b432e8280876d3d2b04bcef62901f48965f21589aeb764ec69d0e85",
+  "identification": "Raw generated Types.lean of that run has sha256 15d7c4fb2c02c8909e0ba1d4bce05667f981709cebdaf955ac51229d5284a2e6 (terminal-v4-named-types-20261019/raw-generated/Types.lean); the gate FIq_NativeTypes.lean / RPu_FIq_NativeTypes.lean (sha256 cdc1db1e524db01fefdfe7493aa403b4a599d8a676e2c3da9a1a230ca244459c) differs from it only by the namespace rename, abbrev for IntoIter, hand-expanded read_discriminant defs and removed set_option/discriminant attributes (diff of 76 lines); Source: line ranges of gate declarations (e.g. private_public 1327:0-1343:1, withdrawal_public 1345:0-1361:1, SemanticPublic 87:0-98:1) match the snapshot's pair_forest_semantic_terminal.rs exactly. NML_PROVENANCE said NO_HASH_LINKED_RECEIPT_FOUND because it searched only for the hash of the Aeneas outputs against receipts; this hash link (Types raw sha) was missing from the maps.",
+  "path_dependencies": "docs/research/v8-r0-zk-20261009/refine/{writers,blockwriters,poseidon}/ (3 crates) fetched from git research at the sha256 rows of merged-source-manifest.external_packages (all verified)"
+ },
+ "file": "src/statement/pool_v1/pair_forest_semantic_terminal.rs",
+ "before_sha256": "6e817b4bbbc350dd5ef71517e6e0eb57b5607a5241e9889041c7ec0a2c0182ea",
+ "after_sha256": "54ef43c147efaf86aaf86fdacf5dc10863262612c03a5c9a42e2e18c0b24c6cd",
+ "frozen_r0_source": {
+  "revision": "c7593d23fdc56fcee9a9df1628d5f63b52ac7a95",
+  "path": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+  "sha256": "d326ede72fea8f7859fe3ed579cb62ee7ad1b91b22852348baf45229c6828791"
+ },
+ "frozen_4bb3b3f_file_sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e",
+ "pre_update_state_REPORT_FIRST": "The probe's r0 module copy was NOT text-equal to the frozen 4bb3b3f r0 module before the update: it differed in exactly ONE line (inside Public::terminal_qm31 area, r0 line 100: `core::array::from_fn(|i| claims[i / 28][i % 28])` replaced by the v4 private helper `crate::array_from_fn_copy::<_, 84>(QM31::ZERO, |i| claims[i / 28][i % 28])`). The rest of the file differs from 4bb3b3f only by the other seven v4 from_fn replacements (lines 128, 277, 338, 1257-1259 outside r0; one more in r0 as stated). No semantic difference at a matching configuration.",
+ "what_changed": "(a) the `pub mod r0 { ... }` block and the cfg(all(test, feature=r0)) test module that follows it, replaced by the c7593d23fdc text; (b) the three hunks c7593d23fdc made outside r0 in this file: SemanticPublic gains `destination: Option<[u8; 32]>` after withdrawal_amount, private_public sets destination: None, withdrawal_public sets destination: Some(public.destination_token_account).",
+ "what_is_kept": "The eight v4 array_from_fn_copy replacements remain (seven outside r0, one inside r0) (the c7593d23fdc line `core::array::from_fn(|i| ...)` is mapped to the probe's existing helper line). The after file differs from the c7593d23fdc file ONLY in those array_from_fn_copy lines (checked by diff: 8 changed line pairs).",
+ "only_file_changed": "Only the probe crate's copy of pair_forest_semantic_terminal.rs changed; every other file of the probe crate and the three path-dependency crates are byte-identical to the pinned snapshot; shipped source, crates/, programs/, the L187 closure and the overlay are untouched. Other crates/ changes between 4bb3b3f and c7593d23fdc do not touch aspis-statement (git diff --stat: only pair_forest_semantic_terminal.rs in aspis-statement)."
+}

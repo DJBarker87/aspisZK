@@ -1,0 +1,44 @@
+{
+ "schema": "PCXW_STATUS/1",
+ "target_established": false,
+ "extraction": {
+  "PCXW_E001": "Charon original (daad69be) on updated probe, exit 0, 46 s, peak 1.2 GiB, swap 0",
+  "PCXW_E002": "Aeneas original on saved LLBC FAILED exit 2: name clash field.M31 (type vs constructor); shape retired",
+  "PCXW_E003": "same LLBC + v4 one-field M31 metadata adapter (PCXW_m31_adapter.py) then Aeneas 959659a6 -loops-to-rec, exit 0, 10.9 s, peak 333 MiB",
+  "PCXW_E004": "Charon original on updated probe, --start-from r0::_::public_bytes (+include Option/Result/ok_or), exit 0, 46 s, 1.2 GiB peak, swap 0",
+  "PCXW_E005": "Aeneas via M31 adapter FAILED exit 1 in 0.1 s: adapter assertion M31 constructor candidates=0 (the public_bytes LLBC has no M31 constructor decl); shape retired",
+  "PCXW_E006": "Aeneas 959659a6 -loops-to-rec on raw E004 LLBC (no adapter needed: no M31 clash), exit 0, 5 s, 809 MB peak, swap 0"
+ },
+ "lean": {
+  "PCXW_L001": "PRVEq_PIN2_ProbeSemanticPublicProjection exit 0, 2.3 s, peak 2.6 GB, swap 0, standard axioms only"
+ },
+ "module": {
+  "source": "/home/dombarker/project-offloads/codex-pc-prov-p9a-20261110/PCXQ_sources/PRVEq_PIN2_ProbeSemanticPublicProjection.lean",
+  "sha256": "514a39a68d01d26cda344fba3a996ffd82820b2cff1b96b9d675a66a6f48edf3",
+  "olean_sha256": "d5b532677acf0fddf5a92ef1abdfa5d40a3aee2a83800430ff68d9ce2e350367"
+ },
+ "fresh_equals_gate": {
+  "Types": "PIN2 emission == v4 raw Types (same source, original tools) except Source line shifts and the added `destination` field: no tool-induced difference. v4 raw Types sha 15d7c4fb; emission Types sha bf723b12.",
+  "Funs": "PIN2 emission == v4 raw Funs except Source line shifts and two destination lines (private_public: none; withdrawal_public: some destination_token_account): no tool-induced difference.",
+  "vs_gate_modules": "195 emitted blocks: 169 identical to the gate chunks; 17 differ, of which 15 are equal to the v4 raw emission (gate-side Lean adaptations, e.g. decide coercion, external models; unchanged by PIN2 and not tool-induced); 2 differ by the PIN2 source change (withdrawal_public, private_public) = NEW_GATE; 9 emitted blocks have no gate counterpart by name (not examined; closure/instance naming)."
+ },
+ "status": {
+  "SemanticPublic": "NEW_GATE (PIN2P.SemanticPublic compiled)",
+  "private_public / withdrawal_public": "NEW_GATE (destination constructor lines)",
+  "other unchanged functions": "SETTLED as text-equal to the v4 emission of the gate source (PROBE_CRATE_EMISSION); gate-chunk adaptations not re-proved here"
+ },
+ "public_bytes_semantic_packed": {
+  "semantic_packed": "text-identical to the gate block (E003 emission), no difference",
+  "public_bytes": "E006 emission contains the PIN2 tail (p.pool, p.deployment_domain, is_some destination, destination bytes; Funs.lean lines ~514-525). Gate (FIq_Native) has NO public_bytes block: the gate never extracted r0 public_bytes, so the tail is NEW_GATE (real, expected).",
+  "vs_PIN2_NEWGATE_r0 (p9a, Charon 454586e9/Aeneas 0d21a9ec, source 271869c946d)": "No body difference after normalising crate/namespace/library prefixes (aspis_core., PCWN_NewLib.). Differences are tool/option-induced only: (1) fields loop: NEWGATE default loop-combinator `.body`+ControlFlow vs E006 -loops-to-rec `@[rust_loop] ... partial_fixpoint` (Aeneas option, also the gate shape); (2) Try-branch residual naming `_t` vs `TInfallible` (Aeneas version); (3) module path prefix aspis_core.state_only_prefix vs probe-local state_only_prefix (crate layout). frontier and public_bytes blocks differ only by (2),(3). Different source revisions (271869c946d vs probe copy of c7593d23fdc) were not separately distinguished by text; no real difference observed."
+ },
+ "unmatched_9_blocks": {
+  "array_from_fn_copy": "no extracted gate block; gate consumes it from the separate hand/model module FIq_FromFn (sound-int2); not compared here",
+  "POOL_V1_PAIR_FOREST_COPY_TERMINAL_ROWS_V1": "no gate counterpart (constant emitted, not consumed by any gate block)",
+  "terminal_qm31_probe": "no gate counterpart (extraction-only root wrapper)",
+  "lift_m31, accumulate_endpoint, PoolV1PairForestCompiledVariantV1::eq, link_weight": "map to gate module RPu_FIq_CopyPrefix: text-identical",
+  "copy_residual": "maps to RPu_FIq_CopyPrefix: differs, but emission equals v4 raw emission (gate-side adaptation, not tool-induced)",
+  "COPY_PATTERNS": "present in gate_13 (my earlier by-doc-comment match missed it because the gate drops the doc comment header); name-mapped"
+ },
+ "unmatched_note": "that is 9 listed keys; COPY_PATTERNS is a name mapping so only 3 have no extracted gate counterpart (array_from_fn_copy->FIq_FromFn model, ROWS_V1, terminal_qm31_probe)"
+}
