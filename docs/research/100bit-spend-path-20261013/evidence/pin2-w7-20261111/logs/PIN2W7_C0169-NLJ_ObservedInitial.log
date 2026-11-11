@@ -1,0 +1,32 @@
+'AspisR1.NLJ_Observed.source_invocation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLJ_Observed.initial_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLJ_Observed.events_from_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLJ_Observed.initial_fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLJ_Observed.events_from_cuts : ∀ {H : Type} (i : Input H) (out : Result (Out H)) (log : Log)
+  (events : List Event),
+  Invocation 6 (initial i) out log events →
+    run
+        (S1SemanticCode.verify
+          (fun {H_1} => S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries i.reservation)) i.digest
+          i.publicValue i.bytes i.hash none) =
+      (log, out) :=
+fun {H} i out log events cuts =>
+  Eq.mpr (id (congrArg (fun _a => _a = (log, out)) (Eq.symm (initial_source i)))) (fold_from_steps cuts)
+        4.93 real         2.33 user         1.74 sys
+          5173854208  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              389070  page reclaims
+                 135  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  35  voluntary context switches
+                3086  involuntary context switches
+         38806931315  instructions retired
+         13534221850  cycles elapsed
+           821745504  peak memory footprint
