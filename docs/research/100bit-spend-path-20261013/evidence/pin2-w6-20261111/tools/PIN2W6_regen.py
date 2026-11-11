@@ -37,6 +37,11 @@ for name, fn in SUB.SUBS.get(gen, []):
     subs_applied.append(name)
     if mode == 'check': assert new == code, f'substitution {name}: 26 October native values do not reproduce the generator literal'
     code = new
+# geometry parametrizations (PIN2W6_subs.PARAM): applied in BOTH modes with the mode's
+# geometry; in check mode the parametrized generator must still reproduce every release
+# output byte for byte (functional, not textual, identity; as W4's PIN2W4_sha.py).
+for name, fn in SUB.PARAM.get(gen, []):
+    code = fn(code, mode); subs_applied.append('param: ' + name)
 if subs_applied:
     (W6 / 'generators').mkdir(exist_ok=True)
     (W6 / 'generators' / f'{mode}-{Path(gen).name}').write_text(code)

@@ -2,7 +2,7 @@
 # PIN2 W6 local compile wrapper (from PIN2W5_compile.sh; W6 paths; no deletion:
 # a failed temporary object is moved into quarantine/).  One lean process
 # (waits while any lean runs), -M7000, -DElab.async=false, 180 s alarm.
-# LEAN_PATH = overlay-PIN2-W4 : overlay-PIN2 : objs : base.  Objects are
+# LEAN_PATH = overlay-PIN2-W4 : overlay-PIN2 : overlay-HOST-P1 (lead copy of host phase-1 PASS objects, read-only) : objs : base.  Objects are
 # written through a temporary file and renamed; links refused.
 # usage: PIN2W6_compile.sh <Module> <note>   (SRCDIR env = source root)
 set -u
@@ -22,7 +22,7 @@ SHA=$(shasum -a 256 $SRCDIR/$M.lean | cut -d' ' -f1)
 REV=$(git -C $W rev-parse HEAD)
 BEFORE=$( [ -f $OV/$M.olean ] && shasum -a 256 $OV/$M.olean | cut -c1-16 || echo absent )
 while pgrep -x lean >/dev/null; do sleep 2; done
-( cd $SRCDIR && LEAN_PATH="$OV:$C/overlay-PIN2:$C/objs:$C/base" /usr/bin/time -l perl -e 'alarm 180; exec @ARGV' $LEAN -M7000 -DElab.async=false -o $OV/$M.olean.tmp $M.lean ) > $LOG 2>&1
+( cd $SRCDIR && LEAN_PATH="$OV:$C/overlay-PIN2:$C/overlay-HOST-P1:$C/objs:$C/base" /usr/bin/time -l perl -e 'alarm 180; exec @ARGV' $LEAN -M7000 -DElab.async=false -o $OV/$M.olean.tmp $M.lean ) > $LOG 2>&1
 EXIT=$?
 if [ $EXIT = 0 ]; then mv $OV/$M.olean.tmp $OV/$M.olean; elif [ -f $OV/$M.olean.tmp ]; then mv $OV/$M.olean.tmp $EV/quarantine/$ID-$M.olean.tmp; fi
 AFTER=$( [ -f $OV/$M.olean ] && shasum -a 256 $OV/$M.olean | cut -c1-16 || echo absent )
