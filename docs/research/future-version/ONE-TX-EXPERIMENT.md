@@ -1088,3 +1088,21 @@ once, at deployment.
   owner did not answer the proposed working rule, so it is not in force: every other choice that
   raises compute units still goes to the owner one by one. The worst-case work is in
   WORST-CASE-COMPUTE.md.
+
+### Round 7: decision, and the branch head
+
+- Owner, 2026-11-11, after the worst case was measured (WORST-CASE-COMPUTE.md: 1,372,342 for A6,
+  1,364,799 for X1, 1,390,527 for X2, against the limit of 1,400,000) and the lead recommended
+  keeping the direct hash call: "recommendation". The build is X1: the rewrites applied, the
+  direct `sol_sha256` call kept, and that call site named inside the hash trust assumption.
+- The rewrites are applied to the branch at 7dffe3e2a93. The six changed files equal those of the
+  measured source tree, hash for hash.
+- Reproducibility of X1: a second copy of that source at another path, built with a fresh target
+  directory (host attempt `B-X1-repro`), gives a byte-identical program,
+  `7a77273b1dc64689a0eed1cc267c6e81c9f6d0ad2e17fe0be316243d3ae9a3d5` (`out/X1-repro/`). One host,
+  one toolchain; a build on a second machine is still owed for a release.
+- The owner then asked whether further optimisation is worth attempting before the freeze. A
+  bounded effort is running: implementation only, each change still accepted by the translator,
+  identical verdicts on the mutation campaign, measured at the rollover worst case, two rounds at
+  most, nothing adopted without the owner. Its note is OPTIMISATION-ROUNDS.md. The freeze waits
+  for it.
