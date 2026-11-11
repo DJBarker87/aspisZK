@@ -1,0 +1,308 @@
+# One-transaction verification: measured experiment, 11 November 2026
+
+Status: experiment on branch `future-version`. Nothing here is adopted, proved
+or part of the pinned R1 verifier. The pinned entrypoints (`tx1`, `tx2`,
+`tx2_authenticated`) and the Pool release surface are unchanged; every new code
+path is reachable only from a measurement build without `pool-adapter`.
+
+Result against the target: **one transaction is not established.** The best
+measured verifier is about 1.60M CU before the Pool and adapter are added,
+against a transaction limit of 1.40M.
+
+Criteria were not pre-registered before these measurements were taken. The only
+gate applied is the external one (does the invocation complete inside
+1,400,000 CU). The numbers below are measurements on six saved fixtures, not
+all-input bounds; the 20 October all-input argument put its bounds 7 to 8%
+above the fixture maxima.
+
+## What was built
+
+Base: `d7142292c48` (the PIN2 pin `c7593d23fdc` plus its tools). The published
+`main` branch was tried first and cannot be used as a development base: it
+lacks `tools/r1-cost-probe`, the prover's included research files and
+`refine/diffharness/tests/glue_gen.rs`, so host builds of `aspis-statement`
+fail there.
+
+- `crates/aspis-r1-cost-probe/src/fused.rs`
+  - `verify` (stage A): the pinned checks of `tx1` then `tx2` in one
+    invocation, with no checkpoint.
+  - `verify_batched` (stage C): the second fold rearranged exactly, and the 22
+    first-fold equalities replaced by one equality batched with the existing
+    challenge `rho`, accumulated in QM31 before any WideExact product.
+  - `input_evaluation_probe`, `unit_cost_probe`, `relation_probe`: cost probes
+    that verify nothing.
+- `fast_pairing.rs`: `KbyKDot`, `k_mul_sixteen` (additive).
+- `weights.rs`: `pair_marked`, profiling builds only.
+- `aspis-core`: default-off feature `future-fast-kmul`, which replaces the body
+  of `QM31::mul` (nested Karatsuba) by the sixteen-product form with one
+  reduction per limb. Same field product.
+- `programs/r1-cost-probe`: measurement tags 8 (fused), 9 (batched), 10, 11, 12
+  (probes) on the three-account entry. The Pool surface rejects them.
+- `tools/r1-cost-probe/src/bin/fused_probe.rs`: LiteSVM driver.
+- `docs/research/future-version/lean/TwoFamilyResidualBatch.lean`.
+
+## Totals
+
+Verifier program CU, LiteSVM 0.16.0 / Agave 4.2.1, `cargo-build-sbf` 3.1.13
+with platform-tools v1.52, build without `pool-adapter` and without profiling
+markers. "Pinned" is stage 1 plus stage 2 at the real 1.4M limit; the fused
+rows are diagnostic runs at an elevated limit, and each was also run at the
+real limit, where none completes.
+
+| Fixture | Pinned stage 1 | Pinned stage 2 | Pinned sum | Fused | Fused + batched |
+|---|---:|---:|---:|---:|---:|
+| transfer-13 | 1,206,856 | 1,027,069 | 2,233,925 | 2,090,624 | 1,860,972 |
+| transfer-255 | 1,207,902 | 1,029,884 | 2,237,786 | 2,094,461 | 1,864,886 |
+| transfer-1023 | 1,204,474 | 1,030,753 | 2,235,227 | 2,091,942 | 1,862,357 |
+| withdrawal-13 | 1,208,933 | 1,025,398 | 2,234,331 | 2,091,035 | 1,861,214 |
+| withdrawal-255 | 1,204,870 | 1,031,004 | 2,235,874 | 2,092,549 | 1,862,728 |
+| withdrawal-1023 | 1,204,834 | 1,030,652 | 2,235,486 | 2,092,185 | 1,862,481 |
+
+The same with `future-fast-kmul`:
+
+| Fixture | Pinned stage 1 | Pinned stage 2 | Pinned sum | Fused | Fused + batched |
+|---|---:|---:|---:|---:|---:|
+| transfer-13 | 1,051,484 | 824,566 | 1,876,050 | 1,747,872 | 1,602,695 |
+| transfer-255 | 1,052,613 | 827,406 | 1,880,019 | 1,751,838 | 1,606,608 |
+| transfer-1023 | 1,049,137 | 828,244 | 1,877,381 | 1,749,201 | 1,604,063 |
+| withdrawal-13 | 1,053,451 | 822,845 | 1,876,296 | 1,748,118 | 1,602,820 |
+| withdrawal-255 | 1,049,472 | 828,263 | 1,877,735 | 1,749,559 | 1,604,268 |
+| withdrawal-1023 | 1,049,494 | 828,115 | 1,877,609 | 1,749,430 | 1,604,178 |
+
+For comparison, the devnet run of 11 November recorded 1,211,602 (stage 1) and
+1,043,169 (stage 2) for the deployed verifier through its adapter, and Pool
+settlement of 96,703 (transfer) and 106,104 (withdrawal) on top of stage 2. A
+fused Pool path was not built. Adding the adapter and Pool overheads observed
+on devnet (about 120k) to the best measured core gives a projection of about
+1.72M, roughly 320k over the limit.
+
+Differences:
+
+| Change | Saving | Kind |
+|---|---:|---|
+| Fusion (no checkpoint, one parse, one geometry batch) | about 143k | exact |
+| Sixteen-product `QM31::mul` on the pinned pair | about 358k (155k stage 1, 202k stage 2) | exact |
+| Batched first fold and rearranged second fold, Karatsuba kernel | about 230k | changes the acceptance predicate |
+| The same with the fast kernel already in | about 145k | changes the acceptance predicate |
+
+## Phase profile
+
+Profiling build with `detail-phases`, transfer-13; markers add a few thousand CU
+in total. Intervals in CU.
+
+| Phase | Fused, pinned kernel | Fused, fast kernel | Fused + batched, fast kernel |
+|---|---:|---:|---:|
+| Entry, statement decode, shape and canonical scan | 25,934 | 25,936 | 25,934 |
+| Semantic: expansion and prefix parse | 22,542 | 22,542 | 22,541 |
+| Semantic: public transcript and first challenges | 19,021 | 19,021 | 19,021 |
+| Semantic: ten sumcheck rounds | 131,291 | 85,633 | 85,633 |
+| Semantic: claims and terminal evaluation | 376,095 | 332,762 | 332,762 |
+| Semantic: mask value and terminal equality | 16,232 | 15,549 | 15,549 |
+| Semantic: circle challenges | 10,254 | 9,540 | 9,540 |
+| Preparation (challenges, queries, gamma powers, claim) | 116,267 | 92,593 | 92,585 |
+| Merkle, queries 0..10 | 129,185 | 129,185 | 129,182 |
+| Merkle, queries 10..22 | 149,781 | 149,781 | 149,781 |
+| 22 queries | 704,000 | 612,834 | 464,055 |
+| Relation | 384,434 | 246,317 | 242,212 |
+| Final dot product | 21,441 | 21,441 | 21,441 |
+| Total | 2,106,704 | 1,763,361 | 1,610,462 |
+
+The batched query phase splits into: geometry inversion and coefficients
+37,505; the 26 base-field lanes 164,129; the three QM31 lanes and the first
+cubic 86,803; the second fold and the right-hand sum 67,482; the final-weight
+accumulation 108,136.
+
+The relation phase with the pinned kernel splits into: two round checks 19,551;
+`Weights::new` 36,711; fold powers 8,464; the three regular rows 166,857; the
+two shared-point rows 46,508; the inactive row 58,780; the Libra row 30,668;
+kappa powers and sum 17,487. With the fast kernel the same eight are 11,591,
+18,325, 4,945, 110,713, 35,087, 39,993, 16,965 and 9,456.
+
+Unit costs, 512 chained operations each, loop overhead included:
+
+| Operation | Pinned kernel | Fast kernel |
+|---|---:|---:|
+| `QM31::mul` | 320 | 136 |
+| `WideExact::mul` | 1,157 | 584 |
+| `WideExact::mul_qm31` | 639 | 289 |
+| `M31::mul` | 21 | 20 |
+| Sixteen-product multiplication with both operands checked | 151 | 155 |
+
+The two dot-accumulator rows of that probe pushed loop-invariant operands and
+were hoisted by the compiler; they are not unit costs and are not used.
+
+## The multiplication kernel
+
+`QM31::mul` is nested Karatsuba: nine M31 products, each reduced separately,
+with canonical additions and subtractions between them. On SBF every
+instruction costs one unit, so saving multiplications at the price of extra
+additions, branches and reductions loses. The sixteen-product form with one
+reduction per output limb is the multiplication the verifier crate already
+uses inside its private dot accumulators (`canonical::Q::mul`).
+
+The change is one function body. It is exact: `future_fast_kmul_tests` compares
+it with the Karatsuba form on 20,000 edge and random operand pairs, the 280
+`aspis-core` library tests and the 25 verifier library tests pass with the
+feature on, and all six fixtures are accepted on chain in every mode by the
+ELF built with it. Its overflow bound is stated for canonical limbs, as is the
+Karatsuba form's (its `CM31::mul` multiplies two unreduced sums on the same
+assumption), so the precondition is of the same kind, but the proof that no
+intermediate wraps is a new one.
+
+It is a change to frozen `aspis-core` source and so to the pin, the ELF and the
+source-level proofs that mention `QM31::mul`, `CM31::mul` and
+`WideExact::mul`. That is an owner decision. It is independent of the
+one-transaction question: applied to the deployed two-transaction verifier it
+lowers stage 1 from about 1,207k to 1,051k and stage 2 from about 1,027k to
+825k.
+
+## Stage C: what changes and what it rests on
+
+For query `i`, write `F_i` for the pinned first fold of the gamma-combined
+opening, `b_i` for the authenticated folded value it must equal, `G_i` for the
+pinned second fold and `e_i` for the final polynomial at the query's node. The
+pinned verifier checks `F_i = b_i` for each `i` and
+`sum_i rho^i (e_i - G_i) = 0`. Stage C checks
+
+    sum_i rho^i (F_i - b_i) = 0   and   sum_i rho^i (e_i - G_i) = 0
+
+as two separate equalities. The second is the pinned check with its sums
+reordered. The first is new: a proof whose first-fold residuals are nonzero and
+vanish at `rho` is accepted by stage C and rejected by the pinned verifier. The
+test `rho_dependent_cancellation_passes_the_batched_check_and_fails_the_pinned_one`
+constructs such data for a known `rho`, and shows it is rejected at a different
+challenge.
+
+The argument for keeping the bound is that both residual vectors are functions
+of committed data and of challenges drawn before `rho` (the transcript derives
+the queries from the final message and then `rho`; `Prepared::new`). If either
+vector is nonzero, take the first whose polynomial is nonzero; acceptance
+requires `rho` to be one of its at most 21 roots in QM31. So the pair has at
+most 21 bad challenges, not 42, and the `rho` row keeps its cap
+`21 * ceil(2^256/|K|)/2^256`.
+
+Proved here, algebra only: `bad2_card_le_21` and
+`all_zero_of_both_evals_zero_outside_bad2` in
+`lean/TwoFamilyResidualBatch.lean`. The bad set is a function of the two
+vectors alone; outside it, the two batched equalities imply all 44 coordinate
+equalities. Compile: `lake env lean -M7000` on that one file in `AspisFormal`
+(Lean 4.32.0, prebuilt Mathlib), exit 0, 1.98 s wall, 1,772,290,048 bytes peak
+RSS, swap not measured on the Mac, source revision the commit that adds this
+note; `#print axioms` gives `propext`, `Classical.choice`, `Quot.sound` for
+both.
+
+Not proved, and required before any claim:
+
+1. The `rho` row now depends on the binding of the C1 and C2 trees as well as
+   the folded tree, because the first-fold residual reads all three. No new
+   numerical term is expected (the same binding event is already charged), but
+   the row's hypotheses change and its bridge theorem
+   (`QueryResidualBridge`) has to be restated for two families.
+2. The Fiat-Shamir placement: one `rho` per transcript prefix, with the pair of
+   residual vectors determined by that prefix.
+3. Source correspondence of the new kernels. None of the existing source-level
+   proofs of `four_dots`, the circle fold or the query loop applies to them.
+   The base-lane kernel also reads M31 limbs without re-checking them and
+   relies on the canonical scan of the same buffer in the same invocation.
+4. The all-input cost argument.
+
+Stage C does not change the proof bytes, the prover or the transcript.
+
+## The certificate proposal
+
+The second proposal was one sumcheck or GKR certificate for all of the
+verifier's public arithmetic, with the semantic layer included. Three
+measurements bear on it.
+
+First, the certificate verifier has to evaluate its public input itself.
+`input_evaluation_probe` measures the cheapest form of that for the openings
+and the final message only (2,288 M31 values, 264 QM31 values, 152 WideExact
+values as QM31 coordinates, product-form QM31 weights): about 154k to 155k CU
+for the kernel, plus 18,228 (fast multiplication) or 38,667 (pinned) for the
+weight tables. It does not cover the semantic prefix or the public
+statement. It has the same multiplication count (9,152 limb products for the
+base lanes) as stage C's direct check of the batched first fold, so on the
+query region a certificate cannot cost less than checking directly.
+
+Second, the semantic terminal is 333k to 376k of straight-line evaluation of
+the constraint composition at one point. Its wiring is irregular. A GKR
+verifier pays for wiring it cannot evaluate in closed form, on the order of the
+circuit size, unless the wiring is committed in advance, which is a second
+proof system.
+
+Third, proof size. The 16 upload transactions are full except the last, which
+has about 1.9 KB free. Each further 3.8 KB of certificate is one more upload
+transaction; a certificate of a few hundred rounds is 10 to 20 KB. The
+certificate would add more transactions than the one it removes.
+
+On these grounds the certificate is not pursued. The terminal-relation sumcheck
+of the first proposal (six rounds, about 576 bytes, fits in the free space)
+remains a possible local experiment on a 242k phase; it adds Fiat-Shamir rows
+and a prover change, and was not built.
+
+## Where this leaves the one-transaction target
+
+With every measured change applied, the verifier core is about 1.60M. The
+remaining phases are the semantic layer (485k, of which the terminal 333k),
+the batched queries (464k), Merkle authentication (279k), the relation (242k),
+preparation (93k) and parsing (26k). The limit, less the Pool and adapter, is
+about 1.28M, so about 320k more would have to go on fixtures, and more than
+that for an all-input bound.
+
+Estimates, not measurements, of what is left: tightening the stage C kernels
+(the base-lane kernel spends about three times the probe's tight loop per
+product) perhaps 100k to 130k; decoding the final message once and the
+terminal-relation sumcheck perhaps 60k to 100k; one 22-query multiproof per
+tree in place of two perhaps 20k to 40k, with a format change. That does not
+reach 320k without a large reduction in the semantic terminal, which has not
+been profiled internally. Earlier analytical cost estimates in this project
+have run low, so none of these should be relied on before measurement.
+
+The exact changes are worth more to the deployed two-transaction design than
+to this target: the multiplication kernel alone gives each transaction 155k to
+202k of headroom.
+
+## Reproduction
+
+Host workspace `/home/dombarker/project-offloads/future-version-20261111`
+(source snapshots by rsync of this worktree; scripts in
+`evidence/future-version-20261111/host/`). Every build and run was one systemd
+scope with `MemoryHigh=6G`, `MemoryMax=8G`, `MemorySwapMax=0`; admission
+required fewer than five other scopes and a summed `MemoryMax` of at most
+55 GiB. All scopes exited 0 with zero swap.
+
+| ELF | Source | Features | SHA-256 | Build wall, peak |
+|---|---|---|---|---|
+| B1-plain | `44751d4afe7` | `private-leaf-salts` | `b56c79f8…34ac726` | 48.0 s, 1.45 GB |
+| B2-profile | `44751d4afe7` | + `cu-profiling` | `d4ee5750…7af1aff` | 2.8 s, 0.13 GB |
+| B3-detail | `44751d4afe7` | + `detail-phases` | `f3730f18…41320f7` | 8.6 s, 0.17 GB |
+| B4-detail2 | `d5f46723c61` | as B3 | `53b445be…f7712bc` | 6.6 s, 0.17 GB |
+| B5-plain2 | `d5f46723c61` | as B1 | `50b0f399…2474f38` | 6.6 s, 0.17 GB |
+| B6-plain-fastk | `9c82845beab` | B1 + `future-fast-kmul` | `2aeb5c5d…ca73b67` | 22.9 s, 1.01 GB |
+| B7-detail-fastk | `9c82845beab` | B3 + `future-fast-kmul` | `783b77ba…e5b5819` | 5.3 s, 0.16 GB |
+
+The driver was built with Rust 1.94.1, `--release --offline --locked`
+(1 min 57 s, 2.19 GB peak). Build command, per `docs/r1/BUILD.md` without
+`pool-adapter`:
+
+    cargo-build-sbf --manifest-path programs/r1-cost-probe/Cargo.toml \
+      --sbf-out-dir <out> --features <features> \
+      --skip-tools-install --offline -j 4 -- --locked
+
+Run: `fused_probe <elf> <proof> <public> <out.json> <label>` on the fixtures in
+`docs/research/100bit-spend-path-20261013/evidence/format-adopt-20261019/fixtures/`.
+The JSON records, receipts and exact environments are in
+`evidence/future-version-20261111/`.
+
+Host tests:
+
+    cargo test -p aspis-r1-cost-probe --release --offline --lib \
+      --features detail-phases fused
+    cargo test -p aspis-core --release --offline --lib \
+      --features r0,future-fast-kmul
+
+Nine fused tests pass: the three verifiers accept the six fixtures and reject
+the same 20 single-byte mutations; the batched sums equal the pinned per-query
+kernels on 40 random and edge cases and on maximal limbs; the batched equality
+alone rejects single opening changes; the cancellation vector; the probes equal
+their naive forms.
