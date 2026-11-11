@@ -11,9 +11,11 @@ programs, rejections included). Copies of `OraclePortFrozen2Resource.inPlace`,
 merged slots the bound `2·22 + cap − 1` gives 339, 339 and 297, and the three
 short-circuited slots issue at most 975 digest calls on every input.
 
-NOT established here: the 40-row sampler-prefix count (136, PAPER) and hence
-the verifier total (1,111, PAPER); both need the Aspis model decision and the
-40-row sampler. -/
+Not in this file: the 40-row transcript count (136) and the verifier total
+(1,111 = 136 + 975). They are proved in `AspisRec40CallBudget`
+(`budget_sum`, `sampler_verifier_length`) and `AspisRec40CallBudgetAspis`
+(`verifier_issued`). An earlier form of this header called both numbers paper
+counts; that was true when the file was written and is no longer. -/
 set_option autoImplicit false
 noncomputable section
 namespace AspisOneTx

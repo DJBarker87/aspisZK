@@ -1,20 +1,11 @@
 import AspisRec40Frames
 import AspisRec40CleanB
 
-/-! Aspis 40-row clean event: `clean40`, R1's `Frozen2StartChargeClean.clean`
-for the 40-row experiment at the one-transaction decision `dV_aspis`.
-
-Two named hypotheses, with exactly the shapes stated in
-`AspisRec40CleanStatement` / RECORDED-EXPERIMENT-40.md §7.2:
-* `hchecks`: `CheckedAcceptance40` at every stored input (the game agent's
-  M9; R1's `fibre_checks`). It is stated at `ChargePrefix.prover P`, which is
-  R1's `pairProver s P` as a program (R1's `Frozen2StartChargePrefix.fibre_prover`).
-* `hfinal`: decoding of rows 33 to 39 on the charged run, under R1's four
-  premises of `Frozen2StartChargeCompletion.decodes` (mine, to be discharged).
-Everything else is proved here: the full experiment equals the recorded
-decision experiment, acceptance and output transport, the constructor
-schedule and `Format` from `AspisChecks` fields, the public tag from
-`admitted_aspis`/`accepted_guardS`, the word alignment, and the assembly. -/
+/-! Aspis 40-row clean event, word alignment: `extractor_word_alignment`, the
+copy for the 40-row run of R1's `OraclePortCleanModel.extractor_word_alignment`
+(the words the extractor rebuilds from the run are the words of the run's
+proof). It is one of the pieces `AspisRec40Clean.accepted_facts` assembles.
+Model level. (An earlier header here was a copy of `AspisRec40Clean`'s.) -/
 set_option autoImplicit false
 noncomputable section
 namespace AspisRec40.CleanWords
