@@ -307,6 +307,27 @@ value at Q = 0 does not change at 6 significant figures for any `A` up to
 10^5. With `A = 2965` (R1's number, not justified for Aspis), the range would
 end near 7.40·10^45 ≈ 2^152.37.
 
+**Independent cross-check (soundness lead's session, 2026-11-11).** The soundness lead recomputed
+this section in exact rational arithmetic from the Lean definitions at 44025fad4cd (its own
+script; Python, nothing established) and reports agreement digit for digit: the bound has
+exactly five right-hand terms, `kappa(Q+1111) + Q·capMax + verifierCharge40 + 2^-126 + 2^-454`
+(`verifierCharge40` already contains the two charges of rows 33 to 39); `capMax` equals the
+query cap, 0.966612653·B = 2^-105.1421; `verifierCharge40` = 0.15067183·2^-100; the bound at
+Q = 0 is 0.15067185·2^-100; it is below 2^-100 up to Q = 29; the per-query form
+`(Q+1)·2^-100` holds up to about 2^153.37. Its breakdown at Q = 0: the semantic rows are 62% of
+the charge (rows 1 to 25, coarsened to one budget, are 54%; per-row budgets would give 0.0747
+in place of 0.076), and the two query-cap charges (row 31 and the reseed at row 26) are 38%;
+from Q = 6 the term `Q·capMax` dominates.
+
+Two things follow for the record:
+- These numbers are arithmetic on the definitions. Lean proves `capMax ≤ B` and
+  `verifierCharge40 ≤ 34·B` and no lemma gives the values above. If a figure is ever quoted it
+  needs a Lean numeric lemma, as R1 has in `F3T_Numeric`. That lemma is now being written
+  (`lean/AspisNumeric.lean`); it is pure arithmetic and does not depend on the open hypothesis,
+  but the figure does.
+- Since this section was written, the three hypotheses have become one, restated (section 7).
+  Everything here is conditional on that one.
+
 ## 5. Validation
 
 All compiles ran on the build host against the L187 objects with
