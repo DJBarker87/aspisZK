@@ -21,6 +21,11 @@ while [ -z "$slot" ]; do
   [ -n "$slot" ] || sleep 2
 done
 echo "slot $slot" > $R/slot.txt
+# Each slot has its own four cores (slot 1: 0-3, slot 2: 4-7, slot 3: 8-11). The scripts name
+# --cpu-list 0-3 everywhere; slotbin/taskset replaces that list by the slot's cores.
+export FV_CPUS=$(( (slot-1)*4 ))-$(( (slot-1)*4+3 ))
+export PATH=$W/slotbin:$PATH
+echo "cpus $FV_CPUS" >> $R/slot.txt
 G=$((1024*1024*1024))
 for i in $(seq 0 45); do
   n=0; sum=0

@@ -1,0 +1,6 @@
+#!/bin/bash
+# Slot-aware taskset (Aspis host scripts). A job running in slot k of fv_slot.sh is pinned to that
+# slot own four cores, whatever --cpu-list the caller names, so that three slots do not share the
+# same four cores. Outside a slot (FV_CPUS unset) it is the plain taskset.
+if [ -n "${FV_CPUS:-}" ] && [ "${1:-}" = "--cpu-list" ]; then shift 2; exec /usr/bin/taskset --cpu-list "$FV_CPUS" "$@"; fi
+exec /usr/bin/taskset "$@"
