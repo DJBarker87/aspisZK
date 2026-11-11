@@ -1,0 +1,32 @@
+'AspisR1.S2W_ExpandedChildren.returned_child' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_ExpandedChildren.accepted_native_children' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.S2W_ExpandedChildren.ChildConeJoin (E : Type) (ops : AdapterRw.Ops) : Type 1
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.execute : {A : Type} →
+      Call A → Result (A × List (S2W_ExpandedTrace.Event E))
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.erasure : ∀ {A : Type} (call : Call A),
+      (thenResult (self.execute call) fun answer => ok answer.1) = invoke ops call
+constructor:
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.mk {E : Type} {ops : AdapterRw.Ops}
+    (execute : {A : Type} → Call A → Result (A × List (S2W_ExpandedTrace.Event E)))
+    (erasure : ∀ {A : Type} (call : Call A), (thenResult (execute call) fun answer => ok answer.1) = invoke ops call) :
+    ChildConeJoin E ops
+        2.23 real         1.36 user         0.87 sys
+          3731783680  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              291502  page reclaims
+                   3  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                 313  involuntary context switches
+         24715391320  instructions retired
+          8288027270  cycles elapsed
+           582223632  peak memory footprint
