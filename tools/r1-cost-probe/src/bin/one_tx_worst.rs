@@ -34,6 +34,9 @@
 //!   of the current page, same-page path only) | next (the next page at rollover,
 //!   rollover positions only) | genesis (page 0 zeroed except the planted byte,
 //!   N must be 0); <at> = first | mid | last position of that region.
+//!   neg-<master|checkpoint|lane>-<byte>: a NEGATIVE scenario for the Pool's account decoders: the
+//!   byte at that offset of the master, checkpoint or lane account is XORed with 0x01, marker absent,
+//!   one run at the real limit that must fail and change nothing but the payer's fee.
 //!   Every run also records a sha256 of all watched accounts after the run
 //!   (`post_state_sha256`), so runs with different Pool ELFs can be compared.
 use anyhow::{anyhow, ensure, Context, Result};
@@ -199,7 +202,8 @@ fn parse_specs(s: &str) -> Result<Vec<Spec>> {
             let negative = f[3].strip_prefix("neg-").and_then(|r| r.split_once('-'));
             ensure!(
                 matches!(f[3], "full" | "basic" | "genesis")
-                    || matches!(negative, Some(("tail" | "next" | "genesis", "first" | "mid" | "last"))),
+                    || matches!(negative, Some(("tail" | "next" | "genesis", "first" | "mid" | "last")))
+                    || matches!(negative, Some(("master" | "checkpoint" | "lane", at)) if at.parse::<usize>().is_ok()),
                 "mode {}",
                 f[3]
             );
@@ -381,7 +385,20 @@ fn main() -> Result<()> {
         }
         // Negative scenarios: plant one non-zero byte where the Pool requires zero bytes.
         let mut planted: Option<(&str, usize)> = None;
-        if let Some((place, at)) = negative {
+        let mut master_run_image = master_image.clone();
+        let mut checkpoint_image = encode_pool_v1_pair_forest_checkpoint_v1(&checkpoint).map_err(|e| anyhow!("{e:?}"))?.to_vec();
+        let mut lane_image = encode_pool_v1_pair_forest_lane_state_v1(&lane, &POOL_V1_PAIR_EMPTY_ROOTS).map_err(|e| anyhow!("{e:?}"))?.to_vec();
+        if let Some((place @ ("master" | "checkpoint" | "lane"), at)) = negative {
+            let position: usize = at.parse()?;
+            let image = match place {
+                "master" => &mut master_run_image,
+                "checkpoint" => &mut checkpoint_image,
+                _ => &mut lane_image,
+            };
+            ensure!(position < image.len(), "{place} offset {position} beyond {} bytes", image.len());
+            image[position] ^= 0x01;
+            planted = Some((place, position));
+        } else if let Some((place, at)) = negative {
             let page_len = POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES;
             let region_start = match place {
                 "tail" => {
@@ -444,9 +461,9 @@ fn main() -> Result<()> {
                 svm.set_account(addr(k), a.clone()).map_err(|e| anyhow!("set: {e:?}"))?;
             }
             let pool_owned = |data: Vec<u8>| Account { lamports: rent_for(data.len()), data, owner: addr(&pool_program), executable: false, rent_epoch: u64::MAX };
-            svm.set_account(addr(&master_key), Account { data: master_image.clone(), ..master_account.clone() }).map_err(|e| anyhow!("{e:?}"))?;
-            svm.set_account(addr(&checkpoint_key), pool_owned(encode_pool_v1_pair_forest_checkpoint_v1(&checkpoint).map_err(|e| anyhow!("{e:?}"))?.to_vec())).map_err(|e| anyhow!("{e:?}"))?;
-            svm.set_account(addr(&lane_key), pool_owned(encode_pool_v1_pair_forest_lane_state_v1(&lane, &POOL_V1_PAIR_EMPTY_ROOTS).map_err(|e| anyhow!("{e:?}"))?.to_vec())).map_err(|e| anyhow!("{e:?}"))?;
+            svm.set_account(addr(&master_key), Account { data: master_run_image.clone(), ..master_account.clone() }).map_err(|e| anyhow!("{e:?}"))?;
+            svm.set_account(addr(&checkpoint_key), pool_owned(checkpoint_image.clone())).map_err(|e| anyhow!("{e:?}"))?;
+            svm.set_account(addr(&lane_key), pool_owned(lane_image.clone())).map_err(|e| anyhow!("{e:?}"))?;
             svm.set_account(addr(&page_key), pool_owned(page_image.clone())).map_err(|e| anyhow!("{e:?}"))?;
             if rollover {
                 svm.set_account(addr(&next_page_key), pool_owned(next_page_image.clone())).map_err(|e| anyhow!("{e:?}"))?;
@@ -515,7 +532,7 @@ fn main() -> Result<()> {
                 let (o, pre) = run(elf, None, 1_400_000)?;
                 eprintln!("[{label}] {elabel} negative: {} CU, error {:?}", o.cu, o.error);
                 let unchanged = unchanged_but_fee(&o, &pre);
-                runs.push(json!({"variant": "negative-marker-absent", "planted": planted.map(|(page, position)| json!({"page": page, "position": position, "value": 1})), "error": o.error, "transaction_cu": o.cu, "pool_cu": consumed(&o.logs, &pool_id_s), "verifier_cu": consumed(&o.logs, &verifier_id_s), "rejected": o.error.is_some(), "unchanged_except_payer_fee": unchanged, "post_state_sha256": state_hash(&o.post), "pre_state_sha256": state_hash(&pre), "logs": o.logs}));
+                runs.push(json!({"variant": "negative-marker-absent", "planted": planted.map(|(page, position)| json!({"page": page, "position": position, "value_or_xor": 1})), "error": o.error, "transaction_cu": o.cu, "pool_cu": consumed(&o.logs, &pool_id_s), "verifier_cu": consumed(&o.logs, &verifier_id_s), "rejected": o.error.is_some(), "unchanged_except_payer_fee": unchanged, "post_state_sha256": state_hash(&o.post), "pre_state_sha256": state_hash(&pre), "logs": o.logs}));
                 elf_results.push(json!({"elf": elabel, "path": epath, "elf_sha256": sha(elf), "runs": runs}));
                 continue;
             }

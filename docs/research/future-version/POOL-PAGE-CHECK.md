@@ -1,6 +1,6 @@
 # Aspis Pool: cheap zero checks of the root-history pages
 
-Status: v2 (slice equality) is the final form; gates 0-6 run on v1 and rerun on v2, all passed. Tests and measurements only. Nothing here is proved, committed or deployed.
+Status: v2 (slice equality) is the final page-check form; final Pool ELF for the freeze built from head 965955709cc and gated (last section). All gates passed. Tests and measurements only. Nothing here is proved, committed or deployed.
 
 Scope (owner's approval of 2026-11-11): the byte-by-byte zero checks of the Pool's root-history pages are
 replaced by a cheaper check of the same predicate. The checks cover the unused tail of the current page,
@@ -346,3 +346,94 @@ rollover. Not measured. It needs the same differential gate, including limbs equ
 2^32 − 1 at every position.
 
 Target status: unchanged, not yet established. These are tests and compute measurements, not a proof.
+
+## Final Pool for the freeze (head 965955709cc)
+
+The Pool to be frozen is the v2 page check plus tonight's reshaped functions in `aspis-statement` and
+`aspis-core`, which the Pool links. It was built from `src-head3` (git archive of 965955709cc on the
+host, not modified here) with the deployed recipe and its own target directory (`PL3-build`, exit 0,
+2:10, 644,200 kB, 8 GiB cap, no swap).
+
+**ELF: `0553a8bd5ef5c5ff93023b1923f96f9651a23f5aa4e50855baebe29109799cec`, 340,320 bytes.** It is
+5,328 bytes smaller than the deployed ELF, so a deployment sized to the ELF locks
+5,328 × 5,080 = 27,066,240 lamports less.
+
+**What differs from the v2 ELF.** The Pool program directory is identical to v2. In the linked crates,
+`wide_exact.rs` (core) and eight `aspis-statement` files differ. The function-level comparison of the
+two unstripped ELFs is `evidence/future-version-20261111/host/fv_pool_fndiff.py`, output
+`final/fndiff-v2-vs-head3.txt`. It compares `llvm-objdump` per symbol, with call and `lddw` immediates
+and jump labels blanked. Of 284 functions:
+- three have a different normalised body:
+  - `decode_pool_v1_pair_forest_master_v1` (196 → 173 instructions);
+  - `decode_pool_v1_pair_forest_checkpoint_v1` (188 → 188);
+  - `decode_pool_v1_pair_verified_afterstate_v1` (833 → 103);
+- one is new: `decode_afterstate_frontier_v1` (78);
+- every other function is equal. Code inlined into a caller would show as a change in that caller, and
+  none does.
+
+The semantic-side functions (`external_linear_lazy`, `pattern_values_windowed`, `composition_parts`)
+and `WideExact::to_le_bytes` leave no trace in the Pool ELF.
+
+**Gates.** "Old" is the deployed Pool `e0e49c34…` and "new" is `0553a8bd…`. Both run against the
+head's verifier ELF `out/BASE2/artifacts/aspis_r1_cost_probe_program.so`
+(`7540abe6c5f07827011b11d3313fe5594816a32fa05963195ee4a1f5cf7856b5`). Tool `one_tx_worst.rs` sha256
+`a52346355b68dad0e81ca758309ee9b2d2586552fce7c2e05c8e7514a2c0c159`, extended with
+`neg-<master|checkpoint|lane>-<byte>`, which XORs one byte of that account with 0x01. Host script
+`fv_pool_final.sh`; results and receipts in `evidence/future-version-20261111/pool-page-check/final/`.
+1. **Pool crate tests in `src-head3`,** `--release`: deployed features 78 passed, 0 failed;
+   defaults 45 passed, 0 failed (all 11 page-check tests among them).
+2. **The 14 positive scenarios** (three marker states and the run one unit under its cost each, 56 runs
+   per Pool) **and the 18 planted-byte scenarios**. `compare_final.py` → `compare_final.txt`:
+   `ALL_RUNS_AGREE_AND_AS_EXPECTED True`.
+   - Every run has the same proof, error and post-state hash under both Pools.
+   - Every settling run writes the expected state.
+   - Every under-limit run fails with no change.
+   - Every planted byte is rejected with the same error and no change.
+3. **Account corruptions** (withdrawal, n = 3), 15 scenarios at field starts:
+   - master bytes 0 (magic), 40, 49, 64, 320 and 383 (last);
+   - checkpoint bytes 0, 8, 72, 80, 112 and 191 (last);
+   - lane bytes 0, 40 and 80.
+
+   Both Pools behave identically in all 15: same error or outcome, same post-state. Thirteen are
+   rejected with no state change. **Two settle under both Pools:** master byte 320 (low byte of the
+   first last-sequence value) and checkpoint byte 112 (low byte of the first lane-sequence value). The
+   payment completes and the post-state is identical under old and new. This behaviour predates
+   tonight's change. These fields are not checked against this payment, and someone should confirm
+   that this is intended. The decoders' own oracle tests (about 1.2 million single-byte corruptions)
+   stand as recorded by their worker.
+4. **Replays and redirect attempts,** old and new Pool with BASE2:
+   - same outcomes, and every state-difference list is empty for both, including the control against
+     the recorded devnet final state;
+   - the redirect attempts are rejected with the same errors, and the honest settlements pay the
+     recorded destination;
+   - recorded payments in one transaction: transfer 1,280,964 → 1,232,533, withdrawal
+     1,287,485 → 1,239,054;
+   - the new Pool's `one_tx_replay` exits 1 only because the control's Pool CU differs from the
+     recorded devnet figure.
+
+**Compute at the head** (BASE2 verifier; Pool's own = Pool inclusive − nested verifier; whole
+transaction; old → new):
+
+| Scenario | Marker | Pool's own, old → new | Whole transaction, old → new |
+|---|---|---:|---:|
+| Withdrawal, rollover n = 255, seed 60 | absent | 136,208 → 69,985 | 1,324,151 → 1,257,928 |
+| | one lamport | 140,305 → 74,082 | 1,328,248 → **1,262,025** |
+| | full rent | 138,690 → 72,467 | 1,326,633 → 1,260,410 |
+| Withdrawal, rollover n = 255, seed 1 | absent | 136,208 → 69,985 | 1,313,265 → 1,247,042 |
+| | one lamport | 140,305 → 74,082 | 1,317,362 → 1,251,139 |
+| | full rent | 138,690 → 72,467 | 1,315,747 → 1,249,524 |
+| Transfer, rollover n = 255 | one lamport | 130,854 → 64,631 | 1,309,787 → 1,243,564 |
+| Withdrawal, rollover n = 1023 | one lamport | 140,243 → 74,020 | 1,323,213 → 1,256,990 |
+| Withdrawal, nearly full n = 254 | absent / one lamport / full rent | 67,542 / 71,639 / 70,024 → 67,159 / 71,256 / 69,641 | 1,249,531 / 1,253,628 / 1,252,013 → 1,249,148 / 1,253,245 / 1,251,630 |
+| Transfer, n = 254 | one lamport | 62,238 → 61,855 | 1,244,516 → 1,244,133 |
+| Withdrawal, young n = 3 | absent / one lamport / full rent | 105,768 / 109,865 / 108,250 → 57,717 / 61,814 / 60,199 | 1,286,839 / 1,290,936 / 1,289,321 → 1,238,788 / 1,242,885 / 1,241,270 |
+| Transfer, n = 3 | one lamport | 100,464 → 52,413 | 1,285,652 → 1,237,601 |
+| Withdrawal, genesis | absent / one lamport / full rent | 106,740 / 110,837 / 109,222 → 57,559 / 61,656 / 60,041 | 1,291,589 / 1,295,686 / 1,294,071 → 1,242,408 / 1,246,505 / 1,244,890 |
+| Transfer, genesis | one lamport | 101,436 → 52,255 | 1,282,718 → 1,233,537 |
+
+The Pool's own cost at the head is v2's plus 307 on every settling run (for example 73,775 → 74,082 at
+the rollover). The other worker measured the same +307 for the reshaped decoders.
+
+**Worst case at the head:** the heaviest measured case is the rollover withdrawal with seed 60 and a
+one-lamport marker, 1,262,025. Adding the 10,697 allowance (the X1 figure, used here as instructed for
+BASE2) gives **1,272,722, headroom 127,278**.
