@@ -10,7 +10,7 @@ pub(super) fn is_close_checkpoint(data: &[u8]) -> bool {
     data.len() >= 3
         && data[0] == CLOSE_CHECKPOINT_TAG
         && data[1] as usize == data.len() - 2
-        && (1..=32).contains(&data[1])
+        && 1 <= data[1] && data[1] <= 32
 }
 
 pub(super) fn admitted(data: &[u8]) -> bool {

@@ -37,7 +37,7 @@ pub struct View<'a> {
     pub final_message:&'a[u8],pub query_bytes:&'a[u8],
 }
 fn echeck(b:&[u8],k:bool)->Result<(),Error> {
-    for c in b.chunks_exact(32) {let x=E::from_le_bytes(c).ok_or(Error::Parse)?;if k&&x.c1()!=K::ZERO {return Err(Error::Parse);}}
+    for c in b.chunks_exact(32) {let Some(x)=E::from_le_bytes(c) else {return Err(Error::Parse)};if k&&x.c1()!=K::ZERO {return Err(Error::Parse);}}
     Ok(())
 }
 impl<'a> View<'a> {
@@ -363,7 +363,7 @@ fn accumulate_batched_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,valu
     a.power=a.power.mul(p.rho);a.next+=1;
 }
 
-pub fn polynomial(bytes:&[u8],x:E)->E {(0..7).rev().fold(E::ZERO,|a,i|a.mul(x).add(field(bytes,i)))}
+pub fn polynomial(bytes:&[u8],x:E)->E {let mut a=E::ZERO;let mut i=7;while i>0 {i-=1;a=a.mul(x).add(field(bytes,i));} a}
 fn finish_relation_round(poly:&[u8],alpha:E,mut claim:E,round:usize)->Result<E,Error> {
         let lhs=field(poly,0).add(field(poly,4));let rhs=claim.mul_m31(QUARTER);
         crate::trace::value(15,3*round,lhs);crate::trace::value(15,3*round+1,rhs);
@@ -600,3 +600,66 @@ const _:()=assert!(PROOF_BYTES==57_607&&SPLIT==10);
 #[cfg(feature="audit-eight-way")]
 #[path="eight_way.rs"]
 pub mod eight_way;
+
+/// Differential test of `echeck` against the frozen body (verifier.rs 39-42).
+#[cfg(test)]
+mod ok_or_explicit_match {
+    extern crate std;
+    use super::*;
+    fn old(b:&[u8],k:bool)->Result<(),Error> {
+        for c in b.chunks_exact(32) {let x=E::from_le_bytes(c).ok_or(Error::Parse)?;if k&&x.c1()!=K::ZERO {return Err(Error::Parse);}}
+        Ok(())
+    }
+    fn next(s: &mut u64) -> u64 { *s = s.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407); *s >> 11 }
+    /// Little-endian 4-byte limbs, mostly canonical M31 values, with the edges 0, p - 1, p, p + 1 and 2^32 - 1;
+    /// with probability 1/4 per 16-byte group the group is zero (so wide values with a zero high half occur).
+    fn limbs(s: &mut u64, n: usize) -> std::vec::Vec<u8> {
+        let mut out = std::vec::Vec::new();
+        while out.len() < n {
+            let zero = next(s) % 4 == 0;
+            for _ in 0..4 {
+                let v = if zero { 0 } else { match next(s) % 32 { 0 => 0, 1 => 0x7fff_fffe, 2 => 0x7fff_ffff, 3 => 0x8000_0000, 4 => u32::MAX, _ => (next(s) as u32) % 0x7fff_ffff } };
+                out.extend_from_slice(&v.to_le_bytes());
+            }
+        }
+        out.truncate(n);
+        out
+    }
+    #[test]
+    fn same_result() {
+        let mut s = 3u64;
+        let mut seen = [0usize; 2];
+        for n in 0..20_000 {
+            let b = limbs(&mut s, 32 * (n % 9) + if n % 13 == 0 { 7 } else { 0 });
+            for k in [false, true] {
+                let r = echeck(&b, k);
+                seen[r.is_ok() as usize] += 1;
+                assert_eq!(r, old(&b, k));
+            }
+        }
+        assert!(seen[0] > 1000 && seen[1] > 1000);
+    }
+}
+
+/// Differential test of `polynomial` against the frozen body (verifier.rs 366).
+#[cfg(test)]
+mod counted_loop_form {
+    use super::*;
+    fn old(bytes:&[u8],x:E)->E {(0..7).rev().fold(E::ZERO,|a,i|a.mul(x).add(field(bytes,i)))}
+    fn next(s: &mut u64) -> u64 { *s = s.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407); *s >> 11 }
+    fn wide(s: &mut u64) -> [u8; 32] {
+        let mut b = [0u8; 32];
+        for k in 0..4 { let v = (next(s) as u32) % 0x7fff_ffff; b[4 * k..4 * k + 4].copy_from_slice(&v.to_le_bytes()); }
+        b
+    }
+    #[test]
+    fn same_result() {
+        let mut s = 29u64;
+        for _ in 0..5_000 {
+            let mut bytes = [0u8; 224];
+            for i in 0..7 { bytes[32 * i..32 * i + 32].copy_from_slice(&wide(&mut s)); }
+            let x = E::from_le_bytes(&wide(&mut s)).unwrap();
+            assert_eq!(polynomial(&bytes, x), old(&bytes, x));
+        }
+    }
+}

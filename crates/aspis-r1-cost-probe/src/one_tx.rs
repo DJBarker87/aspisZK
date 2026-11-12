@@ -122,8 +122,8 @@ pub fn verify_batched<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, ob
 }
 
 const NO_BYTES: &[u8] = &[];
-fn relation_view(proof: &[u8]) -> Result<View<'_>, Error> {
-    let inactive = E::from_le_bytes(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?;
+fn relation_view(proof: &[u8]) -> Result<View<'_>, Error> { let inactive = match
+                   E::from_le_bytes(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]) { Some(v) => v, None => return Err(Error::Parse) };
     Ok(View {
         variant: Variant::S2,
         semantic: NO_BYTES,
@@ -652,9 +652,9 @@ fn final_rounds<H: Digest32>(t: &mut Transcript<H>, certificate: &[u8], start: E
     let mut current = start;
     let mut r = [K::ZERO; 6];
     for b in 0..6 {
-        let bytes = &certificate[64 * b..64 * b + 64];
-        let c0 = E::from_le_bytes(&bytes[..32]).ok_or(Error::Parse)?;
-        let c2 = E::from_le_bytes(&bytes[32..]).ok_or(Error::Parse)?;
+        let bytes = &certificate[64 * b..64 * b + 64]; let c0 = match
+                 E::from_le_bytes(&bytes[..32]) { Some(v) => v, None => return Err(Error::Parse) }; let c2 = match
+                 E::from_le_bytes(&bytes[32..]) { Some(v) => v, None => return Err(Error::Parse) };
         r[b] = t.scalar_k(ROW_ROUND + b as u8, bytes);
         // s(0) + s(1) = 2 c0 + c1 + c2 is the running claim.
         let c1 = current.sub(c0).sub(c0).sub(c2);
@@ -862,7 +862,7 @@ pub fn parse_packed_shape(proof: &[u8]) -> Result<(), Error> {
     if proof.len() != format::PROOF_BYTES
         || &proof[..8] != format::MAGIC
         || proof[8] != Variant::S2.tag()
-        || proof[9..16].iter().any(|&x| x != 0)
+        || proof[9..16] != [0u8; 7]
     {
         return Err(Error::Parse);
     }

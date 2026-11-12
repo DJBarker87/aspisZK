@@ -52,7 +52,7 @@ fn observer()->verifier::Observer {
     #[cfg(feature="cu-profiling")] {Some(mark)}
     #[cfg(not(feature="cu-profiling"))] {None}
 }
-fn error(e:verifier::Error)->ProgramError{msg!("r1:error:{:?}",e);ProgramError::InvalidInstructionData}
+fn error(e:verifier::Error)->ProgramError{msg!(error_log(e));ProgramError::InvalidInstructionData}
 #[inline(never)]
 fn first(public_bytes:&[u8],proof:&[u8],k:usize)->Result<Vec<u8>,ProgramError>{
     let statement=decode_pool_v1_pair_forest_terminal_statement_v1(public_bytes).map_err(|_|ProgramError::InvalidAccountData)?;
@@ -257,3 +257,25 @@ mod tests {
 #[cfg(all(test, feature="pool-adapter"))]
 #[path="r1_pool_adapter_original.rs"]
 mod r1_pool_adapter_original;
+
+/// The log line of `error` without run-time formatting: the same text `msg!("r1:error:{:?}", e)` printed
+/// (the derived `Debug` of a unit variant is its name), so the program log is unchanged.
+fn error_log(e:verifier::Error)->&'static str{
+    match e {
+        verifier::Error::Parse=>"r1:error:Parse",verifier::Error::Semantic=>"r1:error:Semantic",
+        verifier::Error::Transcript=>"r1:error:Transcript",verifier::Error::Relation=>"r1:error:Relation",
+        verifier::Error::Merkle=>"r1:error:Merkle",verifier::Error::Query=>"r1:error:Query",
+        verifier::Error::Checkpoint=>"r1:error:Checkpoint",verifier::Error::Allocation=>"r1:error:Allocation",
+    }
+}
+
+#[cfg(test)]
+mod error_log_literals {
+    #[test]
+    fn same_text_as_the_formatted_log() {
+        use aspis_r1_cost_probe::verifier::Error::*;
+        for e in [Parse,Semantic,Transcript,Relation,Merkle,Query,Checkpoint,Allocation] {
+            assert_eq!(super::error_log(e), format!("r1:error:{:?}", e));
+        }
+    }
+}

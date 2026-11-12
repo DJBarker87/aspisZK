@@ -124,11 +124,11 @@ pub fn compact_values(logical: &[u8], out: &mut Vec<u8>) -> Result<(), CodecErro
 /// stored `y1` values in its strict scan and the rebuilt semantic records in
 /// the shipped `Prefix::parse` (one check per value, as in the shipped path).
 #[inline(always)]
-pub fn expand_values(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {
-    if compact.len() % 16 != 0 || out.len() != 2 * compact.len() {
+pub fn expand_values(encoded: &[u8], out: &mut [u8]) -> Result<(), CodecError> {
+    if encoded.len() % 16 != 0 || out.len() != 2 * encoded.len() {
         return Err(CodecError::Length);
     }
-    for (c, o) in compact.chunks_exact(16).zip(out.chunks_exact_mut(32)) {
+    for (k, c) in encoded.chunks_exact(16).enumerate() { let o = &mut out[32 * k..32 * k + 32];
         o[..16].copy_from_slice(c);
         o[16..].fill(0);
     }
@@ -136,36 +136,36 @@ pub fn expand_values(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {
 }
 
 /// Every stored compact value is a canonical QM31.
-pub fn check_values(compact: &[u8]) -> Result<(), CodecError> {
-    for c in compact.chunks_exact(16) {
-        QM31::from_le_bytes(c).ok_or(CodecError::NonCanonical)?;
+pub fn check_values(encoded: &[u8]) -> Result<(), CodecError> {
+    for c in encoded.chunks_exact(16) {
+  match QM31::from_le_bytes(c) { Some(_) => {} None => return Err(CodecError::NonCanonical) }
     }
     Ok(())
 }
 
 /// Decoder: compact semantic -> logical semantic (framing bytes copied;
 /// the shipped `Prefix::parse` then checks tag, length and every limb).
-pub fn expand_semantic(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {
-    if compact.len() != COMPACT_SEMANTIC || out.len() != LOGICAL_SEMANTIC {
+pub fn expand_semantic(encoded: &[u8], out: &mut [u8]) -> Result<(), CodecError> {
+    if encoded.len() != COMPACT_SEMANTIC || out.len() != LOGICAL_SEMANTIC {
         return Err(CodecError::Length);
     }
-    out[..32].copy_from_slice(&compact[..32]);
+    out[..32].copy_from_slice(&encoded[..32]);
     let (mut src, mut dst) = (32, 32);
     for row in 0..SEMANTIC_ROWS {
-        let size = row_shape(row).ok_or(CodecError::Length)?.1;
-        out[dst..dst + 5].copy_from_slice(&compact[src..src + 5]);
+        let Some((_, size)) = row_shape(row) else { return Err(CodecError::Length) };
+        out[dst..dst + 5].copy_from_slice(&encoded[src..src + 5]);
         src += 5;
         dst += 5;
         if compact_row(row) {
-            expand_values(&compact[src..src + size / 2], &mut out[dst..dst + size])?;
+            expand_values(&encoded[src..src + size / 2], &mut out[dst..dst + size])?;
             src += size / 2;
         } else {
-            out[dst..dst + size].copy_from_slice(&compact[src..src + size]);
+            out[dst..dst + size].copy_from_slice(&encoded[src..src + size]);
             src += size;
         }
         dst += size;
     }
-    if src != compact.len() || dst != out.len() {
+    if src != encoded.len() || dst != out.len() {
         return Err(CodecError::Length);
     }
     Ok(())
@@ -197,5 +197,116 @@ mod tests {
         let mut bad = c.clone();
         bad[0..4].copy_from_slice(&0x7fff_ffffu32.to_le_bytes());
         assert_eq!(check_values(&bad), Err(CodecError::NonCanonical));
+    }
+}
+
+/// Differential test of `check_values` and `expand_semantic` against the frozen bodies (compact.rs
+/// 139-145, 148-172), comparing the result and the whole output buffer.
+#[cfg(test)]
+mod ok_or_explicit_match {
+    extern crate std;
+    use super::*;
+    fn old_check_values(compact: &[u8]) -> Result<(), CodecError> {
+        for c in compact.chunks_exact(16) {
+            QM31::from_le_bytes(c).ok_or(CodecError::NonCanonical)?;
+        }
+        Ok(())
+    }
+    fn old_expand_semantic(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {
+        if compact.len() != COMPACT_SEMANTIC || out.len() != LOGICAL_SEMANTIC {
+            return Err(CodecError::Length);
+        }
+        out[..32].copy_from_slice(&compact[..32]);
+        let (mut src, mut dst) = (32, 32);
+        for row in 0..SEMANTIC_ROWS {
+            let size = row_shape(row).ok_or(CodecError::Length)?.1;
+            out[dst..dst + 5].copy_from_slice(&compact[src..src + 5]);
+            src += 5;
+            dst += 5;
+            if compact_row(row) {
+                expand_values(&compact[src..src + size / 2], &mut out[dst..dst + size])?;
+                src += size / 2;
+            } else {
+                out[dst..dst + size].copy_from_slice(&compact[src..src + size]);
+                src += size;
+            }
+            dst += size;
+        }
+        if src != compact.len() || dst != out.len() {
+            return Err(CodecError::Length);
+        }
+        Ok(())
+    }
+    fn next(s: &mut u64) -> u64 { *s = s.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407); *s >> 11 }
+    /// Little-endian 4-byte limbs, mostly canonical M31 values, with the edges 0, p - 1, p, p + 1 and 2^32 - 1;
+    /// with probability 1/4 per 16-byte group the group is zero (so wide values with a zero high half occur).
+    fn limbs(s: &mut u64, n: usize) -> std::vec::Vec<u8> {
+        let mut out = std::vec::Vec::new();
+        while out.len() < n {
+            let zero = next(s) % 4 == 0;
+            for _ in 0..4 {
+                let v = if zero { 0 } else { match next(s) % 32 { 0 => 0, 1 => 0x7fff_fffe, 2 => 0x7fff_ffff, 3 => 0x8000_0000, 4 => u32::MAX, _ => (next(s) as u32) % 0x7fff_ffff } };
+                out.extend_from_slice(&v.to_le_bytes());
+            }
+        }
+        out.truncate(n);
+        out
+    }
+    #[test]
+    fn same_result_and_output() {
+        let mut s = 5u64;
+        let mut seen = [0usize; 2];
+        for n in 0..20_000 {
+            let b = limbs(&mut s, 16 * (n % 11) + if n % 17 == 0 { 3 } else { 0 });
+            let r = check_values(&b);
+            seen[r.is_ok() as usize] += 1;
+            assert_eq!(r, old_check_values(&b));
+        }
+        assert!(seen[0] > 100 && seen[1] > 100);
+        for n in 0..200 {
+            let len_c = if n % 10 == 9 { COMPACT_SEMANTIC - 16 } else { COMPACT_SEMANTIC };
+            let len_o = if n % 10 == 8 { LOGICAL_SEMANTIC + 1 } else { LOGICAL_SEMANTIC };
+            let c = limbs(&mut s, len_c);
+            let fill = (n % 3) as u8 * 0x55;
+            let mut a = std::vec![fill; len_o];
+            let mut b = a.clone();
+            assert_eq!(expand_semantic(&c, &mut a), old_expand_semantic(&c, &mut b));
+            assert_eq!(a, b);
+        }
+    }
+}
+
+/// Differential test of `expand_values` against the frozen body (compact.rs 126-136), comparing the
+/// result and the whole output buffer on every length class (aligned or not, matching or not).
+#[cfg(test)]
+mod expand_values_indexed {
+    extern crate std;
+    use super::*;
+    fn old_expand_values(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {
+        if compact.len() % 16 != 0 || out.len() != 2 * compact.len() {
+            return Err(CodecError::Length);
+        }
+        for (c, o) in compact.chunks_exact(16).zip(out.chunks_exact_mut(32)) {
+            o[..16].copy_from_slice(c);
+            o[16..].fill(0);
+        }
+        Ok(())
+    }
+    #[test]
+    fn same_output_and_error() {
+        let mut state = 0x9e37_79b9_7f4a_7c15u64;
+        for n in [0usize, 1, 15, 16, 17, 31, 32, 48, 160, 464, 1600, 16 * 426, 16 * 300] {
+            for extra in [0usize, 1, 16, 32] {
+                for fill in [0u8, 0xa5, 0xff] {
+                    let input: std::vec::Vec<u8> = (0..n).map(|_| { state = state.wrapping_mul(6364136223846793005).wrapping_add(1); (state >> 56) as u8 }).collect();
+                    for out_len in [2 * n, 2 * n + extra, (2 * n).saturating_sub(extra)] {
+                        let mut a = std::vec![fill; out_len];
+                        let mut b = a.clone();
+                        assert_eq!(expand_values(&input, &mut a), old_expand_values(&input, &mut b), "{n} {out_len}");
+                        assert_eq!(a, b, "{n} {out_len}");
+                    }
+                }
+            }
+        }
     }
 }

@@ -378,7 +378,7 @@ fn r15_release_stage1_rejects_occupied_and_wrong_size_without_writes() {
     }
 }
 
-#[test]
+#[test] #[cfg(not(feature = "one-tx"))] // lifecycle compiled out under one-tx
 fn r15_lifecycle_requires_recorded_signer_to_upload_or_seal() {
     let program = Pubkey::new_unique();
     let mut target = TestAccount::new(program, vec![0; ASPU_HEADER + ASRU_BODY_BYTES], true);

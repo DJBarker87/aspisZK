@@ -591,10 +591,10 @@ pub fn evaluate_state_only_poseidon_oracle_projected(
     selectors: &StateOnlyPoseidonSelectors,
 ) -> [QM31; STATE_ONLY_POSEIDON_PACKED_LANES] {
     let leading_low = selectors.local[0];
-    let full_low = [1usize, 9, 10]
-        .into_iter()
-        .fold(QM31::ZERO, |sum, row| sum.add(selectors.local[row]));
-    let internal_low = (2usize..=8).fold(QM31::ZERO, |sum, row| sum.add(selectors.local[row]));
+    let full_low = QM31::ZERO
+        .add(selectors.local[1]).add(selectors.local[9])
+        .add(selectors.local[10]);
+    let internal_low = QM31::ZERO.add(selectors.local[2]).add(selectors.local[3]).add(selectors.local[4]).add(selectors.local[5]).add(selectors.local[6]).add(selectors.local[7]).add(selectors.local[8]);
     let leading = leading_pair_packed(openings);
     let full = interpolated_full_pair_packed(openings.z, &selectors.local);
     let internal = interpolated_internal_pair(openings.z, &selectors.local);

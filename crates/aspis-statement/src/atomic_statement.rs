@@ -90,22 +90,22 @@ pub(crate) fn unwrap_fixed_slice<T: Copy>(value: Result<T, core::array::TryFromS
 
 pub fn decode_digest_canonical(bytes: &[u8; 32]) -> Result<Digest, AtomicStatementError> {
     Ok([
-        M31::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]])
-            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
-        M31::from_le_bytes([bytes[4], bytes[5], bytes[6], bytes[7]])
-            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
-        M31::from_le_bytes([bytes[8], bytes[9], bytes[10], bytes[11]])
-            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
-        M31::from_le_bytes([bytes[12], bytes[13], bytes[14], bytes[15]])
-            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
-        M31::from_le_bytes([bytes[16], bytes[17], bytes[18], bytes[19]])
-            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
-        M31::from_le_bytes([bytes[20], bytes[21], bytes[22], bytes[23]])
-            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
-        M31::from_le_bytes([bytes[24], bytes[25], bytes[26], bytes[27]])
-            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
-        M31::from_le_bytes([bytes[28], bytes[29], bytes[30], bytes[31]])
-            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
+  match M31::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]])
+            { Some(v) => v, None => return Err(AtomicStatementError::NonCanonicalDigest) },
+  match M31::from_le_bytes([bytes[4], bytes[5], bytes[6], bytes[7]])
+            { Some(v) => v, None => return Err(AtomicStatementError::NonCanonicalDigest) },
+  match M31::from_le_bytes([bytes[8], bytes[9], bytes[10], bytes[11]])
+            { Some(v) => v, None => return Err(AtomicStatementError::NonCanonicalDigest) },
+  match M31::from_le_bytes([bytes[12], bytes[13], bytes[14], bytes[15]])
+            { Some(v) => v, None => return Err(AtomicStatementError::NonCanonicalDigest) },
+  match M31::from_le_bytes([bytes[16], bytes[17], bytes[18], bytes[19]])
+            { Some(v) => v, None => return Err(AtomicStatementError::NonCanonicalDigest) },
+  match M31::from_le_bytes([bytes[20], bytes[21], bytes[22], bytes[23]])
+            { Some(v) => v, None => return Err(AtomicStatementError::NonCanonicalDigest) },
+  match M31::from_le_bytes([bytes[24], bytes[25], bytes[26], bytes[27]])
+            { Some(v) => v, None => return Err(AtomicStatementError::NonCanonicalDigest) },
+  match M31::from_le_bytes([bytes[28], bytes[29], bytes[30], bytes[31]])
+            { Some(v) => v, None => return Err(AtomicStatementError::NonCanonicalDigest) },
     ])
 }
 
@@ -375,5 +375,47 @@ mod tests {
             ),
             third
         );
+    }
+}
+
+/// Differential test of `decode_digest_canonical` against the frozen body (atomic_statement.rs 91-110).
+#[cfg(test)]
+mod ok_or_explicit_match {
+    extern crate std;
+    use super::*;
+    fn old(bytes: &[u8; 32]) -> Result<Digest, AtomicStatementError> {
+        Ok([
+            M31::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]).ok_or(AtomicStatementError::NonCanonicalDigest)?,
+            M31::from_le_bytes([bytes[4], bytes[5], bytes[6], bytes[7]]).ok_or(AtomicStatementError::NonCanonicalDigest)?,
+            M31::from_le_bytes([bytes[8], bytes[9], bytes[10], bytes[11]]).ok_or(AtomicStatementError::NonCanonicalDigest)?,
+            M31::from_le_bytes([bytes[12], bytes[13], bytes[14], bytes[15]]).ok_or(AtomicStatementError::NonCanonicalDigest)?,
+            M31::from_le_bytes([bytes[16], bytes[17], bytes[18], bytes[19]]).ok_or(AtomicStatementError::NonCanonicalDigest)?,
+            M31::from_le_bytes([bytes[20], bytes[21], bytes[22], bytes[23]]).ok_or(AtomicStatementError::NonCanonicalDigest)?,
+            M31::from_le_bytes([bytes[24], bytes[25], bytes[26], bytes[27]]).ok_or(AtomicStatementError::NonCanonicalDigest)?,
+            M31::from_le_bytes([bytes[28], bytes[29], bytes[30], bytes[31]]).ok_or(AtomicStatementError::NonCanonicalDigest)?,
+        ])
+    }
+    fn next(s: &mut u64) -> u64 { *s = s.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407); *s >> 11 }
+    /// Little-endian 4-byte limbs, mostly canonical M31 values, with the edges 0, p - 1, p, p + 1 and 2^32 - 1.
+    fn limbs(s: &mut u64, n: usize) -> std::vec::Vec<u8> {
+        let mut out = std::vec::Vec::new();
+        while out.len() < n {
+            let v = match next(s) % 16 { 0 => 0, 1 => 0x7fff_fffe, 2 => 0x7fff_ffff, 3 => 0x8000_0000, 4 => u32::MAX, _ => (next(s) as u32) % 0x7fff_ffff };
+            out.extend_from_slice(&v.to_le_bytes());
+        }
+        out.truncate(n);
+        out
+    }
+    #[test]
+    fn same_result() {
+        let mut s = 11u64;
+        let (mut ok, mut err) = (0, 0);
+        for _ in 0..200_000 {
+            let b: [u8; 32] = limbs(&mut s, 32).try_into().unwrap();
+            let r = decode_digest_canonical(&b);
+            if r.is_ok() { ok += 1 } else { err += 1 }
+            assert_eq!(r, old(&b));
+        }
+        assert!(ok > 1000 && err > 1000);
     }
 }

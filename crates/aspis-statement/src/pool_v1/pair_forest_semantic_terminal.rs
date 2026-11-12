@@ -183,10 +183,10 @@ fn sum_high(selectors: &Selectors, ranges: &[core::ops::Range<usize>]) -> QM31 {
 
 #[inline(always)]
 fn reconstruct_10(view: &[QM31; 16]) -> QM31 {
-    view[..9]
-        .iter()
-        .rev()
-        .fold(view[9], |acc, bit| acc.add(acc).add(*bit))
+    let mut acc = view[9]; let mut i = 9;
+    while i > 0 { i -= 1;
+        acc = acc.add(acc).add(view[i]); }
+    acc
 }
 
 #[inline(always)]
@@ -1291,10 +1291,10 @@ fn composition_parts(
     );
     let prepared_theta = PreparedQm31Multiplier::new(theta);
     let mut composition = copy.residual;
-    for index in (0..semantic.len()).rev() {
+    let mut index = semantic.len(); while index > 0 { index -= 1;
         composition = prepared_theta.mul(composition).add(semantic[index]);
     }
-    for index in (0..poseidon.len()).rev() {
+    let mut index = poseidon.len(); while index > 0 { index -= 1;
         composition = prepared_theta.mul(composition).add(poseidon[index]);
     }
     Ok((
@@ -2616,5 +2616,34 @@ mod public_serializer_tests {
         assert_eq!(&new_w[..OLD_WITHDRAWAL_BYTES], &old_w[..]);
         assert_eq!(hex(&new_t[..OLD_TRANSFER_BYTES]), TRANSFER_PREFIX_SHA256);
         assert_eq!(hex(&new_w[..OLD_WITHDRAWAL_BYTES]), WITHDRAWAL_PREFIX_SHA256);
+    }
+}
+
+/// Differential test of `reconstruct_10` against the frozen body (pair_forest_semantic_terminal.rs
+/// 184-190).
+#[cfg(test)]
+mod counted_loop_form {
+    use super::*;
+    fn old(view: &[QM31; 16]) -> QM31 {
+        view[..9]
+            .iter()
+            .rev()
+            .fold(view[9], |acc, bit| acc.add(acc).add(*bit))
+    }
+    fn next(s: &mut u64) -> u64 { *s = s.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407); *s >> 11 }
+    /// A QM31 value from four canonical limbs, with the edges 0, 1 and p - 1 among them.
+    fn q(s: &mut u64) -> QM31 {
+        let mut b = [0u8; 16];
+        for k in 0..4 { let v = match next(s) % 8 { 0 => 0, 1 => 1, 2 => 0x7fff_fffe, _ => (next(s) as u32) % 0x7fff_ffff }; b[4 * k..4 * k + 4].copy_from_slice(&v.to_le_bytes()); }
+        QM31::from_le_bytes(&b).unwrap()
+    }
+    #[test]
+    fn same_result() {
+        let mut s = 25u64;
+        for _ in 0..5_000 {
+            let mut v = [QM31::ZERO; 16];
+            for x in v.iter_mut() { *x = q(&mut s); }
+            assert_eq!(reconstruct_10(&v), old(&v));
+        }
     }
 }

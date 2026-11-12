@@ -600,7 +600,7 @@ fn absorb_round_root(transcript: &mut Transcript, layer: usize, root: &[u8; ROOT
 fn state_only_statement_points(z: &[QM31; 10]) -> [[QM31; 10]; 3] {
     let mut successor = *z;
     let mut carry = QM31::ONE;
-    for coordinate in (0..z.len()).rev() {
+    let mut coordinate = z.len(); while coordinate > 0 { coordinate -= 1;
         let bit = z[coordinate];
         let bit_and_carry = bit.mul(carry);
         successor[coordinate] = bit.add(carry).sub(bit_and_carry.add(bit_and_carry));
@@ -1884,5 +1884,42 @@ pub mod r0 {
             mu,
             eta,
         })
+    }
+}
+
+/// Differential test of `state_only_statement_points` against the frozen body (state_only_prefix.rs
+/// 600-614).
+#[cfg(test)]
+mod counted_loop_form {
+    use super::*;
+    fn old(z: &[QM31; 10]) -> [[QM31; 10]; 3] {
+        let mut successor = *z;
+        let mut carry = QM31::ONE;
+        for coordinate in (0..z.len()).rev() {
+            let bit = z[coordinate];
+            let bit_and_carry = bit.mul(carry);
+            successor[coordinate] = bit.add(carry).sub(bit_and_carry.add(bit_and_carry));
+            carry = bit_and_carry;
+        }
+        let mut absorption = *z;
+        absorption[7] = QM31::ONE.sub(absorption[7]);
+        absorption[6] = QM31::ONE.sub(absorption[6]);
+        [*z, successor, absorption]
+    }
+    fn next(s: &mut u64) -> u64 { *s = s.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407); *s >> 11 }
+    /// A QM31 value from four canonical limbs, with the edges 0, 1 and p - 1 among them.
+    fn q(s: &mut u64) -> QM31 {
+        let mut b = [0u8; 16];
+        for k in 0..4 { let v = match next(s) % 8 { 0 => 0, 1 => 1, 2 => 0x7fff_fffe, _ => (next(s) as u32) % 0x7fff_ffff }; b[4 * k..4 * k + 4].copy_from_slice(&v.to_le_bytes()); }
+        QM31::from_le_bytes(&b).unwrap()
+    }
+    #[test]
+    fn same_result() {
+        let mut s = 23u64;
+        for n in 0..5_000 {
+            let mut z = [QM31::ZERO; 10];
+            for x in z.iter_mut() { *x = if n % 3 == 0 { if next(&mut s) % 2 == 0 { QM31::ZERO } else { QM31::ONE } } else { q(&mut s) }; }
+            assert_eq!(state_only_statement_points(&z), old(&z));
+        }
     }
 }

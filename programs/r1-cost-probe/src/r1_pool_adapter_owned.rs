@@ -171,8 +171,8 @@ fn authenticate_invariant_release_registry(
     let registry_program = Pubkey::new_from_array(registry_program_id());
     require_readonly_account(registry_account, &registry_program)?;
     let immutable_deployment =
-        master.verifier_policy.flags & POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT != 0;
-    if immutable_deployment {
+        master.verifier_policy.flags & POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT != 0; if immutable_deployment { return authenticate_release_registry_v2(verifier_program, master_account, master, registry_account, entry_account, current_slot, registry_program); } authenticate_release_registry_v1(verifier_program, master_account, master, registry_account, entry_account, current_slot, registry_program) }
+#[inline(always)] fn authenticate_release_registry_v2(verifier_program: &Pubkey, master_account: &OwnedAccount, master: &PoolV1PairForestMasterV1, registry_account: &OwnedAccount, entry_account: &OwnedAccount, current_slot: u64, registry_program: Pubkey) -> ProgramResult { // X1b item L: the immutable-deployment (v2) branch of `authenticate_invariant_release_registry`, unchanged.
         let loader = bpf_loader_upgradeable::id();
         let registry = decode_verifier_registry_v2(registry_account.data()?)
             .map_err(|_| ProgramError::InvalidAccountData)?;
@@ -240,8 +240,8 @@ fn authenticate_invariant_release_registry(
             return Err(ProgramError::InvalidAccountData);
         }
         return Ok(());
-    }
-
+}
+#[inline(always)] fn authenticate_release_registry_v1(verifier_program: &Pubkey, master_account: &OwnedAccount, master: &PoolV1PairForestMasterV1, registry_account: &OwnedAccount, entry_account: &OwnedAccount, current_slot: u64, registry_program: Pubkey) -> ProgramResult { // X1b item L: the v1 tail of `authenticate_invariant_release_registry`, unchanged.
     let registry = decode_verifier_registry_v1(registry_account.data()?)
         .map_err(|_| ProgramError::InvalidAccountData)?;
     let expected_registry = Pubkey::create_program_address(
@@ -434,8 +434,8 @@ fn validate_asq8(
         &pool_program,
         output_lane,
         current_slot?,
-    )?;
-    let proof_account = accounts.first().ok_or(ProgramError::NotEnoughAccountKeys)?;
+    )?; let proof_account = match
+                        accounts.first() { Some(v) => v, None => return Err(ProgramError::NotEnoughAccountKeys) };
     let scanned = scan_proof_buffer(proof_account.data()?)?;
     let statement =
         reconstruct_asq8_statement(&request, &authenticated, &scanned.candidate_afterstate)?;
@@ -529,8 +529,8 @@ fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], cur
     let proof_data = accounts[0].data()?;
     let checkpoint_data = accounts[6].data()?;
     let proof_start = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
-    let proof_end = proof_start.checked_add(validated.proof_length)
-        .ok_or(ProgramError::InvalidAccountData)?;
+    let proof_end = match proof_start.checked_add(validated.proof_length)
+        { Some(v) => v, None => return Err(ProgramError::InvalidAccountData) };
     if proof_data.len() != proof_end {
         return Err(ProgramError::InvalidAccountData);
     }

@@ -104,7 +104,7 @@ fn twofold_libra_weights(low:&[E;16],extra:[K;2])->[E;4] {
 /// tensors; the only cut blocks have lengths 12 and 4 (28 = 16 + 12).
 #[inline(never)]
 fn factored_s2_libra_weights(ap0:&[E;4],ap1:&[E;4],extra:[K;2])->[E;4] {
-    let mut weights=[E::ZERO;4];
+    let mut libra_w=[E::ZERO;4];
     for side in 0..2 {
         let q0=K::ONE;
         let q1=q0.mul(extra[side]);
@@ -122,15 +122,15 @@ fn factored_s2_libra_weights(ap0:&[E;4],ap1:&[E;4],extra:[K;2])->[E;4] {
         let terms=[term0,term1,term2,term3];
         let first2=terms[0].add(terms[1]);let first3=first2.add(terms[2]);let all=first3.add(terms[3]);
         if side==0 {
-            weights[0]=low.mul(all);
-            weights[1]=low.mul(first3).mul_qm31(q16);
+            libra_w[0]=low.mul(all);
+            libra_w[1]=low.mul(first3).mul_qm31(q16);
         } else {
-            weights[1]=weights[1].add(low.mul(ap1[PERM[3]].mul_m31(QUARTER)));
-            weights[2]=low.mul(all).mul_qm31(q4);
-            weights[3]=low.mul(first2).mul_qm31(q16.mul(q4));
+            libra_w[1]=libra_w[1].add(low.mul(ap1[PERM[3]].mul_m31(QUARTER)));
+            libra_w[2]=low.mul(all).mul_qm31(q4);
+            libra_w[3]=low.mul(first2).mul_qm31(q16.mul(q4));
         }
     }
-    weights
+    libra_w
 }
 
 fn shared_two_point_guard(w:&Weights,folds:usize)->bool {
@@ -235,7 +235,7 @@ impl Weights {
         }
     }
     fn scalar_factor(f:&[K;4],p:&[E;4])->E {
-        (0..4).fold(E::ZERO,|v,s|v.add(p[PERM[s]].mul_qm31(f[s]))).mul_m31(QUARTER)
+        {let mut v=E::ZERO;let mut s=0;while s<4 {v=v.add(p[PERM[s]].mul_qm31(f[s]));s+=1;} v}.mul_m31(QUARTER)
     }
     fn tensor(&self,k:usize,folds:usize,output:&mut[K]) {
         output[0]=K::ONE;let mut n=1;

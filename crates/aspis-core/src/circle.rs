@@ -35,10 +35,10 @@ pub fn secure_circle_point_from_parameter(
     parameter: QM31,
 ) -> Result<SecureCirclePoint, CirclePointError> {
     let square = parameter.square();
-    let inverse_denominator = QM31::ONE
+    let inverse_denominator = match QM31::ONE
         .add(square)
         .try_inv()
-        .ok_or(CirclePointError::SingularParameter)?;
+        { Some(v) => v, None => return Err(CirclePointError::SingularParameter) };
     Ok(SecureCirclePoint {
         x: QM31::ONE.sub(square).mul(inverse_denominator),
         y: parameter.add(parameter).mul(inverse_denominator),
@@ -116,5 +116,49 @@ mod tests {
         let point = secure_ood_circle_point_from_parameter(q([17, 29, 43, 71])).unwrap();
         assert!(point.x.c1 != CM31::ZERO || point.y.c1 != CM31::ZERO);
         assert_eq!(point.x.square().add(point.y.square()), QM31::ONE);
+    }
+}
+
+/// Differential test of `secure_circle_point_from_parameter` against the frozen body (circle.rs 34-46).
+#[cfg(test)]
+mod ok_or_explicit_match {
+    extern crate std;
+    use super::*;
+    fn old(parameter: QM31) -> Result<SecureCirclePoint, CirclePointError> {
+        let square = parameter.square();
+        let inverse_denominator = QM31::ONE
+            .add(square)
+            .try_inv()
+            .ok_or(CirclePointError::SingularParameter)?;
+        Ok(SecureCirclePoint {
+            x: QM31::ONE.sub(square).mul(inverse_denominator),
+            y: parameter.add(parameter).mul(inverse_denominator),
+        })
+    }
+    fn next(s: &mut u64) -> u64 { *s = s.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407); *s >> 11 }
+    /// Little-endian 4-byte limbs, mostly canonical M31 values, with the edges 0, p - 1, p, p + 1 and 2^32 - 1.
+    fn limbs(s: &mut u64, n: usize) -> std::vec::Vec<u8> {
+        let mut out = std::vec::Vec::new();
+        while out.len() < n {
+            let v = match next(s) % 16 { 0 => 0, 1 => 0x7fff_fffe, 2 => 0x7fff_ffff, 3 => 0x8000_0000, 4 => u32::MAX, _ => (next(s) as u32) % 0x7fff_ffff };
+            out.extend_from_slice(&v.to_le_bytes());
+        }
+        out.truncate(n);
+        out
+    }
+    #[test]
+    fn same_result() {
+        let mut s = 7u64;
+        let mut singular = 0;
+        // 0, 1, i, -i first (i and -i are the singular parameters), then random parameters.
+        let edges: [[u32; 4]; 4] = [[0, 0, 0, 0], [1, 0, 0, 0], [0, 1, 0, 0], [0, 0x7fff_fffe, 0, 0]];
+        for k in 0..20_000 {
+            let b = if k < 4 { edges[k].iter().flat_map(|v| v.to_le_bytes()).collect() } else { limbs(&mut s, 16) };
+            let Some(t) = QM31::from_le_bytes(&b) else { continue };
+            let r = secure_circle_point_from_parameter(t);
+            if r.is_err() { singular += 1; }
+            assert_eq!(r, old(t));
+        }
+        assert!(singular >= 2);
     }
 }

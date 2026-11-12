@@ -147,7 +147,7 @@ impl Selectors {
         let mut len = 1usize;
         for coordinate in coordinates {
             let prepared = PreparedQm31Multiplier::new(*coordinate);
-            for index in (0..len).rev() {
+            let mut index = len; while index > 0 { index -= 1;
                 let parent = weights[index];
                 let right = prepared.mul(parent);
                 weights[2 * index] = parent.sub(right);
@@ -1678,6 +1678,45 @@ mod pv_aspis_r2s_copy_patterns_literal {
             assert_eq!(new.kinds, old.kinds);
             assert_eq!(new.columns, old.columns);
             assert_eq!(new.offsets, old.offsets);
+        }
+    }
+}
+
+/// Differential test of `Selectors::expand` against the frozen body (pair_forest_copy_terminal.rs
+/// 144-158), for 0 to 4 coordinates.
+#[cfg(test)]
+mod counted_loop_form {
+    use super::*;
+    fn old<const N: usize>(coordinates: &[QM31]) -> [QM31; N] {
+        let mut weights = [QM31::ZERO; N];
+        weights[0] = QM31::ONE;
+        let mut len = 1usize;
+        for coordinate in coordinates {
+            let prepared = PreparedQm31Multiplier::new(*coordinate);
+            for index in (0..len).rev() {
+                let parent = weights[index];
+                let right = prepared.mul(parent);
+                weights[2 * index] = parent.sub(right);
+                weights[2 * index + 1] = right;
+            }
+            len *= 2;
+        }
+        weights
+    }
+    fn next(s: &mut u64) -> u64 { *s = s.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407); *s >> 11 }
+    /// A QM31 value from four canonical limbs, with the edges 0, 1 and p - 1 among them.
+    fn q(s: &mut u64) -> QM31 {
+        let mut b = [0u8; 16];
+        for k in 0..4 { let v = match next(s) % 8 { 0 => 0, 1 => 1, 2 => 0x7fff_fffe, _ => (next(s) as u32) % 0x7fff_ffff }; b[4 * k..4 * k + 4].copy_from_slice(&v.to_le_bytes()); }
+        QM31::from_le_bytes(&b).unwrap()
+    }
+    #[test]
+    fn same_result() {
+        let mut s = 27u64;
+        for n in 0..5_000 {
+            let c: [QM31; 4] = [q(&mut s), q(&mut s), q(&mut s), q(&mut s)];
+            let k = n % 5;
+            assert_eq!(Selectors::expand::<16>(&c[..k]), old::<16>(&c[..k]));
         }
     }
 }

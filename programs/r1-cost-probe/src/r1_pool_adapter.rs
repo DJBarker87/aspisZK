@@ -105,13 +105,13 @@ const VERIFIER_REGISTRY_V2_SEED: &[u8] = b"aspis-verifier-registry-v2";
 const VERIFIER_ENTRY_V2_SEED: &[u8] = b"aspis-verifier-entry-v2";
 const _: () = assert!(ASPU_HEADER == 40);
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq)] #[cfg(not(feature = "one-tx"))]
 enum LifecycleKind {
     Proof,
     Public,
 }
 
-impl LifecycleKind {
+#[cfg(not(feature = "one-tx"))] impl LifecycleKind {
     fn from_byte(value: u8) -> Result<Self, ProgramError> {
         match value {
             0 => Ok(Self::Proof),
@@ -243,20 +243,20 @@ fn decode_public_statement_box(
     ))
 }
 
-#[inline(never)]
+#[inline(never)] #[cfg(not(feature = "one-tx"))]
 fn lifecycle_accounts<'a, 'info>(
     program_id: &Pubkey,
     accounts: &'a [AccountInfo<'info>],
 ) -> Result<(&'a AccountInfo<'info>, &'a AccountInfo<'info>), ProgramError> {
-    let [target, authority] = accounts else {
+    if accounts.len() != 2 { // indexed form of `let [target, authority] = accounts else`
         return Err(if accounts.len() < 2 {
             ProgramError::NotEnoughAccountKeys
         } else {
             ProgramError::InvalidArgument
         });
-    };
-    if target.key == authority.key
-        || target.owner != program_id
+    } let (target, authority) = (&accounts[0], &accounts[1]);
+    if *target.key == *authority.key
+        || *target.owner != *program_id
         || !target.is_writable
         || target.is_signer
         || target.executable
@@ -270,7 +270,7 @@ fn lifecycle_accounts<'a, 'info>(
     Ok((target, authority))
 }
 
-#[inline(never)]
+#[inline(never)] #[cfg(not(feature = "one-tx"))]
 fn validate_lifecycle_header(
     data: &[u8],
     authority: &Pubkey,
@@ -305,7 +305,7 @@ fn validate_lifecycle_header(
     Ok(kind)
 }
 
-#[inline(never)]
+#[inline(never)] #[cfg(not(feature = "one-tx"))]
 fn validate_lifecycle_final_body(data: &[u8], kind: LifecycleKind) -> ProgramResult {
     match kind {
         LifecycleKind::Proof => {
@@ -339,7 +339,7 @@ fn validate_lifecycle_final_body(data: &[u8], kind: LifecycleKind) -> ProgramRes
     Ok(())
 }
 
-#[inline(never)]
+#[inline(never)] #[cfg(not(feature = "one-tx"))]
 fn lifecycle_init(
     program_id: &Pubkey,
     accounts: &[AccountInfo<'_>],
@@ -364,7 +364,7 @@ fn lifecycle_init(
     Ok(())
 }
 
-#[inline(never)]
+#[inline(never)] #[cfg(not(feature = "one-tx"))]
 fn lifecycle_write(
     program_id: &Pubkey,
     accounts: &[AccountInfo<'_>],
@@ -401,7 +401,7 @@ fn lifecycle_write(
     Ok(())
 }
 
-#[inline(never)]
+#[inline(never)] #[cfg(not(feature = "one-tx"))]
 fn lifecycle_finalize(
     program_id: &Pubkey,
     accounts: &[AccountInfo<'_>],
@@ -501,8 +501,8 @@ fn decode_lane_from_pool_release(
         || bytes[7] != POOL_V1_PAIR_TREE_DEPTH as u8
         || bytes[8..40] != POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING
         || bytes[73..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES]
-            .iter()
-            .any(|byte| *byte != 0)
+            !=
+            [0u8; POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES - 73]
     {
         return Err(ProgramError::InvalidAccountData);
     }
@@ -844,9 +844,9 @@ fn scan_proof_buffer(bytes: &[u8]) -> Result<ScannedAsqaProof, ProgramError> {
 fn scan_proof_buffer(bytes: &[u8]) -> Result<ScannedAsqaProof, ProgramError> {
     // Aspis: the one-transaction entry reads the Aspis proof format.
     let proof_length = verifier::candidate::one_tx::format::PROOF_BYTES;
-    let expected_body = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+    let expected_body = match POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
         .checked_add(proof_length)
-        .ok_or(ProgramError::InvalidAccountData)?;
+        { Some(v) => v, None => return Err(ProgramError::InvalidAccountData) };
     if bytes.len() != expected_body {
         return Err(ProgramError::InvalidAccountData);
     }
@@ -1030,10 +1030,10 @@ fn close_checkpoint(
     if !crate::pool_route::is_close_checkpoint(data) {
         return Err(ProgramError::InvalidInstructionData);
     }
-    let [checkpoint, base] = accounts else {
+    if accounts.len() != 2 { // indexed form of `let [checkpoint, base] = accounts else`
         return Err(ProgramError::NotEnoughAccountKeys);
-    };
-    if checkpoint.owner != program_id || !checkpoint.is_writable || checkpoint.executable {
+    } let (checkpoint, base) = (&accounts[0], &accounts[1]);
+    if *checkpoint.owner != *program_id || !checkpoint.is_writable || checkpoint.executable {
         return Err(ProgramError::InvalidAccountData);
     }
     if !base.is_signer {
@@ -1046,13 +1046,13 @@ fn close_checkpoint(
     }
     // Checked before any write, so a rejected close leaves both accounts as
     // they were even outside the runtime's rollback.
-    let total = base
+    let total = match base
         .try_lamports()?
         .checked_add(checkpoint.try_lamports()?)
-        .ok_or(ProgramError::ArithmeticOverflow)?;
-    checkpoint.try_borrow_mut_data()?.fill(0);
-    **checkpoint.try_borrow_mut_lamports()? = 0;
-    **base.try_borrow_mut_lamports()? = total;
+        { Some(total) => total, None => return Err(ProgramError::ArithmeticOverflow) };
+    write_zero_data(checkpoint)?; // the frozen three writes, in order,
+    write_lamports(checkpoint, 0)?; // each through an account write boundary
+    write_lamports(base, total)?; // (opaque to the translator)
     Ok(())
 }
 
@@ -1063,9 +1063,9 @@ pub(super) fn process(
     data: &[u8],
 ) -> ProgramResult {
     match data.first().copied() {
-        Some(4) => lifecycle_init(program_id, accounts, data),
-        Some(5) => lifecycle_write(program_id, accounts, data),
-        Some(6) => lifecycle_finalize(program_id, accounts, data),
+        #[cfg(not(feature = "one-tx"))] Some(4) => lifecycle_init(program_id, accounts, data),
+        #[cfg(not(feature = "one-tx"))] Some(5) => lifecycle_write(program_id, accounts, data),
+        #[cfg(not(feature = "one-tx"))] Some(6) => lifecycle_finalize(program_id, accounts, data),
         Some(crate::pool_route::CLOSE_CHECKPOINT_TAG) => close_checkpoint(program_id, accounts, data),
         _ if data == &[3, 10] || data == &[3, 11] => stage1(program_id, accounts, data),
         _ => stage2(program_id, accounts, data),
@@ -1086,3 +1086,121 @@ mod rw_tests;
 #[cfg(test)]
 #[path = "close_checkpoint_tests.rs"]
 mod close_checkpoint_tests;
+
+/// Account write boundary: one borrow of `account`'s data handle, then
+/// `<[u8]>::fill(0)` over the whole data; a failed borrow is returned unchanged.
+#[inline(always)]
+fn write_zero_data(account: &AccountInfo<'_>) -> ProgramResult {
+    let mut data = match account.try_borrow_mut_data() { Ok(data) => data, Err(err) => return Err(err) };
+    data.fill(0);
+    Ok(())
+}
+
+/// Account write boundary: one borrow of `account`'s lamports handle,
+/// then one assignment of `lamports`; a failed borrow is returned unchanged.
+#[inline(always)]
+fn write_lamports(account: &AccountInfo<'_>, lamports: u64) -> ProgramResult {
+    let mut handle = match account.try_borrow_mut_lamports() { Ok(handle) => handle, Err(err) => return Err(err) };
+    **handle = lamports;
+    Ok(())
+}
+
+/// Differential test of `close_checkpoint` against the frozen body
+/// (3d700effcab r1_pool_adapter.rs 1025-1057), comparing the result and the
+/// complete data and lamports of both accounts, on accepting and rejecting inputs.
+#[cfg(test)]
+mod close_checkpoint_write_boundary {
+    use super::*;
+
+    fn old_close_checkpoint(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
+        if !crate::pool_route::is_close_checkpoint(data) {
+            return Err(ProgramError::InvalidInstructionData);
+        }
+        let [checkpoint, base] = accounts else {
+            return Err(ProgramError::NotEnoughAccountKeys);
+        };
+        if checkpoint.owner != program_id || !checkpoint.is_writable || checkpoint.executable {
+            return Err(ProgramError::InvalidAccountData);
+        }
+        if !base.is_signer {
+            return Err(ProgramError::MissingRequiredSignature);
+        }
+        let seed = core::str::from_utf8(&data[2..]).map_err(|_| ProgramError::InvalidInstructionData)?;
+        if Pubkey::create_with_seed(base.key, seed, program_id)? != *checkpoint.key {
+            return Err(ProgramError::InvalidSeeds);
+        }
+        let total = base
+            .try_lamports()?
+            .checked_add(checkpoint.try_lamports()?)
+            .ok_or(ProgramError::ArithmeticOverflow)?;
+        checkpoint.try_borrow_mut_data()?.fill(0);
+        **checkpoint.try_borrow_mut_lamports()? = 0;
+        **base.try_borrow_mut_lamports()? = total;
+        Ok(())
+    }
+
+    #[derive(Clone, Debug, PartialEq)]
+    struct Acc { key: Pubkey, owner: Pubkey, lamports: u64, data: Vec<u8>, signer: bool, writable: bool, executable: bool }
+
+    // hold: 0 none, 1 checkpoint data borrowed, 2 base lamports borrowed, 3 checkpoint lamports borrowed
+    fn run(new: bool, program: &Pubkey, accs: &mut [Acc], data: &[u8], hold: u8) -> (ProgramResult, Vec<Acc>) {
+        let snapshot = accs.to_vec();
+        let mut cells: Vec<(Pubkey, Pubkey, u64, Vec<u8>)> = snapshot.iter().map(|a| (a.key, a.owner, a.lamports, a.data.clone())).collect();
+        let result;
+        {
+            let infos: Vec<AccountInfo<'_>> = cells.iter_mut().zip(snapshot.iter()).map(|((k, o, l, d), a)| {
+                AccountInfo::new(k, a.signer, a.writable, l, d, o, a.executable, 0)
+            }).collect();
+            let _g1 = if hold == 1 && !infos.is_empty() { Some(infos[0].try_borrow_data().unwrap()) } else { None };
+            let _g2 = if hold == 2 && infos.len() > 1 { Some(infos[1].try_borrow_lamports().unwrap()) } else { None };
+            let _g3 = if hold == 3 && !infos.is_empty() { Some(infos[0].try_borrow_mut_lamports().unwrap()) } else { None };
+            result = if new { close_checkpoint(program, &infos, data) } else { old_close_checkpoint(program, &infos, data) };
+        }
+        let after = snapshot.iter().zip(cells).map(|(a, (_, _, l, d))| Acc { lamports: l, data: d, ..a.clone() }).collect();
+        (result, after)
+    }
+
+    #[test]
+    fn same_result_and_same_account_state() {
+        const SEED: &str = "aspis-ckpt-0001";
+        let program = Pubkey::new_unique();
+        let base_key = Pubkey::new_unique();
+        let key = Pubkey::create_with_seed(&base_key, SEED, &program).unwrap();
+        let size = verifier::checkpoint_size(Variant::S2);
+        let checkpoint = Acc { key, owner: program, lamports: 13_196_160, data: (0..size).map(|i| (i % 251) as u8 | 1).collect(), signer: false, writable: true, executable: false };
+        let base = Acc { key: base_key, owner: Pubkey::default(), lamports: 5, data: vec![], signer: true, writable: true, executable: false };
+        let mut ix = vec![7u8, SEED.len() as u8];
+        ix.extend_from_slice(SEED.as_bytes());
+        let mut bad_seed = ix.clone();
+        *bad_seed.last_mut().unwrap() ^= 1;
+        let mut bad_utf8 = ix.clone();
+        bad_utf8[2] = 0xff;
+        let instructions: [&[u8]; 6] = [&ix, &bad_seed, &bad_utf8, &[7, 0], &[6], &[3, 10]];
+        let mut cases = 0;
+        for variant in 0..10 {
+            let mut accs = vec![checkpoint.clone(), base.clone()];
+            match variant {
+                0 => {}
+                1 => accs[0].owner = Pubkey::new_unique(),
+                2 => accs[0].writable = false,
+                3 => accs[0].executable = true,
+                4 => accs[1].signer = false,
+                5 => accs[1].lamports = u64::MAX,
+                6 => { accs.pop(); }
+                7 => accs.push(base.clone()),
+                8 => accs[0].data = vec![],
+                _ => accs[1].lamports = u64::MAX - 13_196_160,
+            }
+            for data in instructions {
+                for hold in 0..4u8 {
+                    let (r_old, s_old) = run(false, &program, &mut accs.clone(), data, hold);
+                    let (r_new, s_new) = run(true, &program, &mut accs.clone(), data, hold);
+                    assert_eq!(r_new, r_old, "variant {variant} data {data:?} hold {hold}");
+                    assert_eq!(s_new, s_old, "variant {variant} data {data:?} hold {hold}");
+                    cases += 1;
+                }
+            }
+        }
+        assert_eq!(cases, 240);
+    }
+}
