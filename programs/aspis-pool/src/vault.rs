@@ -104,7 +104,15 @@ pub(crate) struct LegacyWithdrawalTransferPlanV1 {
 }
 
 fn require_zero(bytes: &[u8]) -> Result<(), ProgramError> {
-    if bytes.iter().any(|byte| *byte != 0) {
+    // A `while` loop with a flag instead of `iter().any` (the native iterator has no `any`);
+    // it stops at the first non-zero byte, as `any` did.
+    let mut nonzero = false;
+    let mut index = 0;
+    while !nonzero && index < bytes.len() {
+        nonzero = bytes[index] != 0;
+        index += 1;
+    }
+    if nonzero {
         return Err(PoolV1ProgramError::UnsupportedTokenConfiguration.into());
     }
     Ok(())
@@ -196,7 +204,7 @@ pub(crate) fn parse_legacy_token_account_v1(
 }
 
 fn require_token_owned_account(account: &AccountInfo, writable: bool) -> Result<(), ProgramError> {
-    if account.owner != &LEGACY_SPL_TOKEN_PROGRAM_ID
+    if *account.owner != LEGACY_SPL_TOKEN_PROGRAM_ID
         || account.executable
         || account.is_signer
         || account.is_writable != writable
@@ -209,22 +217,32 @@ fn require_token_owned_account(account: &AccountInfo, writable: bool) -> Result<
 fn exact_five_accounts<'slice, 'info>(
     accounts: &'slice [AccountInfo<'info>],
 ) -> Result<[&'slice AccountInfo<'info>; 5], ProgramError> {
-    let [mint, source, authority, vault, token_program] = accounts else {
+    // Length check and indexing instead of a slice pattern, and the ten
+    // pairwise key comparisons written out in the order of the former nested loop (same first
+    // failing pair, same error). The translator rejects both the slice pattern over AccountInfo
+    // (Inconsistent projection) and any loop in a function that holds an AccountInfo.
+    if accounts.len() != 5 {
         return Err(if accounts.len() < 5 {
             ProgramError::NotEnoughAccountKeys
         } else {
             ProgramError::InvalidArgument
         });
-    };
-    let values = [mint, source, authority, vault, token_program];
-    for left in 0..values.len() {
-        for right in left + 1..values.len() {
-            if values[left].key == values[right].key {
-                return Err(PoolV1ProgramError::InvalidTokenAccount.into());
-            }
-        }
     }
-    Ok(values)
+    let (mint, source, authority, vault, token_program) = (&accounts[0], &accounts[1], &accounts[2], &accounts[3], &accounts[4]);
+    if *mint.key == *source.key
+        || *mint.key == *authority.key
+        || *mint.key == *vault.key
+        || *mint.key == *token_program.key
+        || *source.key == *authority.key
+        || *source.key == *vault.key
+        || *source.key == *token_program.key
+        || *authority.key == *vault.key
+        || *authority.key == *token_program.key
+        || *vault.key == *token_program.key
+    {
+        return Err(PoolV1ProgramError::InvalidTokenAccount.into());
+    }
+    Ok([mint, source, authority, vault, token_program])
 }
 
 
@@ -239,9 +257,12 @@ pub(crate) fn plan_legacy_deposit_transfer_from_identity_v1(
     amount: u32,
 ) -> Result<LegacyDepositTransferPlanV1, ProgramError> {
     let [mint_account, source_account, source_authority, vault_account, token_program] =
-        exact_five_accounts(accounts)?;
+        match exact_five_accounts(accounts) {
+            Ok(five) => five,
+            Err(err) => return Err(err),
+        };
     if identity.token_program != LEGACY_SPL_TOKEN_PROGRAM_ID.to_bytes()
-        || token_program.key != &LEGACY_SPL_TOKEN_PROGRAM_ID
+        || *token_program.key != LEGACY_SPL_TOKEN_PROGRAM_ID
         || !token_program.executable
         || token_program.is_signer
         || token_program.is_writable
@@ -250,12 +271,15 @@ pub(crate) fn plan_legacy_deposit_transfer_from_identity_v1(
     }
 
     let expected_mint = Pubkey::new_from_array(identity.asset_mint);
-    if mint_account.key != &expected_mint {
+    if *mint_account.key != expected_mint {
         return Err(PoolV1ProgramError::InvalidMint.into());
     }
     require_token_owned_account(mint_account, false)?;
     let mint = {
-        let data = mint_account.try_borrow_data()?;
+        let data = match mint_account.try_borrow_data() {
+            Ok(data) => data,
+            Err(err) => return Err(err),
+        };
         parse_legacy_mint_v1(&data)?
     };
 
@@ -266,47 +290,57 @@ pub(crate) fn plan_legacy_deposit_transfer_from_identity_v1(
     }
 
     let source = {
-        let data = source_account.try_borrow_data()?;
+        let data = match source_account.try_borrow_data() {
+            Ok(data) => data,
+            Err(err) => return Err(err),
+        };
         parse_legacy_token_account_v1(&data)?
     };
-    let vault = {
-        let data = vault_account.try_borrow_data()?;
+    let vault_state = {
+        let data = match vault_account.try_borrow_data() {
+            Ok(data) => data,
+            Err(err) => return Err(err),
+        };
         parse_legacy_token_account_v1(&data)?
     };
     if source.mint != expected_mint
-        || vault.mint != expected_mint
+        || vault_state.mint != expected_mint
         || source.authority != *source_authority.key
     {
         return Err(PoolV1ProgramError::InvalidTokenAccount.into());
     }
     let expected_vault = pool_v1_vault_token_account_address(program_id, pool).0;
-    if vault_account.key != &expected_vault {
+    if *vault_account.key != expected_vault {
         return Err(PoolV1ProgramError::InvalidVaultTokenAddress.into());
     }
     let expected_vault_authority = pool_v1_vault_authority_address(program_id, pool).0;
-    if vault.authority != expected_vault_authority {
+    if vault_state.authority != expected_vault_authority {
         return Err(PoolV1ProgramError::InvalidVaultAuthority.into());
     }
     // The launch vault has no delegate/close/native side channels. In
     // particular wrapped-native reserve semantics are deferred rather than
     // silently folded into the conservation invariant.
-    if vault.has_delegate
-        || vault.is_native
-        || vault.delegated_amount != 0
-        || vault.has_close_authority
+    if vault_state.has_delegate
+        || vault_state.is_native
+        || vault_state.delegated_amount != 0
+        || vault_state.has_close_authority
     {
         return Err(PoolV1ProgramError::UnsupportedTokenConfiguration.into());
     }
 
     let amount = u64::from(amount);
-    let source_after = source
+    let source_after = match source
         .amount
-        .checked_sub(amount)
-        .ok_or(PoolV1ProgramError::InsufficientDepositFunds)?;
-    let vault_after = vault
+        .checked_sub(amount) {
+        Some(value) => value,
+        None => return Err(PoolV1ProgramError::InsufficientDepositFunds.into()),
+    };
+    let vault_after = match vault_state
         .amount
-        .checked_add(amount)
-        .ok_or(PoolV1ProgramError::ArithmeticOverflow)?;
+        .checked_add(amount) {
+        Some(value) => value,
+        None => return Err(PoolV1ProgramError::ArithmeticOverflow.into()),
+    };
     let mut data = Vec::with_capacity(10);
     data.push(SPL_TOKEN_TRANSFER_CHECKED_DISCRIMINANT);
     data.extend_from_slice(&amount.to_le_bytes());
@@ -330,7 +364,7 @@ pub(crate) fn plan_legacy_deposit_transfer_from_identity_v1(
         amount,
         source_before: source.amount,
         source_after,
-        vault_before: vault.amount,
+        vault_before: vault_state.amount,
         vault_after,
         decimals: mint.decimals,
     })
@@ -339,35 +373,51 @@ pub(crate) fn plan_legacy_deposit_transfer_from_identity_v1(
 pub(crate) fn exact_transfer_account_infos_v1<'a>(
     accounts: &[AccountInfo<'a>],
 ) -> Result<[AccountInfo<'a>; 5], ProgramError> {
-    let [mint, source, authority, vault, token_program] = exact_five_accounts(accounts)?;
+    // The translator rejects the array pattern over the returned references and the clones
+    // out of it (Unimplemented). `exact_five_accounts` returns references to accounts[0..5] in order, so the same
+    // check runs first and the same five accounts are cloned from the slice by index in the same output order.
+    if let Err(err) = exact_five_accounts(accounts) {
+        return Err(err);
+    }
+    // [mint, source, authority, vault, token_program] = accounts[0..5]
     Ok([
-        (*source).clone(),
-        (*mint).clone(),
-        (*vault).clone(),
-        (*authority).clone(),
-        (*token_program).clone(),
+        accounts[1].clone(),
+        accounts[0].clone(),
+        accounts[3].clone(),
+        accounts[2].clone(),
+        accounts[4].clone(),
     ])
 }
 
 fn exact_five_withdrawal_accounts<'slice, 'info>(
     accounts: &'slice [AccountInfo<'info>],
 ) -> Result<[&'slice AccountInfo<'info>; 5], ProgramError> {
-    let [mint, vault, destination, vault_authority, token_program] = accounts else {
+    // Length check and indexing instead of a slice pattern, and the ten
+    // pairwise key comparisons written out in the order of the former nested loop (same first
+    // failing pair, same error). The translator rejects both the slice pattern over AccountInfo
+    // (Inconsistent projection) and any loop in a function that holds an AccountInfo.
+    if accounts.len() != 5 {
         return Err(if accounts.len() < 5 {
             ProgramError::NotEnoughAccountKeys
         } else {
             ProgramError::InvalidArgument
         });
-    };
-    let values = [mint, vault, destination, vault_authority, token_program];
-    for left in 0..values.len() {
-        for right in left + 1..values.len() {
-            if values[left].key == values[right].key {
-                return Err(PoolV1ProgramError::InvalidTokenAccount.into());
-            }
-        }
     }
-    Ok(values)
+    let (mint, vault, destination, vault_authority, token_program) = (&accounts[0], &accounts[1], &accounts[2], &accounts[3], &accounts[4]);
+    if *mint.key == *vault.key
+        || *mint.key == *destination.key
+        || *mint.key == *vault_authority.key
+        || *mint.key == *token_program.key
+        || *vault.key == *destination.key
+        || *vault.key == *vault_authority.key
+        || *vault.key == *token_program.key
+        || *destination.key == *vault_authority.key
+        || *destination.key == *token_program.key
+        || *vault_authority.key == *token_program.key
+    {
+        return Err(PoolV1ProgramError::InvalidTokenAccount.into());
+    }
+    Ok([mint, vault, destination, vault_authority, token_program])
 }
 
 
@@ -394,12 +444,15 @@ pub(crate) fn plan_legacy_withdrawal_transfer_from_identity_v1(
     bump_hints: Option<VaultBumpHintsV1>,
 ) -> Result<LegacyWithdrawalTransferPlanV1, ProgramError> {
     let [mint_account, vault_account, destination_account, vault_authority, token_program] =
-        exact_five_withdrawal_accounts(accounts)?;
+        match exact_five_withdrawal_accounts(accounts) {
+            Ok(five) => five,
+            Err(err) => return Err(err),
+        };
     if amount == 0 {
         return Err(PoolV1ProgramError::InvalidWithdrawalAmount.into());
     }
     if identity.token_program != LEGACY_SPL_TOKEN_PROGRAM_ID.to_bytes()
-        || token_program.key != &LEGACY_SPL_TOKEN_PROGRAM_ID
+        || *token_program.key != LEGACY_SPL_TOKEN_PROGRAM_ID
         || !token_program.executable
         || token_program.is_signer
         || token_program.is_writable
@@ -408,17 +461,103 @@ pub(crate) fn plan_legacy_withdrawal_transfer_from_identity_v1(
     }
 
     let expected_mint = Pubkey::new_from_array(identity.asset_mint);
-    if mint_account.key != &expected_mint {
+    if *mint_account.key != expected_mint {
         return Err(PoolV1ProgramError::InvalidMint.into());
     }
     require_token_owned_account(mint_account, false)?;
     let mint = {
-        let data = mint_account.try_borrow_data()?;
+        let data = match mint_account.try_borrow_data() {
+            Ok(data) => data,
+            Err(err) => return Err(err),
+        };
         parse_legacy_mint_v1(&data)?
     };
 
     require_token_owned_account(vault_account, true)?;
     require_token_owned_account(destination_account, true)?;
+    // Translatable form (emitter line break): the authority derivation and check, and the plan built from the checked
+    // values, are helpers in the same order; the emitted body was nested deep enough that the emitter broke a match
+    // arm across lines ("unexpected identifier; expected '=>'").
+    // The authority's fields are read here and passed as values (a helper taking the account reference made the
+    // later vault-address match fail with nested borrows, run X2c-pool-c6). `data_is_empty` is evaluated before the
+    // helper's checks instead of last in their `||` chain: it reads the data length only and cannot fail.
+    let (expected_authority, authority_bump) = match withdrawal_vault_authority_v1(
+        program_id,
+        pool,
+        *vault_authority.key,
+        *vault_authority.owner,
+        vault_authority.executable,
+        vault_authority.is_signer,
+        vault_authority.is_writable,
+        vault_authority.data_is_empty(),
+        bump_hints,
+    ) {
+        Ok(value) => value,
+        Err(err) => return Err(err),
+    };
+    if *destination_account.key != *destination {
+        return Err(PoolV1ProgramError::InvalidDestinationTokenAccount.into());
+    }
+
+    let vault_state = {
+        let data = match vault_account.try_borrow_data() {
+            Ok(data) => data,
+            Err(err) => return Err(err),
+        };
+        parse_legacy_token_account_v1(&data)?
+    };
+    let destination_state = {
+        let data = match destination_account.try_borrow_data() {
+            Ok(data) => data,
+            Err(err) => return Err(err),
+        };
+        parse_legacy_token_account_v1(&data)?
+    };
+    if !withdrawal_vault_address_ok_v1(program_id, pool, *vault_account.key, bump_hints) {
+        return Err(PoolV1ProgramError::InvalidVaultTokenAddress.into());
+    }
+    if vault_state.mint != expected_mint
+        || destination_state.mint != expected_mint
+        || vault_state.authority != expected_authority
+    {
+        return Err(PoolV1ProgramError::InvalidTokenAccount.into());
+    }
+    if vault_state.has_delegate
+        || vault_state.is_native
+        || vault_state.delegated_amount != 0
+        || vault_state.has_close_authority
+        || destination_state.is_native
+    {
+        return Err(PoolV1ProgramError::UnsupportedTokenConfiguration.into());
+    }
+
+    withdrawal_plan_from_checked_values_v1(
+        *mint_account.key,
+        *vault_account.key,
+        *destination_account.key,
+        *vault_authority.key,
+        amount,
+        vault_state.amount,
+        destination_state.amount,
+        mint.decimals,
+        authority_bump,
+    )
+}
+
+/// The vault-authority part of `plan_legacy_withdrawal_transfer_from_identity_v1` (frozen order and errors),
+/// over the authority account's key, owner and flags as values.
+#[allow(clippy::too_many_arguments)]
+fn withdrawal_vault_authority_v1(
+    program_id: &Pubkey,
+    pool: &Pubkey,
+    authority_key: Pubkey,
+    authority_owner: Pubkey,
+    authority_executable: bool,
+    authority_is_signer: bool,
+    authority_is_writable: bool,
+    authority_data_is_empty: bool,
+    bump_hints: Option<VaultBumpHintsV1>,
+) -> Result<(Pubkey, u8), ProgramError> {
     // With hints (B4-style, Pool-only): one `create_program_address` each.
     // A hinted non-canonical authority cannot pass, because the vault token
     // account (authenticated below) records the canonical authority, and the
@@ -432,9 +571,9 @@ pub(crate) fn plan_legacy_withdrawal_transfer_from_identity_v1(
                     &[hints.vault_authority],
                 ],
                 program_id,
-                vault_authority.key,
+                &authority_key,
             ) {
-                *vault_authority.key
+                authority_key
             } else {
                 return Err(PoolV1ProgramError::InvalidVaultAuthority.into());
             },
@@ -442,28 +581,27 @@ pub(crate) fn plan_legacy_withdrawal_transfer_from_identity_v1(
         ),
         None => pool_v1_vault_authority_address(program_id, pool),
     };
-    if vault_authority.key != &expected_authority
-        || vault_authority.owner != &system_program::id()
-        || vault_authority.executable
-        || vault_authority.is_signer
-        || vault_authority.is_writable
-        || !vault_authority.data_is_empty()
+    if authority_key != expected_authority
+        || authority_owner != system_program::id()
+        || authority_executable
+        || authority_is_signer
+        || authority_is_writable
+        || !authority_data_is_empty
     {
         return Err(PoolV1ProgramError::InvalidVaultAuthority.into());
     }
-    if destination_account.key != destination {
-        return Err(PoolV1ProgramError::InvalidDestinationTokenAccount.into());
-    }
+    Ok((expected_authority, authority_bump))
+}
 
-    let vault = {
-        let data = vault_account.try_borrow_data()?;
-        parse_legacy_token_account_v1(&data)?
-    };
-    let destination_state = {
-        let data = destination_account.try_borrow_data()?;
-        parse_legacy_token_account_v1(&data)?
-    };
-    let vault_address_ok = match bump_hints {
+/// The vault token account address check of `plan_legacy_withdrawal_transfer_from_identity_v1`, over the
+/// vault's key as a value.
+fn withdrawal_vault_address_ok_v1(
+    program_id: &Pubkey,
+    pool: &Pubkey,
+    vault_key: Pubkey,
+    bump_hints: Option<VaultBumpHintsV1>,
+) -> bool {
+    match bump_hints {
         Some(hints) => crate::registry::stored_bump_address_matches(
             &[
                 POOL_V1_VAULT_TOKEN_ACCOUNT_SEED,
@@ -471,63 +609,62 @@ pub(crate) fn plan_legacy_withdrawal_transfer_from_identity_v1(
                 &[hints.vault_token_account],
             ],
             program_id,
-            vault_account.key,
+            &vault_key,
         ),
-        None => vault_account.key == &pool_v1_vault_token_account_address(program_id, pool).0,
-    };
-    if !vault_address_ok {
-        return Err(PoolV1ProgramError::InvalidVaultTokenAddress.into());
+        None => vault_key == pool_v1_vault_token_account_address(program_id, pool).0,
     }
-    if vault.mint != expected_mint
-        || destination_state.mint != expected_mint
-        || vault.authority != expected_authority
-    {
-        return Err(PoolV1ProgramError::InvalidTokenAccount.into());
-    }
-    if vault.has_delegate
-        || vault.is_native
-        || vault.delegated_amount != 0
-        || vault.has_close_authority
-        || destination_state.is_native
-    {
-        return Err(PoolV1ProgramError::UnsupportedTokenConfiguration.into());
-    }
+}
 
+/// The tail of `plan_legacy_withdrawal_transfer_from_identity_v1` over plain values (frozen order and errors).
+#[allow(clippy::too_many_arguments)]
+fn withdrawal_plan_from_checked_values_v1(
+    mint_key: Pubkey,
+    vault_key: Pubkey,
+    destination_key: Pubkey,
+    authority_key: Pubkey,
+    amount: u32,
+    vault_amount: u64,
+    destination_amount: u64,
+    decimals: u8,
+    authority_bump: u8,
+) -> Result<LegacyWithdrawalTransferPlanV1, ProgramError> {
     let amount = u64::from(amount);
-    let vault_after = vault
-        .amount
-        .checked_sub(amount)
-        .ok_or(PoolV1ProgramError::InsufficientVaultFunds)?;
-    let destination_after = destination_state
-        .amount
-        .checked_add(amount)
-        .ok_or(PoolV1ProgramError::ArithmeticOverflow)?;
+    let vault_after = match vault_amount
+        .checked_sub(amount) {
+        Some(value) => value,
+        None => return Err(PoolV1ProgramError::InsufficientVaultFunds.into()),
+    };
+    let destination_after = match destination_amount
+        .checked_add(amount) {
+        Some(value) => value,
+        None => return Err(PoolV1ProgramError::ArithmeticOverflow.into()),
+    };
     let mut data = Vec::with_capacity(10);
     data.push(SPL_TOKEN_TRANSFER_CHECKED_DISCRIMINANT);
     data.extend_from_slice(&amount.to_le_bytes());
-    data.push(mint.decimals);
+    data.push(decimals);
     let instruction = Instruction {
         program_id: LEGACY_SPL_TOKEN_PROGRAM_ID,
         accounts: vec![
-            AccountMeta::new(*vault_account.key, false),
-            AccountMeta::new_readonly(*mint_account.key, false),
-            AccountMeta::new(*destination_account.key, false),
-            AccountMeta::new_readonly(*vault_authority.key, true),
+            AccountMeta::new(vault_key, false),
+            AccountMeta::new_readonly(mint_key, false),
+            AccountMeta::new(destination_key, false),
+            AccountMeta::new_readonly(authority_key, true),
         ],
         data,
     };
     Ok(LegacyWithdrawalTransferPlanV1 {
         instruction,
-        mint: *mint_account.key,
-        vault: *vault_account.key,
-        destination: *destination_account.key,
-        authority: *vault_authority.key,
+        mint: mint_key,
+        vault: vault_key,
+        destination: destination_key,
+        authority: authority_key,
         amount,
-        vault_before: vault.amount,
+        vault_before: vault_amount,
         vault_after,
-        destination_before: destination_state.amount,
+        destination_before: destination_amount,
         destination_after,
-        decimals: mint.decimals,
+        decimals,
         authority_bump,
     })
 }
@@ -535,14 +672,18 @@ pub(crate) fn plan_legacy_withdrawal_transfer_from_identity_v1(
 pub(crate) fn exact_withdrawal_transfer_account_infos_v1<'a>(
     accounts: &[AccountInfo<'a>],
 ) -> Result<[AccountInfo<'a>; 5], ProgramError> {
-    let [mint, vault, destination, vault_authority, token_program] =
-        exact_five_withdrawal_accounts(accounts)?;
+    // As `exact_transfer_account_infos_v1`; `exact_five_withdrawal_accounts` returns
+    // references to accounts[0..5] in order.
+    if let Err(err) = exact_five_withdrawal_accounts(accounts) {
+        return Err(err);
+    }
+    // [mint, vault, destination, vault_authority, token_program] = accounts[0..5]
     Ok([
-        (*vault).clone(),
-        (*mint).clone(),
-        (*destination).clone(),
-        (*vault_authority).clone(),
-        (*token_program).clone(),
+        accounts[1].clone(),
+        accounts[0].clone(),
+        accounts[2].clone(),
+        accounts[3].clone(),
+        accounts[4].clone(),
     ])
 }
 
@@ -553,27 +694,36 @@ pub(crate) fn validate_exact_withdrawal_delta_v1(
     plan: &LegacyWithdrawalTransferPlanV1,
 ) -> Result<(), ProgramError> {
     let [mint_account, vault_account, destination_account, vault_authority, token_program] =
-        exact_five_withdrawal_accounts(accounts)?;
-    if mint_account.key != &plan.mint
-        || vault_account.key != &plan.vault
-        || destination_account.key != &plan.destination
-        || vault_authority.key != &plan.authority
-        || token_program.key != &LEGACY_SPL_TOKEN_PROGRAM_ID
+        match exact_five_withdrawal_accounts(accounts) {
+            Ok(five) => five,
+            Err(err) => return Err(err),
+        };
+    if *mint_account.key != plan.mint
+        || *vault_account.key != plan.vault
+        || *destination_account.key != plan.destination
+        || *vault_authority.key != plan.authority
+        || *token_program.key != LEGACY_SPL_TOKEN_PROGRAM_ID
     {
         return Err(PoolV1ProgramError::TokenBalanceDeltaMismatch.into());
     }
-    let vault = {
-        let data = vault_account.try_borrow_data()?;
+    let vault_state = {
+        let data = match vault_account.try_borrow_data() {
+            Ok(data) => data,
+            Err(err) => return Err(err),
+        };
         parse_legacy_token_account_v1(&data)?
     };
     let destination = {
-        let data = destination_account.try_borrow_data()?;
+        let data = match destination_account.try_borrow_data() {
+            Ok(data) => data,
+            Err(err) => return Err(err),
+        };
         parse_legacy_token_account_v1(&data)?
     };
-    if vault.mint != plan.mint
+    if vault_state.mint != plan.mint
         || destination.mint != plan.mint
-        || vault.authority != plan.authority
-        || vault.amount != plan.vault_after
+        || vault_state.authority != plan.authority
+        || vault_state.amount != plan.vault_after
         || destination.amount != plan.destination_after
     {
         return Err(PoolV1ProgramError::TokenBalanceDeltaMismatch.into());
@@ -588,28 +738,37 @@ pub(crate) fn validate_exact_deposit_delta_v1(
     plan: &LegacyDepositTransferPlanV1,
 ) -> Result<(), ProgramError> {
     let [mint_account, source_account, source_authority, vault_account, token_program] =
-        exact_five_accounts(accounts)?;
-    if mint_account.key != &plan.mint
-        || source_account.key != &plan.source
-        || source_authority.key != &plan.authority
-        || vault_account.key != &plan.vault
-        || token_program.key != &LEGACY_SPL_TOKEN_PROGRAM_ID
+        match exact_five_accounts(accounts) {
+            Ok(five) => five,
+            Err(err) => return Err(err),
+        };
+    if *mint_account.key != plan.mint
+        || *source_account.key != plan.source
+        || *source_authority.key != plan.authority
+        || *vault_account.key != plan.vault
+        || *token_program.key != LEGACY_SPL_TOKEN_PROGRAM_ID
     {
         return Err(PoolV1ProgramError::TokenBalanceDeltaMismatch.into());
     }
     let source = {
-        let data = source_account.try_borrow_data()?;
+        let data = match source_account.try_borrow_data() {
+            Ok(data) => data,
+            Err(err) => return Err(err),
+        };
         parse_legacy_token_account_v1(&data)?
     };
-    let vault = {
-        let data = vault_account.try_borrow_data()?;
+    let vault_state = {
+        let data = match vault_account.try_borrow_data() {
+            Ok(data) => data,
+            Err(err) => return Err(err),
+        };
         parse_legacy_token_account_v1(&data)?
     };
     if source.mint != plan.mint
-        || vault.mint != plan.mint
+        || vault_state.mint != plan.mint
         || source.authority != plan.authority
         || source.amount != plan.source_after
-        || vault.amount != plan.vault_after
+        || vault_state.amount != plan.vault_after
     {
         return Err(PoolV1ProgramError::TokenBalanceDeltaMismatch.into());
     }

@@ -361,7 +361,8 @@ pub fn decode_pool_v1_pair_forest_lane_state_v1(
     if master == [0u8; 32] {
         return Err(PoolV1PairForestAccountErrorV1::ZeroRequiredBinding);
     }
-    if bytes[73..LANE_TREE_OFFSET].iter().any(|byte| *byte != 0) {
+    // The crate's `any_nonzero_byte` instead of `iter().any` (same result).
+    if any_nonzero_byte(&bytes[73..LANE_TREE_OFFSET]) {
         return Err(PoolV1PairForestAccountErrorV1::NonZeroReserved);
     }
     let tree = IncrementalMerkleTreeV1::decode_with_empty_roots(
@@ -388,11 +389,9 @@ pub fn encode_pool_v1_pair_forest_checkpoint_v1(
     if !digest_is_canonical(&checkpoint.global_root) {
         return Err(PoolV1PairForestAccountErrorV1::NonCanonicalDigest);
     }
-    if checkpoint
-        .lane_sequences
-        .iter()
-        .any(|sequence| *sequence > POOL_V1_PAIR_CAPACITY)
-    {
+    // Translatable form (the tools reject: "could not match the contexts"): the crate's `any_lane_sequence_above_capacity`
+    // instead of `iter().any`, and an index loop instead of `iter().enumerate()` for the copy (same bytes).
+    if any_lane_sequence_above_capacity(&checkpoint.lane_sequences) {
         return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);
     }
     let mut output = [0u8; POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES];
@@ -408,9 +407,11 @@ pub fn encode_pool_v1_pair_forest_checkpoint_v1(
         .copy_from_slice(&checkpoint.checkpoint_sequence.to_le_bytes());
     output[CHECKPOINT_GLOBAL_ROOT_OFFSET..CHECKPOINT_LANE_SEQUENCES_OFFSET]
         .copy_from_slice(&encode_digest_canonical(&checkpoint.global_root));
-    for (lane, sequence) in checkpoint.lane_sequences.iter().enumerate() {
+    let mut lane = 0;
+    while lane < POOL_V1_PAIR_FOREST_LANE_COUNT {
         let start = CHECKPOINT_LANE_SEQUENCES_OFFSET + 8 * lane;
-        output[start..start + 8].copy_from_slice(&sequence.to_le_bytes());
+        output[start..start + 8].copy_from_slice(&checkpoint.lane_sequences[lane].to_le_bytes());
+        lane += 1;
     }
     Ok(output)
 }
@@ -469,6 +470,51 @@ pub fn decode_pool_v1_pair_forest_checkpoint_v1(
     })
 }
 
+/// The frozen per-lane checks of `plan_pool_v1_pair_forest_checkpoint_v1`, in their order.
+fn checkpoint_lane_sequence_v1(
+    lane: &PoolV1PairForestLaneStateV1,
+    expected_lane: usize,
+    pool: &[u8; 32],
+) -> Result<u64, PoolV1PairForestAccountErrorV1> {
+    if lane.master != *pool {
+        return Err(PoolV1PairForestAccountErrorV1::LaneMasterMismatch);
+    }
+    if usize::from(lane.lane_id) != expected_lane {
+        return Err(PoolV1PairForestAccountErrorV1::LaneOrderMismatch);
+    }
+    if lane.tree.next_leaf_index > POOL_V1_PAIR_CAPACITY {
+        return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);
+    }
+    Ok(lane.tree.next_leaf_index)
+}
+
+/// The frozen progress loop over plain arrays. 1: a lane decreased (the first such lane stops the scan, as the
+/// frozen early return did); 2: no lane progressed; 0: otherwise.
+fn checkpoint_lane_progress_v1(
+    sequences: &[u64; POOL_V1_PAIR_FOREST_LANE_COUNT],
+    last: &[u64; POOL_V1_PAIR_FOREST_LANE_COUNT],
+) -> u8 {
+    let mut decreased = false;
+    let mut progressed = false;
+    let mut lane = 0;
+    while !decreased && lane < POOL_V1_PAIR_FOREST_LANE_COUNT {
+        // Branches, not stored comparisons: the emitter stored `a < b` as a Prop in the loop state (run X2c-pool-c8).
+        if sequences[lane] < last[lane] {
+            decreased = true;
+        } else if sequences[lane] > last[lane] {
+            progressed = true;
+        }
+        lane += 1;
+    }
+    if decreased {
+        1
+    } else if progressed {
+        0
+    } else {
+        2
+    }
+}
+
 /// Validate a coherent fixed-order snapshot and prepare one immutable record.
 /// The caller supplies the global root computed by the separately reviewed
 /// forest combiner and the canonical checkpoint bump from PDA authentication;
@@ -486,35 +532,59 @@ pub fn plan_pool_v1_pair_forest_checkpoint_v1(
     if !digest_is_canonical(&global_root) {
         return Err(PoolV1PairForestAccountErrorV1::NonCanonicalDigest);
     }
-    let mut lane_sequences = [0u64; POOL_V1_PAIR_FOREST_LANE_COUNT];
-    for (expected_lane, lane) in lanes.iter().enumerate() {
-        if lane.master != master.identity.pool {
-            return Err(PoolV1PairForestAccountErrorV1::LaneMasterMismatch);
-        }
-        if usize::from(lane.lane_id) != expected_lane {
-            return Err(PoolV1PairForestAccountErrorV1::LaneOrderMismatch);
-        }
-        if lane.tree.next_leaf_index > POOL_V1_PAIR_CAPACITY {
-            return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);
-        }
-        lane_sequences[expected_lane] = lane.tree.next_leaf_index;
-    }
+    // Translatable form (the tools reject: returns inside loops; a flag loop over the borrowed lanes did not translate either, run
+    // X2c-pool-c5 "could not match the contexts"): the per-lane checks in `checkpoint_lane_sequence_v1`, called for
+    // lanes 0 to 7 written out (same first failing lane, same error); the progress scan in
+    // `checkpoint_lane_progress_v1` over the two plain arrays. `ok_or(..)?` (class 9) as an explicit match.
+    const _: () = assert!(POOL_V1_PAIR_FOREST_LANE_COUNT == 8);
+    let sequence_0 = match checkpoint_lane_sequence_v1(&lanes[0], 0, &master.identity.pool) {
+        Ok(sequence) => sequence,
+        Err(err) => return Err(err),
+    };
+    let sequence_1 = match checkpoint_lane_sequence_v1(&lanes[1], 1, &master.identity.pool) {
+        Ok(sequence) => sequence,
+        Err(err) => return Err(err),
+    };
+    let sequence_2 = match checkpoint_lane_sequence_v1(&lanes[2], 2, &master.identity.pool) {
+        Ok(sequence) => sequence,
+        Err(err) => return Err(err),
+    };
+    let sequence_3 = match checkpoint_lane_sequence_v1(&lanes[3], 3, &master.identity.pool) {
+        Ok(sequence) => sequence,
+        Err(err) => return Err(err),
+    };
+    let sequence_4 = match checkpoint_lane_sequence_v1(&lanes[4], 4, &master.identity.pool) {
+        Ok(sequence) => sequence,
+        Err(err) => return Err(err),
+    };
+    let sequence_5 = match checkpoint_lane_sequence_v1(&lanes[5], 5, &master.identity.pool) {
+        Ok(sequence) => sequence,
+        Err(err) => return Err(err),
+    };
+    let sequence_6 = match checkpoint_lane_sequence_v1(&lanes[6], 6, &master.identity.pool) {
+        Ok(sequence) => sequence,
+        Err(err) => return Err(err),
+    };
+    let sequence_7 = match checkpoint_lane_sequence_v1(&lanes[7], 7, &master.identity.pool) {
+        Ok(sequence) => sequence,
+        Err(err) => return Err(err),
+    };
+    let lane_sequences = [
+        sequence_0, sequence_1, sequence_2, sequence_3, sequence_4, sequence_5, sequence_6, sequence_7,
+    ];
     if master.has_checkpoint {
-        let mut progressed = false;
-        for lane in 0..POOL_V1_PAIR_FOREST_LANE_COUNT {
-            if lane_sequences[lane] < master.last_checkpoint_lane_sequences[lane] {
-                return Err(PoolV1PairForestAccountErrorV1::LaneSequenceDecreased);
-            }
-            progressed |= lane_sequences[lane] > master.last_checkpoint_lane_sequences[lane];
+        let progress = checkpoint_lane_progress_v1(&lane_sequences, &master.last_checkpoint_lane_sequences);
+        if progress == 1 {
+            return Err(PoolV1PairForestAccountErrorV1::LaneSequenceDecreased);
         }
-        if !progressed {
+        if progress == 2 {
             return Err(PoolV1PairForestAccountErrorV1::DuplicateCheckpoint);
         }
     }
-    let next_sequence = master
-        .next_checkpoint_sequence
-        .checked_add(1)
-        .ok_or(PoolV1PairForestAccountErrorV1::CheckpointSequenceOverflow)?;
+    let next_sequence = match master.next_checkpoint_sequence.checked_add(1) {
+        Some(value) => value,
+        None => return Err(PoolV1PairForestAccountErrorV1::CheckpointSequenceOverflow),
+    };
     let checkpoint = PoolV1PairForestCheckpointV1 {
         bump: checkpoint_bump,
         master: master.identity.pool,
@@ -1230,5 +1300,40 @@ mod translatability_oracle {
         }
         assert!(!any_nonzero_byte(&[]));
         assert!(any_nonzero_byte(&[0, 0, 1]));
+    }
+}
+
+/// `checkpoint_lane_progress_v1` against the frozen progress loop of `plan_pool_v1_pair_forest_checkpoint_v1`.
+#[cfg(test)]
+mod x2c_checkpoint_progress_differential {
+    use super::*;
+
+    fn frozen(sequences: &[u64; POOL_V1_PAIR_FOREST_LANE_COUNT], last: &[u64; POOL_V1_PAIR_FOREST_LANE_COUNT]) -> u8 {
+        let mut progressed = false;
+        for lane in 0..POOL_V1_PAIR_FOREST_LANE_COUNT {
+            if sequences[lane] < last[lane] {
+                return 1;
+            }
+            progressed |= sequences[lane] > last[lane];
+        }
+        if !progressed {
+            return 2;
+        }
+        0
+    }
+
+    #[test]
+    fn x2c_same_result_as_frozen_loop() {
+        let mut seed = 3u64;
+        for _ in 0..100_000 {
+            let mut a = [0u64; POOL_V1_PAIR_FOREST_LANE_COUNT];
+            let mut b = [0u64; POOL_V1_PAIR_FOREST_LANE_COUNT];
+            for lane in 0..POOL_V1_PAIR_FOREST_LANE_COUNT {
+                seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+                a[lane] = (seed >> 33) % 3;
+                b[lane] = (seed >> 40) % 3;
+            }
+            assert_eq!(checkpoint_lane_progress_v1(&a, &b), frozen(&a, &b));
+        }
     }
 }

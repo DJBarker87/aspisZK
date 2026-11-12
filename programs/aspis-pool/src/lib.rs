@@ -12,6 +12,7 @@
 #[cfg(test)]
 extern crate std;
 
+pub(crate) mod account_write;
 pub mod deposit;
 pub mod deposit_transport;
 pub mod empty_roots;

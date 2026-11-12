@@ -60,7 +60,15 @@ pub enum PoolV1ProgramError {
 }
 
 impl From<PoolV1ProgramError> for ProgramError {
-    fn from(error: PoolV1ProgramError) -> Self {
-        Self::Custom(error as u32)
+    // Translatable form: the discriminant cast is a free function. Inside this impl the emitted `read_discriminant`
+    // resolved to `ProgramError`'s own (runs X2c-pool-c4, c8); the parameter is no longer named `error` (a module).
+    fn from(value: PoolV1ProgramError) -> Self {
+        Self::Custom(pool_v1_program_error_code(value))
     }
+}
+
+/// The error's custom code (`value as u32`, as in the frozen `From` impl).
+#[inline(always)]
+fn pool_v1_program_error_code(value: PoolV1ProgramError) -> u32 {
+    value as u32
 }

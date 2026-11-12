@@ -111,17 +111,77 @@ fn decode_tree_image_unvalidated(bytes: &[u8]) -> Result<IncrementalMerkleTreeV1
     let next_leaf_index = u64::from_le_bytes(bytes[8..16].try_into().unwrap());
     let root = decode_digest_canonical(bytes[16..48].try_into().unwrap())
         .map_err(|_| PoolV1TreeError::NonCanonicalDigest)?;
+    // A `while` loop with a flag instead of `iter_mut().enumerate()` with `?` inside; it
+    // stops at the first non-canonical level and returns the same error after the loop.
     let mut frontier = [[M31::ZERO; DIGEST_ELEMS]; POOL_V1_TREE_DEPTH];
-    for (level, node) in frontier.iter_mut().enumerate() {
+    let mut canonical = true;
+    let mut level = 0;
+    while canonical && level < POOL_V1_TREE_DEPTH {
         let start = POOL_V1_TREE_STATE_HEADER_BYTES + level * 32;
-        *node = decode_digest_canonical(bytes[start..start + 32].try_into().unwrap())
-            .map_err(|_| PoolV1TreeError::NonCanonicalDigest)?;
+        match decode_digest_canonical(bytes[start..start + 32].try_into().unwrap()) {
+            Ok(node) => frontier[level] = node,
+            Err(_) => canonical = false,
+        }
+        level += 1;
+    }
+    if !canonical {
+        return Err(PoolV1TreeError::NonCanonicalDigest);
     }
     Ok(IncrementalMerkleTreeV1 {
         next_leaf_index,
         root,
         frontier,
     })
+}
+
+/// The body of `ValidatedIncrementalMerkleTreeV1::append_one` (frozen commit 3d700effcabe) over plain values;
+/// the shift amounts as u32 (the native `wrapping_shr` takes u32; same values).
+fn append_one_core_v1(
+    leaf_index: u64,
+    source_frontier: [Digest; POOL_V1_TREE_DEPTH],
+    leaf: Digest,
+    empty: &[Digest; POOL_V1_TREE_DEPTH + 1],
+) -> Result<(IncrementalMerkleTreeV1, AppendOneV1), PoolV1TreeError> {
+    if leaf_index == POOL_V1_LEAF_CAPACITY {
+        return Err(PoolV1TreeError::TreeFull);
+    }
+    let mut frontier = source_frontier;
+    let mut carry = leaf;
+    let mut carry_level = 0usize;
+    while carry_level < POOL_V1_TREE_DEPTH && (leaf_index >> (carry_level as u32)) & 1 == 1 {
+        carry = pool_v1_tree_parent(&frontier[carry_level], &carry);
+        frontier[carry_level] = empty[carry_level];
+        carry_level += 1;
+    }
+    let next_leaf_index = leaf_index + 1;
+    let root = if carry_level == POOL_V1_TREE_DEPTH {
+        carry
+    } else {
+        frontier[carry_level] = carry;
+        let provisional = IncrementalMerkleTreeV1 {
+            next_leaf_index,
+            root: [M31::ZERO; DIGEST_ELEMS],
+            frontier,
+        };
+        match provisional.reconstruct_nonfull_root_from_level(empty, carry_level) {
+            Ok(root) => root,
+            Err(err) => return Err(err),
+        }
+    };
+    let receipt = AppendOneV1 {
+        leaf_index,
+        root_sequence: next_leaf_index,
+        root,
+        history: root_history_location(next_leaf_index),
+    };
+    Ok((
+        IncrementalMerkleTreeV1 {
+            next_leaf_index,
+            root,
+            frontier,
+        },
+        receipt,
+    ))
 }
 
 impl<'a> ValidatedIncrementalMerkleTreeV1<'a> {
@@ -179,50 +239,15 @@ impl<'a> ValidatedIncrementalMerkleTreeV1<'a> {
     /// validated source and the explicit clearing/carry-stop assignments, so
     /// the returned sealed result needs no second root reconstruction.
     pub fn append_one(&self, leaf: Digest) -> Result<(Self, AppendOneV1), PoolV1TreeError> {
-        if self.inner.next_leaf_index == POOL_V1_LEAF_CAPACITY {
-            return Err(PoolV1TreeError::TreeFull);
-        }
-        let leaf_index = self.inner.next_leaf_index;
-        let mut frontier = self.inner.frontier;
-        let mut carry = leaf;
-        let mut carry_level = 0usize;
-        while carry_level < POOL_V1_TREE_DEPTH && (leaf_index >> carry_level) & 1 == 1 {
-            carry = pool_v1_tree_parent(&frontier[carry_level], &carry);
-            frontier[carry_level] = self.empty[carry_level];
-            carry_level += 1;
-        }
-        let next_leaf_index = leaf_index + 1;
-        let root = if carry_level == POOL_V1_TREE_DEPTH {
-            carry
-        } else {
-            frontier[carry_level] = carry;
-            let provisional = IncrementalMerkleTreeV1 {
-                next_leaf_index,
-                root: [M31::ZERO; DIGEST_ELEMS],
-                frontier,
+        // Translatable form (the tools reject: joining region abstractions with shared loans that contain borrows): the body runs
+        // in `append_one_core_v1` over plain values and the pinned table; the capability is rebuilt around its
+        // result with the same table. Same checks, parents and receipt.
+        let (inner, receipt) =
+            match append_one_core_v1(self.inner.next_leaf_index, self.inner.frontier, leaf, self.empty) {
+                Ok(value) => value,
+                Err(err) => return Err(err),
             };
-            // All lower bits were cleared by the carry, so the subtree below
-            // `carry_level` is exactly the pinned recursive empty root at that
-            // level. Starting there avoids recomputing `carry_level` known
-            // empty parents and makes one append use exactly depth parent
-            // hashes regardless of the cursor's trailing-one count.
-            provisional.reconstruct_nonfull_root_from_level(self.empty, carry_level)?
-        };
-        let next = Self {
-            inner: IncrementalMerkleTreeV1 {
-                next_leaf_index,
-                root,
-                frontier,
-            },
-            empty: self.empty,
-        };
-        let receipt = AppendOneV1 {
-            leaf_index,
-            root_sequence: next_leaf_index,
-            root,
-            history: root_history_location(next_leaf_index),
-        };
-        Ok((next, receipt))
+        Ok((Self { inner, empty: self.empty }, receipt))
     }
 
     /// Atomically append two leaves using the same sealed-table capability.
@@ -304,10 +329,17 @@ impl IncrementalMerkleTreeV1 {
         if self.next_leaf_index > POOL_V1_LEAF_CAPACITY {
             return Err(PoolV1TreeError::IndexOutOfRange);
         }
-        for level in 0..POOL_V1_TREE_DEPTH {
-            if (self.next_leaf_index >> level) & 1 == 0 && self.frontier[level] != empty[level] {
-                return Err(PoolV1TreeError::NonCanonicalFrontier);
-            }
+        // Translatable form (the tools reject: "unexpected return"): a `while` loop with a flag instead of a return inside the
+        // loop (same first failing level, same error), and the sequence-zero result without a `return if`
+        // expression. Shift amounts as u32 (same values).
+        let mut canonical = true;
+        let mut level = 0;
+        while canonical && level < POOL_V1_TREE_DEPTH {
+            canonical = (self.next_leaf_index >> (level as u32)) & 1 != 0 || self.frontier[level] == empty[level];
+            level += 1;
+        }
+        if !canonical {
+            return Err(PoolV1TreeError::NonCanonicalFrontier);
         }
         // Sequence zero has one exact canonical image: every frontier slot is
         // the corresponding pinned recursive empty root (checked above), and
@@ -315,11 +347,10 @@ impl IncrementalMerkleTreeV1 {
         // same twenty Poseidon parents here proves no additional relation and
         // is prohibitively expensive in the Pool's preparation instruction.
         if self.next_leaf_index == 0 {
-            return if self.root == empty[POOL_V1_TREE_DEPTH] {
-                Ok(())
-            } else {
-                Err(PoolV1TreeError::RootMismatch)
-            };
+            if self.root != empty[POOL_V1_TREE_DEPTH] {
+                return Err(PoolV1TreeError::RootMismatch);
+            }
+            return Ok(());
         }
         // A full tree has carried beyond the last stored frontier slot.  Its
         // canonical frontier is empty and its terminal root remains explicit
@@ -389,7 +420,7 @@ impl IncrementalMerkleTreeV1 {
         }
         let mut node = empty[start_level];
         for level in start_level..POOL_V1_TREE_DEPTH {
-            node = if (self.next_leaf_index >> level) & 1 == 0 {
+            node = if (self.next_leaf_index >> (level as u32)) & 1 == 0 {
                 pool_v1_tree_parent(&node, &empty[level])
             } else {
                 pool_v1_tree_parent(&self.frontier[level], &node)
@@ -484,8 +515,56 @@ impl IncrementalMerkleTreeV1 {
         bytes: &[u8],
         empty: &[Digest; POOL_V1_TREE_DEPTH + 1],
     ) -> Result<Self, PoolV1TreeError> {
-        ValidatedIncrementalMerkleTreeV1::decode(bytes, empty)
-            .map(ValidatedIncrementalMerkleTreeV1::into_inner)
+        // Explicit match instead of `Result::map` with the method path as a function
+        // value, which the translator rejects. Same value, same error.
+        match ValidatedIncrementalMerkleTreeV1::decode(bytes, empty) {
+            Ok(validated) => Ok(validated.into_inner()),
+            Err(err) => Err(err),
+        }
+    }
+}
+
+#[cfg(test)]
+mod x2b_decode_with_empty_roots_differential {
+    use super::*;
+
+    /// The frozen body of `IncrementalMerkleTreeV1::decode_with_empty_roots` (commit 3d700effcabe).
+    fn frozen(bytes: &[u8], empty: &[Digest; POOL_V1_TREE_DEPTH + 1]) -> Result<IncrementalMerkleTreeV1, PoolV1TreeError> {
+        ValidatedIncrementalMerkleTreeV1::decode(bytes, empty).map(ValidatedIncrementalMerkleTreeV1::into_inner)
+    }
+
+    fn next(state: &mut u64) -> u64 {
+        *state = state.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+        *state >> 33
+    }
+
+    #[test]
+    fn same_result_as_frozen_body() {
+        let empty = pool_v1_empty_roots();
+        let mut state = 0xdec0_de_u64;
+        let mut tree = IncrementalMerkleTreeV1::empty();
+        for step in 0..40u32 {
+            let bytes = tree.encode().unwrap();
+            assert_eq!(IncrementalMerkleTreeV1::decode_with_empty_roots(&bytes, &empty), frozen(&bytes, &empty));
+            // one-byte mutations at random positions (mostly rejected, some accepted)
+            for _ in 0..20 {
+                let mut mutated = bytes;
+                let at = (next(&mut state) as usize) % mutated.len();
+                mutated[at] ^= 1u8 << (next(&mut state) % 8);
+                assert_eq!(
+                    IncrementalMerkleTreeV1::decode_with_empty_roots(&mutated, &empty),
+                    frozen(&mutated, &empty)
+                );
+            }
+            // wrong lengths
+            assert_eq!(
+                IncrementalMerkleTreeV1::decode_with_empty_roots(&bytes[..bytes.len() - 1], &empty),
+                frozen(&bytes[..bytes.len() - 1], &empty)
+            );
+            assert_eq!(IncrementalMerkleTreeV1::decode_with_empty_roots(&[], &empty), frozen(&[], &empty));
+            let leaf = core::array::from_fn(|i| aspis_core::field::M31((step * 31 + i as u32 * 7) % aspis_core::field::P));
+            tree = tree.append_one(leaf).unwrap().0;
+        }
     }
 }
 
@@ -764,3 +843,166 @@ mod tests {
 #[cfg(any(kani, aeneas_ref))]
 #[path = "../../../../tools/r1-builder-reference/tree.rs"]
 pub mod tree_reference;
+
+/// `decode_tree_image_unvalidated` against its frozen frontier loop (commit 3d700effcabe), kept here; and the
+/// nullifier marker's digest check against `iter().all`.
+#[cfg(test)]
+mod x2c_tree_image_differential {
+    use super::*;
+
+    fn frozen(bytes: &[u8]) -> Result<IncrementalMerkleTreeV1, PoolV1TreeError> {
+        if bytes.len() != POOL_V1_TREE_STATE_ACCOUNT_BYTES {
+            return Err(PoolV1TreeError::WrongLength);
+        }
+        if bytes[..4] != POOL_V1_TREE_STATE_MAGIC {
+            return Err(PoolV1TreeError::WrongMagic);
+        }
+        if bytes[4] != POOL_V1_TREE_STATE_VERSION {
+            return Err(PoolV1TreeError::WrongVersion);
+        }
+        if bytes[5] != POOL_V1_TREE_DEPTH as u8 {
+            return Err(PoolV1TreeError::WrongDepth);
+        }
+        if bytes[6] != POOL_V1_TREE_HASH_VERSION {
+            return Err(PoolV1TreeError::WrongTreeHash);
+        }
+        if bytes[7] != POOL_V1_DIGEST_ENCODING_VERSION {
+            return Err(PoolV1TreeError::WrongDigestEncoding);
+        }
+        let next_leaf_index = u64::from_le_bytes(bytes[8..16].try_into().unwrap());
+        let root = decode_digest_canonical(bytes[16..48].try_into().unwrap())
+            .map_err(|_| PoolV1TreeError::NonCanonicalDigest)?;
+        let mut frontier = [[M31::ZERO; DIGEST_ELEMS]; POOL_V1_TREE_DEPTH];
+        for (level, node) in frontier.iter_mut().enumerate() {
+            let start = POOL_V1_TREE_STATE_HEADER_BYTES + level * 32;
+            *node = decode_digest_canonical(bytes[start..start + 32].try_into().unwrap())
+                .map_err(|_| PoolV1TreeError::NonCanonicalDigest)?;
+        }
+        Ok(IncrementalMerkleTreeV1 { next_leaf_index, root, frontier })
+    }
+
+    #[test]
+    fn x2c_same_result_as_frozen_body() {
+        let mut seed = 77u64;
+        let mut next = || {
+            seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+            seed >> 33
+        };
+        for round in 0..4_000u64 {
+            let mut bytes = alloc::vec![0u8; POOL_V1_TREE_STATE_ACCOUNT_BYTES];
+            bytes[..4].copy_from_slice(&POOL_V1_TREE_STATE_MAGIC);
+            bytes[4] = POOL_V1_TREE_STATE_VERSION;
+            bytes[5] = POOL_V1_TREE_DEPTH as u8;
+            bytes[6] = POOL_V1_TREE_HASH_VERSION;
+            bytes[7] = POOL_V1_DIGEST_ENCODING_VERSION;
+            let mut at = 8;
+            while at + 4 <= bytes.len() {
+                let v = (next() as u32) % aspis_core::field::P;
+                bytes[at..at + 4].copy_from_slice(&v.to_le_bytes());
+                at += 4;
+            }
+            match round % 4 {
+                0 => {}
+                1 => {
+                    let level = (next() as usize) % POOL_V1_TREE_DEPTH;
+                    let at = POOL_V1_TREE_STATE_HEADER_BYTES + level * 32 + 4 * ((next() as usize) % 8);
+                    bytes[at..at + 4].copy_from_slice(&aspis_core::field::P.to_le_bytes());
+                }
+                2 => {
+                    let at = (next() as usize) % 8;
+                    bytes[at] ^= 1;
+                }
+                _ => {
+                    bytes.pop();
+                }
+            }
+            assert_eq!(decode_tree_image_unvalidated(&bytes), frozen(&bytes));
+        }
+    }
+}
+
+/// `append_one` and `validate_with_empty_roots` against their frozen bodies (commit 3d700effcabe), kept here.
+#[cfg(test)]
+mod x2c_append_validate_differential {
+    use super::*;
+
+    fn frozen_validate(t: &IncrementalMerkleTreeV1, empty: &[Digest; POOL_V1_TREE_DEPTH + 1]) -> Result<(), PoolV1TreeError> {
+        if t.next_leaf_index > POOL_V1_LEAF_CAPACITY {
+            return Err(PoolV1TreeError::IndexOutOfRange);
+        }
+        for level in 0..POOL_V1_TREE_DEPTH {
+            if (t.next_leaf_index >> level) & 1 == 0 && t.frontier[level] != empty[level] {
+                return Err(PoolV1TreeError::NonCanonicalFrontier);
+            }
+        }
+        if t.next_leaf_index == 0 {
+            return if t.root == empty[POOL_V1_TREE_DEPTH] { Ok(()) } else { Err(PoolV1TreeError::RootMismatch) };
+        }
+        if t.next_leaf_index < POOL_V1_LEAF_CAPACITY && t.reconstruct_nonfull_root(empty)? != t.root {
+            return Err(PoolV1TreeError::RootMismatch);
+        }
+        Ok(())
+    }
+
+    fn frozen_append(t: &IncrementalMerkleTreeV1, leaf: Digest, empty: &[Digest; POOL_V1_TREE_DEPTH + 1]) -> Result<(IncrementalMerkleTreeV1, AppendOneV1), PoolV1TreeError> {
+        if t.next_leaf_index == POOL_V1_LEAF_CAPACITY {
+            return Err(PoolV1TreeError::TreeFull);
+        }
+        let leaf_index = t.next_leaf_index;
+        let mut frontier = t.frontier;
+        let mut carry = leaf;
+        let mut carry_level = 0usize;
+        while carry_level < POOL_V1_TREE_DEPTH && (leaf_index >> carry_level) & 1 == 1 {
+            carry = pool_v1_tree_parent(&frontier[carry_level], &carry);
+            frontier[carry_level] = empty[carry_level];
+            carry_level += 1;
+        }
+        let next_leaf_index = leaf_index + 1;
+        let root = if carry_level == POOL_V1_TREE_DEPTH {
+            carry
+        } else {
+            frontier[carry_level] = carry;
+            let provisional = IncrementalMerkleTreeV1 { next_leaf_index, root: [M31::ZERO; DIGEST_ELEMS], frontier };
+            provisional.reconstruct_nonfull_root_from_level(empty, carry_level)?
+        };
+        Ok((
+            IncrementalMerkleTreeV1 { next_leaf_index, root, frontier },
+            AppendOneV1 { leaf_index, root_sequence: next_leaf_index, root, history: root_history_location(next_leaf_index) },
+        ))
+    }
+
+    #[test]
+    fn x2c_append_and_validate_match_frozen() {
+        let empty = pool_v1_empty_roots();
+        let mut seed = 99u64;
+        let mut next = move || {
+            seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+            seed >> 33
+        };
+        // A valid chain of appends from empty, checked at every step, plus mutated copies.
+        let mut tree = IncrementalMerkleTreeV1 { next_leaf_index: 0, root: empty[POOL_V1_TREE_DEPTH], frontier: core::array::from_fn(|l| empty[l]) };
+        for step in 0..200u64 {
+            let leaf: Digest = core::array::from_fn(|_| M31((next() as u32) % aspis_core::field::P));
+            assert_eq!(tree.validate_with_empty_roots(&empty), frozen_validate(&tree, &empty));
+            let mut bad = tree;
+            match step % 3 {
+                0 => bad.root[0] = M31((bad.root[0].0 + 1) % aspis_core::field::P),
+                1 => bad.frontier[(next() as usize) % POOL_V1_TREE_DEPTH][1] = M31(7),
+                _ => bad.next_leaf_index = POOL_V1_LEAF_CAPACITY + (next() % 3),
+            }
+            assert_eq!(bad.validate_with_empty_roots(&empty), frozen_validate(&bad, &empty));
+            let validated = ValidatedIncrementalMerkleTreeV1::from_parts(tree.next_leaf_index, tree.root, tree.frontier, &empty).unwrap();
+            let (next_tree, receipt) = validated.append_one(leaf).unwrap();
+            let (frozen_tree, frozen_receipt) = frozen_append(&tree, leaf, &empty).unwrap();
+            assert_eq!(next_tree.into_inner(), frozen_tree);
+            assert_eq!(receipt, frozen_receipt);
+            tree = frozen_tree;
+        }
+        // Near capacity and at capacity (core over plain values, frontier as found).
+        for index in [POOL_V1_LEAF_CAPACITY - 2, POOL_V1_LEAF_CAPACITY - 1, POOL_V1_LEAF_CAPACITY] {
+            let t = IncrementalMerkleTreeV1 { next_leaf_index: index, root: tree.root, frontier: tree.frontier };
+            let leaf: Digest = core::array::from_fn(|_| M31((next() as u32) % aspis_core::field::P));
+            assert_eq!(append_one_core_v1(t.next_leaf_index, t.frontier, leaf, &empty), frozen_append(&t, leaf, &empty));
+        }
+    }
+}

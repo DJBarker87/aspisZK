@@ -144,10 +144,17 @@ impl PoolV1PairLeafWitnessV1 {
         if one_minus_occupied.mul(self.second_occupancy_inverse) != M31::ZERO {
             return Err(PoolV1PairLeafErrorV1::EmptyInverseNonZero);
         }
-        if self
-            .second_commitment
-            .iter()
-            .any(|limb| one_minus_occupied.mul(*limb) != M31::ZERO)
+        // Translatable form (the tools reject: closure in `iter().any`): the eight products written out, left to right, stopping
+        // at the first non-zero one as `any` did (they have no effect).
+        let c = &self.second_commitment;
+        if one_minus_occupied.mul(c[0]) != M31::ZERO
+            || one_minus_occupied.mul(c[1]) != M31::ZERO
+            || one_minus_occupied.mul(c[2]) != M31::ZERO
+            || one_minus_occupied.mul(c[3]) != M31::ZERO
+            || one_minus_occupied.mul(c[4]) != M31::ZERO
+            || one_minus_occupied.mul(c[5]) != M31::ZERO
+            || one_minus_occupied.mul(c[6]) != M31::ZERO
+            || one_minus_occupied.mul(c[7]) != M31::ZERO
         {
             return Err(PoolV1PairLeafErrorV1::EmptyCommitmentNonZero);
         }

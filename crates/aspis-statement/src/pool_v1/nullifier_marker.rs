@@ -77,7 +77,15 @@ impl PoolV1NullifierMarkerV1 {
 }
 
 fn digest_is_canonical(digest: &Digest) -> bool {
-    digest.iter().all(|limb| limb.0 < P)
+    // The eight comparisons written out instead of `iter().all` (no effect, same result).
+    digest[0].0 < P
+        && digest[1].0 < P
+        && digest[2].0 < P
+        && digest[3].0 < P
+        && digest[4].0 < P
+        && digest[5].0 < P
+        && digest[6].0 < P
+        && digest[7].0 < P
 }
 
 pub fn validate_pool_v1_nullifier_marker(
@@ -275,5 +283,19 @@ mod tests {
             decode_pool_v1_nullifier_marker(&changed),
             Err(PoolV1NullifierMarkerFormatError::NonCanonicalDigest)
         );
+    }
+}
+
+#[cfg(test)]
+mod x2c_digest_is_canonical_differential {
+    use super::*;
+    use aspis_core::field::M31;
+
+    #[test]
+    fn x2c_same_result_as_iter_all() {
+        for mask in 0u32..256 {
+            let digest: Digest = core::array::from_fn(|k| if mask & (1 << k) != 0 { M31(P + k as u32) } else { M31(P - 1 - k as u32) });
+            assert_eq!(digest_is_canonical(&digest), digest.iter().all(|limb| limb.0 < P));
+        }
     }
 }

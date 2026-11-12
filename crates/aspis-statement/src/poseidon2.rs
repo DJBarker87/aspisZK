@@ -184,16 +184,50 @@ fn apply_mat4_lazy(values: &mut [M31]) {
     values[3] = M31::reduce_u62(3 * a + b + c + 2 * d);
 }
 
+/// `apply_mat4_lazy` over four values (the same four outputs).
+#[inline(always)]
+fn mat4_lazy_values(v0: M31, v1: M31, v2: M31, v3: M31) -> [M31; 4] {
+    let a = v0.0 as u64;
+    let b = v1.0 as u64;
+    let c = v2.0 as u64;
+    let d = v3.0 as u64;
+    [
+        M31::reduce_u62(2 * a + 3 * b + c + d),
+        M31::reduce_u62(a + 2 * b + 3 * c + d),
+        M31::reduce_u62(a + b + 2 * c + 3 * d),
+        M31::reduce_u62(3 * a + b + c + 2 * d),
+    ]
+}
+
 #[inline(always)]
 fn external_linear_lazy(state: &mut [M31; 16]) {
-    for chunk in state.chunks_exact_mut(4) {
-        apply_mat4_lazy(chunk);
-    }
-    let sums: [u64; 4] =
-        core::array::from_fn(|column| (0..4).map(|row| state[row * 4 + column].0 as u64).sum());
-    for (index, value) in state.iter_mut().enumerate() {
-        *value = M31::reduce_u62(value.0 as u64 + sums[index & 3]);
-    }
+    // No loop.
+    // The four 4x4 blocks (the frozen `chunks_exact_mut(4)` loop) over values, the column sums (rows 0 to 3 in order,
+    // as the frozen `map(..).sum()`; every term is below 2^31, so no sum wraps), and the sixteen outputs written out.
+    let r0 = mat4_lazy_values(state[0], state[1], state[2], state[3]);
+    let r1 = mat4_lazy_values(state[4], state[5], state[6], state[7]);
+    let r2 = mat4_lazy_values(state[8], state[9], state[10], state[11]);
+    let r3 = mat4_lazy_values(state[12], state[13], state[14], state[15]);
+    let s0 = r0[0].0 as u64 + r1[0].0 as u64 + r2[0].0 as u64 + r3[0].0 as u64;
+    let s1 = r0[1].0 as u64 + r1[1].0 as u64 + r2[1].0 as u64 + r3[1].0 as u64;
+    let s2 = r0[2].0 as u64 + r1[2].0 as u64 + r2[2].0 as u64 + r3[2].0 as u64;
+    let s3 = r0[3].0 as u64 + r1[3].0 as u64 + r2[3].0 as u64 + r3[3].0 as u64;
+    state[0] = M31::reduce_u62(r0[0].0 as u64 + s0);
+    state[1] = M31::reduce_u62(r0[1].0 as u64 + s1);
+    state[2] = M31::reduce_u62(r0[2].0 as u64 + s2);
+    state[3] = M31::reduce_u62(r0[3].0 as u64 + s3);
+    state[4] = M31::reduce_u62(r1[0].0 as u64 + s0);
+    state[5] = M31::reduce_u62(r1[1].0 as u64 + s1);
+    state[6] = M31::reduce_u62(r1[2].0 as u64 + s2);
+    state[7] = M31::reduce_u62(r1[3].0 as u64 + s3);
+    state[8] = M31::reduce_u62(r2[0].0 as u64 + s0);
+    state[9] = M31::reduce_u62(r2[1].0 as u64 + s1);
+    state[10] = M31::reduce_u62(r2[2].0 as u64 + s2);
+    state[11] = M31::reduce_u62(r2[3].0 as u64 + s3);
+    state[12] = M31::reduce_u62(r3[0].0 as u64 + s0);
+    state[13] = M31::reduce_u62(r3[1].0 as u64 + s1);
+    state[14] = M31::reduce_u62(r3[2].0 as u64 + s2);
+    state[15] = M31::reduce_u62(r3[3].0 as u64 + s3);
 }
 
 #[inline(always)]
@@ -222,13 +256,27 @@ fn internal_linear(state: &mut [M31; 16]) {
 /// kept lazy and each output is reduced once.
 #[inline(always)]
 fn internal_linear_lazy(state: &mut [M31; 16]) {
-    let part_sum: u64 = state[1..].iter().map(|value| value.0 as u64).sum();
+    // The partial sum of limbs 1 to 15 in order
+    // (instead of `iter().map(..).sum()`) and the fifteen outputs written out, with the shift amounts as u32 (the
+    // native `wrapping_shl` takes u32; same values).
+    let part_sum: u64 = state[1].0 as u64 + state[2].0 as u64 + state[3].0 as u64 + state[4].0 as u64 + state[5].0 as u64 + state[6].0 as u64 + state[7].0 as u64 + state[8].0 as u64 + state[9].0 as u64 + state[10].0 as u64 + state[11].0 as u64 + state[12].0 as u64 + state[13].0 as u64 + state[14].0 as u64 + state[15].0 as u64;
     let full_sum = part_sum + state[0].0 as u64;
     state[0] = M31::reduce_u62(part_sum + aspis_core::field::P as u64 - state[0].0 as u64);
-    for index in 1..16 {
-        state[index] =
-            M31::reduce_u62(full_sum + ((state[index].0 as u64) << INTERNAL_SHIFTS[index - 1]));
-    }
+    state[1] = M31::reduce_u62(full_sum + ((state[1].0 as u64) << u32::from(INTERNAL_SHIFTS[0])));
+    state[2] = M31::reduce_u62(full_sum + ((state[2].0 as u64) << u32::from(INTERNAL_SHIFTS[1])));
+    state[3] = M31::reduce_u62(full_sum + ((state[3].0 as u64) << u32::from(INTERNAL_SHIFTS[2])));
+    state[4] = M31::reduce_u62(full_sum + ((state[4].0 as u64) << u32::from(INTERNAL_SHIFTS[3])));
+    state[5] = M31::reduce_u62(full_sum + ((state[5].0 as u64) << u32::from(INTERNAL_SHIFTS[4])));
+    state[6] = M31::reduce_u62(full_sum + ((state[6].0 as u64) << u32::from(INTERNAL_SHIFTS[5])));
+    state[7] = M31::reduce_u62(full_sum + ((state[7].0 as u64) << u32::from(INTERNAL_SHIFTS[6])));
+    state[8] = M31::reduce_u62(full_sum + ((state[8].0 as u64) << u32::from(INTERNAL_SHIFTS[7])));
+    state[9] = M31::reduce_u62(full_sum + ((state[9].0 as u64) << u32::from(INTERNAL_SHIFTS[8])));
+    state[10] = M31::reduce_u62(full_sum + ((state[10].0 as u64) << u32::from(INTERNAL_SHIFTS[9])));
+    state[11] = M31::reduce_u62(full_sum + ((state[11].0 as u64) << u32::from(INTERNAL_SHIFTS[10])));
+    state[12] = M31::reduce_u62(full_sum + ((state[12].0 as u64) << u32::from(INTERNAL_SHIFTS[11])));
+    state[13] = M31::reduce_u62(full_sum + ((state[13].0 as u64) << u32::from(INTERNAL_SHIFTS[12])));
+    state[14] = M31::reduce_u62(full_sum + ((state[14].0 as u64) << u32::from(INTERNAL_SHIFTS[13])));
+    state[15] = M31::reduce_u62(full_sum + ((state[15].0 as u64) << u32::from(INTERNAL_SHIFTS[14])));
 }
 
 /// Evaluate the two consecutive Poseidon2 rounds assigned to one active
@@ -355,7 +403,32 @@ pub fn permute(state: &mut [M31; 16]) {
 /// Equality is covered against both the canonical kernel and the pinned
 /// Plonky3 implementation.
 pub fn permute_optimized(state: &mut [M31; 16]) {
-    permute_optimized_with_trace(state, |_| {});
+    permute_optimized_untraced(state);
+}
+
+/// Translatable form: the body of `permute_optimized_with_trace` without the trace callback (and the copies that only fed
+/// it). `permute_optimized`, `merkle_node_compress_v3` and `hash_fields` called the traced form with a closure that
+/// does nothing; the closure's `FnMut` instance does not elaborate on the native library. Same rounds, same order.
+fn permute_optimized_untraced(state: &mut [M31; 16]) {
+    external_linear_lazy(state);
+    for round in 0..EXTERNAL_INITIAL.len() {
+        let constants = &EXTERNAL_INITIAL[round];
+        for index in 0..16 {
+            state[index] = pow5(state[index].add(M31(constants[index])));
+        }
+        external_linear_lazy(state);
+    }
+    for round in 0..INTERNAL.len() {
+        state[0] = pow5(state[0].add(M31(INTERNAL[round])));
+        internal_linear_lazy(state);
+    }
+    for round in 0..EXTERNAL_FINAL.len() {
+        let constants = &EXTERNAL_FINAL[round];
+        for index in 0..16 {
+            state[index] = pow5(state[index].add(M31(constants[index])));
+        }
+        external_linear_lazy(state);
+    }
 }
 
 /// Apply the optimized permutation while emitting all 22 round transitions.
@@ -421,7 +494,22 @@ where
 /// node compression ([`merkle_node_compress_v3`]), each of which pins exactly
 /// one domain constant.
 pub(crate) fn hash_fields(domain: M31, input: &[M31]) -> Digest {
-    hash_fields_with_trace(domain, input, |_, _| {})
+    // Translatable form: the body of `hash_fields_with_trace` without the trace callback (see
+    // `permute_optimized_untraced`); the output digest written out instead of `array::from_fn` with a closure.
+    let mut state = [M31::ZERO; 16];
+    state[RATE] = domain;
+    state[RATE + 1] = M31(input.len() as u32);
+    if input.is_empty() {
+        permute_optimized_untraced(&mut state);
+    } else {
+        for chunk in input.chunks(RATE) {
+            for (index, value) in chunk.iter().enumerate() {
+                state[index] = state[index].add(*value);
+            }
+            permute_optimized_untraced(&mut state);
+        }
+    }
+    [state[0], state[1], state[2], state[3], state[4], state[5], state[6], state[7]]
 }
 
 /// Owner-key derivation sponge (`DOMAIN_OWNER_KEY`, `0x4153_0001`).
@@ -499,8 +587,9 @@ pub fn merkle_node_compress_v3(left: &Digest, right: &Digest) -> Digest {
     // Fixed node-domain tweak. This construction is never reused for leaves
     // or variable-length inputs; the ordered 16-limb input is the full state.
     state[POSEIDON2_WIDTH - 1] = state[POSEIDON2_WIDTH - 1].add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
-    permute_optimized_with_trace(&mut state, |_| {});
-    core::array::from_fn(|index| state[index])
+    // Translatable form: untraced permutation (see `permute_optimized_untraced`); output written out.
+    permute_optimized_untraced(&mut state);
+    [state[0], state[1], state[2], state[3], state[4], state[5], state[6], state[7]]
 }
 
 /// The exact sponge path used by [`hash_fields`], with a permutation-local
@@ -908,3 +997,81 @@ mod tests {
 #[cfg(any(kani, aeneas_ref))]
 #[path = "../../../tools/r1-builder-reference/poseidon.rs"]
 mod builder_reference;
+
+/// The rewritten Poseidon2 paths against the frozen ones (frozen commit 3d700effcabe). The frozen
+/// `hash_fields`, `permute_optimized` and `merkle_node_compress_v3` called the traced forms with a no-op callback;
+/// the traced forms are unchanged and serve as the oracle. The two linear layers' frozen bodies are kept here.
+#[cfg(test)]
+mod x2c_untraced_differential {
+    use super::*;
+
+    fn frozen_external_linear_lazy(state: &mut [M31; 16]) {
+        for chunk in state.chunks_exact_mut(4) {
+            apply_mat4_lazy(chunk);
+        }
+        let sums: [u64; 4] =
+            core::array::from_fn(|column| (0..4).map(|row| state[row * 4 + column].0 as u64).sum());
+        for (index, value) in state.iter_mut().enumerate() {
+            *value = M31::reduce_u62(value.0 as u64 + sums[index & 3]);
+        }
+    }
+
+    fn frozen_internal_linear_lazy(state: &mut [M31; 16]) {
+        let part_sum: u64 = state[1..].iter().map(|value| value.0 as u64).sum();
+        let full_sum = part_sum + state[0].0 as u64;
+        state[0] = M31::reduce_u62(part_sum + aspis_core::field::P as u64 - state[0].0 as u64);
+        for index in 1..16 {
+            state[index] =
+                M31::reduce_u62(full_sum + ((state[index].0 as u64) << INTERNAL_SHIFTS[index - 1]));
+        }
+    }
+
+    fn next(seed: &mut u64) -> u64 {
+        *seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+        *seed >> 33
+    }
+
+    fn state(seed: &mut u64) -> [M31; 16] {
+        core::array::from_fn(|_| M31((next(seed) as u32) % aspis_core::field::P))
+    }
+
+    #[test]
+    fn x2c_linear_layers_match_frozen() {
+        let mut seed = 11u64;
+        for round in 0..20_000 {
+            let mut a = if round == 0 { [M31(aspis_core::field::P - 1); 16] } else { state(&mut seed) };
+            let mut b = a;
+            external_linear_lazy(&mut a);
+            frozen_external_linear_lazy(&mut b);
+            assert_eq!(a, b);
+            internal_linear_lazy(&mut a);
+            frozen_internal_linear_lazy(&mut b);
+            assert_eq!(a, b);
+        }
+    }
+
+    #[test]
+    fn x2c_untraced_permutation_and_hashes_match_traced() {
+        let mut seed = 23u64;
+        for round in 0..3_000 {
+            let mut a = state(&mut seed);
+            let mut b = a;
+            permute_optimized_untraced(&mut a);
+            permute_optimized_with_trace(&mut b, |_| {});
+            assert_eq!(a, b);
+            let len = round % 41;
+            let input: alloc::vec::Vec<M31> = (0..len).map(|_| M31((next(&mut seed) as u32) % aspis_core::field::P)).collect();
+            let domain = M31((next(&mut seed) as u32) % aspis_core::field::P);
+            assert_eq!(hash_fields(domain, &input), hash_fields_with_trace(domain, &input, |_, _| {}));
+            let left: Digest = core::array::from_fn(|_| M31((next(&mut seed) as u32) % aspis_core::field::P));
+            let right: Digest = core::array::from_fn(|_| M31((next(&mut seed) as u32) % aspis_core::field::P));
+            let mut reference = [M31::ZERO; POSEIDON2_WIDTH];
+            reference[..DIGEST_ELEMS].copy_from_slice(&left);
+            reference[DIGEST_ELEMS..].copy_from_slice(&right);
+            reference[POSEIDON2_WIDTH - 1] = reference[POSEIDON2_WIDTH - 1].add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
+            permute_optimized_with_trace(&mut reference, |_| {});
+            let expected: Digest = core::array::from_fn(|index| reference[index]);
+            assert_eq!(merkle_node_compress_v3(&left, &right), expected);
+        }
+    }
+}

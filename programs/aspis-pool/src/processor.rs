@@ -12,7 +12,6 @@ use alloc::{vec, vec::Vec};
 use aspis_statement::pool_v1::POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES;
 #[cfg(target_os = "solana")]
 use solana_program::instruction::get_stack_height;
-#[cfg(any(target_os = "solana", test))]
 use solana_program::instruction::TRANSACTION_LEVEL_STACK_HEIGHT;
 #[allow(deprecated)]
 use solana_program::system_instruction;
@@ -120,15 +119,141 @@ fn supported_program_loader(owner: &Pubkey) -> bool {
         || owner == &loader_v4::id()
 }
 
+/// The key of `accounts[index]`, or the zero key past the end. A conditional write into a key array in a function
+/// that holds AccountInfo values is rejected by the translator (nested borrows at the join); this helper returns a
+/// plain value instead.
+pub(crate) fn account_key_or_zero(accounts: &[AccountInfo<'_>], index: usize) -> Pubkey {
+    if index < accounts.len() {
+        *accounts[index].key
+    } else {
+        Pubkey::new_from_array([0u8; 32])
+    }
+}
+
+/// Largest account list `require_unique_accounts` accepts. Every caller first requires an exact account count no
+/// larger than this (terminal at most 18, initialize 14, checkpoint 12, deposit at most 11).
+pub(crate) const UNIQUE_ACCOUNTS_MAX: usize = 18;
+
+/// Pairwise scan over plain keys, in the order of the former nested loop (left ascending, then right ascending);
+/// stops at the first repeated pair.
+pub(crate) fn keys_repeat(keys: &[Pubkey; UNIQUE_ACCOUNTS_MAX], count: usize) -> bool {
+    // One loop over the (left, right) pairs; a nested loop is rejected by the translator (nested borrows in the
+    // loop join).
+    let mut repeat = false;
+    let mut left = 0;
+    let mut right = 1;
+    while !repeat && left < count {
+        if right < count {
+            repeat = keys[left] == keys[right];
+            right += 1;
+        } else {
+            left += 1;
+            right = left + 1;
+        }
+    }
+    repeat
+}
+
 pub(crate) fn require_unique_accounts(accounts: &[AccountInfo<'_>]) -> ProgramResult {
-    for left in 0..accounts.len() {
-        for right in left + 1..accounts.len() {
-            if accounts[left].key == accounts[right].key {
-                return Err(ProgramError::InvalidArgument);
+    // The translator rejects any loop in a function that holds an
+    // AccountInfo, so the keys are copied, written out without a loop, through `account_key_or_zero` into a plain array, and the
+    // pairwise scan runs in a helper that sees only that array. A list longer than UNIQUE_ACCOUNTS_MAX is rejected
+    // with the duplicate error; no caller can pass one (each requires an exact count of at most 18 first).
+    let count = accounts.len();
+    if count > UNIQUE_ACCOUNTS_MAX {
+        return Err(ProgramError::InvalidArgument);
+    }
+    let keys: [Pubkey; UNIQUE_ACCOUNTS_MAX] = [
+        account_key_or_zero(accounts, 0),
+        account_key_or_zero(accounts, 1),
+        account_key_or_zero(accounts, 2),
+        account_key_or_zero(accounts, 3),
+        account_key_or_zero(accounts, 4),
+        account_key_or_zero(accounts, 5),
+        account_key_or_zero(accounts, 6),
+        account_key_or_zero(accounts, 7),
+        account_key_or_zero(accounts, 8),
+        account_key_or_zero(accounts, 9),
+        account_key_or_zero(accounts, 10),
+        account_key_or_zero(accounts, 11),
+        account_key_or_zero(accounts, 12),
+        account_key_or_zero(accounts, 13),
+        account_key_or_zero(accounts, 14),
+        account_key_or_zero(accounts, 15),
+        account_key_or_zero(accounts, 16),
+        account_key_or_zero(accounts, 17),
+    ];
+    if keys_repeat(&keys, count) {
+        return Err(ProgramError::InvalidArgument);
+    }
+    Ok(())
+}
+
+#[cfg(test)]
+mod x2b_unique_accounts_differential {
+    use super::*;
+
+    /// The frozen body of `require_unique_accounts` (commit 3d700effcabe), kept for comparison.
+    fn frozen_require_unique_accounts(accounts: &[AccountInfo<'_>]) -> ProgramResult {
+        for left in 0..accounts.len() {
+            for right in left + 1..accounts.len() {
+                if accounts[left].key == accounts[right].key {
+                    return Err(ProgramError::InvalidArgument);
+                }
+            }
+        }
+        Ok(())
+    }
+
+    fn next(state: &mut u64) -> u64 {
+        *state = state.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+        *state >> 33
+    }
+
+    fn check(keys: &[Pubkey]) {
+        let owner = Pubkey::new_from_array([9u8; 32]);
+        let mut lamports = [0u64; UNIQUE_ACCOUNTS_MAX];
+        let mut data = [[0u8; 1]; UNIQUE_ACCOUNTS_MAX];
+        let mut infos = alloc::vec::Vec::new();
+        for ((key, lamport), datum) in keys.iter().zip(lamports.iter_mut()).zip(data.iter_mut()) {
+            infos.push(AccountInfo::new(key, false, false, lamport, datum, &owner, false, 0));
+        }
+        assert_eq!(require_unique_accounts(&infos), frozen_require_unique_accounts(&infos), "{keys:?}");
+    }
+
+    #[test]
+    fn same_result_as_frozen_loop() {
+        let mut state = 0x5eed_u64;
+        for count in 0..=UNIQUE_ACCOUNTS_MAX {
+            // all distinct
+            let distinct: alloc::vec::Vec<Pubkey> =
+                (0..count).map(|i| Pubkey::new_from_array([i as u8 + 1; 32])).collect();
+            check(&distinct);
+            // every single duplicated pair, including first/last positions
+            for left in 0..count {
+                for right in left + 1..count {
+                    let mut keys = distinct.clone();
+                    keys[right] = keys[left];
+                    check(&keys);
+                }
+            }
+            // random keys from a small alphabet (frequent repeats) and from a large one
+            for _ in 0..200 {
+                let small: alloc::vec::Vec<Pubkey> = (0..count)
+                    .map(|_| Pubkey::new_from_array([(next(&mut state) % 6) as u8; 32]))
+                    .collect();
+                check(&small);
+                let large: alloc::vec::Vec<Pubkey> = (0..count)
+                    .map(|_| {
+                        let mut b = [0u8; 32];
+                        b[..8].copy_from_slice(&next(&mut state).to_le_bytes());
+                        Pubkey::new_from_array(b)
+                    })
+                    .collect();
+                check(&large);
             }
         }
     }
-    Ok(())
 }
 
 pub(crate) fn require_payer_and_system_program(
@@ -159,20 +284,23 @@ pub(crate) fn plan_fresh_program_pda(
     expected_address: &Pubkey,
     exact_bytes: usize,
 ) -> Result<FreshPdaPreparationV1, ProgramError> {
-    if account.key != expected_address
+    if *account.key != *expected_address
         || account.executable
         || account.is_signer
         || !account.is_writable
     {
         return Err(PoolV1ProgramError::InvalidFreshAccount.into());
     }
-    if account.owner == program_id {
-        let data = account.try_borrow_data()?;
-        if data.len() != exact_bytes || data.iter().any(|byte| *byte != 0) {
+    if *account.owner == *program_id {
+        let data = match account.try_borrow_data() {
+            Ok(data) => data,
+            Err(err) => return Err(err),
+        };
+        if data.len() != exact_bytes || !crate::history::page_bytes_are_zero(&data) {
             return Err(PoolV1ProgramError::InvalidFreshAccount.into());
         }
         Ok(FreshPdaPreparationV1::ProgramOwnedZeroed)
-    } else if account.owner == &system_program::id() && account.data_is_empty() {
+    } else if *account.owner == system_program::id() && account.data_is_empty() {
         Ok(FreshPdaPreparationV1::CreateOrAllocateSystemOwned)
     } else {
         Err(PoolV1ProgramError::InvalidFreshAccount.into())
@@ -212,7 +340,7 @@ pub(crate) fn create_or_allocate_pda_with_rent<'info, R: PoolCpiRuntimeV1>(
     rent: &Rent,
 ) -> ProgramResult {
     require_payer_and_system_program(payer, system_program_account)?;
-    if account.owner != &system_program::id() || !account.data_is_empty() {
+    if *account.owner != system_program::id() || !account.data_is_empty() {
         return Err(PoolV1ProgramError::InvalidFreshAccount.into());
     }
     let required_lamports = rent.minimum_balance(exact_bytes).max(1);
@@ -278,7 +406,7 @@ pub(crate) fn create_or_allocate_with_seed_with_rent<'info, R: PoolCpiRuntimeV1>
     rent: &Rent,
 ) -> ProgramResult {
     require_payer_and_system_program(payer, system_program_account)?;
-    if account.owner != &system_program::id() || !account.data_is_empty() {
+    if *account.owner != system_program::id() || !account.data_is_empty() {
         return Err(PoolV1ProgramError::InvalidFreshAccount.into());
     }
     let required_lamports = rent.minimum_balance(exact_bytes).max(1);
@@ -347,17 +475,23 @@ fn require_initialized_empty_vault(
     program_id: &Pubkey,
     pool: &Pubkey,
     mint: &Pubkey,
-    vault: &AccountInfo<'_>,
+    vault_account: &AccountInfo<'_>,
 ) -> ProgramResult {
-    if vault.key != &pool_v1_vault_token_account_address(program_id, pool).0
-        || vault.owner != &LEGACY_SPL_TOKEN_PROGRAM_ID
-        || vault.executable
-        || vault.is_signer
-        || !vault.is_writable
+    if *vault_account.key != pool_v1_vault_token_account_address(program_id, pool).0
+        || *vault_account.owner != LEGACY_SPL_TOKEN_PROGRAM_ID
+        || vault_account.executable
+        || vault_account.is_signer
+        || !vault_account.is_writable
     {
         return Err(PoolV1ProgramError::InvalidVaultTokenAddress.into());
     }
-    let parsed = parse_legacy_token_account_v1(&vault.try_borrow_data()?)?;
+    let parsed = {
+        let data = match vault_account.try_borrow_data() {
+            Ok(data) => data,
+            Err(err) => return Err(err),
+        };
+        parse_legacy_token_account_v1(&data)?
+    };
     if parsed.mint != *mint
         || parsed.authority != pool_v1_vault_authority_address(program_id, pool).0
         || parsed.amount != 0
@@ -375,19 +509,19 @@ pub(crate) fn plan_vault_initialization(
     program_id: &Pubkey,
     pool: &Pubkey,
     mint: &Pubkey,
-    vault: &AccountInfo<'_>,
+    vault_account: &AccountInfo<'_>,
 ) -> Result<VaultPreparationV1, ProgramError> {
-    if vault.key != &pool_v1_vault_token_account_address(program_id, pool).0
-        || vault.executable
-        || vault.is_signer
-        || !vault.is_writable
+    if *vault_account.key != pool_v1_vault_token_account_address(program_id, pool).0
+        || vault_account.executable
+        || vault_account.is_signer
+        || !vault_account.is_writable
     {
         return Err(PoolV1ProgramError::InvalidVaultTokenAddress.into());
     }
-    if vault.owner == &system_program::id() && vault.data_is_empty() {
+    if *vault_account.owner == system_program::id() && vault_account.data_is_empty() {
         Ok(VaultPreparationV1::CreateAndInitialize)
     } else {
-        require_initialized_empty_vault(program_id, pool, mint, vault)?;
+        require_initialized_empty_vault(program_id, pool, mint, vault_account)?;
         Ok(VaultPreparationV1::InitializedEmpty)
     }
 }
@@ -398,7 +532,7 @@ pub(crate) fn initialize_vault_account<'info, R: PoolCpiRuntimeV1>(
     program_id: &Pubkey,
     pool: &Pubkey,
     mint: &AccountInfo<'info>,
-    vault: &AccountInfo<'info>,
+    vault_account: &AccountInfo<'info>,
     token_program: &AccountInfo<'info>,
     payer: &AccountInfo<'info>,
     system_program_account: &AccountInfo<'info>,
@@ -413,7 +547,7 @@ pub(crate) fn initialize_vault_account<'info, R: PoolCpiRuntimeV1>(
     create_or_allocate_pda(
         runtime,
         payer,
-        vault,
+        vault_account,
         system_program_account,
         LEGACY_SPL_TOKEN_ACCOUNT_BYTES,
         &LEGACY_SPL_TOKEN_PROGRAM_ID,
@@ -427,16 +561,16 @@ pub(crate) fn initialize_vault_account<'info, R: PoolCpiRuntimeV1>(
     let instruction = Instruction {
         program_id: LEGACY_SPL_TOKEN_PROGRAM_ID,
         accounts: vec![
-            AccountMeta::new(*vault.key, false),
+            AccountMeta::new(*vault_account.key, false),
             AccountMeta::new_readonly(*mint.key, false),
         ],
         data,
     };
     runtime.invoke(
         &instruction,
-        &[vault.clone(), mint.clone(), token_program.clone()],
+        &[vault_account.clone(), mint.clone(), token_program.clone()],
     )?;
-    require_initialized_empty_vault(program_id, pool, mint.key, vault)
+    require_initialized_empty_vault(program_id, pool, mint.key, vault_account)
 }
 
 /// Create the pair-forest (B1) marker at `create_with_seed(master, seed,
@@ -499,13 +633,36 @@ pub fn process_instruction(
     // advancing the append-only tree without a corresponding top-level scan
     // record.  Host unit tests exercise the pure predicate below; LiteSVM and
     // validator release gates exercise the production syscall.
-    #[cfg(target_os = "solana")]
-    require_transaction_level_invocation_v1(get_stack_height())?;
-    let magic = instruction_data
-        .get(..4)
-        .ok_or(ProgramError::InvalidInstructionData)?;
+    require_transaction_level_invocation_v1(runtime_stack_height_v1())?;
+    // A length check and a range index instead of `get(..4).ok_or(..)?` (`ok_or` does not
+    // elaborate on the native library); `get(..4)` is None exactly when the length is below 4.
+    if instruction_data.len() < 4 {
+        return Err(ProgramError::InvalidInstructionData);
+    }
+    // Translatable form (inference row): the dispatch chain is a helper. Its outer error is an early `?` exit of the frozen
+    // chain (a sysvar read), returned as before without the second `set_return_data`; its inner value is the
+    // handler's result. With the chain inlined, the translator propagated the final `Err` literal into `is_err` and
+    // its type argument could not be inferred.
+    let result = match dispatch_pool_instruction_v1(program_id, accounts, instruction_data) {
+        Ok(result) => result,
+        Err(err) => return Err(err),
+    };
+    if result.is_err() {
+        program::set_return_data(&[]);
+    }
+    result
+}
+
+/// The frozen dispatch chain of `process_instruction`, unchanged, as a helper (see the caller).
+#[inline(always)]
+fn dispatch_pool_instruction_v1(
+    program_id: &Pubkey,
+    accounts: &[AccountInfo<'_>],
+    instruction_data: &[u8],
+) -> Result<ProgramResult, ProgramError> {
+    let magic = &instruction_data[..4];
     let mut runtime = SolanaPoolCpiRuntimeV1;
-    let result = if cfg!(feature = "pair-forest-account-evidence") && magic == b"AS8I" {
+    Ok(if cfg!(feature = "pair-forest-account-evidence") && magic == b"AS8I" {
         #[cfg(feature = "pair-forest-account-evidence")]
         {
             let rent = Rent::get()?;
@@ -618,14 +775,25 @@ pub fn process_instruction(
         unreachable!()
     } else {
         Err(ProgramError::InvalidInstructionData)
-    };
-    if result.is_err() {
-        program::set_return_data(&[]);
-    }
-    result
+    })
 }
 
-#[cfg(any(target_os = "solana", test))]
+/// Translatable form (target_os audit): the runtime boundary is this one call. On the deployed target it
+/// is the stack-height syscall; off chain (host tests, the translator's host-target compilation)
+/// every invocation is treated as transaction-level, which is what the host build did before
+/// (the check was absent there). The check itself is ordinary code on every target.
+#[inline(always)]
+fn runtime_stack_height_v1() -> usize {
+    #[cfg(target_os = "solana")]
+    {
+        get_stack_height()
+    }
+    #[cfg(not(target_os = "solana"))]
+    {
+        TRANSACTION_LEVEL_STACK_HEIGHT
+    }
+}
+
 #[inline(always)]
 fn require_transaction_level_invocation_v1(stack_height: usize) -> ProgramResult {
     if stack_height != TRANSACTION_LEVEL_STACK_HEIGHT {
