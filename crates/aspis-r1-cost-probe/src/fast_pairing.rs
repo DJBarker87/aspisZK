@@ -283,17 +283,21 @@ impl KbyKDot {
         Self { dot: canonical::Dot::new(), count: 0 }
     }
 
+    #[cfg(not(feature = "future-lean-dot"))]
     #[inline(always)]
     pub fn push(&mut self, left: QM31, right: QM31) -> Result<(), ()> {
-        if cfg!(feature = "future-lean-dot") {
-            self.push_lean(left, right);
-            return Ok(());
-        }
         if self.count >= MAX_TERMS { return Err(()); }
         let left = checked_q(left)?;
         let right = checked_q(right)?;
         self.dot.push(left, right);
         self.count += 1;
+        Ok(())
+    }
+
+    #[cfg(feature = "future-lean-dot")]
+    #[inline(always)]
+    pub fn push(&mut self, left: QM31, right: QM31) -> Result<(), ()> {
+        self.push_lean(left, right);
         Ok(())
     }
 

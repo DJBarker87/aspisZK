@@ -41,16 +41,54 @@ pub fn decode<const N: usize>(row: u8, bytes: &[u8]) -> Result<[QM31; N], Error>
 #[inline(never)]
 fn claims(prefix: &Prefix<'_>) -> Result<Box<[[QM31; 29]; 3]>, Error> {
     let record = prefix.validated_record(25)?;
-    let mut out =
-        aspis_core::r0::heap::uninit::<[[QM31; 29]; 3]>().map_err(|_| Error::Allocation)?;
-    unsafe {
-        for p in 0..3 {
-            out.as_mut_ptr()
-                .cast::<[QM31; 29]>()
-                .add(p)
-                .write(record.decode_k::<29>(p * 29)?);
+    let out = aspis_core::r0::heap::filled(3, [QM31::ZERO; 29])
+        .map_err(|_| Error::Allocation)?;
+    let mut out: Box<[[QM31; 29]; 3]> = out
+        .into_boxed_slice()
+        .try_into()
+        .map_err(|_| Error::Allocation)?;
+    out[0] = record.decode_k::<29>(0)?;
+    out[1] = record.decode_k::<29>(29)?;
+    out[2] = record.decode_k::<29>(58)?;
+    Ok(out)
+}
+
+#[cfg(test)]
+mod claims_tests {
+    use super::*;
+    /// The pinned form of `claims` (raw-pointer initialisation in a loop), verbatim, as the oracle.
+    fn claims_pinned(prefix: &Prefix<'_>) -> Result<Box<[[QM31; 29]; 3]>, Error> {
+        let record = prefix.validated_record(25)?;
+        let mut out =
+            aspis_core::r0::heap::uninit::<[[QM31; 29]; 3]>().map_err(|_| Error::Allocation)?;
+        unsafe {
+            for p in 0..3 {
+                out.as_mut_ptr()
+                    .cast::<[QM31; 29]>()
+                    .add(p)
+                    .write(record.decode_k::<29>(p * 29)?);
+            }
+            Ok(out.assume_init())
         }
-        Ok(out.assume_init())
+    }
+    /// On the semantic prefix of each saved proof (expanded as the verifier expands it) the two forms agree.
+    #[test]
+    fn claims_equals_the_pinned_form_on_the_saved_proofs() {
+        macro_rules! proof {
+            ($name:literal) => {
+                include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"), "/../../docs/research/100bit-spend-path-20261013/evidence/format-adopt-20261019/fixtures/", $name, "/r1-s2-proof.bin")) as &[u8]
+            };
+        }
+        let mut compared = 0;
+        for (name, proof) in [("transfer-13", proof!("transfer-13")), ("transfer-255", proof!("transfer-255")), ("transfer-1023", proof!("transfer-1023")), ("withdrawal-13", proof!("withdrawal-13")), ("withdrawal-255", proof!("withdrawal-255")), ("withdrawal-1023", proof!("withdrawal-1023"))] {
+            let mut semantic = alloc::vec![0u8; crate::compact::LOGICAL_SEMANTIC];
+            crate::compact::expand_semantic(&proof[crate::compact::OFF_SEMANTIC..crate::compact::OFF_Y1], &mut semantic).unwrap();
+            let prefix = match Prefix::parse(&semantic) { Ok(p) => p, Err(_) => panic!("{name}: prefix") };
+            assert!(claims(&prefix).map(|b| *b) == claims_pinned(&prefix).map(|b| *b), "{name}");
+            assert!(claims(&prefix).is_ok(), "{name}");
+            compared += 1;
+        }
+        assert_eq!(compared, 6);
     }
 }
 
@@ -90,18 +128,21 @@ fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {
     // FUTURE-VERSION EXPERIMENT E8 (default off): the same sum
     // `p[0] + (p[0] + ... + p[27])` with one reduction per limb. The 29
     // canonical limbs sum below 2^36.
-    {
-        use aspis_core::field::{CM31, M31};
-        let first = polynomial[0];
-        let mut sums = [u64::from(first.c0.a.0), u64::from(first.c0.b.0), u64::from(first.c1.a.0), u64::from(first.c1.b.0)];
-        for c in polynomial {
-            sums[0] += u64::from(c.c0.a.0);
-            sums[1] += u64::from(c.c0.b.0);
-            sums[2] += u64::from(c.c1.a.0);
-            sums[3] += u64::from(c.c1.b.0);
-        }
-        let [a, b, c, d] = sums.map(M31::reduce_u64);
-        return QM31 { c0: CM31 { a, b }, c1: CM31 { a: c, b: d } };
+    use aspis_core::field::{CM31, M31};
+    let first = polynomial[0];
+    let mut sums = [u64::from(first.c0.a.0), u64::from(first.c0.b.0), u64::from(first.c1.a.0), u64::from(first.c1.b.0)];
+    let mut i = 0;
+    while i < 28 {
+        let c = &polynomial[i];
+        sums[0] += u64::from(c.c0.a.0);
+        sums[1] += u64::from(c.c0.b.0);
+        sums[2] += u64::from(c.c1.a.0);
+        sums[3] += u64::from(c.c1.b.0);
+        i += 1;
+    }
+    QM31 {
+        c0: CM31 { a: M31::reduce_u64(sums[0]), b: M31::reduce_u64(sums[1]) },
+        c1: CM31 { a: M31::reduce_u64(sums[2]), b: M31::reduce_u64(sums[3]) },
     }
 }
 
@@ -383,4 +424,90 @@ pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, o
     let challenges = wire::begin(&prefix, &mut transcript)?;
     mark(obs, 1);
     verify_finish(public, prefix, transcript, challenges, obs)
+}
+
+/// Aspis entry (new gate): `verify_observed` without the observer parameter. The same calls in the same
+/// order; the shared functions (`Prefix::parse`, `public_transcript`, `begin`) are called unchanged.
+#[inline(never)]
+pub fn verify_unobserved<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H) -> Result<Verified<H>, Error> {
+    let prefix = Prefix::parse(bytes)?;
+    let mut transcript = public_transcript(public, hash, prefix.c1_root)?;
+    let challenges = wire::begin(&prefix, &mut transcript)?;
+    verify_finish_unobserved(public, prefix, transcript, challenges)
+}
+
+/// Aspis form of `verify_finish` (new gate): the same body without the observer parameter and its four marks.
+#[inline(never)]
+fn verify_finish_unobserved<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges) -> Result<Verified<H>, Error> {
+    #[cfg(not(feature = "prover"))]
+    let (running, alpha, mut transcript) = semantic_rounds(&prefix, transcript)?;
+    #[cfg(feature = "prover")]
+    let (running, alpha, mut transcript, round_checks) = semantic_rounds(&prefix, transcript)?;
+    let claims = claims(&prefix)?;
+    let original_challenges = aspis_core::state_only_prefix::r0::Challenges {
+        lambda: challenges.lambda,
+        chi: challenges.chi,
+        theta: challenges.theta,
+        zc: challenges.zc,
+        mu: challenges.mu,
+        eta: challenges.eta,
+    };
+    let terminal = public
+        .terminal_qm31(&claims, &alpha, &original_challenges)
+        .map_err(|_| Error::Public)?;
+    let mask = aspis_core::state_only_hiding::state_only_selected_mask_value(
+        &core::array::from_fn(|i| claims[0][i]),
+        &core::array::from_fn(|i| claims[0][16 + i]),
+        claims[0][27],
+        &alpha,
+    );
+    let extra = prefix.validated_record(25)?.decode_k::<29>(87)?;
+    let masked_terminal = mask.add(challenges.eta.mul(terminal)).add(extra[28]);
+    if running != masked_terminal {
+        return Err(Error::Terminal);
+    }
+    let state_before_z0 = transcript.state();
+    let z0 = transcript.circle_validated(prefix.validated_record(25)?)?;
+    let before_z1 = prefix.validated_record(26)?.decode_k::<29>(0)?;
+    let z1 = transcript.circle_validated(prefix.validated_record(26)?)?;
+    #[cfg(feature = "prover")]
+    {
+        for (i, x) in [z0.x, z0.y, z1.x, z1.y].into_iter().enumerate() {
+            crate::trace::value(3, i, aspis_core::field::WideExact::from_qm31(x));
+        }
+        for (i, x) in challenges.with_alphas(&alpha).into_iter().enumerate() {
+            crate::trace::value(0, i, x);
+        }
+        for (i, row) in round_checks.iter().enumerate() {
+            for (j, x) in row.iter().enumerate() {
+                crate::trace::value(1, 3 * i + j, aspis_core::field::WideExact::from_qm31(*x));
+            }
+        }
+        crate::trace::value(2, 0, aspis_core::field::WideExact::from_qm31(terminal));
+        crate::trace::value(
+            2,
+            1,
+            aspis_core::field::WideExact::from_qm31(masked_terminal),
+        );
+    }
+    if z0 == z1 {
+        return Err(Error::EqualCirclePoints);
+    }
+    Ok(Verified {
+        roots: [*prefix.c1_root, prefix.payload(2)?.try_into().unwrap()],
+        challenges,
+        alpha,
+        claims,
+        extra,
+        before_z1,
+        state_before_z0,
+        z: [z0, z1],
+        transcript,
+        #[cfg(feature = "prover")]
+        round_checks,
+        #[cfg(feature = "prover")]
+        terminal,
+        #[cfg(feature = "prover")]
+        masked_terminal,
+    })
 }

@@ -441,6 +441,50 @@ fn decode_checkpoint_box(bytes: &[u8]) -> Result<Box<PoolV1PairForestCheckpointV
     ))
 }
 
+/// One frontier node of the lane account image (level `level`): canonical, and equal to the pinned empty root where
+/// the subtree is unoccupied (bit `level` of the next leaf index is 0); otherwise an error.
+#[inline(always)]
+fn lane_frontier_node(tree: &[u8], level: usize, next_leaf_index: u64) -> Result<[M31; 8], ProgramError> {
+    use v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS;
+    let start = 48 + 32 * level;
+    let node = decode_digest_canonical(
+        tree[start..start + 32]
+            .try_into()
+            .map_err(|_| ProgramError::InvalidAccountData)?,
+    )
+    .map_err(|_| ProgramError::InvalidAccountData)?;
+    if (next_leaf_index >> (level as u32)) & 1 == 0 {
+        if node != V7_PAIR_EMPTY_ROOTS[level] {
+            Err(ProgramError::InvalidAccountData)
+        } else {
+            Ok(node)
+        }
+    } else {
+        Ok(node)
+    }
+}
+
+/// The frontier of the lane account image: its nodes, one per level, each as `lane_frontier_node` accepts it; an
+/// error if any level is not acceptable.
+#[inline(always)]
+fn lane_frontier(tree: &[u8], next_leaf_index: u64) -> Result<[[M31; 8]; POOL_V1_PAIR_TREE_DEPTH], ProgramError> {
+    let mut frontier = [[M31::ZERO; 8]; POOL_V1_PAIR_TREE_DEPTH];
+    let mut frontier_ok = true;
+    let mut level = 0;
+    while level < POOL_V1_PAIR_TREE_DEPTH {
+        match lane_frontier_node(tree, level, next_leaf_index) {
+            Ok(node) => frontier[level] = node,
+            Err(_) => frontier_ok = false,
+        }
+        level += 1;
+    }
+    if frontier_ok {
+        Ok(frontier)
+    } else {
+        Err(ProgramError::InvalidAccountData)
+    }
+}
+
 /// Exact source-release lane decoder copied from the ASQ8 audit path. It
 /// retains the pinned account format, frontier canonicality, and empty-root
 /// conditions for each unoccupied subtree.
@@ -491,19 +535,7 @@ fn decode_lane_from_pool_release(
             .map_err(|_| ProgramError::InvalidAccountData)?,
     )
     .map_err(|_| ProgramError::InvalidAccountData)?;
-    let mut frontier = [[M31::ZERO; 8]; POOL_V1_PAIR_TREE_DEPTH];
-    for (level, node) in frontier.iter_mut().enumerate() {
-        let start = 48 + 32 * level;
-        *node = decode_digest_canonical(
-            tree[start..start + 32]
-                .try_into()
-                .map_err(|_| ProgramError::InvalidAccountData)?,
-        )
-        .map_err(|_| ProgramError::InvalidAccountData)?;
-        if (next_leaf_index >> level) & 1 == 0 && *node != V7_PAIR_EMPTY_ROOTS[level] {
-            return Err(ProgramError::InvalidAccountData);
-        }
-    }
+    let frontier = lane_frontier(tree, next_leaf_index)?;
     if next_leaf_index == 0 && root != V7_PAIR_EMPTY_ROOTS[POOL_V1_PAIR_TREE_DEPTH] {
         return Err(ProgramError::InvalidAccountData);
     }

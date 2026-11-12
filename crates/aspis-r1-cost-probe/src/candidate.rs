@@ -58,19 +58,38 @@ fn canonical_scan(proof: &[u8]) -> Result<(), Error> {
     echeck(&proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT], false)?;
     echeck(&proof[compact::OFF_ROUND1..compact::OFF_OPENINGS], false)?;
     for i in 0..22 {
-        let q = opening(proof, i);
-        for s in 0..4 {
-            for l in 0..26 {
-                M31::from_le_bytes(q[s * 120 + l * 4..s * 120 + l * 4 + 4].try_into().unwrap()).ok_or(Error::Parse)?;
-            }
-            K::from_le_bytes(&q[s * 120 + 104..s * 120 + 120]).ok_or(Error::Parse)?;
-            for l in 0..2 {
-                K::from_le_bytes(&q[480 + s * 32 + l * 16..480 + s * 32 + l * 16 + 16]).ok_or(Error::Parse)?;
-            }
-        }
-        echeck(&q[672..800], false)?;
+        scan_opening(opening(proof, i))?;
     }
     Ok(())
+}
+/// The 26 base-field limbs of slot `s` of one opening.
+#[cfg(not(feature = "future-word-scan"))]
+#[inline(always)]
+fn scan_slot_base(q: &[u8], s: usize) -> Result<(), Error> {
+    for l in 0..26 {
+        M31::from_le_bytes(q[s * 120 + l * 4..s * 120 + l * 4 + 4].try_into().unwrap()).ok_or(Error::Parse)?;
+    }
+    Ok(())
+}
+/// Slot `s` of one opening: the 26 base-field limbs, the C1 tail value, the two C2 values.
+#[cfg(not(feature = "future-word-scan"))]
+#[inline(always)]
+fn scan_slot(q: &[u8], s: usize) -> Result<(), Error> {
+    scan_slot_base(q, s)?;
+    K::from_le_bytes(&q[s * 120 + 104..s * 120 + 120]).ok_or(Error::Parse)?;
+    K::from_le_bytes(&q[480 + s * 32..480 + s * 32 + 16]).ok_or(Error::Parse)?;
+    K::from_le_bytes(&q[480 + s * 32 + 16..480 + s * 32 + 32]).ok_or(Error::Parse)?;
+    Ok(())
+}
+/// One opening: its four slots in order, then the folded values.
+#[cfg(not(feature = "future-word-scan"))]
+#[inline(always)]
+fn scan_opening(q: &[u8]) -> Result<(), Error> {
+    scan_slot(q, 0)?;
+    scan_slot(q, 1)?;
+    scan_slot(q, 2)?;
+    scan_slot(q, 3)?;
+    echeck(&q[672..800], false)
 }
 /// Aspis new gate (replaces the pinned `canonical_scan` when `future-word-scan` is on); equality with the pinned function is owed.
 #[cfg(feature = "future-word-scan")]
@@ -136,6 +155,8 @@ fn canonical_scan_pinned(proof: &[u8]) -> Result<(), Error> {
     Ok(())
 }
 
+/// The empty query-bytes slice of the views built here (a named constant, not a literal in the returned struct).
+const NO_QUERY_BYTES: &[u8] = &[];
 /// View over the logical semantic/y1 buffers and the stored wide fields.
 fn wide_view<'a>(proof: &'a [u8], semantic: &'a [u8], y1: &'a [u8]) -> Result<View<'a>, Error> {
     Ok(View {
@@ -147,7 +168,7 @@ fn wide_view<'a>(proof: &'a [u8], semantic: &'a [u8], y1: &'a [u8]) -> Result<Vi
         folded_root: Some(proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap()),
         round1: &proof[compact::OFF_ROUND1..compact::OFF_FINAL],
         final_message: &proof[compact::OFF_FINAL..compact::OFF_OPENINGS],
-        query_bytes: &[],
+        query_bytes: NO_QUERY_BYTES,
     })
 }
 
@@ -484,6 +505,28 @@ pub fn tx2<H: Digest32>(public_bytes: &[u8], proof: &[u8], checkpoint: &[u8], ha
     canonical_scan(proof)?;
     mark(obs, Phase::Parsed);
     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+}
+
+#[cfg(all(test, not(feature = "future-word-scan")))]
+mod canonical_scan_tests {
+    use super::*;
+    /// The reshaped scan against the pinned nested-loop form (`canonical_scan_pinned`): on an all-zero buffer,
+    /// and with every 32-bit limb position from the first scanned byte to the end of the openings set to P.
+    #[test]
+    fn reshaped_scan_equals_the_pinned_scan() {
+        let mut proof = alloc::vec![0u8; compact::PROOF_BYTES];
+        assert_eq!(canonical_scan(&proof), Ok(()));
+        assert_eq!(canonical_scan(&proof), canonical_scan_pinned(&proof));
+        let p = 0x7fff_ffffu32.to_le_bytes();
+        let mut at = compact::OFF_Y1;
+        while at + 4 <= compact::OFF_NODES {
+            let saved: [u8; 4] = proof[at..at + 4].try_into().unwrap();
+            proof[at..at + 4].copy_from_slice(&p);
+            assert_eq!(canonical_scan(&proof), canonical_scan_pinned(&proof), "limb at {at}");
+            proof[at..at + 4].copy_from_slice(&saved);
+            at += 4;
+        }
+    }
 }
 
 // FUTURE-VERSION EXPERIMENT (branch `future-version`): single-invocation

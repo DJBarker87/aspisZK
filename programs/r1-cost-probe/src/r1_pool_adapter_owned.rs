@@ -70,6 +70,74 @@ fn require_distinct_accounts<const N: usize>(accounts: &[&OwnedAccount; N]) -> P
     }
     Ok(())
 }
+/// `require_distinct_accounts` for the seven accounts of the ASQ8 instruction, written out: the same 21 key
+/// comparisons in the same order, the same error at the first equal pair.
+fn require_distinct_seven(a: &[&OwnedAccount; 7]) -> ProgramResult {
+    if a[0].key() == a[1].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[0].key() == a[2].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[1].key() == a[2].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[0].key() == a[3].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[1].key() == a[3].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[2].key() == a[3].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[0].key() == a[4].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[1].key() == a[4].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[2].key() == a[4].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[3].key() == a[4].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[0].key() == a[5].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[1].key() == a[5].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[2].key() == a[5].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[3].key() == a[5].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[4].key() == a[5].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[0].key() == a[6].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[1].key() == a[6].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[2].key() == a[6].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[3].key() == a[6].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[4].key() == a[6].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    if a[5].key() == a[6].key() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    Ok(())
+}
 fn require_zero(mut remaining: &[u8]) -> ProgramResult {
     while !remaining.is_empty() {
         if remaining[0] != 0 { return Err(ProgramError::AccountAlreadyInitialized); }
@@ -234,21 +302,26 @@ fn authenticate_asq8_accounts(
     output_lane: u8,
     current_slot: u64,
 ) -> Result<AuthenticatedAsq8Accounts, ProgramError> {
-    let [proof_account, master_account, checkpoint_account, lane_account, registry_account, entry_account, verifier_checkpoint] =
-        accounts
-    else {
+    if accounts.len() != 7 {
         return Err(if accounts.len() < 7 {
             ProgramError::NotEnoughAccountKeys
         } else {
             ProgramError::InvalidArgument
         });
-    };
+    }
+    let proof_account = &accounts[0];
+    let master_account = &accounts[1];
+    let checkpoint_account = &accounts[2];
+    let lane_account = &accounts[3];
+    let registry_account = &accounts[4];
+    let entry_account = &accounts[5];
+    let verifier_checkpoint = &accounts[6];
     require_readonly_buffer(proof_account)?;
     require_verifier_checkpoint(verifier_checkpoint, verifier_program, false)?;
     require_readonly_account(master_account, pool_program)?;
     require_readonly_account(checkpoint_account, pool_program)?;
     require_readonly_account(lane_account, pool_program)?;
-    require_distinct_accounts(&[
+    require_distinct_seven(&[
         proof_account,
         master_account,
         checkpoint_account,
@@ -475,11 +548,19 @@ fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], cur
         if validated.proof_length != verifier::candidate::fused::summed_format::PROOF_BYTES {
             return Err(ProgramError::InvalidAccountData);
         }
+        #[cfg(feature = "cu-profiling")]
         verifier::candidate::fused::verify_summed_format(
             validated.statement.semantic_public(),
             &proof_data[proof_start..proof_end],
             super::super::SolanaDigest,
             super::super::observer(),
+        )
+        .map_err(super::super::error)?;
+        #[cfg(not(feature = "cu-profiling"))]
+        verifier::candidate::fused::verify_summed_format_unobserved(
+            validated.statement.semantic_public(),
+            &proof_data[proof_start..proof_end],
+            super::super::SolanaDigest,
         )
         .map_err(super::super::error)?;
         return emit_result(&validated.statement);

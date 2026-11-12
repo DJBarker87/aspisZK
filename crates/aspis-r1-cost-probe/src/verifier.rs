@@ -50,29 +50,45 @@ pub struct Prepared {
     pub variant:Variant,pub roots:[[u8;32];2],pub gamma:E,pub kappa:E,pub alpha:[E;2],pub rho:K,
     pub queries:[u32;22],pub semantic_alpha:[K;10],pub z:[SecureCirclePoint;2],pub claim:E,pub state:[u8;32],
 }
+#[cfg(not(feature="future-claim-rows"))]
+fn prepared_claim_sum(k:[E;7],parts:[E;7])->E {
+        let mut claim=E::ZERO;
+        for i in 0..7 {crate::trace::value(14,i,parts[i]);claim=claim.add(k[i].mul(parts[i]));}
+        crate::trace::value(14,7,claim);
+        claim
+}
+#[cfg(not(feature="future-claim-rows"))]
+fn prepared_claim_dot<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],g:&[E;29],point:usize)->Result<E,Error> {
+    let mut dot=crate::fast_pairing::EbyKDot::new();
+    for l in 0..29 {
+        let scalar=match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()};
+        dot.push(g[l],scalar).map_err(|_|Error::Parse)?;
+    }
+    Ok(dot.finish())
+}
+#[cfg(not(feature="future-claim-rows"))]
 fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error> {
         let k=powers::<7>(kappa);
         let mut parts=[E::ZERO;7];parts[0]=inactive;
-        if cfg!(feature="future-claim-rows") {
-            // FUTURE-VERSION EXPERIMENT G5: the same 174 products, with each
-            // point's 29 scalars copied to one row first.
-            for point in 0..6 {
-                let row:[K;29]=match point {0..=2=>sem.claims[point],3=>sem.extra,4=>sem.before_z1,_=>core::array::from_fn(|l|field(y1,l).c0())};
-                let mut dot=crate::fast_pairing::EbyKDot::new();
-                for (power,scalar) in g.iter().zip(row.iter()) {
-                    dot.push(*power,*scalar).map_err(|_|Error::Parse)?;
-                }
-                parts[point+1]=dot.finish();
-            }
-        } else {
         for point in 0..6 {
+            parts[point+1]=prepared_claim_dot(sem,y1,g,point)?;
+        }
+        Ok(prepared_claim_sum(k,parts))
+}
+/// Aspis new gate (replaces the pinned `prepared_claim` when `future-claim-rows` is on); equality with the pinned function is owed.
+#[cfg(feature="future-claim-rows")]
+fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error> {
+        let k=powers::<7>(kappa);
+        let mut parts=[E::ZERO;7];parts[0]=inactive;
+        // FUTURE-VERSION EXPERIMENT G5: the same 174 products, with each
+        // point's 29 scalars copied to one row first.
+        for point in 0..6 {
+            let row:[K;29]=match point {0..=2=>sem.claims[point],3=>sem.extra,4=>sem.before_z1,_=>core::array::from_fn(|l|field(y1,l).c0())};
             let mut dot=crate::fast_pairing::EbyKDot::new();
-            for l in 0..29 {
-                let scalar=match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()};
-                dot.push(g[l],scalar).map_err(|_|Error::Parse)?;
+            for (power,scalar) in g.iter().zip(row.iter()) {
+                dot.push(*power,*scalar).map_err(|_|Error::Parse)?;
             }
             parts[point+1]=dot.finish();
-        }
         }
         let mut claim=E::ZERO;
         for i in 0..7 {crate::trace::value(14,i,parts[i]);claim=claim.add(k[i].mul(parts[i]));}
@@ -80,6 +96,17 @@ fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inac
         Ok(claim)
 }
 
+/// The second folding challenge: with two folds, row 30 over the folded root followed by the second round
+/// message; with one fold, zero and no transcript row.
+#[inline(never)]
+fn second_alpha<H:Digest32>(t:&mut Transcript<H>,v:&View<'_>)->E {
+    if v.variant.folds()==2 {
+        let mut bytes=Vec::with_capacity(32+224);bytes.extend_from_slice(v.folded_root.unwrap());bytes.extend_from_slice(v.round1);
+        t.scalar(30,&bytes,false)
+    } else {
+        E::ZERO
+    }
+}
 impl Prepared {
     #[inline(never)]
     pub fn new<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,hash:H,g:&mut [E;29])->Result<Box<Self>,Error> {
@@ -87,12 +114,8 @@ impl Prepared {
         let gamma=t.scalar(27,v.y1,true);
         let kappa=t.scalar(28,&v.inactive.to_le_bytes(),false);
         let alpha0=t.scalar(29,v.round0,false);
-        let (alpha,row)=if v.variant.folds()==2 {
-            let mut bytes=Vec::with_capacity(32+224);bytes.extend_from_slice(v.folded_root.unwrap());bytes.extend_from_slice(v.round1);
-            ([alpha0,t.scalar(30,&bytes,false)],31)
-        } else {
-            ([alpha0,E::ZERO],30)
-        };
+        let alpha=[alpha0,second_alpha(&mut t,v)];
+        let row:u8=if v.variant.folds()==2 {31} else {30};
         let queries=t.queries(row,v.final_message)?;
         let rho=t.scalar_k(row+1,&[]);
         // Reuse this caller-owned scratch array in tx1; it is never serialized.
@@ -157,6 +180,34 @@ fn batch_prefix_products(flat:&[M31])->(Vec<M31>,M31) {
     (prefixes,product)
 }
 
+/// The backward pass of the batch inversion: entry `i` is the inverse of `flat[i]`, from the inverse of the product
+/// of all entries and the prefix products.
+#[inline(always)]
+fn batch_suffix_inverses(flat:&[M31],prefixes:&[M31],product:M31)->Vec<M31> {
+    let mut suffix_inverse=product.inv();
+    let mut flat_inverse=Vec::with_capacity(flat.len());
+    flat_inverse.resize(flat.len(),M31::ZERO);
+    let mut i=flat.len();
+    while i>0 {
+        i-=1;
+        flat_inverse[i]=suffix_inverse.mul(prefixes[i]);
+        suffix_inverse=suffix_inverse.mul(flat[i]);
+    }
+    flat_inverse
+}
+
+/// The five inverses of each query, in query order, taken from the flat vector.
+#[inline(always)]
+fn group_inverses(flat_inverse:&[M31],count:usize)->Vec<[M31;5]> {
+    let mut inverses=Vec::with_capacity(count);
+    let mut i=0;
+    while i<count {
+        inverses.push([flat_inverse[5*i],flat_inverse[5*i+1],flat_inverse[5*i+2],flat_inverse[5*i+3],flat_inverse[5*i+4]]);
+        i+=1;
+    }
+    inverses
+}
+
 impl QueryGeometry {
     fn for_range(queries:&[u32;22],start:usize,end:usize)->Result<Self,Error> {
         if start>end||end>queries.len(){return Err(Error::Query);}
@@ -170,7 +221,7 @@ impl QueryGeometry {
             let line_y=crate::fast_domain::line_node(domain::FibreIndex::new(u/4*4+3).map_err(|_|Error::Query)?);
             let line_z=line_x.mul(line_x).double().sub(M31::ONE);
             let values=[circle_x,circle_y,line_x,line_y,line_z];
-            if values.iter().any(|x|*x==M31::ZERO){return Err(Error::Query);}
+            if circle_x==M31::ZERO||circle_y==M31::ZERO||line_x==M31::ZERO||line_y==M31::ZERO||line_z==M31::ZERO {return Err(Error::Query);}
             flat.extend_from_slice(&values);
             line_z_values.push(line_z);
         }
@@ -178,6 +229,18 @@ impl QueryGeometry {
         // Standard prefix-product/backward batch inversion. The only `inv`
         // in this routine is applied to the product of all nonzero entries.
         let (prefixes,product)=batch_prefix_products(&flat);
+        let flat_inverse=batch_suffix_inverses(&flat,&prefixes,product);
+        let inverses=group_inverses(&flat_inverse,line_z_values.len());
+        Ok(Self{start,inverses,line_z:line_z_values})
+    }
+    #[inline(always)]
+    fn for_query(&self,index:usize)->&[M31;5] {&self.inverses[index-self.start]}
+}
+#[cfg(test)]
+mod for_range_tests {
+    use super::*;
+    /// The pinned backward pass of `for_range` (reversed range iterator), verbatim, as the oracle.
+    fn backward_pinned(flat:&[M31],prefixes:&[M31],product:M31)->Vec<M31> {
         let mut suffix_inverse=product.inv();
         let mut flat_inverse=Vec::with_capacity(flat.len());
         flat_inverse.resize(flat.len(),M31::ZERO);
@@ -185,11 +248,32 @@ impl QueryGeometry {
             flat_inverse[i]=suffix_inverse.mul(prefixes[i]);
             suffix_inverse=suffix_inverse.mul(flat[i]);
         }
-        let inverses=(0..line_z_values.len()).map(|i|core::array::from_fn(|j|flat_inverse[5*i+j])).collect();
-        Ok(Self{start,inverses,line_z:line_z_values})
+        flat_inverse
     }
-    #[inline(always)]
-    fn for_query(&self,index:usize)->&[M31;5] {&self.inverses[index-self.start]}
+    #[test]
+    fn for_range_inverses_equal_the_pinned_backward_pass() {
+        let mut state=0x9e37_79b9_7f4a_7c15u64;
+        for case in 0..200 {
+            let mut queries=[0u32;22];
+            for q in queries.iter_mut() {state^=state<<13;state^=state>>7;state^=state<<17;*q=(state%(1<<18)) as u32;}
+            for (start,end) in [(0usize,22usize),(0,10),(10,22),(5,5)] {
+                let g=match QueryGeometry::for_range(&queries,start,end) {Ok(g)=>g,Err(_)=>continue};
+                let mut flat=Vec::new();
+                for &query in &queries[start..end] {
+                    let u=query as usize;
+                    let domain::Point{x,y}=crate::fast_domain::fibre_point(domain::FibreIndex::new(u).unwrap());
+                    let lx=crate::fast_domain::line_node(domain::FibreIndex::new(u/4*4).unwrap());
+                    let ly=crate::fast_domain::line_node(domain::FibreIndex::new(u/4*4+3).unwrap());
+                    flat.extend_from_slice(&[x,y,lx,ly,lx.mul(lx).double().sub(M31::ONE)]);
+                }
+                if flat.is_empty() {assert!(g.inverses.is_empty());continue;}
+                let (prefixes,product)=batch_prefix_products(&flat);
+                let expect=backward_pinned(&flat,&prefixes,product);
+                assert_eq!(g.inverses.len(),end-start);
+                for i in 0..g.inverses.len() {for j in 0..5 {assert_eq!(g.inverses[i][j],expect[5*i+j],"case {case}");}}
+            }
+        }
+    }
 }
 #[inline(always)]
 fn circle_fold_with_inverses(alpha:E,a:[E;4],inverse:&[M31;5])->E {

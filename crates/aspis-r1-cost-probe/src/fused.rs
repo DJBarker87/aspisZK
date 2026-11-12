@@ -23,6 +23,43 @@ use crate::compact::QUERIES;
 use crate::fast_pairing::{EbyKDot, KbyKDot};
 use crate::transcript::Transcript;
 
+/// Profiling hook of the one-transaction functions. With `phase-observer` it carries the observer; without it
+/// (every deployed build) it is a zero-sized value, so no function-pointer type is on the on-chain path.
+#[cfg(feature = "phase-observer")]
+#[derive(Clone, Copy)]
+pub(crate) struct Hook(Observer);
+#[cfg(not(feature = "phase-observer"))]
+#[derive(Clone, Copy)]
+pub(crate) struct Hook;
+impl Hook {
+    #[cfg(feature = "phase-observer")]
+    pub(crate) const NONE: Hook = Hook(None);
+    #[cfg(not(feature = "phase-observer"))]
+    pub(crate) const NONE: Hook = Hook;
+    /// From an observer. Without `phase-observer` the observer is dropped.
+    #[cfg(feature = "phase-observer")]
+    #[inline(always)]
+    pub(crate) fn of(obs: Observer) -> Self {
+        Hook(obs)
+    }
+    #[cfg(not(feature = "phase-observer"))]
+    #[inline(always)]
+    pub(crate) fn of(obs: Observer) -> Self {
+        let _ = obs;
+        Hook
+    }
+    #[cfg(feature = "phase-observer")]
+    #[inline(always)]
+    fn note(self, phase: Phase) {
+        mark(self.0, phase)
+    }
+    #[cfg(not(feature = "phase-observer"))]
+    #[inline(always)]
+    fn note(self, phase: Phase) {
+        let _ = phase;
+    }
+}
+
 const P64: u64 = 0x7fff_ffff;
 
 /// Stage A. Pinned mathematics, one invocation, no checkpoint.
@@ -68,7 +105,7 @@ pub fn verify_batched<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, ob
     mark(obs, Phase::Merkle(SPLIT));
     let geometry = QueryGeometry::for_range(&p.queries, 0, QUERIES)?;
     let openings = &proof[compact::OFF_OPENINGS..compact::OFF_NODES];
-    let sums = fold_sums(openings, &p.queries, p.rho, &p.alpha, &g, &geometry, obs)?;
+    let sums = fold_sums(openings, &p.queries, p.rho, &p.alpha, &g, &geometry, Hook::of(obs))?;
     if sums.lhs1 != sums.rhs1 {
         return Err(Error::Query);
     }
@@ -134,12 +171,16 @@ fn coefficients(rho: K, geometry: &QueryGeometry) -> Result<Coefficients, Error>
         let r = power.mul_m31(QUARTER);
         circle[i] = [r, r.mul_m31(iy), r.mul_m31(ix), r.mul_m31(ix.mul(iy))];
         let rz = r.mul_m31(lz);
-        line[i] = if cfg!(feature = "future-fold-shared") {
+        #[cfg(feature = "future-fold-shared")]
+        {
             // G6 uses only the first and fourth entries.
-            [r, K::ZERO, K::ZERO, rz, K::ZERO, K::ZERO]
-        } else {
-            [r, r.mul_m31(lx), r.mul_m31(ly), rz, rz.mul_m31(lx), rz.mul_m31(ly).neg()]
-        };
+            let _ = (lx, ly);
+            line[i] = [r, K::ZERO, K::ZERO, rz, K::ZERO, K::ZERO];
+        }
+        #[cfg(not(feature = "future-fold-shared"))]
+        {
+            line[i] = [r, r.mul_m31(lx), r.mul_m31(ly), rz, rz.mul_m31(lx), rz.mul_m31(ly).neg()];
+        }
         powers[i] = power;
         power = power.mul(rho);
     }
@@ -305,12 +346,12 @@ fn cubic(alpha: E, h: [E; 4]) -> E {
 /// The batched fold quantities over all 22 openings (`openings` is the
 /// 22 x 832-byte opening section of the stored proof).
 #[inline(never)]
-fn fold_sums(openings: &[u8], queries: &[u32; 22], rho: K, alpha: &[E; 2], g: &[E; 29], geometry: &QueryGeometry, obs: Observer) -> Result<FoldSums, Error> {
+fn fold_sums(openings: &[u8], queries: &[u32; 22], rho: K, alpha: &[E; 2], g: &[E; 29], geometry: &QueryGeometry, hook: Hook) -> Result<FoldSums, Error> {
     if openings.len() != QUERIES * OPENING {
         return Err(Error::Parse);
     }
     let c = coefficients(rho, geometry)?;
-    mark(obs, Phase::QueryPart(0, 0));
+    hook.note(Phase::QueryPart(0, 0));
     let mut first = [EbyKDot::new(), EbyKDot::new(), EbyKDot::new(), EbyKDot::new()];
     #[cfg(feature = "future-tight-base")]
     {
@@ -325,19 +366,19 @@ fn fold_sums(openings: &[u8], queries: &[u32; 22], rho: K, alpha: &[E; 2], g: &[
         }
         first_fold_base(&mut first, g, &h)?;
     }
-    mark(obs, Phase::QueryPart(0, 1));
+    hook.note(Phase::QueryPart(0, 1));
     #[cfg(feature = "future-tight-ext")]
     let extension = extension_lanes_tight(openings, &c.circle)?;
     #[cfg(not(feature = "future-tight-ext"))]
     let extension = [extension_lane(openings, &c.circle, 0)?, extension_lane(openings, &c.circle, 1)?, extension_lane(openings, &c.circle, 2)?];
     first_fold_extension(&mut first, g, &extension)?;
     let lhs1 = cubic(alpha[0], finish_e4(&first));
-    mark(obs, Phase::QueryPart(0, 2));
+    hook.note(Phase::QueryPart(0, 2));
     let mut second = [EbyKDot::new(), EbyKDot::new(), EbyKDot::new(), EbyKDot::new()];
     let mut right = EbyKDot::new();
     second_fold(openings, queries, &c, geometry, &mut second, &mut right)?;
     let rhs2 = cubic(alpha[1], finish_e4(&second));
-    mark(obs, Phase::QueryPart(0, 3));
+    hook.note(Phase::QueryPart(0, 3));
     Ok(FoldSums { lhs1, rhs1: right.finish(), rhs2 })
 }
 
@@ -370,8 +411,10 @@ fn accumulate_weights(p: &Prepared, a: &mut Accumulator, geometry: &QueryGeometr
 
 #[inline(always)]
 fn k_of(limbs: [u64; 4]) -> K {
-    let [a, b, c, d] = limbs.map(M31::reduce_u64);
-    K { c0: aspis_core::field::CM31 { a, b }, c1: aspis_core::field::CM31 { a: c, b: d } }
+    K {
+        c0: aspis_core::field::CM31 { a: M31::reduce_u64(limbs[0]), b: M31::reduce_u64(limbs[1]) },
+        c1: aspis_core::field::CM31 { a: M31::reduce_u64(limbs[2]), b: M31::reduce_u64(limbs[3]) },
+    }
 }
 
 /// E5: all 26 base-field lanes in one pass, queries outermost. Same sums as
@@ -443,7 +486,10 @@ fn base_accumulate(acc: &mut [u64; 416], openings: &[u8], circle: &[[K; 4]]) -> 
 fn base_lanes_tight(openings: &[u8], circle: &[[K; 4]]) -> Result<Vec<[K; 4]>, Error> {
     let mut acc = aspis_core::r0::heap::filled(26 * 16, 0u64).map_err(|_| Error::Allocation)?;
     {
-        let acc: &mut [u64; 416] = (&mut acc[..]).try_into().map_err(|_| Error::Allocation)?;
+        let acc: &mut [u64; 416] = match (&mut acc[..]).try_into() {
+            Ok(array) => array,
+            Err(_) => return Err(Error::Allocation),
+        };
         base_accumulate(acc, openings, circle)?;
     }
     let mut out = aspis_core::r0::heap::filled(26, [K::ZERO; 4]).map_err(|_| Error::Allocation)?;
@@ -562,7 +608,7 @@ pub fn verify_summed<H: Digest32>(public: Public<'_>, proof: &[u8], certificate:
     mark(obs, Phase::Merkle(SPLIT));
     let geometry = QueryGeometry::for_range(&p.queries, 0, QUERIES)?;
     let openings = &proof[compact::OFF_OPENINGS..compact::OFF_NODES];
-    let sums = fold_sums(openings, &p.queries, p.rho, &p.alpha, &g, &geometry, obs)?;
+    let sums = fold_sums(openings, &p.queries, p.rho, &p.alpha, &g, &geometry, Hook::of(obs))?;
     if sums.lhs1 != sums.rhs1 {
         return Err(Error::Query);
     }
@@ -570,7 +616,7 @@ pub fn verify_summed<H: Digest32>(public: Public<'_>, proof: &[u8], certificate:
     let mut claim = finish_relation_round(v.round0, p.alpha[0], p.claim, 0)?;
     claim = finish_relation_round(v.round1, p.alpha[1], claim, 1)?;
     mark(obs, Phase::QueryPart(5, 0));
-    summed_final_checks(&p, v.final_message, claim, sums.rhs2, &geometry, certificate, hash, obs)?;
+    summed_final_checks(&p, v.final_message, claim, sums.rhs2, &geometry, certificate, hash, Hook::of(obs))?;
     mark(obs, Phase::Final);
     Ok(())
 }
@@ -578,24 +624,24 @@ pub fn verify_summed<H: Digest32>(public: Public<'_>, proof: &[u8], certificate:
 /// The two claims `sum_j f_j W_j = claim` and `sum_j f_j w_j = rhs2`, checked
 /// through the certificate.
 #[inline(never)]
-fn summed_final_checks<H: Digest32>(p: &Prepared, final_message: &[u8], claim: E, rhs2: E, geometry: &QueryGeometry, certificate: &[u8], hash: H, obs: Observer) -> Result<(), Error> {
+fn summed_final_checks<H: Digest32>(p: &Prepared, final_message: &[u8], claim: E, rhs2: E, geometry: &QueryGeometry, certificate: &[u8], hash: H, hook: Hook) -> Result<(), Error> {
     // The final sumcheck continues the opening transcript after rho; it does not start a new one.
     let mut t = Transcript::resume(hash, p.state);
     let lambda = t.scalar_k(ROW_CLAIMS, &claims_bytes(claim, rhs2));
     let (current, r) = final_rounds(&mut t, certificate, claim.add(rhs2.mul_qm31(lambda)))?;
-    mark(obs, Phase::QueryPart(5, 1));
+    hook.note(Phase::QueryPart(5, 1));
     let (eq, digits) = equality_tables(&r);
-    mark(obs, Phase::QueryPart(5, 2));
+    hook.note(Phase::QueryPart(5, 2));
     let f_at = final_message_at(final_message, &eq)?;
-    mark(obs, Phase::QueryPart(5, 3));
+    hook.note(Phase::QueryPart(5, 3));
     let weights = Weights::new(p.variant, &p.semantic_alpha, &p.z)?;
     let w_at = weights.mle_at(&p.alpha[..2], p.kappa, &eq, &digits)?;
-    mark(obs, Phase::QueryPart(5, 4));
+    hook.note(Phase::QueryPart(5, 4));
     #[cfg(feature = "future-d-pair-expansion")]
     let q_at = query_weight_mle_pairs(p, geometry, &r)?;
     #[cfg(not(feature = "future-d-pair-expansion"))]
     let q_at = query_weight_mle(p, geometry, &r)?;
-    mark(obs, Phase::QueryPart(5, 5));
+    hook.note(Phase::QueryPart(5, 5));
     let combined = w_at.add(E::from_qm31(q_at.mul(lambda)));
     if f_at.mul(combined) != current {
         return Err(Error::Relation);
@@ -729,7 +775,7 @@ fn stage_d_vectors<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H) -> Re
     let p = prepare(public, proof, hash, None, &mut g)?;
     let geometry = QueryGeometry::for_range(&p.queries, 0, QUERIES)?;
     let openings = &proof[compact::OFF_OPENINGS..compact::OFF_NODES];
-    let sums = fold_sums(openings, &p.queries, p.rho, &p.alpha, &g, &geometry, None)?;
+    let sums = fold_sums(openings, &p.queries, p.rho, &p.alpha, &g, &geometry, Hook::NONE)?;
     let v = relation_view(proof)?;
     let mut claim = finish_relation_round(v.round0, p.alpha[0], p.claim, 0)?;
     claim = finish_relation_round(v.round1, p.alpha[1], claim, 1)?;
@@ -884,25 +930,25 @@ fn merged_merkle<H: Digest32>(proof: &[u8], p: &Prepared, folded_root: &[u8; 32]
 /// stage D with the certificate carried in the proof, one multiproof per tree.
 /// UNPROVED (see `SOUNDNESS-ROWS.md`).
 #[inline(never)]
-pub fn verify_summed_format<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, obs: Observer) -> Result<(), Error> {
+fn verify_summed_format_hooked<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, hook: Hook) -> Result<(), Error> {
     parse_shape_summed(proof)?;
     canonical_scan(proof)?;
-    mark(obs, Phase::Parsed);
+    hook.note(Phase::Parsed);
     let mut g = [E::ZERO; 29];
-    let p = prepare(public, proof, hash, obs, &mut g)?;
-    mark(obs, Phase::Prepare);
+    let p = prepare_summed(public, proof, hash, hook, &mut g)?;
+    hook.note(Phase::Prepare);
     let geometry = QueryGeometry::for_range(&p.queries, 0, QUERIES)?;
     let openings = &proof[compact::OFF_OPENINGS..compact::OFF_NODES];
-    let sums = fold_sums(openings, &p.queries, p.rho, &p.alpha, &g, &geometry, obs)?;
+    let sums = fold_sums(openings, &p.queries, p.rho, &p.alpha, &g, &geometry, hook)?;
     if sums.lhs1 != sums.rhs1 {
         return Err(Error::Query);
     }
     let v = relation_view(proof)?;
     let mut claim = finish_relation_round(v.round0, p.alpha[0], p.claim, 0)?;
     claim = finish_relation_round(v.round1, p.alpha[1], claim, 1)?;
-    mark(obs, Phase::QueryPart(5, 0));
-    summed_final_checks(&p, v.final_message, claim, sums.rhs2, &geometry, &proof[summed_format::OFF_CERTIFICATE..], hash, obs)?;
-    mark(obs, Phase::Final);
+    hook.note(Phase::QueryPart(5, 0));
+    summed_final_checks(&p, v.final_message, claim, sums.rhs2, &geometry, &proof[summed_format::OFF_CERTIFICATE..], hash, hook)?;
+    hook.note(Phase::Final);
     // Merkle authentication LAST: every transcript row (0 to 39) is derived before any Merkle
     // digest is computed, which is the order the formal model has (all rows, then the terminal
     // decision). The same checks are made and all must pass, so acceptance is unchanged; only
@@ -910,8 +956,38 @@ pub fn verify_summed_format<H: Digest32>(public: Public<'_>, proof: &[u8], hash:
     // authenticated here.
     let folded_root: [u8; 32] = proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();
     merged_merkle(proof, &p, &folded_root, hash)?;
-    mark(obs, Phase::Merkle(0));
+    hook.note(Phase::Merkle(0));
     Ok(())
+}
+
+/// The entry with an observer, as before (tests, tools, profiling builds). Without `phase-observer` the
+/// observer is ignored.
+#[inline(always)]
+pub fn verify_summed_format<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, obs: Observer) -> Result<(), Error> {
+    verify_summed_format_hooked(public, proof, hash, Hook::of(obs))
+}
+
+/// The on-chain entry of the Aspis one-transaction verifier: no observer parameter.
+#[inline(always)]
+pub fn verify_summed_format_unobserved<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H) -> Result<(), Error> {
+    verify_summed_format_hooked(public, proof, hash, Hook::NONE)
+}
+
+/// `candidate::prepare` for the one-transaction path (new gate): the same steps in the same order, with the
+/// semantic layer entered through `verify_unobserved` unless a profiling build asks for the observer.
+#[inline(never)]
+fn prepare_summed<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, hook: Hook, g: &mut [E; 29]) -> Result<Box<Prepared>, Error> {
+    let mut logical = aspis_core::r0::heap::filled(compact::LOGICAL_SEMANTIC + compact::LOGICAL_Y1, 0u8).map_err(|_| Error::Allocation)?;
+    let (semantic, y1) = logical.split_at_mut(compact::LOGICAL_SEMANTIC);
+    compact::expand_semantic(&proof[compact::OFF_SEMANTIC..compact::OFF_Y1], semantic)?;
+    compact::expand_values(&proof[compact::OFF_Y1..compact::OFF_INACTIVE], y1)?;
+    let v = wide_view(proof, &logical[..compact::LOGICAL_SEMANTIC], &logical[compact::LOGICAL_SEMANTIC..])?;
+    #[cfg(feature = "phase-observer")]
+    let sem = crate::r1_semantic::verify_observed(public, v.semantic, hash, hook.0).map_err(|_| Error::Semantic)?;
+    #[cfg(not(feature = "phase-observer"))]
+    let sem = crate::r1_semantic::verify_unobserved(public, v.semantic, hash).map_err(|_| Error::Semantic)?;
+    hook.note(Phase::Semantic);
+    Prepared::new(&sem, &v, hash, g)
 }
 
 /// The supplied sibling positions of a binary multiproof over the strictly
@@ -1280,7 +1356,7 @@ mod tests {
             let alpha = [random_e(&mut state, 3 + case % 2), random_e(&mut state, 2 + case % 3)];
             let g = powers::<29>(random_e(&mut state, if case % 7 == 0 { 2 } else { 3 }));
             let (expected, _, _) = reference(&openings, &queries, rho, &alpha, &g, &geometry);
-            let actual = fold_sums(&openings, &queries, rho, &alpha, &g, &geometry, None).unwrap();
+            let actual = fold_sums(&openings, &queries, rho, &alpha, &g, &geometry, Hook::NONE).unwrap();
             assert_eq!(actual, expected, "case {case}");
         }
     }
@@ -1296,7 +1372,7 @@ mod tests {
         let g = [max_e; 29];
         for rho in [max_k, K::ONE, K::ZERO] {
             let (expected, _, _) = reference(&openings, &queries, rho, &[max_e, max_e], &g, &geometry);
-            assert_eq!(fold_sums(&openings, &queries, rho, &[max_e, max_e], &g, &geometry, None).unwrap(), expected);
+            assert_eq!(fold_sums(&openings, &queries, rho, &[max_e, max_e], &g, &geometry, Hook::NONE).unwrap(), expected);
         }
     }
 
@@ -1372,7 +1448,7 @@ mod tests {
         let (p, g) = prepared(proof, public);
         let geometry = QueryGeometry::for_range(&p.queries, 0, 22).unwrap();
         let openings = proof[compact::OFF_OPENINGS..compact::OFF_NODES].to_vec();
-        let honest = fold_sums(&openings, &p.queries, p.rho, &p.alpha, &g, &geometry, None).unwrap();
+        let honest = fold_sums(&openings, &p.queries, p.rho, &p.alpha, &g, &geometry, Hook::NONE).unwrap();
         assert_eq!(honest.lhs1, honest.rhs1);
         for query in [0usize, 9, 10, 21] {
             // One base lane, the C1 tail lane, one C2 lane, in each slot.
@@ -1380,7 +1456,7 @@ mod tests {
                 let mut bad = openings.clone();
                 let b = &mut bad[query * OPENING + at];
                 *b = if *b == 0 { 1 } else { *b - 1 }; // stays canonical
-                let sums = fold_sums(&bad, &p.queries, p.rho, &p.alpha, &g, &geometry, None).unwrap();
+                let sums = fold_sums(&bad, &p.queries, p.rho, &p.alpha, &g, &geometry, Hook::NONE).unwrap();
                 assert_ne!(sums.lhs1, sums.rhs1, "query {query} offset {at}");
                 assert_eq!(sums.rhs2, honest.rhs2);
             }
@@ -1408,14 +1484,14 @@ mod tests {
             let old = E::from_le_bytes(&openings[at..at + 32]).unwrap();
             openings[at..at + 32].copy_from_slice(&old.add(shift).to_le_bytes());
         }
-        let sums = fold_sums(&openings, &p.queries, p.rho, &p.alpha, &g, &geometry, None).unwrap();
+        let sums = fold_sums(&openings, &p.queries, p.rho, &p.alpha, &g, &geometry, Hook::NONE).unwrap();
         assert_eq!(sums.lhs1, sums.rhs1, "the crafted residuals cancel at rho");
         let (_, first, authenticated) = reference(&openings, &p.queries, p.rho, &p.alpha, &g, &geometry);
         assert_ne!(first[3], authenticated[3]);
         assert_ne!(first[4], authenticated[4]);
         // At any other challenge the same data is rejected.
         let other = p.rho.add(K::ONE);
-        let moved = fold_sums(&openings, &p.queries, other, &p.alpha, &g, &geometry, None).unwrap();
+        let moved = fold_sums(&openings, &p.queries, other, &p.alpha, &g, &geometry, Hook::NONE).unwrap();
         assert_ne!(moved.lhs1, moved.rhs1);
     }
 
@@ -1708,12 +1784,12 @@ mod tests {
                 let (p, claim, rhs2, _, _, _) = stage_d_vectors(statement.semantic_public(), proof, Sha).unwrap();
                 let geometry = QueryGeometry::for_range(&p.queries, 0, 22).unwrap();
                 let final_message = &proof[compact::OFF_FINAL..compact::OFF_OPENINGS];
-                summed_final_checks(&p, final_message, claim, rhs2, &geometry, &certificate, Sha, None).unwrap();
+                summed_final_checks(&p, final_message, claim, rhs2, &geometry, &certificate, Sha, Hook::NONE).unwrap();
                 for at in 0..CERTIFICATE_BYTES {
                     for bit in [1u8, 0x80] {
                         let mut bad = certificate.clone();
                         bad[at] ^= bit;
-                        assert!(summed_final_checks(&p, final_message, claim, rhs2, &geometry, &bad, Sha, None).is_err(), "byte {at} bit {bit}");
+                        assert!(summed_final_checks(&p, final_message, claim, rhs2, &geometry, &bad, Sha, Hook::NONE).is_err(), "byte {at} bit {bit}");
                     }
                 }
             }
@@ -1742,10 +1818,10 @@ mod tests {
         for (false_claim, false_rhs2) in [(claim.add(one), rhs2), (claim, rhs2.add(one)), (claim.add(one), rhs2.sub(one))] {
             // Rounds computed for the true vectors on the transcript of the false claims.
             let adaptive = stage_d_rounds(&p, false_claim, false_rhs2, f.clone(), &relation, &query, Sha);
-            assert!(summed_final_checks(&p, final_message, false_claim, false_rhs2, &geometry, &adaptive, Sha, None).is_err());
+            assert!(summed_final_checks(&p, final_message, false_claim, false_rhs2, &geometry, &adaptive, Sha, Hook::NONE).is_err());
             // Rounds computed for the true claims, presented against the false ones.
             let honest = stage_d_rounds(&p, claim, rhs2, f.clone(), &relation, &query, Sha);
-            assert!(summed_final_checks(&p, final_message, false_claim, false_rhs2, &geometry, &honest, Sha, None).is_err());
+            assert!(summed_final_checks(&p, final_message, false_claim, false_rhs2, &geometry, &honest, Sha, Hook::NONE).is_err());
         }
         // A false weight vector with a true-looking claim: the rounds are honest for
         // a perturbed relation vector whose sum the prover claims.
@@ -1753,10 +1829,10 @@ mod tests {
         wrong[17] = wrong[17].add(one);
         let wrong_claim = (0..64).fold(E::ZERO, |a, j| a.add(f[j].mul(wrong[j])));
         let rounds = stage_d_rounds(&p, wrong_claim, rhs2, f.clone(), &wrong, &query, Sha);
-        assert!(summed_final_checks(&p, final_message, wrong_claim, rhs2, &geometry, &rounds, Sha, None).is_err());
+        assert!(summed_final_checks(&p, final_message, wrong_claim, rhs2, &geometry, &rounds, Sha, Hook::NONE).is_err());
         // Control: the true claims with honest rounds are accepted.
         let honest = stage_d_rounds(&p, claim, rhs2, f, &relation, &query, Sha);
-        summed_final_checks(&p, final_message, claim, rhs2, &geometry, &honest, Sha, None).unwrap();
+        summed_final_checks(&p, final_message, claim, rhs2, &geometry, &honest, Sha, Hook::NONE).unwrap();
     }
 
     /// G3: the word-wise scan and the pinned scan agree on the fixtures and
