@@ -1,0 +1,267 @@
+--- a/programs/aspis-pool/src/pair_forest_dispatch.rs
++++ b/programs/aspis-pool/src/pair_forest_dispatch.rs
+@@ -90,11 +90,14 @@
+ fn proof_transport_verifier(
+     verifier_program: &AccountInfo<'_>,
+     proof: &AccountInfo<'_>,
+-    verifier_checkpoint: Option<&AccountInfo<'_>>,
++    verifier_checkpoint: &[AccountInfo<'_>],
+ ) -> Result<Pubkey, ProgramError> {
+     #[cfg(feature = "r1-split-checkpoint")]
+     {
+-        let checkpoint = verifier_checkpoint.ok_or(ProgramError::NotEnoughAccountKeys)?;
++        if verifier_checkpoint.is_empty() {
++            return Err(ProgramError::NotEnoughAccountKeys);
++        }
++        let checkpoint = &verifier_checkpoint[0];
+         if proof.key == verifier_program.key
+             || proof.executable
+             || proof.is_signer
+@@ -113,7 +116,7 @@
+     }
+     #[cfg(not(feature = "r1-split-checkpoint"))]
+     {
+-        if verifier_checkpoint.is_some() {
++        if !verifier_checkpoint.is_empty() {
+             return Err(ProgramError::InvalidArgument);
+         }
+         let claim = derive_pair_verifier_account_claim_v1(verifier_program, proof)?;
+@@ -122,17 +125,26 @@
+ }
+ 
+ fn require_checkpoint_distinct(
+-    verifier_checkpoint: Option<&AccountInfo<'_>>,
++    verifier_checkpoint: &[AccountInfo<'_>],
+     master: &AccountInfo<'_>,
+     forest_checkpoint: &AccountInfo<'_>,
+     lane: &AccountInfo<'_>,
+     registry_accounts: &[AccountInfo<'_>],
+ ) -> ProgramResult {
+-    if let Some(checkpoint) = verifier_checkpoint {
+-        if [master.key, forest_checkpoint.key, lane.key].contains(&checkpoint.key)
+-            || registry_accounts
+-                .iter()
+-                .any(|account| account.key == checkpoint.key)
++    // X2b rewrite (class g): value comparisons written out instead of `contains` and an `any` closure over the
++    // registry accounts (the translator rejects both in a function that holds AccountInfo values). The registry
++    // slice has exactly two accounts at its only caller; a longer slice is rejected with the same error (no caller
++    // can pass one).
++    if !verifier_checkpoint.is_empty() {
++        let checkpoint = *verifier_checkpoint[0].key;
++        if registry_accounts.len() > 2 {
++            return Err(ProgramError::InvalidArgument);
++        }
++        if *master.key == checkpoint
++            || *forest_checkpoint.key == checkpoint
++            || *lane.key == checkpoint
++            || (!registry_accounts.is_empty() && *registry_accounts[0].key == checkpoint)
++            || (registry_accounts.len() > 1 && *registry_accounts[1].key == checkpoint)
+         {
+             return Err(ProgramError::InvalidArgument);
+         }
+@@ -150,7 +162,7 @@
+     registry_accounts: &[AccountInfo<'_>],
+     verifier_program: &AccountInfo<'_>,
+     proof: &AccountInfo<'_>,
+-    verifier_checkpoint: Option<&AccountInfo<'_>>,
++    verifier_checkpoint: &[AccountInfo<'_>],
+     request: &PoolV1PairForestTerminalRequestV1,
+     current_slot: u64,
+ ) -> Result<PlannedPairForestDispatchV1, ProgramError> {
+@@ -183,7 +195,7 @@
+     registry_accounts: &[AccountInfo<'_>],
+     verifier_program: &AccountInfo<'_>,
+     proof: &AccountInfo<'_>,
+-    verifier_checkpoint: Option<&AccountInfo<'_>>,
++    verifier_checkpoint: &[AccountInfo<'_>],
+     request: &PoolV1PairForestTerminalRequestV1,
+     current_slot: u64,
+     request_bytes: Vec<u8>,
+@@ -286,7 +298,7 @@
+     lane: &AccountInfo<'info>,
+     registry_accounts: &[AccountInfo<'info>],
+     verifier_program: &AccountInfo<'info>,
+-    verifier_checkpoint: Option<&AccountInfo<'info>>,
++    verifier_checkpoint: &[AccountInfo<'info>],
+     runtime: &mut R,
+ ) -> Result<AuthenticatedPairForestResultV1, ProgramError> {
+     require_verifier_program(verifier_program, &plan.selected_verifier)?;
+@@ -297,7 +309,7 @@
+         if proof.owner != &plan.selected_verifier || proof.is_writable || proof.is_signer {
+             return Err(PoolV1ProgramError::InvalidVerifierProofAccount.into());
+         }
+-        if verifier_checkpoint.is_some() {
++        if !verifier_checkpoint.is_empty() {
+             return Err(ProgramError::InvalidArgument);
+         }
+     }
+@@ -308,16 +320,21 @@
+         lane,
+         registry_accounts,
+     )?;
++    // X2b rewrite (class g): a length check and indexing instead of the slice pattern over AccountInfo values
++    // (Inconsistent projection: PtrMetadata); same errors for the same lengths.
+     #[cfg(feature = "pair-forest-verifier-lane-invariant-audit")]
+-    let [registry, entry] = registry_accounts
+-    else {
++    if registry_accounts.len() != 2 {
+         return Err(if registry_accounts.len() < 2 {
+             ProgramError::NotEnoughAccountKeys
+         } else {
+             ProgramError::InvalidArgument
+         });
+-    };
++    }
+     #[cfg(feature = "pair-forest-verifier-lane-invariant-audit")]
++    let registry = &registry_accounts[0];
++    #[cfg(feature = "pair-forest-verifier-lane-invariant-audit")]
++    let entry = &registry_accounts[1];
++    #[cfg(feature = "pair-forest-verifier-lane-invariant-audit")]
+     let mut cpi_accounts = vec![
+         AccountMeta::new_readonly(*proof.key, false),
+         AccountMeta::new_readonly(*master.key, false),
+@@ -333,8 +350,8 @@
+         AccountMeta::new_readonly(*checkpoint.key, false),
+         AccountMeta::new_readonly(*lane.key, false),
+     ];
+-    if let Some(checkpoint) = verifier_checkpoint {
+-        cpi_accounts.push(AccountMeta::new_readonly(*checkpoint.key, false));
++    if !verifier_checkpoint.is_empty() {
++        cpi_accounts.push(AccountMeta::new_readonly(*verifier_checkpoint[0].key, false));
+     }
+     let instruction = Instruction {
+         program_id: plan.selected_verifier,
+@@ -359,14 +376,16 @@
+         lane.clone(),
+         verifier_program.clone(),
+     ];
+-    if let Some(checkpoint) = verifier_checkpoint {
+-        infos.insert(infos.len() - 1, checkpoint.clone());
++    if !verifier_checkpoint.is_empty() {
++        infos.insert(infos.len() - 1, verifier_checkpoint[0].clone());
+     }
+     runtime.clear_return_data();
+     runtime.invoke(&instruction, &infos)?;
+-    let (returned_program, returned_data) = runtime
+-        .get_return_data()
+-        .ok_or(PoolV1ProgramError::MissingVerifierReturnData)?;
++    let (returned_program, returned_data) = match runtime
++        .get_return_data() {
++        Some(value) => value,
++        None => return Err(PoolV1ProgramError::MissingVerifierReturnData.into()),
++    };
+     if returned_program != plan.selected_verifier {
+         return Err(PoolV1ProgramError::InvalidVerifierReturnProgram.into());
+     }
+@@ -391,7 +410,7 @@
+     registry_accounts: &[AccountInfo<'info>],
+     verifier_program: &AccountInfo<'info>,
+     proof: &AccountInfo<'info>,
+-    verifier_checkpoint: Option<&AccountInfo<'info>>,
++    verifier_checkpoint: &[AccountInfo<'info>],
+     request: &PoolV1PairForestTerminalRequestV1,
+     current_slot: u64,
+ ) -> Result<AuthenticatedPairForestResultV1, ProgramError> {
+@@ -436,7 +455,7 @@
+     registry_accounts: &[AccountInfo<'info>],
+     verifier_program: &AccountInfo<'info>,
+     proof: &AccountInfo<'info>,
+-    verifier_checkpoint: Option<&AccountInfo<'info>>,
++    verifier_checkpoint: &[AccountInfo<'info>],
+     request: &PoolV1PairForestTerminalRequestV1,
+     current_slot: u64,
+     statement_bytes: &[u8],
+@@ -563,23 +582,23 @@
+         #[cfg(not(feature = "r1-split-checkpoint"))]
+         {
+             assert_eq!(
+-                proof_transport_verifier(&verifier, &proof, None),
++                proof_transport_verifier(&verifier, &proof, &[]),
+                 Ok(verifier_key)
+             );
+-            assert!(proof_transport_verifier(&verifier, &foreign_proof, None).is_err());
+-            assert!(proof_transport_verifier(&verifier, &proof, Some(&checkpoint)).is_err());
++            assert!(proof_transport_verifier(&verifier, &foreign_proof, &[]).is_err());
++            assert!(proof_transport_verifier(&verifier, &proof, core::slice::from_ref(&checkpoint)).is_err());
+             proof.try_borrow_mut_data().unwrap()[8] = 1;
+-            assert!(proof_transport_verifier(&verifier, &proof, None).is_err());
++            assert!(proof_transport_verifier(&verifier, &proof, &[]).is_err());
+         }
+         #[cfg(feature = "r1-split-checkpoint")]
+         {
+             // No lifecycle magic, authority, or owner is a proof-buffer premise.
+             foreign_proof.try_borrow_mut_data().unwrap().fill(0x55);
+             assert_eq!(
+-                proof_transport_verifier(&verifier, &foreign_proof, Some(&checkpoint)),
++                proof_transport_verifier(&verifier, &foreign_proof, core::slice::from_ref(&checkpoint)),
+                 Ok(verifier_key)
+             );
+-            assert!(proof_transport_verifier(&verifier, &foreign_proof, None).is_err());
++            assert!(proof_transport_verifier(&verifier, &foreign_proof, &[]).is_err());
+             for kind in 0..6 {
+                 let mut invalid = checkpoint.clone();
+                 match kind {
+@@ -591,7 +610,7 @@
+                     _ => invalid.key = &verifier_key,
+                 }
+                 assert!(
+-                    proof_transport_verifier(&verifier, &foreign_proof, Some(&invalid)).is_err()
++                    proof_transport_verifier(&verifier, &foreign_proof, core::slice::from_ref(&invalid)).is_err()
+                 );
+             }
+             for kind in 0..4 {
+@@ -602,7 +621,7 @@
+                     2 => invalid.executable = true,
+                     _ => invalid.key = &verifier_key,
+                 }
+-                assert!(proof_transport_verifier(&verifier, &invalid, Some(&checkpoint)).is_err());
++                assert!(proof_transport_verifier(&verifier, &invalid, core::slice::from_ref(&checkpoint)).is_err());
+             }
+         }
+     }
+@@ -852,8 +871,11 @@
+             false,
+             false,
+         );
+-        let split_checkpoint =
+-            cfg!(feature = "r1-split-checkpoint").then_some(&verifier_checkpoint);
++        let split_checkpoint: &[AccountInfo<'_>] = if cfg!(feature = "r1-split-checkpoint") {
++            core::slice::from_ref(&verifier_checkpoint)
++        } else {
++            &[]
++        };
+         let plan = PlannedPairForestDispatchV1 {
+             selected_verifier: selected,
+             request_bytes: vec![0u8; POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES],
+@@ -1048,8 +1070,11 @@
+             false,
+             false,
+         );
+-        let split_checkpoint =
+-            cfg!(feature = "r1-split-checkpoint").then_some(&verifier_checkpoint);
++        let split_checkpoint: &[AccountInfo<'_>] = if cfg!(feature = "r1-split-checkpoint") {
++            core::slice::from_ref(&verifier_checkpoint)
++        } else {
++            &[]
++        };
+         let request = PoolV1PairForestTerminalRequestV1 {
+             verifier_profile: profile,
+             verifier_release: release,
+@@ -1104,7 +1129,7 @@
+                 &[registry.clone(), entry.clone()],
+                 &verifier,
+                 &proof,
+-                Some(&invalid),
++                core::slice::from_ref(&invalid),
+                 &request,
+                 1,
+             )
+@@ -1121,7 +1146,7 @@
+                 &lane,
+                 &[registry.clone(), entry.clone()],
+                 &verifier,
+-                Some(&invalid),
++                core::slice::from_ref(&invalid),
+                 &mut untouched_runtime,
+             )
+             .is_err());

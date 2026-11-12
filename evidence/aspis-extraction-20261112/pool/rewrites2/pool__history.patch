@@ -1,0 +1,71 @@
+--- a/programs/aspis-pool/src/history.rs
++++ b/programs/aspis-pool/src/history.rs
+@@ -159,9 +159,11 @@
+             .unwrap(),
+     );
+     let filled = u16::from_le_bytes(data[PAGE_FILLED_OFFSET..58].try_into().unwrap());
+-    let expected_first = page_number
+-        .checked_mul(POOL_V1_ROOT_HISTORY_CAPACITY as u64)
+-        .ok_or(PoolV1ProgramError::ArithmeticOverflow)?;
++    let expected_first = match page_number
++        .checked_mul(POOL_V1_ROOT_HISTORY_CAPACITY as u64) {
++        Some(value) => value,
++        None => return Err(PoolV1ProgramError::ArithmeticOverflow.into()),
++    };
+     if pool != *expected_pool
+         || page_number != expected_page_number
+         || first_sequence != expected_first
+@@ -169,11 +171,20 @@
+     {
+         return Err(PoolV1ProgramError::StateHistoryMismatch.into());
+     }
+-    for slot in 0..usize::from(filled) {
++    // X2 rewrite (class b): no early return inside the loop; the loop stops at the first
++    // non-canonical root and the same error is returned at the same point.
++    let mut slot = 0;
++    let mut roots_canonical = true;
++    while slot < usize::from(filled) && roots_canonical {
+         let start = PAGE_ROOTS_OFFSET + slot * 32;
+-        decode_digest_canonical(data[start..start + 32].try_into().unwrap())
+-            .map_err(|_| ProgramError::InvalidAccountData)?;
++        if decode_digest_canonical(data[start..start + 32].try_into().unwrap()).is_err() {
++            roots_canonical = false;
++        }
++        slot += 1;
+     }
++    if !roots_canonical {
++        return Err(ProgramError::InvalidAccountData);
++    }
+     let unused_start = PAGE_ROOTS_OFFSET + usize::from(filled) * 32;
+     if !page_bytes_are_zero(&data[unused_start..]) {
+         return Err(ProgramError::InvalidAccountData);
+@@ -224,9 +235,11 @@
+             .unwrap(),
+     );
+     let filled = u16::from_le_bytes(data[PAGE_FILLED_OFFSET..58].try_into().unwrap());
+-    let expected_first = page_number
+-        .checked_mul(POOL_V1_ROOT_HISTORY_CAPACITY as u64)
+-        .ok_or(PoolV1ProgramError::ArithmeticOverflow)?;
++    let expected_first = match page_number
++        .checked_mul(POOL_V1_ROOT_HISTORY_CAPACITY as u64) {
++        Some(value) => value,
++        None => return Err(PoolV1ProgramError::ArithmeticOverflow.into()),
++    };
+     if pool != *expected_pool
+         || page_number != expected_page_number
+         || first_sequence != expected_first
+@@ -416,9 +429,11 @@
+                 .unwrap(),
+         );
+         let filled = u16::from_le_bytes(data[PAGE_FILLED_OFFSET..58].try_into().unwrap());
+-        let expected_first = page_number
+-            .checked_mul(POOL_V1_ROOT_HISTORY_CAPACITY as u64)
+-            .ok_or(PoolV1ProgramError::ArithmeticOverflow)?;
++        let expected_first = match page_number
++            .checked_mul(POOL_V1_ROOT_HISTORY_CAPACITY as u64) {
++            Some(value) => value,
++            None => return Err(PoolV1ProgramError::ArithmeticOverflow.into()),
++        };
+         if pool != *expected_pool
+             || page_number != expected_page_number
+             || first_sequence != expected_first

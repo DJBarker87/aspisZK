@@ -1,0 +1,1222 @@
+--- a/programs/aspis-pool/src/pair_forest.rs
++++ b/programs/aspis-pool/src/pair_forest.rs
+@@ -139,10 +139,12 @@
+ pub fn split_pair_forest_terminal_bump_hints_v1(
+     instruction_data: &[u8],
+ ) -> Result<(&[u8], PoolV1PairForestTerminalBumpHintsV1), ProgramError> {
+-    let split = instruction_data
++    let split = match instruction_data
+         .len()
+-        .checked_sub(POOL_V1_PAIR_FOREST_TERMINAL_BUMP_HINT_BYTES)
+-        .ok_or(ProgramError::InvalidInstructionData)?;
++        .checked_sub(POOL_V1_PAIR_FOREST_TERMINAL_BUMP_HINT_BYTES) {
++        Some(value) => value,
++        None => return Err(ProgramError::InvalidInstructionData.into()),
++    };
+     let (body, hints) = instruction_data.split_at(split);
+     Ok((
+         body,
+@@ -385,7 +387,7 @@
+ ) -> ProgramResult {
+     if mint.key.to_bytes() != initialization.asset_mint
+         || initialization.token_program != LEGACY_SPL_TOKEN_PROGRAM_ID.to_bytes()
+-        || mint.owner != &LEGACY_SPL_TOKEN_PROGRAM_ID
++        || *mint.owner != LEGACY_SPL_TOKEN_PROGRAM_ID
+         || mint.executable
+         || mint.is_signer
+         || mint.is_writable
+@@ -393,7 +395,13 @@
+     {
+         return Err(PoolV1ProgramError::InvalidMint.into());
+     }
+-    parse_legacy_mint_v1(&mint.try_borrow_data()?)?;
++    {
++        let data = match mint.try_borrow_data() {
++            Ok(data) => data,
++            Err(err) => return Err(err),
++        };
++        parse_legacy_mint_v1(&data)?;
++    }
+     Ok(())
+ }
+ 
+@@ -404,7 +412,10 @@
+     rent: &Rent,
+ ) -> ProgramResult {
+     require_program_account(account, program_id, true)?;
+-    let data = account.try_borrow_data()?;
++    let data = match account.try_borrow_data() {
++        Ok(data) => data,
++        Err(err) => return Err(err),
++    };
+     if data.len() != exact_bytes
+         || !crate::history::page_bytes_are_zero(&data)
+         || !rent.is_exempt(account.lamports(), exact_bytes)
+@@ -436,8 +447,14 @@
+     if account.is_signer {
+         return Err(ProgramError::InvalidAccountData);
+     }
+-    let master = decode_pool_v1_pair_forest_master_v1(&account.try_borrow_data()?)
+-        .map_err(|_| PoolV1ProgramError::InvalidAccountType)?;
++    let master = {
++        let data = match account.try_borrow_data() {
++            Ok(data) => data,
++            Err(err) => return Err(err),
++        };
++        decode_pool_v1_pair_forest_master_v1(&data)
++    }
++    .map_err(|_| PoolV1ProgramError::InvalidAccountType)?;
+     // Stored canonical bump (G_R1.8): initialization persists the canonical
+     // `find_program_address` bump and the Pool signs only with canonical bumps,
+     // so one derivation authenticates this Pool-owned image without a search.
+@@ -493,8 +510,15 @@
+ /// full decode so that the address check keeps its place ahead of the image
+ /// checks.
+ fn stored_lane_bump(account: &AccountInfo<'_>) -> Result<Option<u8>, ProgramError> {
+-    let data = account.try_borrow_data()?;
+-    Ok((data.len() == POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES).then(|| data[72]))
++    let data = match account.try_borrow_data() {
++        Ok(data) => data,
++        Err(err) => return Err(err),
++    };
++    if data.len() == POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES {
++        Ok(Some(data[72]))
++    } else {
++        Ok(None)
++    }
+ }
+ 
+ fn decode_lane_account(
+@@ -519,13 +543,16 @@
+     } else {
+         pool_v1_pair_forest_lane_address(program_id, master, expected_lane)?
+     };
+-    if account.is_signer || account.key != &expected {
++    if account.is_signer || *account.key != expected {
+         return Err(PoolV1ProgramError::InvalidPoolStateAddress.into());
+     }
+-    let lane = decode_pool_v1_pair_forest_lane_state_v1(
+-        &account.try_borrow_data()?,
+-        &POOL_V1_PAIR_EMPTY_ROOTS,
+-    )
++    let lane = {
++        let data = match account.try_borrow_data() {
++            Ok(data) => data,
++            Err(err) => return Err(err),
++        };
++        decode_pool_v1_pair_forest_lane_state_v1(&data, &POOL_V1_PAIR_EMPTY_ROOTS)
++    }
+     .map_err(|_| PoolV1ProgramError::InvalidAccountType)?;
+     if lane.master != master.to_bytes() || lane.lane_id != expected_lane || lane.bump != bump {
+         return Err(PoolV1ProgramError::StateHistoryMismatch.into());
+@@ -565,7 +592,10 @@
+     if account.is_signer || account.key != &expected {
+         return Err(PoolV1ProgramError::InvalidPoolStateAddress.into());
+     }
+-    let data = account.try_borrow_data()?;
++    let data = match account.try_borrow_data() {
++        Ok(data) => data,
++        Err(err) => return Err(err),
++    };
+     if data.len() != POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES
+         || data[..4] != POOL_V1_PAIR_FOREST_LANE_MAGIC
+         || data[4] != POOL_V1_PAIR_FOREST_LANE_VERSION
+@@ -644,12 +674,19 @@
+     {
+         return Err(PoolV1ProgramError::StateHistoryMismatch.into());
+     }
+-    for (level, node) in lane.tree.frontier.iter().enumerate() {
+-        if (lane.tree.next_leaf_index >> level) & 1 == 0 && *node != POOL_V1_PAIR_EMPTY_ROOTS[level]
+-        {
+-            return Err(PoolV1ProgramError::StateHistoryMismatch.into());
+-        }
++    // X2b rewrite (class g/9): the translator rejects the early return inside the loop ("could not match the
++    // contexts"), and the native library takes a u32 shift amount. A while loop with a flag stops at the same first
++    // failing level and the same error is returned after it.
++    let mut frontier_canonical = true;
++    let mut level = 0;
++    while frontier_canonical && level < POOL_V1_PAIR_TREE_DEPTH {
++        frontier_canonical = (lane.tree.next_leaf_index >> (level as u32)) & 1 != 0
++            || lane.tree.frontier[level] == POOL_V1_PAIR_EMPTY_ROOTS[level];
++        level += 1;
+     }
++    if !frontier_canonical {
++        return Err(PoolV1ProgramError::StateHistoryMismatch.into());
++    }
+     if lane.tree.next_leaf_index == 0
+         && lane.tree.root != POOL_V1_PAIR_EMPTY_ROOTS[POOL_V1_PAIR_TREE_DEPTH]
+     {
+@@ -684,22 +721,59 @@
+     lanes: &[AccountInfo<'_>],
+     checkpoint: &AccountInfo<'_>,
+ ) -> Result<(), ProgramError> {
+-    if master.key == checkpoint.key {
++    // X2b rewrite (class g): the translator rejects the loop and the `any` closure in a function that holds
++    // AccountInfo values. The lane keys are copied, written out, through `account_key_or_zero` into a plain array and the same
++    // comparisons run in the same order in a helper over plain keys. A lane slice longer than the lane count is
++    // rejected with the same error; the only caller passes exactly POOL_V1_PAIR_FOREST_LANE_COUNT lanes.
++    let count = lanes.len();
++    if count > POOL_V1_PAIR_FOREST_LANE_COUNT {
+         return Err(ProgramError::InvalidArgument);
+     }
+-    for (index, lane) in lanes.iter().enumerate() {
+-        if lane.key == master.key
+-            || lane.key == checkpoint.key
+-            || lanes[..index]
+-                .iter()
+-                .any(|previous| previous.key == lane.key)
+-        {
+-            return Err(ProgramError::InvalidArgument);
+-        }
++    let keys: [Pubkey; POOL_V1_PAIR_FOREST_LANE_COUNT] = [
++        crate::processor::account_key_or_zero(lanes, 0),
++        crate::processor::account_key_or_zero(lanes, 1),
++        crate::processor::account_key_or_zero(lanes, 2),
++        crate::processor::account_key_or_zero(lanes, 3),
++        crate::processor::account_key_or_zero(lanes, 4),
++        crate::processor::account_key_or_zero(lanes, 5),
++        crate::processor::account_key_or_zero(lanes, 6),
++        crate::processor::account_key_or_zero(lanes, 7),
++    ];
++    if lane_keys_alias(master.key, &keys, count, checkpoint.key) {
++        return Err(ProgramError::InvalidArgument);
+     }
+     Ok(())
+ }
+ 
++/// The checks of `require_alias_free` over plain keys, in its order: master against checkpoint, then for each lane
++/// (ascending) the lane against master, against checkpoint, and against every previous lane (ascending). One loop
++/// over (lane, previous) pairs; a nested loop is rejected by the translator.
++fn lane_keys_alias(
++    master: &Pubkey,
++    lanes: &[Pubkey; POOL_V1_PAIR_FOREST_LANE_COUNT],
++    count: usize,
++    checkpoint: &Pubkey,
++) -> bool {
++    let mut alias = *master == *checkpoint;
++    let mut index = 0;
++    let mut previous = 0;
++    let mut own_checked = false;
++    while !alias && index < count {
++        if !own_checked {
++            alias = lanes[index] == *master || lanes[index] == *checkpoint;
++            own_checked = true;
++        } else if previous < index {
++            alias = lanes[previous] == lanes[index];
++            previous += 1;
++        } else {
++            index += 1;
++            previous = 0;
++            own_checked = false;
++        }
++    }
++    alias
++}
++
+ #[inline(never)]
+ fn decode_checkpoint_master_box_v1(
+     program_id: &Pubkey,
+@@ -723,16 +797,43 @@
+     master: &Pubkey,
+     lane_accounts: &[AccountInfo<'_>],
+ ) -> Result<Box<[PoolV1PairForestLaneStateV1; POOL_V1_PAIR_FOREST_LANE_COUNT]>, ProgramError> {
++    // X2b rewrite (class g): the translator rejects the loop in a function that holds AccountInfo values (nested
++    // borrows). The eight decodes are written out in the same order with the same arguments; the states still go
++    // through the heap Vec (an [_; 8] on the stack would exceed the SBF frame).
++    const _: () = assert!(POOL_V1_PAIR_FOREST_LANE_COUNT == 8);
+     let mut lane_states = Vec::with_capacity(POOL_V1_PAIR_FOREST_LANE_COUNT);
+-    for lane in 0..POOL_V1_PAIR_FOREST_LANE_COUNT {
+-        lane_states.push(decode_lane_account(
+-            program_id,
+-            master,
+-            lane as u8,
+-            &lane_accounts[lane],
+-            false,
+-        )?);
++    match decode_lane_account(program_id, master, 0, &lane_accounts[0], false) {
++        Ok(state) => lane_states.push(state),
++        Err(err) => return Err(err),
++    }
++    match decode_lane_account(program_id, master, 1, &lane_accounts[1], false) {
++        Ok(state) => lane_states.push(state),
++        Err(err) => return Err(err),
++    }
++    match decode_lane_account(program_id, master, 2, &lane_accounts[2], false) {
++        Ok(state) => lane_states.push(state),
++        Err(err) => return Err(err),
++    }
++    match decode_lane_account(program_id, master, 3, &lane_accounts[3], false) {
++        Ok(state) => lane_states.push(state),
++        Err(err) => return Err(err),
++    }
++    match decode_lane_account(program_id, master, 4, &lane_accounts[4], false) {
++        Ok(state) => lane_states.push(state),
++        Err(err) => return Err(err),
++    }
++    match decode_lane_account(program_id, master, 5, &lane_accounts[5], false) {
++        Ok(state) => lane_states.push(state),
++        Err(err) => return Err(err),
+     }
++    match decode_lane_account(program_id, master, 6, &lane_accounts[6], false) {
++        Ok(state) => lane_states.push(state),
++        Err(err) => return Err(err),
++    }
++    match decode_lane_account(program_id, master, 7, &lane_accounts[7], false) {
++        Ok(state) => lane_states.push(state),
++        Err(err) => return Err(err),
++    }
+     lane_states
+         .into_boxed_slice()
+         .try_into()
+@@ -811,7 +912,11 @@
+     {
+         return Ok(false);
+     }
+-    Ok(crate::history::page_bytes_are_zero(&account.try_borrow_data()?))
++    let data = match account.try_borrow_data() {
++        Ok(data) => data,
++        Err(err) => return Err(err),
++    };
++    Ok(crate::history::page_bytes_are_zero(&data))
+ }
+ 
+ fn validate_lane_current_page(
+@@ -842,7 +947,10 @@
+             page,
+         )?,
+     }
+-    let data = page.try_borrow_data()?;
++    let data = match page.try_borrow_data() {
++        Ok(data) => data,
++        Err(err) => return Err(err),
++    };
+     #[cfg(not(feature = "pair-forest-history-page-invariant-audit"))]
+     let header = validate_root_page_bytes(&data, lane_account.key, location.page_number)?;
+     #[cfg(feature = "pair-forest-history-page-invariant-audit")]
+@@ -884,9 +992,11 @@
+         frontier[carry_level] = POOL_V1_PAIR_EMPTY_ROOTS[carry_level];
+         carry_level += 1;
+     }
+-    let next_leaf_index = leaf_index
+-        .checked_add(1)
+-        .ok_or(PoolV1ProgramError::ArithmeticOverflow)?;
++    let next_leaf_index = match leaf_index
++        .checked_add(1) {
++        Some(value) => value,
++        None => return Err(PoolV1ProgramError::ArithmeticOverflow.into()),
++    };
+     let root = if carry_level == POOL_V1_PAIR_TREE_DEPTH {
+         carry
+     } else {
+@@ -994,15 +1104,18 @@
+ ) -> ProgramResult {
+     let request = decode_pair_forest_deposit_instruction_v1(instruction_data)
+         .map_err(|_| ProgramError::InvalidInstructionData)?;
+-    let master_account = accounts
+-        .get(FOREST_DEPOSIT_MASTER_ACCOUNT_INDEX)
+-        .ok_or(ProgramError::NotEnoughAccountKeys)?;
+-    let lane_account = accounts
+-        .get(FOREST_DEPOSIT_LANE_ACCOUNT_INDEX)
+-        .ok_or(ProgramError::NotEnoughAccountKeys)?;
+-    let current_page = accounts
+-        .get(FOREST_DEPOSIT_CURRENT_PAGE_ACCOUNT_INDEX)
+-        .ok_or(ProgramError::NotEnoughAccountKeys)?;
++    if accounts.len() <= FOREST_DEPOSIT_MASTER_ACCOUNT_INDEX {
++        return Err(ProgramError::NotEnoughAccountKeys.into());
++    }
++    let master_account = &accounts[FOREST_DEPOSIT_MASTER_ACCOUNT_INDEX];
++    if accounts.len() <= FOREST_DEPOSIT_LANE_ACCOUNT_INDEX {
++        return Err(ProgramError::NotEnoughAccountKeys.into());
++    }
++    let lane_account = &accounts[FOREST_DEPOSIT_LANE_ACCOUNT_INDEX];
++    if accounts.len() <= FOREST_DEPOSIT_CURRENT_PAGE_ACCOUNT_INDEX {
++        return Err(ProgramError::NotEnoughAccountKeys.into());
++    }
++    let current_page = &accounts[FOREST_DEPOSIT_CURRENT_PAGE_ACCOUNT_INDEX];
+     let master = decode_terminal_master_box_v1(program_id, master_account)?;
+     let commitment = pool_v1_note_commitment(
+         &request.owner_key,
+@@ -1012,7 +1125,7 @@
+     );
+     let lane_id = pool_v1_pair_forest_deposit_lane_v1(&commitment)
+         .map_err(|_| PoolV1ProgramError::NonCanonicalLeaf)?;
+-    if master.initialized_lane_mask & (1u8 << lane_id) == 0 {
++    if master.initialized_lane_mask & (1u8 << u32::from(lane_id)) == 0 {
+         return Err(PoolV1ProgramError::StateHistoryMismatch.into());
+     }
+     let lane = decode_deposit_lane_box_v1(program_id, master_account.key, lane_id, lane_account)?;
+@@ -1024,13 +1137,89 @@
+         .map_err(|_| PoolV1ProgramError::NonCanonicalLeaf)?;
+     let (append, next_lane_image) = prepare_deposit_append_v1(&lane, lane_id, pair_leaf)?;
+ 
+-    let current_location = root_history_location(lane.tree.next_leaf_index);
+-    let next_location = root_history_location(append.root_sequence);
++    // X2b rewrite (class f): the page-mode selection is a named helper (same checks, same order, same errors), so
++    // that the code after the three-way branch is not reconstructed once per branch.
++    let (mode, token_start, expected_accounts) =
++        select_deposit_page_mode_v1(program_id, accounts, lane_account, current_page, &lane, append.root_sequence)?;
++
++    require_exact_account_count(accounts, expected_accounts)?;
++    require_unique_accounts(accounts)?;
++    let token_accounts = &accounts[token_start..token_start + 5];
++    require_token_program_account(&token_accounts[4])?;
++    let transfer_plan = plan_legacy_deposit_transfer_from_identity_v1(
++        program_id,
++        master_account.key,
++        &master.identity,
++        token_accounts,
++        request.amount,
++    )?;
++    let transfer_infos = match exact_transfer_account_infos_v1(token_accounts) {
++        Ok(infos) => infos,
++        Err(err) => return Err(err),
++    };
++
++    // X2b rewrite (class f): the writable-page preparation (payer checks, PDA creation CPI, zeroed check) is a named
++    // helper returning the index of the writable page (current page, or the next page on rollover).
++    let writable_page_index =
++        prepare_deposit_writable_page_v1(program_id, accounts, lane_account, current_page, mode, rent, runtime)?;
++    let writable_page = &accounts[writable_page_index];
++
++    // Acquire every Pool-owned mutable borrow before the token CPI. A failed
++    // CPI or post-CPI balance check therefore leaves writes to Solana's outer
++    // transaction rollback boundary, with no partial Pool persistence.
++    let mut lane_data = match lane_account.try_borrow_mut_data() {
++        Ok(data) => data,
++        Err(err) => return Err(err),
++    };
++    let mut page_data = match writable_page.try_borrow_mut_data() {
++        Ok(data) => data,
++        Err(err) => return Err(err),
++    };
++    runtime.invoke(&transfer_plan.instruction, &transfer_infos)?;
++    validate_exact_deposit_delta_v1(token_accounts, &transfer_plan)?;
++
++    lane_data.copy_from_slice(next_lane_image.as_ref());
++    match mode {
++        PairForestDepositPageModeV1::FreshGenesis { .. } => write_new_page_unchecked(
++            &mut page_data,
++            lane_account.key,
++            0,
++            0,
++            &[lane.tree.root, append.root],
++        ),
++        PairForestDepositPageModeV1::ExistingSamePage { header } => {
++            append_roots_unchecked(&mut page_data, header, &[append.root]);
++        }
++        PairForestDepositPageModeV1::FreshRollover {
++            next_page_number, ..
++        } => write_new_page_unchecked(
++            &mut page_data,
++            lane_account.key,
++            next_page_number,
++            append.root_sequence,
++            &[append.root],
++        ),
++    }
++    Ok(())
++}
++
++/// Deposit stage (X2b class f split): select the page mode from the lane state and the current page, in the former
++/// handler's order. Returns (mode, token_start, expected_accounts).
++fn select_deposit_page_mode_v1<'info>(
++    program_id: &Pubkey,
++    accounts: &[AccountInfo<'info>],
++    lane_account: &AccountInfo<'info>,
++    current_page: &AccountInfo<'info>,
++    lane: &PoolV1PairForestLaneStateV1,
++    append_root_sequence: u64,
++) -> Result<(PairForestDepositPageModeV1, usize, usize), ProgramError> {
++    let current_location = root_history_location(lane.tree.next_leaf_index);
++    let next_location = root_history_location(append_root_sequence);
+     let fresh_genesis = lane.tree.next_leaf_index == 0
+-        && ((current_page.owner == &solana_sdk_ids::system_program::id()
++        && ((*current_page.owner == solana_sdk_ids::system_program::id()
+             && current_page.data_is_empty())
+             || account_is_zeroed_program_page(current_page, program_id)?);
+-    let (mode, token_start, expected_accounts) = if fresh_genesis {
++    let selected = if fresh_genesis {
+         let (expected, bump) = pool_v1_root_page_address(program_id, lane_account.key, 0);
+         let preparation = plan_fresh_program_pda(
+             current_page,
+@@ -1045,7 +1234,7 @@
+         )
+     } else if next_location.page_number == current_location.page_number {
+         let header =
+-            validate_lane_current_page(program_id, lane_account, current_page, &lane, true, None)?;
++            validate_lane_current_page(program_id, lane_account, current_page, lane, true, None)?;
+         (
+             PairForestDepositPageModeV1::ExistingSamePage { header },
+             3,
+@@ -1053,11 +1242,14 @@
+         )
+     } else {
+         let current_header =
+-            validate_lane_current_page(program_id, lane_account, current_page, &lane, false, None)?;
++            validate_lane_current_page(program_id, lane_account, current_page, lane, false, None)?;
+         if usize::from(current_header.filled) != POOL_V1_ROOT_HISTORY_CAPACITY {
+             return Err(PoolV1ProgramError::StateHistoryMismatch.into());
+         }
+-        let next_page = accounts.get(3).ok_or(ProgramError::NotEnoughAccountKeys)?;
++        if accounts.len() <= 3 {
++            return Err(ProgramError::NotEnoughAccountKeys.into());
++        }
++        let next_page = &accounts[3];
+         let (expected, bump) =
+             pool_v1_root_page_address(program_id, lane_account.key, next_location.page_number);
+         let preparation = plan_fresh_program_pda(
+@@ -1076,21 +1268,22 @@
+             FOREST_DEPOSIT_ROLLOVER_ACCOUNT_COUNT,
+         )
+     };
++    Ok(selected)
++}
+ 
+-    require_exact_account_count(accounts, expected_accounts)?;
+-    require_unique_accounts(accounts)?;
+-    let token_accounts = &accounts[token_start..token_start + 5];
+-    require_token_program_account(&token_accounts[4])?;
+-    let transfer_plan = plan_legacy_deposit_transfer_from_identity_v1(
+-        program_id,
+-        master_account.key,
+-        &master.identity,
+-        token_accounts,
+-        request.amount,
+-    )?;
+-    let transfer_infos = exact_transfer_account_infos_v1(token_accounts)?;
+-
+-    let writable_page = match mode {
++/// Deposit stage (X2b class f split): prepare the writable root-history page for the selected mode, in the former
++/// handler's order (payer and system program checks, PDA creation when system-owned, zeroed program-owned check).
++/// Returns the index in `accounts` of the writable page.
++fn prepare_deposit_writable_page_v1<'info, R: PoolCpiRuntimeV1>(
++    program_id: &Pubkey,
++    accounts: &[AccountInfo<'info>],
++    lane_account: &AccountInfo<'info>,
++    current_page: &AccountInfo<'info>,
++    mode: PairForestDepositPageModeV1,
++    rent: &Rent,
++    runtime: &mut R,
++) -> Result<usize, ProgramError> {
++    let writable_page_index = match mode {
+         PairForestDepositPageModeV1::FreshGenesis { preparation, bump } => {
+             let payer = &accounts[8];
+             let system_program = &accounts[9];
+@@ -1120,9 +1313,9 @@
+                 POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES,
+                 rent,
+             )?;
+-            current_page
++            FOREST_DEPOSIT_CURRENT_PAGE_ACCOUNT_INDEX
+         }
+-        PairForestDepositPageModeV1::ExistingSamePage { .. } => current_page,
++        PairForestDepositPageModeV1::ExistingSamePage { .. } => FOREST_DEPOSIT_CURRENT_PAGE_ACCOUNT_INDEX,
+         PairForestDepositPageModeV1::FreshRollover {
+             preparation,
+             next_page_number,
+@@ -1158,41 +1351,10 @@
+                 POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES,
+                 rent,
+             )?;
+-            next_page
++            3
+         }
+     };
+-
+-    // Acquire every Pool-owned mutable borrow before the token CPI. A failed
+-    // CPI or post-CPI balance check therefore leaves writes to Solana's outer
+-    // transaction rollback boundary, with no partial Pool persistence.
+-    let mut lane_data = lane_account.try_borrow_mut_data()?;
+-    let mut page_data = writable_page.try_borrow_mut_data()?;
+-    runtime.invoke(&transfer_plan.instruction, &transfer_infos)?;
+-    validate_exact_deposit_delta_v1(token_accounts, &transfer_plan)?;
+-
+-    lane_data.copy_from_slice(next_lane_image.as_ref());
+-    match mode {
+-        PairForestDepositPageModeV1::FreshGenesis { .. } => write_new_page_unchecked(
+-            &mut page_data,
+-            lane_account.key,
+-            0,
+-            0,
+-            &[lane.tree.root, append.root],
+-        ),
+-        PairForestDepositPageModeV1::ExistingSamePage { header } => {
+-            append_roots_unchecked(&mut page_data, header, &[append.root]);
+-        }
+-        PairForestDepositPageModeV1::FreshRollover {
+-            next_page_number, ..
+-        } => write_new_page_unchecked(
+-            &mut page_data,
+-            lane_account.key,
+-            next_page_number,
+-            append.root_sequence,
+-            &[append.root],
+-        ),
+-    }
+-    Ok(())
++    Ok(writable_page_index)
+ }
+ 
+ #[derive(Clone, Copy)]
+@@ -1225,8 +1387,16 @@
+     if lane.tree.next_leaf_index >= POOL_V1_PAIR_CAPACITY {
+         return Err(PoolV1ProgramError::TreeFull.into());
+     }
+-    let lane_account = accounts.get(2).ok_or(ProgramError::NotEnoughAccountKeys)?;
+-    let current = accounts.get(3).ok_or(ProgramError::NotEnoughAccountKeys)?;
++    // X2b rewrite (class 1/c): a length check and indexing instead of `get(..).ok_or(..)?` (an optional account
++    // reference does not translate); same error at the same point.
++    if accounts.len() <= 2 {
++        return Err(ProgramError::NotEnoughAccountKeys);
++    }
++    let lane_account = &accounts[2];
++    if accounts.len() <= 3 {
++        return Err(ProgramError::NotEnoughAccountKeys);
++    }
++    let current = &accounts[3];
+     let current_location = root_history_location(lane.tree.next_leaf_index);
+     let next_location = root_history_location(lane.tree.next_leaf_index + 1);
+     let (page, cursor) = if lane.tree.next_leaf_index == 0
+@@ -1264,9 +1434,10 @@
+             return Err(PoolV1ProgramError::StateHistoryMismatch.into());
+         }
+         let next_index = 4;
+-        let next = accounts
+-            .get(next_index)
+-            .ok_or(ProgramError::NotEnoughAccountKeys)?;
++        if accounts.len() <= next_index {
++            return Err(ProgramError::NotEnoughAccountKeys);
++        }
++        let next = &accounts[next_index];
+         crate::history::require_root_page_address_with_bump(
+             program_id,
+             lane_account.key,
+@@ -1296,9 +1467,10 @@
+     let verifier_index = cursor + 5;
+     let proof_index = cursor + 6;
+     let token_start: usize = cursor + 7;
+-    let expected = token_start
+-        .checked_add(if withdrawal { 5 } else { 0 })
+-        .ok_or(PoolV1ProgramError::ArithmeticOverflow)?;
++    let expected = match token_start.checked_add(if withdrawal { 5 } else { 0 }) {
++        Some(value) => value,
++        None => return Err(PoolV1ProgramError::ArithmeticOverflow.into()),
++    };
+     // Append the R1 verifier checkpoint after the complete legacy layout,
+     // including withdrawal custody accounts. Proof and token indices stay fixed.
+     let verifier_checkpoint_index = cfg!(feature = "r1-split-checkpoint").then_some(expected);
+@@ -1371,7 +1543,7 @@
+         )?
+         || lane.master != pool
+         || lane.lane_id != output_lane
+-        || master.initialized_lane_mask & (1u8 << output_lane) == 0
++        || master.initialized_lane_mask & (1u8 << u32::from(output_lane)) == 0
+         || (request.public.transition_kind()
+             == aspis_statement::pool_v1::PoolV1TransitionKind::Withdrawal
+             && destination == [0u8; 32])
+@@ -1390,7 +1562,7 @@
+         return Err(PoolV1ProgramError::StateHistoryMismatch.into());
+     }
+     for (level, node) in afterstate.next_frontier.iter().enumerate() {
+-        if (afterstate.next_pair_index >> level) & 1 == 0
++        if (afterstate.next_pair_index >> (level as u32)) & 1 == 0
+             && *node != POOL_V1_PAIR_EMPTY_ROOTS[level]
+         {
+             return Err(PoolV1ProgramError::StateHistoryMismatch.into());
+@@ -1612,6 +1784,72 @@
+ }
+ 
+ #[allow(clippy::too_many_arguments)]
++/// X2b rewrite (class e): the two host calls of the settlement handler (the read-only verifier dispatch and the
++/// return-data syscall) as one local trait. The translator cannot translate the former signature, generic over two
++/// callables whose argument types carry elided lifetimes (a higher-ranked lifetime constraint), so it emitted no
++/// declaration at all. Production uses `SolanaPairForestTerminalHostV1`, which makes the same two calls.
++pub(crate) trait PairForestTerminalHostV1<'info> {
++    /// `verifier_checkpoint` holds zero or one account (the former `Option<&AccountInfo>`: a function with such a
++    /// parameter does not translate).
++    #[allow(clippy::too_many_arguments)]
++    fn verify(
++        &mut self,
++        pool_program: &Pubkey,
++        master: &AccountInfo<'info>,
++        checkpoint: &AccountInfo<'info>,
++        lane: &AccountInfo<'info>,
++        policy: &aspis_statement::pool_v1::VerifierPolicyV1,
++        registry_accounts: &[AccountInfo<'info>],
++        verifier_program: &AccountInfo<'info>,
++        proof: &AccountInfo<'info>,
++        verifier_checkpoint: &[AccountInfo<'info>],
++        request: &PoolV1PairForestTerminalRequestV1,
++        current_slot: u64,
++    ) -> Result<AuthenticatedPairForestResultV1, ProgramError>;
++    fn set_return_data(&mut self, data: &[u8]);
++}
++
++/// The production host: `dispatch_pair_forest_terminal_readonly_v1` and the `set_return_data` syscall.
++pub(crate) struct SolanaPairForestTerminalHostV1;
++
++impl<'info> PairForestTerminalHostV1<'info> for SolanaPairForestTerminalHostV1 {
++    fn verify(
++        &mut self,
++        pool_program: &Pubkey,
++        master: &AccountInfo<'info>,
++        checkpoint: &AccountInfo<'info>,
++        lane: &AccountInfo<'info>,
++        policy: &aspis_statement::pool_v1::VerifierPolicyV1,
++        registry_accounts: &[AccountInfo<'info>],
++        verifier_program: &AccountInfo<'info>,
++        proof: &AccountInfo<'info>,
++        verifier_checkpoint: &[AccountInfo<'info>],
++        request: &PoolV1PairForestTerminalRequestV1,
++        current_slot: u64,
++    ) -> Result<AuthenticatedPairForestResultV1, ProgramError> {
++        dispatch_pair_forest_terminal_readonly_v1(
++            pool_program,
++            master,
++            checkpoint,
++            lane,
++            policy,
++            registry_accounts,
++            verifier_program,
++            proof,
++            verifier_checkpoint,
++            request,
++            current_slot,
++        )
++    }
++
++    fn set_return_data(&mut self, data: &[u8]) {
++        solana_program::program::set_return_data(data)
++    }
++}
++
++/// Adapter with the former signature (two callables), unchanged for the unit tests and the audit-only ASF8 route
++/// (feature `pair-forest-full-asf8-audit`, off in the deployed build).
++#[cfg(any(test, feature = "pair-forest-full-asf8-audit"))]
+ pub(crate) fn process_pair_forest_terminal_with_verifier_v1<'info, R, V, S>(
+     program_id: &Pubkey,
+     accounts: &[AccountInfo<'info>],
+@@ -1639,11 +1877,103 @@
+     ) -> Result<AuthenticatedPairForestResultV1, ProgramError>,
+     S: FnOnce(&[u8]),
+ {
++    struct ClosureHost<V, S> {
++        verify: Option<V>,
++        set_return_data: Option<S>,
++    }
++    impl<'info, V, S> PairForestTerminalHostV1<'info> for ClosureHost<V, S>
++    where
++        V: FnOnce(
++            &Pubkey,
++            &AccountInfo<'info>,
++            &AccountInfo<'info>,
++            &AccountInfo<'info>,
++            &aspis_statement::pool_v1::VerifierPolicyV1,
++            &[AccountInfo<'info>],
++            &AccountInfo<'info>,
++            &AccountInfo<'info>,
++            Option<&AccountInfo<'info>>,
++            &PoolV1PairForestTerminalRequestV1,
++            u64,
++        ) -> Result<AuthenticatedPairForestResultV1, ProgramError>,
++        S: FnOnce(&[u8]),
++    {
++        fn verify(
++            &mut self,
++            pool_program: &Pubkey,
++            master: &AccountInfo<'info>,
++            checkpoint: &AccountInfo<'info>,
++            lane: &AccountInfo<'info>,
++            policy: &aspis_statement::pool_v1::VerifierPolicyV1,
++            registry_accounts: &[AccountInfo<'info>],
++            verifier_program: &AccountInfo<'info>,
++            proof: &AccountInfo<'info>,
++            verifier_checkpoint: &[AccountInfo<'info>],
++            request: &PoolV1PairForestTerminalRequestV1,
++            current_slot: u64,
++        ) -> Result<AuthenticatedPairForestResultV1, ProgramError> {
++            (self.verify.take().expect("verify is called once"))(
++                pool_program,
++                master,
++                checkpoint,
++                lane,
++                policy,
++                registry_accounts,
++                verifier_program,
++                proof,
++                verifier_checkpoint.first(),
++                request,
++                current_slot,
++            )
++        }
++        fn set_return_data(&mut self, data: &[u8]) {
++            (self.set_return_data.take().expect("set_return_data is called once"))(data)
++        }
++    }
++    let mut host = ClosureHost {
++        verify: Some(verify),
++        set_return_data: Some(set_return_data),
++    };
++    process_pair_forest_terminal_with_host_v1(
++        program_id,
++        accounts,
++        instruction_data,
++        current_slot,
++        rent,
++        runtime,
++        &mut host,
++    )
++}
++
++pub(crate) fn process_pair_forest_terminal_with_host_v1<'info, R, H>(
++    program_id: &Pubkey,
++    accounts: &[AccountInfo<'info>],
++    instruction_data: &[u8],
++    current_slot: u64,
++    rent: &Rent,
++    runtime: &mut R,
++    host: &mut H,
++) -> ProgramResult
++where
++    R: PoolCpiRuntimeV1,
++    H: PairForestTerminalHostV1<'info>,
++{
+     let (request_bytes, hints) = split_pair_forest_terminal_bump_hints_v1(instruction_data)?;
+     let request = decode_terminal_request_box_v1(request_bytes)?;
+-    let master_account = accounts.first().ok_or(ProgramError::NotEnoughAccountKeys)?;
+-    let checkpoint_account = accounts.get(1).ok_or(ProgramError::NotEnoughAccountKeys)?;
+-    let lane_account = accounts.get(2).ok_or(ProgramError::NotEnoughAccountKeys)?;
++    // X2b rewrite (class 1/c): length checks and indexing instead of `first()/get(..).ok_or(..)?` (an optional
++    // account reference does not translate); same error at the same point.
++    if accounts.is_empty() {
++        return Err(ProgramError::NotEnoughAccountKeys);
++    }
++    let master_account = &accounts[0];
++    if accounts.len() <= 1 {
++        return Err(ProgramError::NotEnoughAccountKeys);
++    }
++    let checkpoint_account = &accounts[1];
++    if accounts.len() <= 2 {
++        return Err(ProgramError::NotEnoughAccountKeys);
++    }
++    let lane_account = &accounts[2];
+     let master = decode_terminal_master_box_v1(program_id, master_account)?;
+     let checkpoint =
+         decode_terminal_checkpoint_box_v1(program_id, master_account.key, checkpoint_account)?;
+@@ -1690,28 +2020,10 @@
+     let planned_marker =
+         plan_pair_forest_nullifier_marker_consumption_v1(program_id, marker, marker_payload)?;
+ 
++    // X2b rewrite (class f): the withdrawal planning branch is a named helper (same checks, same order, same errors).
+     let withdrawal_plan =
+-        if let PoolV1PairForestTerminalPaymentV1::Withdrawal(public) = request.public {
+-            let token_accounts = &accounts[layout.token_start..layout.token_start + 5];
+-            require_token_program_account(&token_accounts[4])?;
+-            Some(plan_legacy_withdrawal_transfer_from_identity_v1(
+-                program_id,
+-                master_account.key,
+-                &master.identity,
+-                token_accounts,
+-                &Pubkey::new_from_array(public.destination_token_account),
+-                public.amount,
+-                Some(hints.vault()),
+-            )?)
+-        } else {
+-            None
+-        };
++        plan_terminal_withdrawal_v1(program_id, accounts, master_account, &master, &request, layout.token_start, hints)?;
+ 
+-    // Reserve the exact nullifier marker immediately before verifier CPI.
+-    // Solana rolls this System CPI back with every later write if
+-    // verification or settlement fails. The master PDA (authenticated by its
+-    // stored bump) is the `create_with_seed` base and signs; the re-check
+-    // authenticates the resulting owner, size, zero image and rent reserve.
+     let master_bump = [master.bump];
+     let master_signer_seeds: &[&[u8]] = &[
+         POOL_V1_PAIR_FOREST_MASTER_SEED,
+@@ -1730,7 +2042,7 @@
+         rent,
+     )?;
+ 
+-    let authenticated = verify(
++    let authenticated = host.verify(
+         program_id,
+         master_account,
+         checkpoint_account,
+@@ -1739,9 +2051,11 @@
+         &accounts[layout.registry_start..layout.registry_start + 2],
+         &accounts[layout.verifier_index],
+         &accounts[layout.proof_index],
+-        layout
+-            .verifier_checkpoint_index
+-            .map(|index| &accounts[index]),
++        // X2b (class e): zero or one account instead of `Option<&AccountInfo>`, built without a closure.
++        match layout.verifier_checkpoint_index {
++            Some(index) => &accounts[index..index + 1],
++            None => &accounts[..0],
++        },
+         &request,
+         current_slot,
+     )?;
+@@ -1773,16 +2087,85 @@
+     #[cfg(feature = "pair-forest-direct-result-audit")]
+     let result_bytes = authenticated.exact_bytes();
+ 
+-    let writable_page = match layout.page {
+-        PairForestSpendPageV1::Genesis | PairForestSpendPageV1::SamePage(_) => &accounts[3],
+-        PairForestSpendPageV1::Rollover { next_index, .. } => &accounts[next_index],
++    let writable_page = &accounts[terminal_writable_page_index_v1(layout.page)];
++    let mut lane_data = match lane_account.try_borrow_mut_data() {
++        Ok(data) => data,
++        Err(err) => return Err(err),
+     };
+-    let mut lane_data = lane_account.try_borrow_mut_data()?;
+-    let mut page_data = writable_page.try_borrow_mut_data()?;
+-    let mut marker_data = marker.try_borrow_mut_data()?;
++    let mut page_data = match writable_page.try_borrow_mut_data() {
++        Ok(data) => data,
++        Err(err) => return Err(err),
++    };
++    let mut marker_data = match marker.try_borrow_mut_data() {
++        Ok(data) => data,
++        Err(err) => return Err(err),
++    };
++    // X2b rewrite (class f): the withdrawal CPI and its balance check are a named helper.
++    settle_terminal_withdrawal_v1(runtime, accounts, master_account, layout.token_start, withdrawal_plan)?;
++
++    lane_data.copy_from_slice(next_lane_image.as_ref());
++    write_terminal_page_v1(&mut page_data, layout.page, lane_account.key, lane.tree.root, result);
++    marker_data.copy_from_slice(&ready_marker.encoded_marker());
++    host.set_return_data(result_bytes.as_ref());
++    Ok(())
++}
++
++/// Settlement stage (X2b class f split): the withdrawal transfer plan, or None for a private transfer.
++fn plan_terminal_withdrawal_v1(
++    program_id: &Pubkey,
++    accounts: &[AccountInfo<'_>],
++    master_account: &AccountInfo<'_>,
++    master: &PoolV1PairForestMasterV1,
++    request: &PoolV1PairForestTerminalRequestV1,
++    token_start: usize,
++    hints: PoolV1PairForestTerminalBumpHintsV1,
++) -> Result<Option<crate::vault::LegacyWithdrawalTransferPlanV1>, ProgramError> {
++    let withdrawal_plan = if let PoolV1PairForestTerminalPaymentV1::Withdrawal(public) = request.public {
++            let token_accounts = &accounts[token_start..token_start + 5];
++            require_token_program_account(&token_accounts[4])?;
++            Some(plan_legacy_withdrawal_transfer_from_identity_v1(
++                program_id,
++                master_account.key,
++                &master.identity,
++                token_accounts,
++                &Pubkey::new_from_array(public.destination_token_account),
++                public.amount,
++                Some(hints.vault()),
++            )?)
++        } else {
++            None
++        };
++
++    // Reserve the exact nullifier marker immediately before verifier CPI.
++    // Solana rolls this System CPI back with every later write if
++    // verification or settlement fails. The master PDA (authenticated by its
++    // stored bump) is the `create_with_seed` base and signs; the re-check
++    // authenticates the resulting owner, size, zero image and rent reserve.
++    Ok(withdrawal_plan)
++}
++
++/// Settlement stage (X2b class f split): index in `accounts` of the writable root-history page.
++fn terminal_writable_page_index_v1(page: PairForestSpendPageV1) -> usize {
++    match page {
++        PairForestSpendPageV1::Genesis | PairForestSpendPageV1::SamePage(_) => 3,
++        PairForestSpendPageV1::Rollover { next_index, .. } => next_index,
++    }
++}
++
++/// Settlement stage (X2b class f split): the withdrawal CPI (vault authority signs) and the exact balance check.
++fn settle_terminal_withdrawal_v1<R: PoolCpiRuntimeV1>(
++    runtime: &mut R,
++    accounts: &[AccountInfo<'_>],
++    master_account: &AccountInfo<'_>,
++    token_start: usize,
++    withdrawal_plan: Option<crate::vault::LegacyWithdrawalTransferPlanV1>,
++) -> ProgramResult {
+     if let Some(plan) = withdrawal_plan {
+-        let token_accounts = &accounts[layout.token_start..layout.token_start + 5];
+-        let infos = exact_withdrawal_transfer_account_infos_v1(token_accounts)?;
++        let token_accounts = &accounts[token_start..token_start + 5];
++        let infos = match exact_withdrawal_transfer_account_infos_v1(token_accounts) {
++            Ok(infos) => infos,
++            Err(err) => return Err(err),
++        };
+         let bump = [plan.authority_bump];
+         let seeds: &[&[u8]] = &[
+             POOL_V1_VAULT_AUTHORITY_SEED,
+@@ -1792,32 +2175,38 @@
+         runtime.invoke_signed(&plan.instruction, &infos, &[seeds])?;
+         validate_exact_withdrawal_delta_v1(token_accounts, &plan)?;
+     }
++    Ok(())
++}
+ 
+-    lane_data.copy_from_slice(next_lane_image.as_ref());
+-    match layout.page {
++/// Settlement stage (X2b class f split): the root-history page write for the page mode.
++fn write_terminal_page_v1(
++    page_data: &mut [u8],
++    page: PairForestSpendPageV1,
++    lane_key: &Pubkey,
++    lane_root: Digest,
++    result: &aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,
++) {
++    match page {
+         PairForestSpendPageV1::Genesis => write_new_page_unchecked(
+-            &mut page_data,
+-            lane_account.key,
++            page_data,
++            lane_key,
+             0,
+             0,
+-            &[lane.tree.root, result.verified_afterstate.next_root],
++            &[lane_root, result.verified_afterstate.next_root],
+         ),
+         PairForestSpendPageV1::SamePage(header) => append_roots_unchecked(
+-            &mut page_data,
++            page_data,
+             header,
+             &[result.verified_afterstate.next_root],
+         ),
+         PairForestSpendPageV1::Rollover { page_number, .. } => write_new_page_unchecked(
+-            &mut page_data,
+-            lane_account.key,
++            page_data,
++            lane_key,
+             page_number,
+             result.verified_afterstate.next_pair_index,
+             &[result.verified_afterstate.next_root],
+         ),
+     }
+-    marker_data.copy_from_slice(&ready_marker.encoded_marker());
+-    set_return_data(result_bytes.as_ref());
+-    Ok(())
+ }
+ 
+ pub(crate) fn process_pair_forest_terminal_v1<'info, R: PoolCpiRuntimeV1>(
+@@ -1828,15 +2217,15 @@
+     rent: &Rent,
+     runtime: &mut R,
+ ) -> ProgramResult {
+-    process_pair_forest_terminal_with_verifier_v1(
++    let mut host = SolanaPairForestTerminalHostV1;
++    process_pair_forest_terminal_with_host_v1(
+         program_id,
+         accounts,
+         instruction_data,
+         current_slot,
+         rent,
+         runtime,
+-        dispatch_pair_forest_terminal_readonly_v1,
+-        solana_program::program::set_return_data,
++        &mut host,
+     )
+ }
+ 
+@@ -1927,7 +2316,10 @@
+                 registry_accounts,
+                 verifier_program,
+                 proof,
+-                verifier_checkpoint,
++                match verifier_checkpoint {
++                    Some(checkpoint) => core::slice::from_ref(checkpoint),
++                    None => &[],
++                },
+                 request,
+                 slot,
+                 statement_bytes,
+@@ -2111,7 +2503,10 @@
+ 
+     // Acquire every mutable borrow before the first write. Runtime rollback
+     // remains the outer atomicity boundary for preceding System CPIs.
+-    let mut master_data = master.try_borrow_mut_data()?;
++    let mut master_data = match master.try_borrow_mut_data() {
++        Ok(data) => data,
++        Err(err) => return Err(err),
++    };
+     let mut lane_data = Vec::with_capacity(POOL_V1_PAIR_FOREST_LANE_COUNT);
+     for lane in lanes {
+         lane_data.push(lane.try_borrow_mut_data()?);
+@@ -2180,8 +2575,14 @@
+         rent,
+     )?;
+ 
+-    let mut master_data = master.try_borrow_mut_data()?;
+-    let mut checkpoint_data = checkpoint.try_borrow_mut_data()?;
++    let mut master_data = match master.try_borrow_mut_data() {
++        Ok(data) => data,
++        Err(err) => return Err(err),
++    };
++    let mut checkpoint_data = match checkpoint.try_borrow_mut_data() {
++        Ok(data) => data,
++        Err(err) => return Err(err),
++    };
+     checkpoint_data.copy_from_slice(&planned.checkpoint_image);
+     master_data.copy_from_slice(&planned.next_master_image);
+     Ok(())
+@@ -2199,8 +2600,14 @@
+     if account.is_signer {
+         return Err(ProgramError::InvalidAccountData);
+     }
+-    let checkpoint = decode_pool_v1_pair_forest_checkpoint_v1(&account.try_borrow_data()?)
+-        .map_err(|_| PoolV1ProgramError::InvalidAccountType)?;
++    let checkpoint = {
++        let data = match account.try_borrow_data() {
++            Ok(data) => data,
++            Err(err) => return Err(err),
++        };
++        decode_pool_v1_pair_forest_checkpoint_v1(&data)
++    }
++    .map_err(|_| PoolV1ProgramError::InvalidAccountType)?;
+     // B4: the checkpoint stores its canonical bump at byte 7 (as the R1
+     // verifier adapter reads it); one `create_program_address` authenticates
+     // this existing Pool-owned image (F6). A mismatch keeps the old error.
+@@ -2222,6 +2629,140 @@
+ }
+ 
+ #[cfg(test)]
++mod x2b_lane_differential {
++    use super::*;
++    use aspis_core::field::{M31, P};
++
++    /// Frozen bodies (commit 3d700effcabe), kept for comparison.
++    fn frozen_encode_lane(
++        lane: &PoolV1PairForestLaneStateV1,
++    ) -> Result<[u8; POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES], ProgramError> {
++        if usize::from(lane.lane_id) >= POOL_V1_PAIR_FOREST_LANE_COUNT
++            || lane.master == [0u8; 32]
++            || lane.tree.next_leaf_index > POOL_V1_PAIR_CAPACITY
++        {
++            return Err(PoolV1ProgramError::StateHistoryMismatch.into());
++        }
++        for (level, node) in lane.tree.frontier.iter().enumerate() {
++            if (lane.tree.next_leaf_index >> level) & 1 == 0 && *node != POOL_V1_PAIR_EMPTY_ROOTS[level]
++            {
++                return Err(PoolV1ProgramError::StateHistoryMismatch.into());
++            }
++        }
++        if lane.tree.next_leaf_index == 0
++            && lane.tree.root != POOL_V1_PAIR_EMPTY_ROOTS[POOL_V1_PAIR_TREE_DEPTH]
++        {
++            return Err(PoolV1ProgramError::StateHistoryMismatch.into());
++        }
++        let mut output = [0u8; POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES];
++        output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_LANE_MAGIC);
++        output[4] = POOL_V1_PAIR_FOREST_LANE_VERSION;
++        output[5] = lane.lane_id;
++        output[6] = POOL_V1_PAIR_FOREST_LANE_COUNT as u8;
++        output[7] = POOL_V1_PAIR_TREE_DEPTH as u8;
++        output[8..40].copy_from_slice(&POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING);
++        output[40..72].copy_from_slice(&lane.master);
++        output[72] = lane.bump;
++        let tree = &mut output[POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES..];
++        tree[..4].copy_from_slice(&POOL_V1_TREE_STATE_MAGIC);
++        tree[4] = POOL_V1_TREE_STATE_VERSION;
++        tree[5] = POOL_V1_PAIR_TREE_DEPTH as u8;
++        tree[6] = POOL_V1_TREE_HASH_VERSION;
++        tree[7] = POOL_V1_DIGEST_ENCODING_VERSION;
++        tree[8..16].copy_from_slice(&lane.tree.next_leaf_index.to_le_bytes());
++        tree[16..48].copy_from_slice(&encode_digest_canonical(&lane.tree.root));
++        for (level, node) in lane.tree.frontier.iter().enumerate() {
++            let start = 48 + 32 * level;
++            tree[start..start + 32].copy_from_slice(&encode_digest_canonical(node));
++        }
++        Ok(output)
++    }
++
++    fn frozen_require_alias_free(
++        master: &AccountInfo<'_>,
++        lanes: &[AccountInfo<'_>],
++        checkpoint: &AccountInfo<'_>,
++    ) -> Result<(), ProgramError> {
++        if master.key == checkpoint.key {
++            return Err(ProgramError::InvalidArgument);
++        }
++        for (index, lane) in lanes.iter().enumerate() {
++            if lane.key == master.key
++                || lane.key == checkpoint.key
++                || lanes[..index]
++                    .iter()
++                    .any(|previous| previous.key == lane.key)
++            {
++                return Err(ProgramError::InvalidArgument);
++            }
++        }
++        Ok(())
++    }
++
++    fn next(state: &mut u64) -> u64 {
++        *state = state.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
++        *state >> 33
++    }
++
++    fn digest(state: &mut u64) -> Digest {
++        core::array::from_fn(|_| M31((next(state) as u32) % P))
++    }
++
++    #[test]
++    fn encode_lane_same_result_as_frozen_body() {
++        let mut state = 0x1a7e_u64;
++        for round in 0..3000u64 {
++            let mut lane = genesis_lane_state(&Pubkey::new_from_array([7u8; 32]), (round % 10) as u8, (round % 256) as u8);
++            lane.tree.next_leaf_index = match round % 4 {
++                0 => next(&mut state) % 64,
++                1 => POOL_V1_PAIR_CAPACITY - (next(&mut state) % 3),
++                2 => POOL_V1_PAIR_CAPACITY + (next(&mut state) % 3),
++                _ => next(&mut state),
++            };
++            for level in 0..POOL_V1_PAIR_TREE_DEPTH {
++                if next(&mut state) % 3 == 0 {
++                    lane.tree.frontier[level] = digest(&mut state);
++                }
++            }
++            if round % 5 == 0 {
++                lane.tree.root = digest(&mut state);
++            }
++            if round % 11 == 0 {
++                lane.master = [0u8; 32];
++            }
++            assert_eq!(encode_lane_from_authenticated_result_v1(&lane), frozen_encode_lane(&lane));
++        }
++    }
++
++    #[test]
++    fn require_alias_free_same_result_as_frozen_body() {
++        let owner = Pubkey::new_from_array([9u8; 32]);
++        let mut state = 0xa11a5_u64;
++        for round in 0..4000 {
++            let alphabet = if round % 2 == 0 { 4 } else { 40 };
++            let mut keys = [Pubkey::new_from_array([0u8; 32]); 10];
++            for key in keys.iter_mut() {
++                *key = Pubkey::new_from_array([(next(&mut state) % alphabet) as u8; 32]);
++            }
++            let count = (round % (POOL_V1_PAIR_FOREST_LANE_COUNT + 1)) as usize;
++            let mut lamports = [0u64; 10];
++            let mut data = [[0u8; 1]; 10];
++            let (master_l, rest_l) = lamports.split_at_mut(1);
++            let (checkpoint_l, lane_l) = rest_l.split_at_mut(1);
++            let (master_d, rest_d) = data.split_at_mut(1);
++            let (checkpoint_d, lane_d) = rest_d.split_at_mut(1);
++            let master = AccountInfo::new(&keys[0], false, false, &mut master_l[0], &mut master_d[0], &owner, false, 0);
++            let checkpoint = AccountInfo::new(&keys[1], false, false, &mut checkpoint_l[0], &mut checkpoint_d[0], &owner, false, 0);
++            let mut lanes = Vec::new();
++            for ((key, lamport), datum) in keys[2..2 + count].iter().zip(lane_l.iter_mut()).zip(lane_d.iter_mut()) {
++                lanes.push(AccountInfo::new(key, false, false, lamport, datum, &owner, false, 0));
++            }
++            assert_eq!(require_alias_free(&master, &lanes, &checkpoint), frozen_require_alias_free(&master, &lanes, &checkpoint));
++        }
++    }
++}
++
++#[cfg(test)]
+ mod tests {
+     use std::{vec, vec::Vec};
+ 

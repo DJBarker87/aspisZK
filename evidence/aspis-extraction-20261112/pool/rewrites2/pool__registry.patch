@@ -1,0 +1,129 @@
+--- a/programs/aspis-pool/src/registry.rs
++++ b/programs/aspis-pool/src/registry.rs
+@@ -169,13 +169,17 @@
+     if policy.flags & POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT != 0 {
+         return authenticate_verifier_selection_v2(pool, policy, accounts, selection, current_slot);
+     }
+-    let [registry_account, entry_account] = accounts else {
++    // X2b rewrite (class g): a length check and indexing instead of the slice pattern over AccountInfo values
++    // (Inconsistent projection: PtrMetadata); same errors for the same lengths.
++    if accounts.len() != 2 {
+         return Err(if accounts.len() < 2 {
+             ProgramError::NotEnoughAccountKeys
+         } else {
+             ProgramError::InvalidArgument
+         });
+-    };
++    }
++    let registry_account = &accounts[0];
++    let entry_account = &accounts[1];
+     let registry_program = Pubkey::new_from_array(policy.registry_program);
+ 
+     require_readonly_registry_account(
+@@ -183,11 +187,14 @@
+         &registry_program,
+         PoolV1ProgramError::InvalidVerifierRegistry,
+     )?;
+-    if registry_account.key != &pool_v1_verifier_registry_address(&registry_program, pool).0 {
++    if *registry_account.key != pool_v1_verifier_registry_address(&registry_program, pool).0 {
+         return Err(PoolV1ProgramError::InvalidVerifierRegistryAddress.into());
+     }
+     let registry = {
+-        let data = registry_account.try_borrow_data()?;
++        let data = match registry_account.try_borrow_data() {
++            Ok(data) => data,
++            Err(err) => return Err(err),
++        };
+         decode_verifier_registry_v1(&data)
+             .map_err(|_| PoolV1ProgramError::InvalidVerifierRegistry)?
+     };
+@@ -216,11 +223,14 @@
+         &selection.release_binding,
+     )
+     .0;
+-    if entry_account.key != &expected_entry {
++    if *entry_account.key != expected_entry {
+         return Err(PoolV1ProgramError::InvalidVerifierEntryAddress.into());
+     }
+     let entry = {
+-        let data = entry_account.try_borrow_data()?;
++        let data = match entry_account.try_borrow_data() {
++            Ok(data) => data,
++            Err(err) => return Err(err),
++        };
+         decode_verifier_registry_entry_v1(&data)
+             .map_err(|_| PoolV1ProgramError::InvalidVerifierEntry)?
+     };
+@@ -277,13 +287,17 @@
+     selection: VerifierSelectionV1,
+     current_slot: u64,
+ ) -> Result<AuthenticatedVerifierSelectionV1, ProgramError> {
+-    let [registry_account, entry_account] = accounts else {
++    // X2b rewrite (class g): a length check and indexing instead of the slice pattern over AccountInfo values
++    // (Inconsistent projection: PtrMetadata); same errors for the same lengths.
++    if accounts.len() != 2 {
+         return Err(if accounts.len() < 2 {
+             ProgramError::NotEnoughAccountKeys
+         } else {
+             ProgramError::InvalidArgument
+         });
+-    };
++    }
++    let registry_account = &accounts[0];
++    let entry_account = &accounts[1];
+     let registry_program = Pubkey::new_from_array(policy.registry_program);
+     let loader = bpf_loader_upgradeable::id();
+ 
+@@ -299,7 +313,10 @@
+     // mismatch falls back to the canonical search only to keep the previous
+     // error precedence (address error before image error) on rejection paths.
+     let registry = {
+-        let data = registry_account.try_borrow_data()?;
++        let data = match registry_account.try_borrow_data() {
++            Ok(data) => data,
++            Err(err) => return Err(err),
++        };
+         decode_verifier_registry_v2(&data).ok()
+     };
+     let registry_address_matches = registry.as_ref().is_some_and(|registry| {
+@@ -314,11 +331,14 @@
+         )
+     });
+     if !registry_address_matches
+-        && registry_account.key != &pool_v1_verifier_registry_v2_address(&registry_program, pool).0
++        && *registry_account.key != pool_v1_verifier_registry_v2_address(&registry_program, pool).0
+     {
+         return Err(PoolV1ProgramError::InvalidVerifierRegistryAddress.into());
+     }
+-    let registry = registry.ok_or(PoolV1ProgramError::InvalidVerifierRegistry)?;
++    let registry = match registry {
++        Some(value) => value,
++        None => return Err(PoolV1ProgramError::InvalidVerifierRegistry.into()),
++    };
+     let expected_registry_programdata = Pubkey::create_program_address(
+         &[registry_program.as_ref(), &[registry.programdata_bump]],
+         &loader,
+@@ -345,7 +365,10 @@
+         PoolV1ProgramError::InvalidVerifierEntry,
+     )?;
+     let entry = {
+-        let data = entry_account.try_borrow_data()?;
++        let data = match entry_account.try_borrow_data() {
++            Ok(data) => data,
++            Err(err) => return Err(err),
++        };
+         decode_verifier_registry_entry_v2(&data).ok()
+     };
+     let entry_address_matches = entry.as_ref().is_some_and(|entry| {
+@@ -373,7 +396,10 @@
+     {
+         return Err(PoolV1ProgramError::InvalidVerifierEntryAddress.into());
+     }
+-    let entry = entry.ok_or(PoolV1ProgramError::InvalidVerifierEntry)?;
++    let entry = match entry {
++        Some(value) => value,
++        None => return Err(PoolV1ProgramError::InvalidVerifierEntry.into()),
++    };
+     if !entry_address_matches {
+         return Err(PoolV1ProgramError::InvalidVerifierEntry.into());
+     }

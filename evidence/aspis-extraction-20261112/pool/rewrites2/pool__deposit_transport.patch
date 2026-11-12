@@ -1,0 +1,32 @@
+--- a/programs/aspis-pool/src/deposit_transport.rs
++++ b/programs/aspis-pool/src/deposit_transport.rs
+@@ -79,9 +79,11 @@
+         return Err(DepositInstructionFormatErrorV1::NonCanonicalDigest);
+     }
+ 
+-    let length = INSTRUCTION_PAYLOAD_OFFSET
+-        .checked_add(request.encrypted_note_payload.len())
+-        .ok_or(DepositInstructionFormatErrorV1::WrongLength)?;
++    let length = match INSTRUCTION_PAYLOAD_OFFSET
++        .checked_add(request.encrypted_note_payload.len()) {
++        Some(value) => value,
++        None => return Err(DepositInstructionFormatErrorV1::WrongLength.into()),
++    };
+     let payload_length = u16::try_from(request.encrypted_note_payload.len())
+         .map_err(|_| DepositInstructionFormatErrorV1::InvalidPayloadLength)?;
+     let mut bytes = [0u8; POOL_V1_DEPOSIT_INSTRUCTION_MAX_BYTES];
+@@ -127,9 +129,11 @@
+     if declared_payload_length > POOL_V1_ENCRYPTED_NOTE_PAYLOAD_MAX_BYTES {
+         return Err(DepositInstructionFormatErrorV1::InvalidPayloadLength);
+     }
+-    let expected_length = INSTRUCTION_PAYLOAD_OFFSET
+-        .checked_add(declared_payload_length)
+-        .ok_or(DepositInstructionFormatErrorV1::WrongLength)?;
++    let expected_length = match INSTRUCTION_PAYLOAD_OFFSET
++        .checked_add(declared_payload_length) {
++        Some(value) => value,
++        None => return Err(DepositInstructionFormatErrorV1::WrongLength.into()),
++    };
+     if bytes.len() != expected_length {
+         return Err(DepositInstructionFormatErrorV1::WrongLength);
+     }

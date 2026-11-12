@@ -1,0 +1,61 @@
+--- a/crates/aspis-statement/src/pool_v1/incremental_merkle.rs
++++ b/crates/aspis-statement/src/pool_v1/incremental_merkle.rs
+@@ -484,8 +484,56 @@
+         bytes: &[u8],
+         empty: &[Digest; POOL_V1_TREE_DEPTH + 1],
+     ) -> Result<Self, PoolV1TreeError> {
+-        ValidatedIncrementalMerkleTreeV1::decode(bytes, empty)
+-            .map(ValidatedIncrementalMerkleTreeV1::into_inner)
++        // X2b rewrite (class d): explicit match instead of `Result::map` with the method path as a function
++        // value, which the translator rejects. Same value, same error.
++        match ValidatedIncrementalMerkleTreeV1::decode(bytes, empty) {
++            Ok(validated) => Ok(validated.into_inner()),
++            Err(err) => Err(err),
++        }
++    }
++}
++
++#[cfg(test)]
++mod x2b_decode_with_empty_roots_differential {
++    use super::*;
++
++    /// The frozen body of `IncrementalMerkleTreeV1::decode_with_empty_roots` (commit 3d700effcabe).
++    fn frozen(bytes: &[u8], empty: &[Digest; POOL_V1_TREE_DEPTH + 1]) -> Result<IncrementalMerkleTreeV1, PoolV1TreeError> {
++        ValidatedIncrementalMerkleTreeV1::decode(bytes, empty).map(ValidatedIncrementalMerkleTreeV1::into_inner)
++    }
++
++    fn next(state: &mut u64) -> u64 {
++        *state = state.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
++        *state >> 33
++    }
++
++    #[test]
++    fn same_result_as_frozen_body() {
++        let empty = pool_v1_empty_roots();
++        let mut state = 0xdec0_de_u64;
++        let mut tree = IncrementalMerkleTreeV1::empty();
++        for step in 0..40u32 {
++            let bytes = tree.encode().unwrap();
++            assert_eq!(IncrementalMerkleTreeV1::decode_with_empty_roots(&bytes, &empty), frozen(&bytes, &empty));
++            // one-byte mutations at random positions (mostly rejected, some accepted)
++            for _ in 0..20 {
++                let mut mutated = bytes;
++                let at = (next(&mut state) as usize) % mutated.len();
++                mutated[at] ^= 1u8 << (next(&mut state) % 8);
++                assert_eq!(
++                    IncrementalMerkleTreeV1::decode_with_empty_roots(&mutated, &empty),
++                    frozen(&mutated, &empty)
++                );
++            }
++            // wrong lengths
++            assert_eq!(
++                IncrementalMerkleTreeV1::decode_with_empty_roots(&bytes[..bytes.len() - 1], &empty),
++                frozen(&bytes[..bytes.len() - 1], &empty)
++            );
++            assert_eq!(IncrementalMerkleTreeV1::decode_with_empty_roots(&[], &empty), frozen(&[], &empty));
++            let leaf = core::array::from_fn(|i| aspis_core::field::M31((step * 31 + i as u32 * 7) % aspis_core::field::P));
++            tree = tree.append_one(leaf).unwrap().0;
++        }
+     }
+ }
+ 
