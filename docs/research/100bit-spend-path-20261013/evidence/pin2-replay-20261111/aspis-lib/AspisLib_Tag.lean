@@ -20,9 +20,7 @@ import R1FinalSoundnessNumeric
 import BinCompiledRunWordStability
 import RawRecordedOracleExtractionMassBin
 import LiteralTableWordChoiceBin
-import R19BudgetSamplerReads
-import R1VerifierCallBudget
-import QvStage2Count
+import R19BudgetOriginalReads
 import AspisV8R19.OracleFiniteSupport
 
 set_option autoImplicit false

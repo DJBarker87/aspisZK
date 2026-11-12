@@ -9,3 +9,6 @@
 - drop_decls.py: command lines (`#print axioms`, `#check`, ...) naming a dropped declaration are removed with it and recorded.
 - Bases regenerated with omitted modules expanded: AspisLib_Tag and AspisLib_Guard import no carrier and no omitted module directly.
 - Gate: X3's graph check (no carrier or omitted module in the import closure of anything compiled), not the compile exit; Lean 4.32 loads a shadowed L187 object silently.
+
+## Revision 5 (2026-11-12): omit list tightened
+Rule for the omit/drop lists: a module goes on OMIT only when most of its declarations use carrier content; a module with a few carrier-using declarations is KEPT and those declarations are DROPPED (its namespace stays available to `open` lines downstream). Moved from OMIT to KEEP+DROP: R15WriterModel (acceptance_alone_obstruction), R16DecisionErasure (accepted_without_instance), R19BudgetOriginalReads (original_reads), R9PoolSavedTenModel (prepare_original, resume_recorded). OMIT now 12. Cascade rule (zk-73/X3) confirmed: an un-needed module failing on an omitted module, dropped declaration or carrier is omitted; an un-needed declaration inside a needed module failing the same way is dropped; a NEEDED declaration failing stops the run; every addition recorded with error and dependency. Tie-breaker: a failure at an `open X` line means X must be kept and trimmed, not omitted.
