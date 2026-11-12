@@ -15,3 +15,6 @@ Rule for the omit/drop lists: a module goes on OMIT only when most of its declar
 
 ## Revision 6 (2026-11-12): empty-namespace stub
 AspisLib_Namespaces declares, empty, the namespaces that carried modules `open` without using: AspisR1.DecoderInstanceBoundaryBin, AspisR1.OraclePortStoredConsumerC7, AspisR1.OraclePortFrozen2Consumer (tested: an empty `namespace X end X` registers X across imports in Lean 4.32.0). trim_imports.py `--stub AspisLib_Namespaces=Mod1,Mod2,...` (STUB_MAP.txt): the stub import is inserted where such a module is expanded, and, as the safety net, in any module whose `open` line names a stubbed namespace (an import-line edit, recorded as "(open)->AspisLib_Namespaces"). AspisLib_Recorded imports the stub, mirroring the original RecordedBinaryExperimentBin which imported DecoderInstanceBoundaryBin. A module that uses a name from a stubbed namespace still fails on that name: the intended failure.
+
+## Revision 7 (2026-11-12)
+OraclePortFrozenOrderDecision off the omit list (tie-breaker: OraclePortFrozen2Reached opens it for slotPrograms); its three carrier-bound declarations (accepted, admitted, dV_frozen) dropped. The tie-breaker applies to base omits as well as cascade omits. OMIT 11, DROP 24 (base lists; X3 cascade additions are on top, logged in omit-drop-additions.tsv).
