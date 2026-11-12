@@ -19,7 +19,7 @@
 # then about a minute of mutant runs and two minutes of worst-case runs.
 W=/home/dombarker/project-offloads/future-version-20261111
 cd $W
-N=$1; S=$2; E=$3; POOL=$4; REMOVALS=${5:-}
+N=$1; S=$2; E=$3; POOL=$4; REMOVALS=${5:-$W/fv_round_intended_removals.tsv}   # default: the list of record beside this script
 OUT=$W/rounds/$N; test ! -e $OUT || { echo "exists: $OUT"; exit 2; }
 mkdir -p $OUT/logs; ST=$OUT/steps.txt; : > $ST; LOGS=$OUT/logs
 BASE=$W/frz/c1
