@@ -1,0 +1,13 @@
+--- a/programs/aspis-pool/src/processor.rs
++++ b/programs/aspis-pool/src/processor.rs
+@@ -349,8 +349,8 @@
+     mint: &Pubkey,
+     vault: &AccountInfo<'_>,
+ ) -> ProgramResult {
+-    if vault.key != &pool_v1_vault_token_account_address(program_id, pool).0
+-        || vault.owner != &LEGACY_SPL_TOKEN_PROGRAM_ID
++    if *vault.key != pool_v1_vault_token_account_address(program_id, pool).0
++        || *vault.owner != LEGACY_SPL_TOKEN_PROGRAM_ID
+         || vault.executable
+         || vault.is_signer
+         || !vault.is_writable

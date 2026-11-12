@@ -1,0 +1,26 @@
+--- a/programs/aspis-pool/src/processor.rs
++++ b/programs/aspis-pool/src/processor.rs
+@@ -159,20 +159,20 @@
+     expected_address: &Pubkey,
+     exact_bytes: usize,
+ ) -> Result<FreshPdaPreparationV1, ProgramError> {
+-    if account.key != expected_address
++    if *account.key != *expected_address
+         || account.executable
+         || account.is_signer
+         || !account.is_writable
+     {
+         return Err(PoolV1ProgramError::InvalidFreshAccount.into());
+     }
+-    if account.owner == program_id {
++    if *account.owner == *program_id {
+         let data = account.try_borrow_data()?;
+         if data.len() != exact_bytes || data.iter().any(|byte| *byte != 0) {
+             return Err(PoolV1ProgramError::InvalidFreshAccount.into());
+         }
+         Ok(FreshPdaPreparationV1::ProgramOwnedZeroed)
+-    } else if account.owner == &system_program::id() && account.data_is_empty() {
++    } else if *account.owner == system_program::id() && account.data_is_empty() {
+         Ok(FreshPdaPreparationV1::CreateOrAllocateSystemOwned)
+     } else {
+         Err(PoolV1ProgramError::InvalidFreshAccount.into())

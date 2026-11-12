@@ -1,0 +1,19 @@
+--- a/programs/aspis-pool/src/vault.rs
++++ b/programs/aspis-pool/src/vault.rs
+@@ -554,11 +554,11 @@
+ ) -> Result<(), ProgramError> {
+     let [mint_account, vault_account, destination_account, vault_authority, token_program] =
+         exact_five_withdrawal_accounts(accounts)?;
+-    if mint_account.key != &plan.mint
+-        || vault_account.key != &plan.vault
+-        || destination_account.key != &plan.destination
+-        || vault_authority.key != &plan.authority
+-        || token_program.key != &LEGACY_SPL_TOKEN_PROGRAM_ID
++    if *mint_account.key != plan.mint
++        || *vault_account.key != plan.vault
++        || *destination_account.key != plan.destination
++        || *vault_authority.key != plan.authority
++        || *token_program.key != LEGACY_SPL_TOKEN_PROGRAM_ID
+     {
+         return Err(PoolV1ProgramError::TokenBalanceDeltaMismatch.into());
+     }

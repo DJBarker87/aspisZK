@@ -289,3 +289,94 @@ there, and two owners under which the freeze emission groups additional closure 
 - `IncrementalMerkleTreeV1::append_one` matches the pattern `_::append_one` used for the Validated method (Charon does
   not parse an impl pattern with a lifetime argument); it is not reached in the final emission, so this has no effect
   on the rows.
+
+# Stage 2 (in progress): rewrites on a scratch tree, by rejection class
+
+Nothing below is applied to the repository or to the frozen tree. The scratch tree is `W/x2/rw-tree` (a copy of
+`src-frz-a`); every rewrite is a `diff -u` patch against the frozen file in `rewrites/` (one per function; the
+stack-height change is `process_instruction_stack_height_check.patch`), summarised in `rewrites.tsv`. Done: classes a
+and b, and the target_os audit. Not done: classes c to g, the shadowing and inference rows, the native-library items
+below, the deposit split.
+
+## Reproducers (probe crate `W/x2/probe/a`; source `rewrites/probe-lib.rs`, manifest `rewrites/probe-Cargo.toml`)
+
+Compiled with the same Charon/Aeneas flags as the Pool emission (config `fv_x2_cfg_probe_a.json`; the probe's lock was
+derived offline from the frozen `Cargo.lock` with `cargo metadata --offline`). Runs `X2-probe-a1` to `X2-probe-a6`.
+
+Class a, "Unreachable" at an AccountInfo SDK call. The SDK methods are already external (axioms in `FunsExternal`):
+their bodies are not pulled in, so an opaque/exclude flag cannot change anything. The error comes from Aeneas
+`interp/InterpProjectors.ml` line 84 (`VLoan _ -> Unreachable` in `apply_proj_borrows_on_shared_borrow`, found with
+`-print-error-emitters`, run `X2-offA-emit`): when the SDK call's `&AccountInfo` argument is projected, the
+AccountInfo value still holds a shared loan. Every borrow shape alone translates (probes a1-a9: guard held, temporary,
+block-scoped, dropped, chained calls). The trigger (probes b7, b9, c2) is a comparison of an AccountInfo reference
+field with a reference, `acc.key != e` or `acc.owner == p` with `e, p: &Pubkey`, earlier in the function than an SDK
+call on the same account. Accepted shape (c1, c3): compare values, `*acc.key != *e`, `*acc.owner == x`.
+
+Class b, loops. `?` or `return` inside nested loops is rejected (d0). Any loop in a function that holds an AccountInfo
+value or reference is rejected with "Found a case of unsupported nested borrows" or "Could not match the contexts",
+whatever the loop shape: `while` with a flag (d1), helper with the inner loop (d2), `for` with `break` (d3), helper
+for the comparison (f1, f3), and even a loop over an array of copied `&Pubkey` in such a function (f2). Accepted
+shapes: no loop at all (f4, ten comparisons written out); recursion over the slice (g1); keys copied out and the loop
+in a helper that sees only `[Pubkey]` (g2). For loops over plain data (no AccountInfo in the function), a `while`
+loop with an `ok` flag in its condition and the error returned after the loop translates (e1).
+
+Class g (seen in passing): a slice pattern `let [a, b] = accounts else {..}` over `&[AccountInfo]` gives
+"Inconsistent projection: PtrMetadata" (b8, c4, c5); a length check and indexing translates (c6).
+
+## Result after classes a and b (run `X2-rw-ab`, deployed setting, LLBC aea72fd66db2236e1cf5c8c760df0734a471a4550ba103f796ab0e520f7a2d5e)
+
+All 17 rewritten functions, the two new helpers and the stack-height wrapper's caller translate: Aeneas
+`-abort-on-error` exits 0 with them no longer opaque (26 named gaps remain opaque, plus the deposit handler and the
+runtime wrapper `runtime_stack_height_v1`). `cargo test --release` of the Pool crate with the deployed features: 78
+passed, 0 failed on the frozen tree (`X2-test-frz`) and on the rewrite tree before and after the stack-height change
+(`X2-test-rw1`, `X2-test-rw2`).
+
+Native library (raw Aeneas output, zero edits, X3's Lean 4.36.0-rc2 library by reference, `fv_x2_native.sh`):
+`TypesExternal`, `Types`, `FunsExternal` compile in both; `Funs` errors: frozen emission 55 (`X2-native-frz`), after
+classes a and b 68 (`X2-native-rwab`). The count rises because 17 more functions reach `Funs`. Of the rewritten
+functions, 9 elaborate natively (`create_or_allocate_pda_with_rent`, `create_or_allocate_with_seed_with_rent`,
+`require_token_owned_account`, `plan_pair_forest_nullifier_marker_consumption_v1`, both `exact_five_*`,
+`require_unique_accounts` and helpers, `require_transaction_level_invocation_v1`); the others fail on:
+- `?` on `try_borrow_data` (a value holding a mutable borrow): "expected a product type", also with the native
+  library (7 functions; also the probe's a3-a8). This needs its own reproducer and shape (next step: an explicit
+  `match` on the borrow result).
+- a local named `vault` shadowing the module `vault` (`require_initialized_empty_vault`, `plan_vault_initialization`,
+  and `initialize_vault_account`): rename the binder (next step).
+- an emitter line break (`plan_legacy_withdrawal_transfer_from_identity_v1`), and an application type mismatch in
+  `validate_root_page_bytes` and `process_instruction` (not yet diagnosed).
+
+## target_os sites in the Pool reachable from the entry
+
+`processor.rs`: line 9 `use alloc::format` (solana only; unused on the path), line 13 `use get_stack_height`
+(solana only), line 15 `use TRANSACTION_LEVEL_STACK_HEIGHT` (solana or test), lines 502-503 the call
+`require_transaction_level_invocation_v1(get_stack_height())?` (solana only), lines 628-635 the predicate itself
+(solana or test): `stack_height != TRANSACTION_LEVEL_STACK_HEIGHT` gives `CpiInvocationForbidden`. This is
+validation logic present only in the SBF build. `pair_forest.rs:161` (`not(target_os = "solana")`) is the client-side
+helper `pool_v1_pair_forest_terminal_bump_hints_v1`, not reachable from the entry; `lib.rs:84` re-exports it. The
+rewrite (`process_instruction_stack_height_check.patch`) makes the predicate and its call ordinary code on every
+target and leaves only the runtime boundary behind the cfg: `runtime_stack_height_v1()` is `get_stack_height()` on
+SBF and the constant `TRANSACTION_LEVEL_STACK_HEIGHT` off chain (what the host build already did, so host tests are
+unchanged). In the emission the wrapper is opaque by name as a runtime boundary.
+
+## Silent-fault checks
+
+Fault 1, writes through a reversed mutable iterator: the source search over the three crates finds only
+`aspis-core/src/r0_transcript.rs:129`, not in any emission (frozen or rewrite tree). The class a and b rewrites add
+no `rev()`.
+
+Fault 2, writes through a copied `Box` in optimized MIR: (a) 15 emitted functions involve a `Box`, all in the Pool
+crate (local, built MIR, not the optimized MIR of a dependency): `decode_checkpoint_master_box_v1`,
+`prepare_deposit_append_v1`, `decode_deposit_lane_box_v1`, `decode_terminal_request_box_v1`,
+`decode_terminal_master_box_v1`, `decode_terminal_checkpoint_box_v1`, `decode_terminal_lane_box_v1`,
+`terminal_common_box_v1`, `transfer_terminal_statement_box_v1`, `withdrawal_terminal_statement_box_v1`,
+`next_lane_image_box_v1`, `terminal_result_bytes_box_v1`, `decode_forest_initialization_box_v1`,
+`forest_master_image_box_v1`, `genesis_lane_image_box_v1` (`pair_forest.rs` lines 704 to 1977). Each builds a `Box`
+from a value with `Box::new` and reads or returns it; none writes through a `Box` or takes `&mut Box`. No
+`aspis_statement` or `aspis_core` function in the emission involves a `Box`. The SDK's account data reaches Aspis
+code only through `Rc<RefCell<&mut [u8]>>` borrows (`try_borrow_data` / `try_borrow_mut_data` giving `Ref` /
+`RefMut`), never as a `Box`. (b) so there is no write through a `Box` to compare; this was established by reading
+the Rust source of the 15 functions, not by reading their emitted Lean. (c) `compare-frza.tsv`: 7 of 153 shared
+functions differ beyond renaming; all 7 are representational (a non-local constant inline here and bound with `←`
+there in `decode_pool_identity_v1`, both `digest_is_canonical`, `decode_afterstate_frontier_v1`;
+`POOL_V1_PAIR_TREE_DEPTH` folded to `20`; two owners where the freeze emission groups extra closure instances). The
+lines are in the `note` column of `compare-frza.tsv`.

@@ -1,0 +1,11 @@
+--- a/programs/aspis-pool/src/pair_forest.rs
++++ b/programs/aspis-pool/src/pair_forest.rs
+@@ -385,7 +385,7 @@
+ ) -> ProgramResult {
+     if mint.key.to_bytes() != initialization.asset_mint
+         || initialization.token_program != LEGACY_SPL_TOKEN_PROGRAM_ID.to_bytes()
+-        || mint.owner != &LEGACY_SPL_TOKEN_PROGRAM_ID
++        || *mint.owner != LEGACY_SPL_TOKEN_PROGRAM_ID
+         || mint.executable
+         || mint.is_signer
+         || mint.is_writable

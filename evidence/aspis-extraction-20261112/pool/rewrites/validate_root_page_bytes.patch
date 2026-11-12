@@ -1,0 +1,26 @@
+--- a/programs/aspis-pool/src/history.rs
++++ b/programs/aspis-pool/src/history.rs
+@@ -169,11 +169,20 @@
+     {
+         return Err(PoolV1ProgramError::StateHistoryMismatch.into());
+     }
+-    for slot in 0..usize::from(filled) {
++    // X2 rewrite (class b): no early return inside the loop; the loop stops at the first
++    // non-canonical root and the same error is returned at the same point.
++    let mut slot = 0;
++    let mut roots_canonical = true;
++    while slot < usize::from(filled) && roots_canonical {
+         let start = PAGE_ROOTS_OFFSET + slot * 32;
+-        decode_digest_canonical(data[start..start + 32].try_into().unwrap())
+-            .map_err(|_| ProgramError::InvalidAccountData)?;
++        if decode_digest_canonical(data[start..start + 32].try_into().unwrap()).is_err() {
++            roots_canonical = false;
++        }
++        slot += 1;
+     }
++    if !roots_canonical {
++        return Err(ProgramError::InvalidAccountData);
++    }
+     let unused_start = PAGE_ROOTS_OFFSET + usize::from(filled) * 32;
+     if !page_bytes_are_zero(&data[unused_start..]) {
+         return Err(ProgramError::InvalidAccountData);

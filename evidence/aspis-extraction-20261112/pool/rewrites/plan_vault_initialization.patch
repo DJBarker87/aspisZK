@@ -1,0 +1,19 @@
+--- a/programs/aspis-pool/src/processor.rs
++++ b/programs/aspis-pool/src/processor.rs
+@@ -377,14 +377,14 @@
+     mint: &Pubkey,
+     vault: &AccountInfo<'_>,
+ ) -> Result<VaultPreparationV1, ProgramError> {
+-    if vault.key != &pool_v1_vault_token_account_address(program_id, pool).0
++    if *vault.key != pool_v1_vault_token_account_address(program_id, pool).0
+         || vault.executable
+         || vault.is_signer
+         || !vault.is_writable
+     {
+         return Err(PoolV1ProgramError::InvalidVaultTokenAddress.into());
+     }
+-    if vault.owner == &system_program::id() && vault.data_is_empty() {
++    if *vault.owner == system_program::id() && vault.data_is_empty() {
+         Ok(VaultPreparationV1::CreateAndInitialize)
+     } else {
+         require_initialized_empty_vault(program_id, pool, mint, vault)?;

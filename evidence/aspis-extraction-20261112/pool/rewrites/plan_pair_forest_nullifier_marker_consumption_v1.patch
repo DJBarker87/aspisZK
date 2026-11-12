@@ -1,0 +1,11 @@
+--- a/programs/aspis-pool/src/nullifier.rs
++++ b/programs/aspis-pool/src/nullifier.rs
+@@ -254,7 +254,7 @@
+         &pool,
+         &marker.canonical_nullifier_encoding(),
+     )?;
+-    if marker_account.key != &expected_address || marker_account.key == &pool {
++    if *marker_account.key != expected_address || *marker_account.key == pool {
+         return Err(PoolV1ProgramError::InvalidNullifierMarkerAddress.into());
+     }
+     let preparation = classify_nullifier_marker_account_v1(program_id, marker_account)?;

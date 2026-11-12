@@ -1,0 +1,19 @@
+--- a/programs/aspis-pool/src/vault.rs
++++ b/programs/aspis-pool/src/vault.rs
+@@ -589,11 +589,11 @@
+ ) -> Result<(), ProgramError> {
+     let [mint_account, source_account, source_authority, vault_account, token_program] =
+         exact_five_accounts(accounts)?;
+-    if mint_account.key != &plan.mint
+-        || source_account.key != &plan.source
+-        || source_authority.key != &plan.authority
+-        || vault_account.key != &plan.vault
+-        || token_program.key != &LEGACY_SPL_TOKEN_PROGRAM_ID
++    if *mint_account.key != plan.mint
++        || *source_account.key != plan.source
++        || *source_authority.key != plan.authority
++        || *vault_account.key != plan.vault
++        || *token_program.key != LEGACY_SPL_TOKEN_PROGRAM_ID
+     {
+         return Err(PoolV1ProgramError::TokenBalanceDeltaMismatch.into());
+     }

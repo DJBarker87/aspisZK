@@ -1,0 +1,11 @@
+--- a/programs/aspis-pool/src/pair_forest.rs
++++ b/programs/aspis-pool/src/pair_forest.rs
+@@ -519,7 +519,7 @@
+     } else {
+         pool_v1_pair_forest_lane_address(program_id, master, expected_lane)?
+     };
+-    if account.is_signer || account.key != &expected {
++    if account.is_signer || *account.key != expected {
+         return Err(PoolV1ProgramError::InvalidPoolStateAddress.into());
+     }
+     let lane = decode_pool_v1_pair_forest_lane_state_v1(

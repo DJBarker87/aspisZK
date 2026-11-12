@@ -1,0 +1,65 @@
+{
+ "note": "diagnostic: Aeneas -print-error-emitters on the LLBC of run offA",
+ "source": "/home/dombarker/project-offloads/future-version-20261111/src-frz-a",
+ "manifest": "programs/aspis-pool/Cargo.toml",
+ "features": "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+ "overflow_checks": false,
+ "target_dir": "/home/dombarker/project-offloads/future-version-20261111/x2/target/off",
+ "crate": "aspis_pool",
+ "lib_crates": [
+  "aspis_statement",
+  "aspis_core"
+ ],
+ "crate_dirs": [
+  "programs/aspis-pool/src",
+  "crates/aspis-statement/src",
+  "crates/aspis-core/src"
+ ],
+ "roots": [
+  "crate::processor::process_instruction",
+  "crate::history::append_roots_unchecked",
+  "crate::history::pool_v1_root_page_address",
+  "crate::history::write_new_page_unchecked",
+  "crate::pair_forest::account_is_zeroed_program_page",
+  "crate::pair_forest::decode_deposit_lane_box_v1",
+  "crate::pair_forest::decode_pair_forest_deposit_instruction_v1",
+  "crate::pair_forest::decode_terminal_master_box_v1",
+  "crate::pair_forest::prepare_deposit_append_v1",
+  "crate::pair_forest::require_exact_account_count",
+  "crate::pair_forest::require_program_owned_zeroed",
+  "crate::pair_forest::validate_lane_current_page",
+  "crate::processor::create_or_allocate_pda",
+  "crate::processor::plan_fresh_program_pda",
+  "crate::processor::require_payer_and_system_program",
+  "crate::processor::require_token_program_account",
+  "crate::processor::require_unique_accounts",
+  "crate::vault::exact_transfer_account_infos_v1",
+  "crate::vault::plan_legacy_deposit_transfer_from_identity_v1",
+  "crate::vault::validate_exact_deposit_delta_v1",
+  "aspis_statement::pool_v1::format::pool_v1_note_commitment",
+  "aspis_statement::pool_v1::pair_forest_accounts::pool_v1_pair_forest_deposit_lane_v1",
+  "aspis_statement::pool_v1::pair_tree_profile::_::single_output",
+  "aspis_statement::pool_v1::root_history::root_history_location"
+ ],
+ "opaque": [
+  "crate::pair_forest::process_pair_forest_deposit_with_runtime_v1"
+ ],
+ "include": [
+  "aspis_statement",
+  "aspis_core"
+ ],
+ "exclude": [],
+ "ns": "AspisX2",
+ "lean_prefix": "AspisX2off",
+ "adapt": "TP_adapt.py",
+ "rules": "fv_x2_rules.json",
+ "shims": [
+  "AspisTPNewLib"
+ ],
+ "emission": "noabort",
+ "lean_timeout": 1200,
+ "llbc_from": "/home/dombarker/project-offloads/future-version-20261111/x2/offA/runs/C",
+ "aeneas_extra": [
+  "-print-error-emitters"
+ ]
+}

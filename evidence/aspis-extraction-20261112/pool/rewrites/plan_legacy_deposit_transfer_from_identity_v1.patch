@@ -1,0 +1,29 @@
+--- a/programs/aspis-pool/src/vault.rs
++++ b/programs/aspis-pool/src/vault.rs
+@@ -241,7 +241,7 @@
+     let [mint_account, source_account, source_authority, vault_account, token_program] =
+         exact_five_accounts(accounts)?;
+     if identity.token_program != LEGACY_SPL_TOKEN_PROGRAM_ID.to_bytes()
+-        || token_program.key != &LEGACY_SPL_TOKEN_PROGRAM_ID
++        || *token_program.key != LEGACY_SPL_TOKEN_PROGRAM_ID
+         || !token_program.executable
+         || token_program.is_signer
+         || token_program.is_writable
+@@ -250,7 +250,7 @@
+     }
+ 
+     let expected_mint = Pubkey::new_from_array(identity.asset_mint);
+-    if mint_account.key != &expected_mint {
++    if *mint_account.key != expected_mint {
+         return Err(PoolV1ProgramError::InvalidMint.into());
+     }
+     require_token_owned_account(mint_account, false)?;
+@@ -280,7 +280,7 @@
+         return Err(PoolV1ProgramError::InvalidTokenAccount.into());
+     }
+     let expected_vault = pool_v1_vault_token_account_address(program_id, pool).0;
+-    if vault_account.key != &expected_vault {
++    if *vault_account.key != expected_vault {
+         return Err(PoolV1ProgramError::InvalidVaultTokenAddress.into());
+     }
+     let expected_vault_authority = pool_v1_vault_authority_address(program_id, pool).0;

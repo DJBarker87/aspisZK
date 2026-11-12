@@ -1,0 +1,45 @@
+--- a/programs/aspis-pool/src/vault.rs
++++ b/programs/aspis-pool/src/vault.rs
+@@ -352,22 +352,32 @@
+ fn exact_five_withdrawal_accounts<'slice, 'info>(
+     accounts: &'slice [AccountInfo<'info>],
+ ) -> Result<[&'slice AccountInfo<'info>; 5], ProgramError> {
+-    let [mint, vault, destination, vault_authority, token_program] = accounts else {
++    // X2 rewrite (class b/g): length check and indexing instead of a slice pattern, and the ten
++    // pairwise key comparisons written out in the order of the former nested loop (same first
++    // failing pair, same error). The translator rejects both the slice pattern over AccountInfo
++    // (Inconsistent projection) and any loop in a function that holds an AccountInfo.
++    if accounts.len() != 5 {
+         return Err(if accounts.len() < 5 {
+             ProgramError::NotEnoughAccountKeys
+         } else {
+             ProgramError::InvalidArgument
+         });
+-    };
+-    let values = [mint, vault, destination, vault_authority, token_program];
+-    for left in 0..values.len() {
+-        for right in left + 1..values.len() {
+-            if values[left].key == values[right].key {
+-                return Err(PoolV1ProgramError::InvalidTokenAccount.into());
+-            }
+-        }
+     }
+-    Ok(values)
++    let (mint, vault, destination, vault_authority, token_program) = (&accounts[0], &accounts[1], &accounts[2], &accounts[3], &accounts[4]);
++    if *mint.key == *vault.key
++        || *mint.key == *destination.key
++        || *mint.key == *vault_authority.key
++        || *mint.key == *token_program.key
++        || *vault.key == *destination.key
++        || *vault.key == *vault_authority.key
++        || *vault.key == *token_program.key
++        || *destination.key == *vault_authority.key
++        || *destination.key == *token_program.key
++        || *vault_authority.key == *token_program.key
++    {
++        return Err(PoolV1ProgramError::InvalidTokenAccount.into());
++    }
++    Ok([mint, vault, destination, vault_authority, token_program])
+ }
+ 
+ 

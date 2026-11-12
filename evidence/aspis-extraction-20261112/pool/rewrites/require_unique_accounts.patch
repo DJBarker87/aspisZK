@@ -1,0 +1,45 @@
+--- a/programs/aspis-pool/src/processor.rs
++++ b/programs/aspis-pool/src/processor.rs
+@@ -121,16 +121,36 @@
+ }
+ 
+ pub(crate) fn require_unique_accounts(accounts: &[AccountInfo<'_>]) -> ProgramResult {
+-    for left in 0..accounts.len() {
+-        for right in left + 1..accounts.len() {
+-            if accounts[left].key == accounts[right].key {
+-                return Err(ProgramError::InvalidArgument);
+-            }
+-        }
++    // X2 rewrite (class b): the translator rejects any loop in a function that holds an
++    // AccountInfo, so the pairwise scan is two recursions with the same visiting order (left
++    // ascending, then right ascending) and the same result. Trades compute for translatability:
++    // one call per visited pair and per left index; stack depth up to 2 * accounts.len() + 1.
++    if account_key_repeats_from(accounts, 0) {
++        return Err(ProgramError::InvalidArgument);
+     }
+     Ok(())
++}
++
++fn account_key_repeats_from(accounts: &[AccountInfo<'_>], left: usize) -> bool {
++    if left >= accounts.len() {
++        false
++    } else if account_key_repeats_after(accounts, left, left + 1) {
++        true
++    } else {
++        account_key_repeats_from(accounts, left + 1)
++    }
+ }
+ 
++fn account_key_repeats_after(accounts: &[AccountInfo<'_>], left: usize, right: usize) -> bool {
++    if right >= accounts.len() {
++        false
++    } else if *accounts[left].key == *accounts[right].key {
++        true
++    } else {
++        account_key_repeats_after(accounts, left, right + 1)
++    }
++}
++
+ pub(crate) fn require_payer_and_system_program(
+     payer: &AccountInfo<'_>,
+     system_program_account: &AccountInfo<'_>,

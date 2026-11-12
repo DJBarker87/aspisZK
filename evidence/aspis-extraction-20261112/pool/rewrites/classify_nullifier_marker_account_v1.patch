@@ -1,0 +1,20 @@
+--- a/programs/aspis-pool/src/nullifier.rs
++++ b/programs/aspis-pool/src/nullifier.rs
+@@ -193,7 +193,7 @@
+     if marker_account.executable || marker_account.is_signer || !marker_account.is_writable {
+         return Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into());
+     }
+-    if marker_account.owner == program_id {
++    if *marker_account.owner == *program_id {
+         let data = marker_account.try_borrow_data()?;
+         if data.len() != POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES {
+             return Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into());
+@@ -205,7 +205,7 @@
+         } else {
+             Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into())
+         }
+-    } else if marker_account.owner == &system_program::id() && marker_account.data_is_empty() {
++    } else if *marker_account.owner == system_program::id() && marker_account.data_is_empty() {
+         Ok(NullifierMarkerPreparationV1::CreateOrAllocateSystemOwned)
+     } else {
+         Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into())

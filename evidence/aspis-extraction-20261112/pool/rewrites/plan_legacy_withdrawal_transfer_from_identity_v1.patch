@@ -1,0 +1,49 @@
+--- a/programs/aspis-pool/src/vault.rs
++++ b/programs/aspis-pool/src/vault.rs
+@@ -399,7 +399,7 @@
+         return Err(PoolV1ProgramError::InvalidWithdrawalAmount.into());
+     }
+     if identity.token_program != LEGACY_SPL_TOKEN_PROGRAM_ID.to_bytes()
+-        || token_program.key != &LEGACY_SPL_TOKEN_PROGRAM_ID
++        || *token_program.key != LEGACY_SPL_TOKEN_PROGRAM_ID
+         || !token_program.executable
+         || token_program.is_signer
+         || token_program.is_writable
+@@ -408,7 +408,7 @@
+     }
+ 
+     let expected_mint = Pubkey::new_from_array(identity.asset_mint);
+-    if mint_account.key != &expected_mint {
++    if *mint_account.key != expected_mint {
+         return Err(PoolV1ProgramError::InvalidMint.into());
+     }
+     require_token_owned_account(mint_account, false)?;
+@@ -442,8 +442,8 @@
+         ),
+         None => pool_v1_vault_authority_address(program_id, pool),
+     };
+-    if vault_authority.key != &expected_authority
+-        || vault_authority.owner != &system_program::id()
++    if *vault_authority.key != expected_authority
++        || *vault_authority.owner != system_program::id()
+         || vault_authority.executable
+         || vault_authority.is_signer
+         || vault_authority.is_writable
+@@ -451,7 +451,7 @@
+     {
+         return Err(PoolV1ProgramError::InvalidVaultAuthority.into());
+     }
+-    if destination_account.key != destination {
++    if *destination_account.key != *destination {
+         return Err(PoolV1ProgramError::InvalidDestinationTokenAccount.into());
+     }
+ 
+@@ -473,7 +473,7 @@
+             program_id,
+             vault_account.key,
+         ),
+-        None => vault_account.key == &pool_v1_vault_token_account_address(program_id, pool).0,
++        None => *vault_account.key == pool_v1_vault_token_account_address(program_id, pool).0,
+     };
+     if !vault_address_ok {
+         return Err(PoolV1ProgramError::InvalidVaultTokenAddress.into());

@@ -1,0 +1,47 @@
+--- a/programs/aspis-pool/src/processor.rs
++++ b/programs/aspis-pool/src/processor.rs
+@@ -12,7 +12,6 @@
+ use aspis_statement::pool_v1::POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES;
+ #[cfg(target_os = "solana")]
+ use solana_program::instruction::get_stack_height;
+-#[cfg(any(target_os = "solana", test))]
+ use solana_program::instruction::TRANSACTION_LEVEL_STACK_HEIGHT;
+ #[allow(deprecated)]
+ use solana_program::system_instruction;
+@@ -499,8 +498,7 @@
+     // advancing the append-only tree without a corresponding top-level scan
+     // record.  Host unit tests exercise the pure predicate below; LiteSVM and
+     // validator release gates exercise the production syscall.
+-    #[cfg(target_os = "solana")]
+-    require_transaction_level_invocation_v1(get_stack_height())?;
++    require_transaction_level_invocation_v1(runtime_stack_height_v1())?;
+     let magic = instruction_data
+         .get(..4)
+         .ok_or(ProgramError::InvalidInstructionData)?;
+@@ -625,9 +623,24 @@
+     result
+ }
+ 
+-#[cfg(any(target_os = "solana", test))]
++/// X2 rewrite (target_os audit): the runtime boundary is this one call. On the deployed target it
++/// is the stack-height syscall; off chain (host tests, the translator's host-target compilation)
++/// every invocation is treated as transaction-level, which is what the host build did before
++/// (the check was absent there). The check itself is ordinary code on every target.
+ #[inline(always)]
+-fn require_transaction_level_invocation_v1(stack_height: usize) -> ProgramResult {
++fn runtime_stack_height_v1() -> usize {
++    #[cfg(target_os = "solana")]
++    {
++        get_stack_height()
++    }
++    #[cfg(not(target_os = "solana"))]
++    {
++        TRANSACTION_LEVEL_STACK_HEIGHT
++    }
++}
++
++#[inline(always)]
++stack_height: usize) -> ProgramResult {
+     if stack_height != TRANSACTION_LEVEL_STACK_HEIGHT {
+         return Err(PoolV1ProgramError::CpiInvocationForbidden.into());
+     }
