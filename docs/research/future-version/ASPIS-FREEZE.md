@@ -419,7 +419,17 @@ the keys of tool output files (they label existing evidence), and a few test str
 
 ## 10. Open items for the owner
 
-Decisions that are the owner's:
+Owner's answers, 12 November 2026 (after the freeze): on item 1, "A": the crate names stay and the
+frozen commit stands. On the lead's calls of the night, "both calls are fine". Three were listed
+(items 2, 3 and 4); the lead reads the answer as covering all three and said so to the owner.
+The owner's direction for what follows: "make sure everything required is extracted and then
+start the proof work", "for both soundness and privacy. Only once everything is extracted are we
+truly ready to proceed". The state of the translation against that direction is kept in
+`evidence/aspis-extraction-20261112/` (first audit: 27 pieces of Aspis code without a translated
+body in any scope of the freeze emission, the five scopes not linked, no emission of the Pool
+program, no release-style emission of the prover path). No proof work starts before it is complete.
+
+Decisions that were the owner's at the freeze:
 
 1. **Crate names.** A: keep `aspis-r1-cost-probe` and `aspis-r1-cost-probe-program` (never seen
    on chain or by a user; the deployed file keeps that name). B: rename them too, as its own commit
