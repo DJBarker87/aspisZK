@@ -1,6 +1,6 @@
 --- carried-src/GSActualEncoderGRSBridge.lean
 +++ ported-src/GSActualEncoderGRSBridge.lean
-@@ -64,8 +64,9 @@
+@@ -64,15 +64,17 @@
      degreeLt (encodeInitialC m) 1025 := by
    unfold degreeLt
    rw [CPolynomial.degree_toPoly]
@@ -12,3 +12,13 @@
  
  theorem final_encode_degreeLt (m : FinalMessage WideExact) :
      degreeLt (encodeFinal m) 256 := by
+   unfold degreeLt
+   rw [CPolynomial.degree_toPoly]
+-  exact (Polynomial.degree_le_natDegree.trans_lt
+-    (WithBot.coe_lt_coe.mpr (final_encode_degree_lt m)))
++  have h : ((encodeFinal m).toPoly.natDegree : WithBot ℕ) < 256 := by
++    exact_mod_cast final_encode_degree_lt m
++  exact Polynomial.degree_le_natDegree.trans_lt h
+ 
+ #print axioms initial_normalizedPoints_eq_maintained
+ #print axioms final_normalizedPoints_eq_maintained
