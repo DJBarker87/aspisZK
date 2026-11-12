@@ -392,3 +392,17 @@ stage 1 `off2` 73; after A (`rwA`) 44; after A, B, C2, I (`rw2b`) 44.
   a `rev()`).
 - Not done yet: (d) whether this Charon can read dependency crates from built MIR; (e) the bodies in
   `compare-frza.tsv` that differ by more than local renaming, listed with their lines.
+
+### Handover (X1 stopped here; nothing running)
+
+- Scratch trees on the host: `W/x1/rw3` (frozen + A + B2 + C2 + I with 7-character names; ELF 827aaec1…, byte-identical)
+  and `W/x1/rw2` (the same with the 6-character name `packed`; its emission is `W/x1/runs/rw2b`, native probe
+  `W/x1/probe/rw2b`). rw3 itself was built only, not emitted; its translation equals rw2b up to binder names.
+- Keeping the ELF byte-identical: a rewrite must keep the line count of the file up to the last panic site, and keep the
+  column of every expression that can panic (bounds checks, asserts). Panic locations (file, line, column) are stored in
+  `.rodata`. Append test modules at the end of the file, and put comments on existing lines.
+- `fv_x1_rwB.py` (7-line form) and `fv_x1_rwC.py` are superseded by `fv_x1_rwB2.py` and `fv_x1_rwC2.py`. The
+  `rewrites/` patches are the line-preserving forms. `fv_x1_rwF.py` (item F) is written but was never built or tested.
+- Receipt names are single-use: `fv_slot.sh` refuses an existing `receipts/<attempt>` with exit 2, which is why the
+  rw2 emission label is `rw2b`.
+- For a noabort run, give the probe the mode: `fv_x1_probe.sh <label> noabort`.
