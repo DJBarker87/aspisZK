@@ -59,12 +59,10 @@
      parse_record(row, framed)?;
      Ok((framed, offset + length))
  }
-@@ -978,5 +978,93 @@
-         if x.c1()!=QM31::ZERO {return Err(Error::NonCanonical{row,value});}
-         let tail=payload[32..].to_vec();
+@@ -980,3 +980,92 @@
          finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
-+    }
-+}
+     }
+ }
 +
 +/// X1b item J: differential test of `validate_record_fields`, `parse_record` and `parse_record_at` against the
 +/// frozen bodies (r1_wire.rs 51-60, 141-157, 410-421).
@@ -97,7 +95,7 @@
 +            old_validate_record_fields(row, payload)?;
 +        }
 +        Ok(payload)
-     }
++    }
 +    fn old_parse_record_at<'a>(bytes: &'a [u8], row: u8, offset: usize) -> Result<(&'a [u8], usize), Error> {
 +        let length = 5 + row_shape(row).unwrap().1;
 +        let framed = bytes
@@ -141,7 +139,8 @@
 +            assert_eq!(a, old_parse_record(row, &r));
 +            assert_eq!(validate_record_fields(row, &r[1..]), old_validate_record_fields(row, &r[1..]));
 +            if row_shape(row).is_some() {
-+                let mut buf = limbs(&mut s, (next(&mut s) % 64) as usize);
++                let prefix = (next(&mut s) % 64) as usize;
++                let mut buf = limbs(&mut s, prefix);
 +                let offset = buf.len();
 +                buf.extend_from_slice(&r);
 +                if next(&mut s) % 4 == 0 { buf.truncate(buf.len() - 1); }
@@ -152,4 +151,4 @@
 +        }
 +        assert!(seen[0] > 500 && seen[1] > 500);
 +    }
- }
++}
