@@ -174,8 +174,6 @@ names it; `shim-items.tsv` has the column.
 
 ## Stage C: import closure of the model theorems and port size
 
-(Interim commit: the closure compile and the trimmed-library runs are in progress; this section is updated when
-they finish.)
 
 Root: `AspisFailureBoundModel` (both theorems are in it). Chain sources are the worktree at
 27b14ab00a4e781cddd8cd8321e158b8d5c4aa94. The `lean/` directory last changed at 5bf1b2216ff, and all 80 files
@@ -250,48 +248,121 @@ up to v4.35.0 (06686e4c70939af82203af21516f8ab8a21a8051, 2026-10-14). It has no 
 upstream now has one is unchecked; checking needs a fetch, which the task excluded. The closure uses 87 of its
 274 modules.
 
-### Compile under the new toolchain: not run
+### Carrier-free object set: what was run (old toolchain, Lean 4.32.0)
 
-`closure-compile.tsv` records this. No module count compiled or failed, and no error kinds exist. Prepared:
-`host/fv_x3_closure_compile.sh`, one slot. It compiles in dependency order with no edits, skips a module whose
-imports failed, and records exit, wall, peak RSS, error count and first error per module.
+The lead's design changed three times during the task; each version was run as it arrived and is kept:
 
-### Port size estimate (static only)
+| Version | Text tools | Old-toolchain result (nodes compiled / failed / skipped) | Table |
+|---|---|---|---|
+| plain trim, research e23c3db75f4 `ASPIS-LIB-trim_imports.py` | carrier import lines deleted | 0 / 7 / 130 of 137 | `trimmed-l187-compile-earlier.tsv` (variant `plain`) |
+| frontier trim, mine, diagnostic (`host/fv_x3_trim_frontier.py`) | each deleted carrier import replaced by that carrier's carrier-free import frontier | 2 / 2 / 133 | same file (variant `frontier`) |
+| mapped trim, research 6032f9ef5bd | carrier imports replaced by base modules (`IMPORT_MAP.txt`), unmapped deleted; 6 bases | 8 / 5 / 130 of 143 | same file (variant `mapped`) |
+| **current: mapped + omit + drop, research 242907bd5b0** (`README-ORDER.md`) | map; 16 `OMIT_MODULES.txt` deleted from import lines; `drop_decls.py` removes 16 declarations in 10 modules; chain from future-version d01246c1052 appended | **47 / 13 / 144 of 204** (127 nodes + 77 chain) | `trimmed-l187-compile.tsv`, `trimmed-l187-error-kinds.tsv` |
 
-- Scope of the port: all 1,451 modules (210,387 lines). They move from Lean 4.32.0 with Mathlib v4.32.0
-  (81a5d257) to Lean 4.36.0-rc2 with Mathlib 9d581dff, four minor Lean versions.
-- Only 9 modules import Aeneas, and only the 22 modules of the generated, aeneas-import and translated-content
-  tiers name translated definitions or Aeneas scalar or slice types. No chain module (kind a) mentions Aeneas. A port "over Aeneas
-  scalar types" therefore concerns those 22 modules, which are also the ones the chain is to shed. Everything
-  else is a Lean/Mathlib version port.
-- Error sites: not measured. A number needs the closure compile. Until then, any figure would be a guess, and none
-  is given.
-- The ten modules with the most transitive dependents in the closure (`closure-dependents.tsv`), all kind (c),
-  64 to 283 lines each:
+Current run: `host/fv_x3_pipeline3.sh` (text steps), then `X3-C-map3-old` (one slot, exit 0, wall 5:26.76, peak RSS
+6,170,828 kB, scope peak 2,472,927,232 B, no memory events). LEAN_PATH: `W/x3/map3-old/out` first, then the L187
+`objs` and `base_ref` by reference. All 18 aspis-lib files and their sha256 are in `W/x3/aspis-lib3/SHA256SUMS.host`
+(for example `trim_imports.py` 2d4078b2304ba762928ee5c89687c0a6c2d502986128a14645a58f1b45756d1d, `drop_decls.py`
+c92d0e75c149be3f73ea4b6086455470db9f77c72d1ef945f50e4f3afd941aaa, `DROP_DECLS.tsv`
+45b096d7fef46260e07b20043919cf3c4dbc2b5a386c69f36e2cca6dea6c6efc, `OMIT_MODULES.txt`
+fdea48ec0a29b70c174b35044ce83280c7ab78ea36e4b71afe199e0664c43d3a). Records copied here: `trim-record.tsv` (26 modules),
+`drop-record.tsv` (16 declarations, all found once), `drop-decls.tsv` (unchanged; no addition was made, see below). Chain
+sources: the 77 files of d01246c1052; `AspisFailureBound` and `AspisRowStarts` hash as in `repoint/diff-vs-before.tsv`.
 
-  | Module | Transitive dependents |
-  |---|---|
-  | `AspisV8Privacy.FiniteGames` | 919 |
-  | `AspisV8R17.AdaptiveOracle` | 918 |
-  | `AspisV8R19.OracleResampling` | 914 |
-  | `AspisV8PairedCommitment.Table` | 912 |
-  | `AspisV8R19.MemoizedProgramLaw` | 911 |
-  | `AspisV8R19.OracleProgramOps` | 910 |
-  | `AspisV8R19.AdaptiveFirstReadLaw` | 886 |
-  | `AspisV8R19.CausalFirstHitUnionBound` | 875 |
-  | `FS.Statement` | 874 |
-  | `FS.LemmaA` | 869 |
+**Graph check before compiling** (`trimmed-graph-check.tsv`, kind (d) plus the 16 omitted modules counted as excluded):
+121 of 127 nodes and 55 of 77 chain modules are clean. Not clean:
+- the base modules `AspisLib_Guard` and `AspisLib_Tag` import `R19BudgetOriginalReads`, which is in `OMIT_MODULES.txt`.
+  The pipeline trims only L187 modules, so the bases keep that import; four nodes downstream of `AspisLib_Guard`
+  inherit it (`OraclePortCompletionDraft`, `OraclePortStoredAcceptanceC6`, `OraclePortStoredReductionC7`,
+  `OraclePortFrozen2C6`);
+- the chain module `AspisOneTxDecision` imports `OraclePortFrozenOrderDecision`, also in `OMIT_MODULES.txt`, and
+  `AspisLib_Guard`; 22 chain modules, including `AspisFailureBound` and `AspisFailureBoundModel`, reach an omitted
+  module through it. Chain sources were not edited.
+
+**Coherence hazard.** An omitted module is not compiled, so an import of it resolves to its L187 object, whose own
+imports (for `R19BudgetOriginalReads`: `BinHonestStartFrames` and below) now resolve to the trimmed objects that
+shadow the originals. Lean 4.32.0 loads such a mix without a check. `AspisLib_Tag` compiled this way (exit 0); that
+result is not evidence of anything and is marked here as incoherent.
+
+**Failures (13), first error each** (`trimmed-l187-compile.tsv`):
+- 11 fail at an `open` line with "unknown namespace" (`FS`, `FS2.Duplex`, `AspisV8R19.DuplexFrames`,
+  `AspisCircleGroupOrder`, `R15WriterModel`): `R16CanonReduction`, `OraclePortDataChoiceDraft`,
+  `OraclePortSelectedArithmeticC4`, `R9PoolCheckpointCodec`, `OraclePortStoredProbabilityC7`,
+  `OraclePortFrozenOrderRecoveryStep`, `OraclePortFrozenOrderLeaves`, `OraclePortFrozenOrderAccepted`,
+  `OraclePortFrozen2Trace`, `Frozen2StartChargePrefix`, `R16DecisionCheckpoint`. The deleted import line (an
+  omitted module or an unmapped carrier) was also the module's only route to namespaces it opens; the earlier
+  frontier variant shows that replacing the line by the carrier-free frontier of the deleted module keeps them.
+  This is a consequence of deleting import lines, not a use of carrier content.
+- `BinHonestQueryBudget`: "Unknown constant `recorded_starts`" at line 119, the `#print axioms recorded_starts`
+  that `drop_decls.py` leaves behind (its span stops at a line starting with `#`). Every dropped declaration whose
+  module prints its axioms will fail the same way.
+- `OracleDecisionFeasibilityBudget`: "Unknown identifier `R19BudgetOriginalReads.verifier_queries`" in theorem
+  `queries` (line 66): a declaration of an omitted module is used. The module is not in `top_closure_modules.tsv`.
+
+**Needed modules that fail** (in `uses/top_closure_modules.tsv`, needed-constant count): `R16CanonReduction` 11,
+`OraclePortFrozenOrderRecoveryStep` 9, `Frozen2StartChargePrefix` 5, `OraclePortSelectedArithmeticC4` 4,
+`OraclePortDataChoiceDraft` 1, `OraclePortFrozenOrderLeaves` 1, `BinHonestQueryBudget` 1. In the first six every
+declaration after the failed `open` fails, the needed ones included. Under the lead's rule this stops the run: no
+declaration was added to `DROP_DECLS.tsv` (the one candidate, `OracleDecisionFeasibilityBudget.queries`, is noted
+above), and nothing was patched.
+
+**The 26 modules of `kindc_declarations_to_drop.tsv` against the prediction.** 16 are in `OMIT_MODULES.txt` and were
+not compiled, as predicted. Of the 10 with dropped declarations: `BinHonestQueryBudget` fails (leftover `#print`),
+`R16CanonReduction` and `OraclePortDataChoiceDraft` fail (unknown namespace), the other seven are skipped because an
+import failed; none of the 10 compiled, so the prediction that the drop is sufficient is untested for them.
+**Leaving out un-needed modules.** All 16 omitted modules are imported, directly or transitively, by needed
+modules, so they cannot be left out by import closure alone; the trim deletes those import lines instead. Over the
+trimmed graph (kind (d) excluded, the bases standing in for the five kind (d) modules in the needed list), the
+needed set with its imports is 1,410 modules (73 chain, 87 CompPoly, 1,244 kind (c), 6 bases; 200,537 lines). The
+closure modules outside it are the 38 kind (d) and 9 kind (c) modules (1,126 lines).
+
+**Chain under the old toolchain:** 37 of 77 compiled; 40 skipped behind failed imports;
+`AspisFailureBoundModel` is skipped (`AspisFailureBoundJoined` not compiled). **The five checks were not run**:
+they need the `AspisFailureBoundModel` object.
+
+### Pass 2 under the new toolchain (partial)
+
+Pass 2 was run on the set of the mapped version (6032f9ef5bd): CompPoly (87), the 1,116 kind (c) modules whose
+closure never reached (d), and the 8 compiled nodes, 1,211 modules and 174,218 lines, in one slot, resumable
+(`host/fv_x3_closure_compile.sh` keys each success by source sha256 and import list). It was paused at module 634
+to give the trimmed runs the slot, as their priority required. The untouched kind (c) modules and CompPoly are the
+same in the current version, so these rows carry over. Result over 634 processed modules
+(`closure-compile-pass2.tsv`, `closure-compile-pass2-error-kinds.tsv`): **227 compile unchanged, 10 fail, 397
+skipped** because an import failed. Failures, first error kind each:
+
+| Error kind | Sites | Modules | Example |
+|---|---|---|---|
+| changed simp behaviour (unsolved goals after `simp`) | 4 | 1 | `FS2.DuplexTrace:175` |
+| rewrite / unfold equation lemmas | 3 | 3 | `R1PublicInitFrame:57` "Failed to rewrite using equation theorems for `absorbA`"; `R1PrefixedStateCodec`, `R1D18PointWeights` |
+| resource (kernel deep recursion) | 3 | 3 | `AspisFormal.CircleFibreRoots:78`; `AspisV8R15.ExactTowerChord`, `R1UnifiedLabels` |
+| kernel "excessive memory consumption" and other | 3 | 3 | `AspisV8R15.ExactTowerFinite:21`; `R0P.SemBadSets`, `R1AppendCopyLinks` |
+| type class / elaboration | 2 | 1 | `AspisFormal.CircleFibreRoots:94` "failed to synthesize NoZeroDivisors (ZMod P)" |
+| tactic behaviour (`rfl`) | 1 | 1 | `R0P.SemBadSets:1170` |
+
+No error names an Aeneas scalar API (none of these modules uses Aeneas) and no renamed Mathlib lemma appears among
+first errors so far. The skip count is large because `FS2.DuplexTrace` sits under most of the closure (`FS2.*` has
+more than 860 transitive dependents), so most of pass 2 is not yet measured: the port size in error sites cannot
+be given until those ten modules compile. Pass 1 over the untrimmed closure was not run (not needed, per the lead).
+
+### Port size (current state of knowledge)
+
+- Set to carry: 1,410 modules, 200,537 lines (needed set over the trimmed graph, above).
+- Measured under Lean 4.36.0-rc2 so far: 634 modules processed, 227 compile unchanged, 10 fail with 16 error
+  sites; everything else is unmeasured behind those 10. The ten modules everything else depends on most are all
+  kind (c) (`closure-dependents.tsv`): `AspisV8Privacy.FiniteGames`, `AspisV8R17.AdaptiveOracle`,
+  `AspisV8R19.{OracleResampling, MemoizedProgramLaw, OracleProgramOps, AdaptiveFirstReadLaw,
+  CausalFirstHitUnionBound}`, `AspisV8PairedCommitment.Table`, `FS.Statement`, `FS.LemmaA`; all ten compile
+  unchanged under Lean 4.36.0-rc2.
+- CompPoly v4.35.0 under the new toolchain (diagnostic): prepared (`W/x3/comppoly-v4.35.0`, 393 modules, 123,740
+  lines, commit 06686e4c70939af82203af21516f8ab8a21a8051), not run.
 
 ## Not checked
 
-- Every compile: the library build, the 19 raw-emission modules and the 1,451 closure modules.
-- Whether `~/.cache/mathlib` holds the files for Mathlib 9d581dff.
-- Whether CompPoly upstream has a revision for v4.36.0-rc2.
+- The five chain checks (a to e): `AspisFailureBoundModel` did not compile.
+- Pass 2 beyond module 634 of its set, and pass 2 over the chain and the bases.
+- CompPoly v4.35.0 under the new toolchain.
+- Whether CompPoly upstream has a revision for v4.36.0-rc2 (needs a fetch).
 - Whether the CompPoly objects in L187 `base_ref` were built from the checkout at 4165a87.
-- Library references outside `core.`/`alloc.`/`std.`, and the `«%S»` scalar-template names, which the reader
-  matched by text only.
-- The (d) tiers rest on regular-expression reads of names (at least 5 characters, a short list of common names
-  excluded) and on reading the modules named above; they are not an elaborated dependency analysis.
 
 ## Files
 
@@ -301,7 +372,9 @@ Tables in this directory:
 - `closure-kind-d.tsv`
 - `closure-chain-to-d-paths.tsv`
 - `closure-dependents.tsv`
-- `closure-compile.tsv`
+- `closure-compile-pass2.tsv`, `closure-compile-pass2-error-kinds.tsv`
+- `trim-record.tsv`, `drop-record.tsv`, `drop-decls.tsv`, `trimmed-l187-compile.tsv`, `trimmed-l187-error-kinds.tsv`,
+  `trimmed-graph-check.tsv`; earlier versions in `trim-record-earlier.tsv`, `trimmed-l187-compile-earlier.tsv`
 - `probe-errors.tsv`
 - `probe-static-library-refs.tsv`
 - `shim-items.tsv`
