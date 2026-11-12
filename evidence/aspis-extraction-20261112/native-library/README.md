@@ -1,24 +1,36 @@
 # Native Aeneas library: set-up, raw-emission probe and port size (task X3)
 
-Status: target not yet established. This is a tool record. Nothing in it is a proof. No module named here was
-compiled under the new toolchain. Stage A stopped before any download because the build host had less free disk
-than the task's floor. Stages B and C therefore contain only static results, read from source text. Every
-compile result asked for is marked "not run".
+Status: target not yet established. This is a tool record. Nothing in it is a proof; an elaborated or compiled
+module is not a verified one.
 
 `W` = `~/project-offloads/future-version-20261111` on the build host. Host outputs are under `W/x3/`.
 
-## Stage A: toolchain (stopped before download)
+History: the first pass stopped at 31 GB free, under the 60 GB floor, and recorded only static results. The lead
+then freed space (76.8 GiB reported) and the stages were run as below. The static tables of the first pass are
+kept (`probe-static-library-refs.tsv`, `shim-items.tsv`); the compile results supersede the statements that
+were marked unchecked there.
 
-Free disk on the host filesystem (`df -h`, `/`, which also holds `W`): 31 GB at the start, 30 GB at the end
-(1.8 TB, 99 % used). The task's floor is 60 GB, so nothing was downloaded and no toolchain was installed. The
-library was not built. There is no wall time, peak RSS or disk figure for a build.
+## Stage A: toolchain and native library (built)
 
-What is on the host:
-- Toolchains installed under elan: v4.31.0, v4.32.0, v4.33.1. v4.36.0-rc2 is not installed.
-- Mathlib checkouts found under `/home/dombarker` (depth 7): all at 81a5d257c8e410db227a6665ed08f64fea08e997
-  (v4.32.0) or with no readable revision. None is at the revision the new manifest names.
-- `~/.cache/mathlib`: 17,181 files, 865 MB. I did not check whether it holds the files for the new revision.
-  Lake decides that, and Lake needs the toolchain.
+| Step (attempt) | Exit | Wall | Peak RSS (time -v) | Scope memory peak | Memory events |
+|---|---|---|---|---|---|
+| elan install `leanprover/lean4:v4.36.0-rc2` (outside a slot; a download) | 0 | 30 s | | | |
+| `lake exe cache get` (`X3-A-cache`) | 0 | 1:55.53 | 1,022,396 kB | 6,443,696,128 B | high 1655, max 0, oom 0 |
+| `lake build Aeneas AeneasMeta` (`X3-A-build`) | 0 | 7:59.89 | 4,509,164 kB | 4,238,536,704 B | none |
+
+- Lean 4.36.0-rc2, commit b35cb10cf2ced51a2fd1880cfdbf75c71ab7a35a (Release); Lake 5.0.0-src+b35cb10.
+- Package revisions as checked out (`stageA-package-revs.txt`) equal the manifest for all nine packages; the
+  manifest, toolchain and lakefile hashes were unchanged after the cache step.
+- The cache step downloaded 9,081 files into `W/x3/mathlib-cache` (`MATHLIB_CACHE_DIR`; the shared
+  `~/.cache/mathlib` was not used). The build log names no Mathlib module as built; the 3,591 build jobs that
+  compiled are Aeneas and AeneasMeta modules. No cold Mathlib build.
+- The "high 1655" events are throttling at MemoryHigh 6G during cache decompression; there was no OOM and no
+  swap.
+- Both slots ran with Lean and Lake on the slot's four cores (`slotbin/taskset --cpu-list`, `LEAN_NUM_THREADS=4`).
+- Disk: free 77 GiB at start, 74 after the toolchain, 66 after the cache, 65 after the build (`stageA-df.txt`).
+  `.lake` 8.05 GB (packages 7.3 GB, build 434 MB), cache 466 MB, `~/.elan/toolchains` grew from 8,768,636 kB to
+  11,953,820 kB.
+- Script `host/fv_x3_stageA.sh` (sha256 daf06c02444dd1c398c48bc6f3823011b0bd2d37bf1ed5421adb4980fd166364).
 
 Source used: the archive kept beside the binaries,
 `codex-pc-prov-p4x-20261110/PCWH_T004_out/aeneas-exact-source.tar.gz`, sha256
@@ -53,10 +65,6 @@ Read from the extracted tree:
 
 The soundness lead's report that the toolchain is v4.36.0-rc2 agrees with this file.
 
-Prepared but not run: `host/fv_x3_stageA.sh`. It refuses below 60 GB free. It installs the toolchain through elan
-(adding it, removing nothing). It then runs `lake exe cache get` in one slot (never `lake update`) and checks
-that the manifest is unchanged. Last, it runs `lake build Aeneas AeneasMeta` in one slot.
-
 ## Stage B: raw emission probe
 
 The raw Aeneas output was kept by the frozen run. For scope X it is in
@@ -71,23 +79,73 @@ the emission README:
 
 No regeneration was needed.
 
-**Compile result per scope: not run, in all five scopes** (`probe-errors.tsv`). Prepared:
-`host/fv_x3_probe.sh <scope> <namespace>`, one slot. It byte-copies the raw files. It copies each
-`*External_Template.lean` to the file name its siblings import (`<ns>/FunsExternal.lean`,
-`<ns>/TypesExternal.lean`), which renames the file without editing its content. Then it compiles the four
-modules in order.
+**Compile result** (attempt `X3-B-probe`, one slot, exit 0, wall 2:37.67, peak RSS 2,155,504 kB, scope peak
+1,147,518,976 B, no memory events; script `host/fv_x3_probe.sh` sha256
+08bcdc44f9ffde91303aee1acd88800bb4078524c27ec64955b123865fea60c6). The raw files were byte-copied. Each
+`*External_Template.lean` was copied to the file name its siblings import (`<ns>/FunsExternal.lean`,
+`<ns>/TypesExternal.lean`): a rename, no content edit. No shim, no rule, no other edit. Lean 4.36.0-rc2,
+`-j1 -M7000 -DElab.async=false`, against the stage A objects.
 
-Facts about the raw text that bear on a zero-edit compile:
-- All raw files use the module system (`module`, `public import`, `@[expose] public section`). They set
-  `linter.internalConstructors`, which the old pipeline removed as unknown to Lean 4.32.0.
-- The templates declare their externals as `axiom`s: v 67+2, p 96+5, s 9+1, d 11, c 10+3 (Funs+Types). Compiling
-  a template unedited adds these axioms. No raw file contains `sorry`.
-- The verifier `Funs` still contains the text behind the old pipeline's two name-clash rules: 5 binders
-  `(compact :` with 151 `compact.<name>` references, and 6 binders or lets named `weights` with 215
-  `weights.<name>` references. Whether those references resolve to the module or the local under v4.36.0-rc2 is
-  unchecked. It is the cause (2) candidate for the verifier scope.
+| Scope | TypesExternal | Types | FunsExternal | Funs | Funs errors | Causes |
+|---|---|---|---|---|---|---|
+| v verifier | 0 | 0 | 0 | 1 (0:50.88, 2.16 GB) | 50 | (1) 4, (2) 27, (3) ok_or 12, mut-iter 3, recdepth 2; 2 consequential |
+| p program | 0 | 0 | 0 | 1 | 13 | (3) line-break 10, ok_or 3 |
+| s statement semantic | 0 | 0 | 0 | **0** | 0 | none |
+| d decoders | (none emitted) | 0 | 0 | 1 | 1 | (3) ok_or 1 |
+| c core | 0 | 0 | 0 | 1 | 1 | (3) ok_or 1 |
 
-Static library-name check (`probe-static-library-refs.tsv`, tool `host/fv_x3_libnames.py`). This is not
+Every `Types`, `TypesExternal` and `FunsExternal` compiles unchanged. The statement-semantic `Funs` compiles
+unchanged with no error. Lean reports one error per failing declaration in these files (a `do` block stops at its
+first error), so the counts are declarations; the pattern-site counts are given per cause. `probe-errors.tsv`
+has one row per error (scope, line, declaration, Lean code, cause, Rust path or name, message); classifier
+`host/fv_x3_probe_errors.py`.
+
+Causes:
+
+- **(1) library item absent from the native library.** The verifier emits an `impl_def` for
+  `core::iter::traits::iterator::Iterator` on `core::slice::iter::ChunksExactMut` (Funs line 45) with the trait
+  methods `zip`, `fold`, `any` and `rev` as structure fields. The native `core.iter.traits.iterator.Iterator`
+  structure has only `next`, `step_by`, `enumerate` and `take` (`Std/Core/Iter.lean:93`; its comment says adding
+  `rev` "leads to a circularity"). Four errors. `ChunksExactMut` itself is not native; the emission's own template
+  declares it as an axiom.
+- **(2) name clash.** Without the old rules, a binder named `compact` (15 errors, in `compact::check_values`,
+  `expand_semantic`, `expand_semantic_loop`, `expand_values`) and a binder named `weights` (12 errors, in
+  `weights::factored_s2_libra_weights` and its loop) shadow the modules `compact` and `weights`: Lean resolves
+  `compact.CodecError` as field access on the local `compact : Slice U8` ("The environment does not contain
+  `Aeneas.Std.Slice.CodecError`") and `weights.PERM` as field access on `weights : Array WideExact 4`. The
+  shadowing is not resolved by the native toolchain.
+- **(3a) `Option::ok_or` purity.** The emitter writes `lift (core.option.Option.ok_or o e)`, treating `ok_or` as a
+  pure function; the native library of the same Aeneas commit declares it as returning
+  `Result (core.result.Result T E)` (`Std/Core/CoreOption.lean:24`). The doubly wrapped value fails at the next
+  `core.result.Result.Insts.CoreOpsTry.branch`. 17 errors; 30 `lift (core.option.Option.ok_or` sites in the raw
+  `Funs` (v 18, p 3, d 8, c 1, s 0). The old shim `AspisTPNewLib`/`AspisXPNewLib` defined `ok_or` as pure
+  (`core.result.Result T E`), although its header names `Std/Core/CoreOption.lean` with the same sha256 as the
+  native file, which returns `Result`. The shim therefore matched the emitter, not the file it cites.
+- **(3b) emitter line breaks.** In the program adapter, `r1_pool_adapter::owned::authenticate_invariant_release_registry`
+  is emitted with applications broken over lines at the emitter's indentation limit (a deeply nested `if`
+  chain at column 68), which Lean parses as separate terms: 10 errors in that one declaration. The old pipeline
+  had the rule `@join-broken-applications` for this.
+- **(3c) recursion depth.** `fast_domain::TABLE_A` and `TABLE_B`, 512-entry `Array.make` literals, exceed the
+  emitted `maxRecDepth 2048`. Two errors.
+- **(3d) mutable-iterator encoding.** The template's `ChunksExactMut::next` has a backward function in its result
+  type, which the native `Iterator.next` field does not take (1 error), and `compact::expand_values` destructures
+  `(o, iter1, next_back)` from `Zip<ChunksExact, ChunksExactMut>::next`, while the native `Zip` `next` returns a
+  pair ("expected a product type, got core.iter.adapters.zip.Zip ..."; 2 errors).
+- Consequential: two "Unknown constant `core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice`"
+  after the failed `impl_def`.
+
+**`compact::expand_values` does not elaborate** (errors at Funs lines 932 name clash, 933 Zip destructuring, 952
+unknown `ChunksExactMut` instance). **`r0::heap::filled` elaborates**: the core scope's only error is in
+`circle::secure_circle_point_from_parameter` (ok_or); no error is reported in the `r0.heap.filled` declarations
+(Funs lines 2179 to 2200), and `alloc.alloc.Global` resolves to the native inductive. Because the core `Funs`
+module still fails, it writes no object.
+
+Facts about the raw text: all raw files use the module system (`module`, `public import`, `@[expose] public
+section`). The templates declare their externals as `axiom`s: v 67+2, p 96+5, s 9+1, d 11, c 10+3 (Funs+Types);
+compiling a template unedited adds these axioms. No raw file contains `sorry`. A compiled module writes `.olean`,
+`.olean.server`, `.olean.private`, `.ir` and `.ir.sig`.
+
+First-pass static check, kept for reference: Static library-name check (`probe-static-library-refs.tsv`, tool `host/fv_x3_libnames.py`). This is not
 elaboration. It takes every `core.`/`alloc.`/`std.` path in the raw text and finds whether the native source
 declares a Lean name for it. Classes:
 - declared: found;
@@ -104,27 +162,20 @@ declares a Lean name for it. Classes:
 | d | 55 | 43 | 4 | 2 | 6 | 0 |
 | c | 62 | 46 | 5 | 7 | 4 | 0 |
 
-No Rust-library path the emission references is missing from the native source text, so no cause (1) item is
-known. Cause (3), anything else such as type mismatches or tactic and elaboration failures, cannot be seen without
-a compile. Paths outside `core.`/`alloc.`/`std.` (for example `Aeneas.Std.*` helpers used without a prefix) were
-not checked.
+Every `core.`/`alloc.`/`std.` path the emission references is declared natively or by its own template; the
+compile confirms there is no unknown library constant, except the cause (1) trait methods, which are structure
+fields rather than declarations and so were not visible to the static reader.
 
 **Old shim items** (`shim-items.tsv`): the three shims define 15 library items, plus four members of
-`SliceIndexRangeFullSlice`. The shims also departed from the copied text twice, because the old library lacks
-`Array.from` and `Slice.from`. The native source declares every one of them, together with `Array.from` and
-`Slice.from`. Elaboration of each is unchecked.
-
-`compact::expand_values` and `r0::heap::filled`:
-- `alloc.alloc.Global` is declared natively (`Std/Alloc/Alloc.lean:13`, `inductive alloc.alloc.Global | mk`).
-- `core.iter.adapters.zip.Zip` is a two-field structure (`fst`, `snd`) natively (`Std/Core/Iter.lean:71`), with
-  `Zip.Insts.CoreIterTraitsIteratorIteratorPair.next` and `Iterator.zip.trait_default` declared.
-- `ChunksExact`/`IteratorChunksExact` are native. `ChunksExactMut` and its `next` are not native; they are axioms
-  of the verifier's own templates.
-
-Whether either function elaborates now is **unchecked**. The old error "expected a product type, got Zip" may or
-may not recur against a structure; only a compile can say.
+`SliceIndexRangeFullSlice`, and departed from the copied text twice (`Array.from`, `Slice.from`). All are declared
+natively. The compile reports no error naming any of them other than `ok_or`, whose native signature differs
+from the shim's (cause 3a). Per item, "elaborates in use" means: the emission uses the item, and no error
+names it; `shim-items.tsv` has the column.
 
 ## Stage C: import closure of the model theorems and port size
+
+(Interim commit: the closure compile and the trimmed-library runs are in progress; this section is updated when
+they finish.)
 
 Root: `AspisFailureBoundModel` (both theorems are in it). Chain sources are the worktree at
 27b14ab00a4e781cddd8cd8321e158b8d5c4aa94. The `lean/` directory last changed at 5bf1b2216ff, and all 80 files
