@@ -1,0 +1,31 @@
+--- carried-src/InitialMessageComputableV8.lean
++++ ported-src/InitialMessageComputableV8.lean
+@@ -73,8 +73,8 @@
+       rw [evenC_coeff]
+       by_cases hn : n < 513
+       · simp only [if_pos hn]
+-        exact (monomialPolynomial_coeff
+-          (fun i : Fin 513 => q.toPoly.coeff (2 * i.val)) ⟨n, hn⟩).symm
++        unfold evenPart
++        conv_rhs => rw [show n = ((⟨n, hn⟩ : Fin 513) : ℕ) from rfl, monomialPolynomial_coeff]
+       · simp only [if_neg hn]
+         have hz := monomialPolynomial_coeff_eq_zero_of_ge
+           (fun i : Fin 513 => q.toPoly.coeff (2 * i.val)) n (by omega)
+@@ -89,13 +89,11 @@
+       rw [oddC_coeff]
+       by_cases hn : n < 512
+       · simp only [if_pos hn]
+-        exact (monomialPolynomial_coeff
+-          (fun i : Fin 512 => (2 : K)⁻¹ * q.toPoly.coeff (2 * i.val + 1))
+-            ⟨n, hn⟩).symm
++        unfold oddPart
++        conv_rhs => rw [show n = ((⟨n, hn⟩ : Fin 512) : ℕ) from rfl, monomialPolynomial_coeff]
+       · simp only [if_neg hn]
+-        have hz := monomialPolynomial_coeff_eq_zero_of_ge
+-          (fun i : Fin 512 => (2 : K)⁻¹ * q.toPoly.coeff (2 * i.val + 1)) n (by omega)
+-        simpa [oddPart] using hz.symm
++        unfold oddPart
++        exact (monomialPolynomial_coeff_eq_zero_of_ge _ n (by omega)).symm
+     apply Polynomial.ext
+     intro n
+     rw [hcoeff, hinput, oddPart_circleNumerator]

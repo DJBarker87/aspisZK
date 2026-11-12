@@ -1,16 +1,12 @@
 --- carried-src/R0/PolynomialPair.lean
 +++ ported-src/R0/PolynomialPair.lean
-@@ -40,8 +40,11 @@
+@@ -39,7 +39,8 @@
+ theorem truncate_eq (p : K[X]) (hp : p.natDegree ≤ 511) : truncate p = p := by
    ext n
    by_cases hn : n < 512
-   · exact monomialPolynomial_coeff _ ⟨n, hn⟩
--  · rw [truncate, monomialPolynomial_coeff_eq_zero_of_ge _ _ (by omega),
--      coeff_eq_zero_of_natDegree_lt (by omega : p.natDegree < n)]
-+  · have h1 : (truncate p).coeff n = 0 := by
-+      unfold truncate
-+      exact monomialPolynomial_coeff_eq_zero_of_ge _ n (by omega)
-+    have h2 : p.coeff n = 0 := coeff_eq_zero_of_natDegree_lt (by omega : p.natDegree < n)
-+    exact h1.trans h2.symm
+-  · exact monomialPolynomial_coeff _ ⟨n, hn⟩
++  · unfold truncate
++    conv_lhs => rw [show n = ((⟨n, hn⟩ : Fin 512) : ℕ) from rfl, monomialPolynomial_coeff]
+   · rw [truncate, monomialPolynomial_coeff_eq_zero_of_ge _ _ (by omega),
+       coeff_eq_zero_of_natDegree_lt (by omega : p.natDegree < n)]
  
- def lift (p0 p1 : K[X]) : InitialMessage K :=
-   Classical.choose (pair_complete (truncate p0) (truncate p1)

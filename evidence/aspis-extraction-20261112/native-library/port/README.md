@@ -292,3 +292,83 @@ upstream v4.35.0 (commit 06686e4c70939af82203af21516f8ab8a21a8051, the local clo
 The clone holds a source export without `.git`, so the commit that deleted the file cannot be named from it; the
 deletion is visible at v4.35.0 and absent at 4165a87. Recorded in `port-patches.tsv` as kind `vendored:
 declaration now in Mathlib` (two rows: the removed file and the import line).
+
+## X6b (successor of X6): Paused, 2026-11-12, by owner instruction
+
+Status: target not yet established. Toolchain port record; nothing new is proved. Work stopped at the owner's pause
+("pause all work across all the aspis agents"). No ssh attempt was made after the pause.
+
+### Runs (one slot each; receipts in `W/receipts/<attempt>/`)
+
+| Attempt | What | Slot wall | Peak RSS kB | Result |
+|---|---|---|---|---|
+| X6b-d1 | scratch bisection `x6b-scratch/X6bR0a.lean` (R0.PolynomialPair) | 0:02.02 | 3,328,336 | t7 (carried second bullet alone) compiles; t1, t2, t3, t4, t8 (every first-bullet variant) fail |
+| X6b-d2 | `x6b-scratch/X6bLR.lean` + full-file candidates `R0.PolynomialPair`, `InitialMessageComputableV8` (objects to `diag-out/X6b-d2/obj`, not `objs`) | 0:09.39 | 3,566,044 | both candidates compile, 0 errors; c2 (`Finset.filter_congr_decidable`) fails |
+| X6b-d3 | `x6b-scratch/X6bLR2.lean` (Close_card) | 0:03.98 | 3,569,968 | c5 compiles; c4 leaves goals; c6 is the traced failure |
+| X6b-p11 | compile pass of the ported tree (`fv_x6_job.sh X6b-p11`) plus the 4.32.0 test of the four patched modules (`oldtest-X6b-p11.txt`), started about 19:53 UTC | | | **left running on the host under nohup at the pause; result not read** |
+
+### Findings (shape of each recursion case)
+
+1. **`R0.PolynomialPair.truncate_eq`.** The failing step is the FIRST bullet (`exact monomialPolynomial_coeff _ ⟨n, hn⟩`,
+   line 42), not the second, which X6 patched. X6's diagnostic `DiagR0d` already reported 44:4, the first bullet.
+   In Mathlib 9d581dff `Polynomial.coeff : R[X] → ℕ →₀ R` (`Mathlib/Algebra/Polynomial/Basic.lean:558`), so `p.coeff n` is
+   `DFunLike.coe (coeff p) n`. The final metavariable-free check
+   `(monomialPolynomial fun i => p.coeff ↑i).coeff ↑⟨n, hn⟩ =?= (truncate p).coeff n` does not compare arguments first.
+   `DFunLike.coe` is a projection, and the argument heuristic for such heads runs only with open metavariables. The
+   check unfolds to the Finsupp field `.2`, and reducing that projection whnf's the 512-term `Finset.sum`, which builds
+   `Finset.univ : Finset (Fin 512)` (X6's `Fin.foldr.loop` 479).
+   **Candidate fix, confirmed in a focused compile (X6b-d2, 0 errors):**
+   `unfold truncate`, then `conv_lhs => rw [show n = ((⟨n, hn⟩ : Fin 512) : ℕ) from rfl, monomialPolynomial_coeff]`.
+   This is the form X6 used in WideExactInitialCirclePairInverseV5. X6's second-bullet edit is reverted to the carried
+   text (t7 compiles). Its compile inside the full pass (X6b-p11) and under 4.32.0 is unread.
+2. **`InitialMessageComputableV8`**, three steps of `decodeMessage_of_circleNumerator`. Lines 76 and 92 have the same
+   shape against `evenPart`/`oddPart` and the same fix with `conv_rhs` (Fin 513 / Fin 512). Line 98
+   (`simpa [oddPart] using hz.symm`) was not traced separately. It is replaced by
+   `unfold oddPart; exact (monomialPolynomial_coeff_eq_zero_of_ge _ n (by omega)).symm`. Confirmed in a focused
+   compile (X6b-d2, 0 errors).
+3. **`R0.ListsResponses.Close_card` and `R1InitialResponses.Close_card`** (same text). After the carried `simp only`, the two
+   sides differ only in the `DecidablePred` instance of the outer filter over `InitialMessage K`:
+   `Classical.propDecidable (closeAtLeast ..)` in hb against `Nat.decLe 38230 (agreementSet ..).card` in the goal. The
+   closing check unfolds `Nat.decLe` and eta-expands against `Classical.choice`, which reaches
+   `decide (..) =?= Nat.ble 38230 (agreementSet f ..).card`. That evaluates the cardinality of a filter over `Fin 1048576`.
+   **Fix:** `unfold Close; convert hb using 4; simp only [closeAtLeast, agreementCount, agreementSet]`. `convert`
+   closes the instance argument by `Subsingleton.elim`. Confirmed only as the scratch theorem c5 (X6b-d3); the two
+   modules' own compiles are in X6b-p11, unread.
+
+The rows of `port-classification.tsv` and `port-patches.tsv` and the four `port-patches/*.diff` are written for these
+patches. The diffs were made from local copies of the carried text and the candidates, in the format of
+`fv_x6_records.py`, not by that script. The compile columns say "pending" where X6b-p11 holds the answer.
+`port-compile.tsv` is unchanged (state after X6-p10).
+
+Ported tree on the host (`W/x6/ported-src`), changed by X6b:
+- `R0/PolynomialPair.lean`: 932af916195a990b1d76c2c1b5691ad777c3e7e1de7b1bacb992a7e9a36e905f (hashed on the host);
+- `InitialMessageComputableV8.lean`: bda30091fdcff6abfffc5e50ee5f8ab6b6a7a2895079e7d9de6c697e91202859 (hashed on the host);
+- `R0/ListsResponses.lean`: 2bc5117ab33281940a00cb94c7e74de1746b70b89119197b6c22214e4e70a9f8 (local copy; not re-hashed on the host);
+- `R1InitialResponses.lean`: beb5c524c06bae61da55623b9e36fb15b929f85071dfee859c0177af6ea7d7de (local copy; not re-hashed on the host).
+
+### State at the pause
+
+- As of X6-p10: 722 compile unchanged and 37 patched compile. The four failing modules now carry the patches above.
+  Their compile in the full pass, and everything behind them (629 modules, `AspisFailureBoundModel` included), is the
+  unread X6b-p11 run.
+- Whether `AspisFailureBoundModel` compiles under 4.36.0-rc2: unknown.
+- Not run:
+  - check (c) over the four new diffs;
+  - checks (a), (b), (d);
+  - the layout and the rebuild.
+
+### What to run next
+
+1. Read X6b-p11 without rerunning it:
+   - `W/receipts/X6b-p11/{exit,time.log,memory_events}`;
+   - `W/x6/run/result.tsv` and `W/x6/run/PROGRESS`;
+   - `W/x6/diag-out/X6b-p11-old/result.tsv` (the 4.32.0 test of the four modules).
+2. Check the two host files marked "not re-hashed" against the hashes above.
+3. If the pass stopped at its 5400 s timeout before the end, resume it with
+   `bash W/fv_slot.sh X6b-p12 5400 bash W/x6/bin/fv_x6_job.sh X6b-p12`. Compiled modules are skipped by key, and
+   unchanged failures are not rerun.
+4. For each new failure, use the same method: a scratch copy, a `trace.Meta.isDefEq` trace, and a fix that keeps the
+   large term out of a metavariable-free defeq check.
+5. Run check (c) (`fv_x6_stmtcheck.py`) over the changed modules, then `fv_x6_records.py` to regenerate the tables.
+6. If `AspisFailureBoundModel` compiles: run `fv_x6_checks.sh` (a, b, d), then `fv_x6_layout.py`, then the rebuild
+   (`fv_x6_rebuild.sh`) in a slot.
