@@ -1,0 +1,36 @@
+import AspisLib_SourceInputs
+import RawExtractorCostComposedV2
+import HchecksReaderComposition
+import Aeneas
+import PublicCodecAgreement
+import PublicRawCore
+import PublicRawAmountGuard
+import PublicRawAmountGuardAgreement
+import R1PublicSourceBoundary
+import R1PublicCodecAgreement
+import R1SemanticPublicWireRoundTrip
+import R1LiteralTranscript
+import RawCutWordsFromView
+import BinCombinedMerkleCollision
+import QueryScanModelFailure
+import R1FinalSoundnessNumeric
+import BinCompiledRunWordStability
+import RawRecordedOracleExtractionMassBin
+import LiteralTableWordChoiceBin
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.AspisLib.RecordedBinaryExperimentBin
+open FS FS2 R0C.V3
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open RawCutProverCompiler RawCutTranscriptRun
+open RawRecordedOracleExtractionMassBin
+
+abbrev SourceInputs := AspisR1.AspisLib.R1FinalSoundness.SourceInputs
+
+abbrev dec := RawAdaptiveLiteralDecoder.decode RawFullPublicSelection.select LiteralTableWordChoiceBin.choose
+abbrev binaryCollision (Q : Nat) (run : RunView) : Prop :=
+  BinCombinedMerkleCollision.Coll SelectedTranscriptParams.params.iv Q run
+
+end AspisR1.AspisLib.RecordedBinaryExperimentBin
