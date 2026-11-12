@@ -1,0 +1,5 @@
+# Trimmed-copy pipeline (order matters)
+1. trim_imports.py <l187src> <out> <closure-kind-d.tsv> --map (IMPORT_MAP.txt rows) <modules...>: carrier imports -> base module imports; unmapped carriers and OMIT_MODULES removed from import lines (add OMIT_MODULES.txt rows to the d-list file, or pass them as unmapped carriers).
+2. drop_decls.py <l187src> <out> DROP_DECLS.tsv: deletes the 16 named declarations from the 10 modules (reads the trimmed copy if present). DROP_RECORD.tsv: module, decl, original line span, sha256 of the removed text.
+3. Compile in import order: AspisLib_SourceInputs, AspisLib_Recorded, AspisLib_QueryAccounting first; then every trimmed module; AspisLib_Tag and AspisLib_Guard where their imports are ready; chain modules last. Trimmed objects shadow the L187 objects on LEAN_PATH; a module importing a carrier and a base together fails by name clash, which is the intended check.
+4. Modules in OMIT_MODULES.txt (16, no needed constant) are not compiled; any needed module importing one gets that import line removed in step 1 (treat them as unmapped carriers).
