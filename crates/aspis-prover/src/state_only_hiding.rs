@@ -214,6 +214,59 @@ fn balance_m31_copy_inactive(
     if table.len() != STATE_ONLY_POSEIDON_TRACE_ROWS || active[dependent] {
         return Err(StateOnlyMaskBuildError::TraceShape);
     }
+    // pv-aspis-rw (extraction rewrite, behaviour unchanged): counted loop in
+    // place of the range/filter/fold chain; same rows, same order, same `add`
+    // (evidence/pv-aspis-rewrite-20261111/notes/03-apply_mask_material.md).
+    let sum = inactive_m31_sum_except(table, active, dependent);
+    table[dependent] = M31::ZERO.sub(sum);
+    Ok(())
+}
+
+/// pv-aspis-rw: sum, in row order, of `table[row]` over rows that are inactive
+/// and not `dependent` (the pin's range/filter/fold). `table` has
+/// `STATE_ONLY_POSEIDON_TRACE_ROWS` entries.
+fn inactive_m31_sum_except(
+    table: &[M31],
+    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+    dependent: usize,
+) -> M31 {
+    let mut sum = M31::ZERO;
+    let mut row = 0;
+    while row < STATE_ONLY_POSEIDON_TRACE_ROWS {
+        sum = inactive_m31_sum_except_step(sum, active[row], row, dependent, table);
+        row += 1;
+    }
+    sum
+}
+
+/// pv-aspis-rw: one row of `inactive_m31_sum_except`; the branch lives here so
+/// the loop body is straight-line, and `table[row]` is read only for the rows
+/// the pin's `filter` let through.
+fn inactive_m31_sum_except_step(
+    sum: M31,
+    is_active: bool,
+    row: usize,
+    dependent: usize,
+    table: &[M31],
+) -> M31 {
+    if !is_active && row != dependent {
+        sum.add(table[row])
+    } else {
+        sum
+    }
+}
+
+/// Pin body of `balance_m31_copy_inactive` (c7593d23fdc), kept only for the
+/// rewrite-equivalence test and for the other pin bodies.
+#[cfg(test)]
+fn balance_m31_copy_inactive_pin(
+    table: &mut [M31],
+    dependent: usize,
+    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+) -> Result<(), StateOnlyMaskBuildError> {
+    if table.len() != STATE_ONLY_POSEIDON_TRACE_ROWS || active[dependent] {
+        return Err(StateOnlyMaskBuildError::TraceShape);
+    }
     let sum = (0..STATE_ONLY_POSEIDON_TRACE_ROWS)
         .filter(|row| !active[*row] && *row != dependent)
         .fold(M31::ZERO, |sum, row| sum.add(table[row]));
@@ -794,7 +847,7 @@ fn build_mask_material_for_layout_pin(
         for _ in 0..STATE_ONLY_POSEIDON_TRACE_ROWS {
             column.push(expander.m31()?);
         }
-        balance_m31_copy_inactive(column, inactive_dependent, active)?;
+        balance_m31_copy_inactive_pin(column, inactive_dependent, active)?;
     }
     let mut g = Vec::with_capacity(STATE_ONLY_POSEIDON_TRACE_ROWS);
     for _ in 0..STATE_ONLY_POSEIDON_TRACE_ROWS {
@@ -1011,6 +1064,84 @@ pub fn apply_state_only_mask_material(
     apply_mask_material_for_layout(trace, material, &cells, &copy_active_rows())
 }
 
+/// pv-aspis-rw: for every C1 column, the row of the last cell of `cells` (in
+/// order) that lies in that column on an inactive row, or `None` (the pin's
+/// `for cell in cells` loop of `apply_mask_material_for_layout`).
+fn inactive_dependent_rows(
+    cells: &[aspis_statement::TraceCell],
+    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+) -> [Option<usize>; STATE_ONLY_HIDING_C1_COLUMNS] {
+    let mut inactive_dependents = [None; STATE_ONLY_HIDING_C1_COLUMNS];
+    let mut index = 0;
+    while index < cells.len() {
+        inactive_dependent_rows_step(&mut inactive_dependents, cells[index], active);
+        index += 1;
+    }
+    inactive_dependents
+}
+
+/// pv-aspis-rw: one cell of `inactive_dependent_rows` (branch outside the
+/// loop): row and column are read, `active[row]` is tested, and only for an
+/// inactive row is the column's entry written, in that order, as in the pin.
+fn inactive_dependent_rows_step(
+    inactive_dependents: &mut [Option<usize>; STATE_ONLY_HIDING_C1_COLUMNS],
+    cell: aspis_statement::TraceCell,
+    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+) {
+    let row = usize::from(cell.row);
+    let column = usize::from(cell.column);
+    if !active[row] {
+        inactive_dependents[column] = Some(row);
+    }
+}
+
+/// pv-aspis-rw: the first loop of `apply_mask_material_for_layout`: mask
+/// `index` is added to cell `index`, in order. `masks` has `cells.len()`
+/// entries (checked by the caller) and is released on return.
+fn add_cell_masks(
+    trace: &mut StateOnlyTraceFoundation,
+    cells: &[aspis_statement::TraceCell],
+    masks: Vec<M31>,
+) {
+    let mut index = 0;
+    while index < cells.len() {
+        add_cell_mask(trace, cells[index], masks[index]);
+        index += 1;
+    }
+}
+
+/// pv-aspis-rw: the second loop of `apply_mask_material_for_layout`: every C1
+/// column, in order, is balanced on its dependent row; the first failure is
+/// returned with the earlier columns already balanced. Every entry of
+/// `dependents` is `Some` (checked by the caller).
+fn balance_trace_columns(
+    trace: &mut StateOnlyTraceFoundation,
+    dependents: &[Option<usize>; STATE_ONLY_HIDING_C1_COLUMNS],
+    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+) -> Result<(), StateOnlyMaskBuildError> {
+    let mut column = 0;
+    while column < STATE_ONLY_HIDING_C1_COLUMNS {
+        balance_m31_copy_inactive(&mut trace.c1[column], dependents[column].unwrap(), active)?;
+        column += 1;
+    }
+    Ok(())
+}
+
+/// pv-aspis-rw: `trace.c1[cell.column][cell.row] += mask`, one step of the
+/// loop of `add_cell_masks` (column indexed before row,
+/// as in the pin).
+fn add_cell_mask(trace: &mut StateOnlyTraceFoundation, cell: aspis_statement::TraceCell, mask: M31) {
+    let column = usize::from(cell.column);
+    let row = usize::from(cell.row);
+    trace.c1[column][row] = trace.c1[column][row].add(mask);
+}
+
+// pv-aspis-rw: the counted column loop of `balance_trace_columns`
+// relies on the trace having exactly as many C1 columns as the hiding layout.
+const _: () = assert!(
+    aspis_statement::state_only_trace::STATE_ONLY_C1_COLUMNS == STATE_ONLY_HIDING_C1_COLUMNS
+);
+
 fn apply_mask_material_for_layout(
     trace: &mut StateOnlyTraceFoundation,
     mut material: StateOnlyMaskMaterial,
@@ -1034,14 +1165,10 @@ fn apply_mask_material_for_layout(
     {
         return Err(StateOnlyMaskBuildError::TraceShape);
     }
-    let mut inactive_dependents = [None; STATE_ONLY_HIDING_C1_COLUMNS];
-    for cell in cells {
-        let row = usize::from(cell.row);
-        let column = usize::from(cell.column);
-        if !active[row] {
-            inactive_dependents[column] = Some(row);
-        }
-    }
+    // pv-aspis-rw (extraction rewrite, behaviour unchanged): the loop
+    // `for cell in cells` that records, per column, the row of its last
+    // inactive cell is the counted loop of `inactive_dependent_rows`.
+    let inactive_dependents = inactive_dependent_rows(cells, active);
     // pv-rw-a (extraction rewrite): closure in place of the `Option::is_none`
     // function item (the closure form of `any` above extracts).
     if inactive_dependents
@@ -1050,13 +1177,18 @@ fn apply_mask_material_for_layout(
     {
         return Err(StateOnlyMaskBuildError::Layout);
     }
-    for (cell, mask) in cells.iter().copied().zip(core::mem::take(&mut material.c1)) {
-        let value = &mut trace.c1[usize::from(cell.column)][usize::from(cell.row)];
-        *value = value.add(mask);
-    }
-    for (column, dependent) in trace.c1.iter_mut().zip(inactive_dependents) {
-        balance_m31_copy_inactive(column, dependent.unwrap(), active)?;
-    }
+    // pv-aspis-rw (extraction rewrite, behaviour unchanged): the two loops
+    // `for (cell, mask) in cells.iter().copied().zip(take(c1))` and
+    // `for (column, dependent) in trace.c1.iter_mut().zip(inactive_dependents)`
+    // are the counted loops of `add_cell_masks` and `balance_trace_columns`.
+    // The masks are taken out of `material` as before and released when the
+    // first loop is over, as the pin's consumed iterator was;
+    // `material.c1.len() == cells.len()` was checked above, so the zip had
+    // exactly `cells.len()` items; `trace.c1` and `inactive_dependents` both
+    // have STATE_ONLY_HIDING_C1_COLUMNS entries
+    // (evidence/pv-aspis-rewrite-20261111/notes/03-apply_mask_material.md).
+    add_cell_masks(trace, cells, core::mem::take(&mut material.c1));
+    balance_trace_columns(trace, &inactive_dependents, active)?;
     Ok(AppliedStateOnlyMasks {
         mask_only_c1: core::mem::take(&mut material.mask_only_c1),
         g: core::mem::take(&mut material.g),
@@ -1107,7 +1239,7 @@ fn apply_mask_material_for_layout_pin(
         *value = value.add(mask);
     }
     for (column, dependent) in trace.c1.iter_mut().zip(inactive_dependents) {
-        balance_m31_copy_inactive(column, dependent.unwrap(), active)?;
+        balance_m31_copy_inactive_pin(column, dependent.unwrap(), active)?;
     }
     Ok(AppliedStateOnlyMasks {
         mask_only_c1: core::mem::take(&mut material.mask_only_c1),
@@ -1584,6 +1716,59 @@ mod tests {
                 assert_eq!(result.is_ok(), case == 0);
             }
         }
+    }
+
+    /// pv-aspis-rw: the rewritten `balance_m31_copy_inactive` against the pin
+    /// body: every layout's active rows and random ones, random tables, every
+    /// kind of dependent row (inactive, active, first, last), and tables of
+    /// the wrong length. Results and the written tables must be equal.
+    #[test]
+    fn pv_aspis_rw_balance_m31_matches_pin_body() {
+        let mut actives: Vec<[bool; STATE_ONLY_POSEIDON_TRACE_ROWS]> =
+            pv_rw_a_layouts().into_iter().map(|(_, active)| active).collect();
+        for _ in 0..8 {
+            let bytes: [u8; STATE_ONLY_POSEIDON_TRACE_ROWS] = pv_rw_a_random_bytes();
+            actives.push(core::array::from_fn(|row| bytes[row] & 3 == 0));
+        }
+        actives.push([false; STATE_ONLY_POSEIDON_TRACE_ROWS]);
+        let (mut ok, mut err) = (0usize, 0usize);
+        for active in &actives {
+            for case in 0..40usize {
+                let length = match case % 10 {
+                    7 => STATE_ONLY_POSEIDON_TRACE_ROWS - 1,
+                    8 => STATE_ONLY_POSEIDON_TRACE_ROWS + 1,
+                    9 => 0,
+                    _ => STATE_ONLY_POSEIDON_TRACE_ROWS,
+                };
+                let mut table: Vec<M31> = (0..length)
+                    .map(|_| M31(u32::from_le_bytes(pv_rw_a_random_bytes::<4>()) % P))
+                    .collect();
+                // Field edge values in a few rows.
+                for (slot, value) in [0u32, 1, P - 1, P - 2].into_iter().enumerate() {
+                    if slot * 97 < table.len() && case % 3 == 0 {
+                        table[slot * 97] = M31(value);
+                    }
+                }
+                let dependent = match case % 5 {
+                    0 => 0,
+                    1 => STATE_ONLY_POSEIDON_TRACE_ROWS - 1,
+                    2 => first_inactive_row(active),
+                    _ => usize::from(u16::from_le_bytes(pv_rw_a_random_bytes::<2>()))
+                        % STATE_ONLY_POSEIDON_TRACE_ROWS,
+                };
+                let mut table_pin = table.clone();
+                let result = balance_m31_copy_inactive(&mut table, dependent, active);
+                let result_pin = balance_m31_copy_inactive_pin(&mut table_pin, dependent, active);
+                assert_eq!(result, result_pin, "case {case}");
+                assert_eq!(table, table_pin, "case {case}");
+                if result.is_ok() {
+                    ok += 1
+                } else {
+                    err += 1
+                }
+            }
+        }
+        assert!(ok > 50 && err > 50, "{ok} {err}");
     }
 
     fn pv_rw_a_assert_material_eq(a: &StateOnlyMaskMaterial, b: &StateOnlyMaskMaterial) {

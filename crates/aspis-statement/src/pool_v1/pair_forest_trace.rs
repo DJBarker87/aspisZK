@@ -542,11 +542,88 @@ fn path_kind(kind: PoolV1PairCopyRowLinkKindV1) -> bool {
     )
 }
 
+/// pv-aspis-rw: index of the first link of `legacy` (lowest index) whose kind
+/// equals `kind`, or `None`: `legacy.iter().position(|link| link.kind == kind)`
+/// as a counted loop.
+fn first_link_of_kind(
+    legacy: &[PoolV1PairCopyLinkV1],
+    kind: PoolV1PairCopyRowLinkKindV1,
+) -> Option<usize> {
+    let mut index = 0;
+    while index < legacy.len() {
+        if legacy[index].kind == kind {
+            return Some(index);
+        }
+        index += 1;
+    }
+    None
+}
+
 pub fn build_pool_v1_pair_forest_copy_registry_v1(
 ) -> Result<Vec<PoolV1PairCopyLinkV1>, PoolV1PairTraceErrorV1> {
     let legacy = build_pool_v1_pair_copy_registry_v1()?;
     let schedule = build_pool_v1_pair_forest_copy_row_schedule_v1()
         .map_err(|_| PoolV1PairTraceErrorV1::CopyLayout)?;
+    let mut output = Vec::with_capacity(schedule.len());
+    for scheduled in schedule {
+        let (producer, consumer, weight) = if path_kind(scheduled.kind) {
+            match scheduled.kind {
+                PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { .. } => (
+                    tuple_cells(usize::from(scheduled.producer_row), 0, 8, false),
+                    tuple_cells(usize::from(scheduled.consumer_row), 1, 8, false),
+                    PoolV1PairCopyWeightV1::One,
+                ),
+                PoolV1PairCopyRowLinkKindV1::PrivatePathLeft { .. } => (
+                    tuple_cells(usize::from(scheduled.producer_row), 0, 8, false),
+                    tuple_cells(usize::from(scheduled.consumer_row), 0, 8, false),
+                    PoolV1PairCopyWeightV1::One,
+                ),
+                PoolV1PairCopyRowLinkKindV1::PrivatePathRight { .. } => (
+                    tuple_cells(usize::from(scheduled.producer_row), 8, 8, false),
+                    tuple_cells(usize::from(scheduled.consumer_row), 8, 8, true),
+                    PoolV1PairCopyWeightV1::One,
+                ),
+                _ => return Err(PoolV1PairTraceErrorV1::CopyLayout),
+            }
+        } else {
+            // pv-aspis-rw (extraction rewrite, behaviour unchanged): counted loop
+            // in place of `legacy.iter().find(|link| link.kind == scheduled.kind)`
+            // (evidence/pv-aspis-rewrite-20261111/notes/02-copy_registry.md).
+            let old = &legacy[first_link_of_kind(&legacy, scheduled.kind)
+                .ok_or(PoolV1PairTraceErrorV1::CopyLayout)?];
+            (
+                translate_aux_tuple(old.producer),
+                translate_aux_tuple(old.consumer),
+                old.weight,
+            )
+        };
+        if producer.row != scheduled.producer_row || consumer.row != scheduled.consumer_row {
+            return Err(PoolV1PairTraceErrorV1::CopyLayout);
+        }
+        let id = output.len() as u16;
+        output.push(PoolV1PairCopyLinkV1 {
+            id,
+            tag: M31(POOL_V1_PAIR_COPY_TAG_BASE_V1 + u32::from(id)),
+            kind: scheduled.kind,
+            weight,
+            producer,
+            consumer,
+        });
+    }
+    if output.len() != POOL_V1_PAIR_FOREST_COPY_ROW_LINKS_V1 {
+        return Err(PoolV1PairTraceErrorV1::CopyLayout);
+    }
+    Ok(output)
+}
+
+/// Pin body of `build_pool_v1_pair_forest_copy_registry_v1` (c7593d23fdc), kept
+/// only for the rewrite-equivalence test; the two builders it calls are
+/// parameters so that the test can vary them.
+#[cfg(test)]
+fn build_pool_v1_pair_forest_copy_registry_v1_pin_with(
+    legacy: Vec<PoolV1PairCopyLinkV1>,
+    schedule: Vec<super::pair_tree_hiding::PoolV1PairCopyRowLinkV1>,
+) -> Result<Vec<PoolV1PairCopyLinkV1>, PoolV1PairTraceErrorV1> {
     let mut output = Vec::with_capacity(schedule.len());
     for scheduled in schedule {
         let (producer, consumer, weight) = if path_kind(scheduled.kind) {
@@ -596,6 +673,53 @@ pub fn build_pool_v1_pair_forest_copy_registry_v1(
         return Err(PoolV1PairTraceErrorV1::CopyLayout);
     }
     Ok(output)
+}
+
+#[cfg(test)]
+mod pv_aspis_rw_tests {
+    use super::*;
+
+    /// pv-aspis-rw: the rewritten registry builder returns what the pin body
+    /// returns on the two real builders (the function has no input), and on
+    /// damaged copies of them that reach every error exit of the body.
+    #[test]
+    fn pv_aspis_rw_copy_registry_matches_pin_body() {
+        let legacy = build_pool_v1_pair_copy_registry_v1().unwrap();
+        let schedule = build_pool_v1_pair_forest_copy_row_schedule_v1().unwrap();
+        let new = build_pool_v1_pair_forest_copy_registry_v1();
+        assert!(new.is_ok());
+        assert_eq!(
+            new,
+            build_pool_v1_pair_forest_copy_registry_v1_pin_with(legacy.clone(), schedule.clone())
+        );
+        // The pin body's `find` and the counted loop agree on every kind of the
+        // schedule, for the real legacy registry and for shortened, reversed and
+        // duplicated copies of it (so absent kinds and repeated kinds occur).
+        let mut variants = vec![legacy.clone(), Vec::new()];
+        variants.push(legacy.iter().rev().copied().collect());
+        variants.push(legacy.iter().chain(legacy.iter()).copied().collect());
+        for cut in [1usize, 7, legacy.len() / 2, legacy.len() - 1] {
+            variants.push(legacy[..cut].to_vec());
+            variants.push(legacy[cut..].to_vec());
+        }
+        let (mut found, mut absent) = (0usize, 0usize);
+        for variant in &variants {
+            for scheduled in &schedule {
+                let pin = variant.iter().position(|link| link.kind == scheduled.kind);
+                assert_eq!(first_link_of_kind(variant, scheduled.kind), pin);
+                assert_eq!(
+                    pin.map(|index| &variant[index]),
+                    variant.iter().find(|link| link.kind == scheduled.kind)
+                );
+                if pin.is_some() {
+                    found += 1
+                } else {
+                    absent += 1
+                }
+            }
+        }
+        assert!(found > 500 && absent > 500, "{found} {absent}");
+    }
 }
 
 fn tuple_value(trace: &PoolV1PairForestTraceV1, tuple: PoolV1PairCopyTupleV1) -> [M31; 16] {

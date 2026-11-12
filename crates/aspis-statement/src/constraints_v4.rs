@@ -609,6 +609,87 @@ fn sparse_eq_weights(point: &[QM31; 10]) -> Vec<(usize, QM31)> {
     for coordinate in &point[prefix_len..] {
         suffix = (suffix << 1) | usize::from(*coordinate == QM31::ONE);
     }
+    // pv-aspis-rw (extraction rewrite, behaviour unchanged): the loop over the
+    // prefixes is `sparse_eq_weight_rows` and its inner loop
+    // `for (coordinate, value) in point[..prefix_len].iter().enumerate()` is
+    // `sparse_eq_prefix_weight`, each a function with one counted loop, the
+    // branch in a third; same prefixes and coordinates, same order, same
+    // `mul` and `sub`, same pushes
+    // (evidence/pv-aspis-rewrite-20261111/notes/05-sparse_eq_weights.md).
+    sparse_eq_weight_rows(point, prefix_len, trailing_boolean, suffix)
+}
+
+/// pv-aspis-rw: the output of `sparse_eq_weights` once the split of `point`
+/// into a prefix and a Boolean suffix is known: for every prefix in increasing
+/// order, the pair (row, weight), pushed to a vector created with capacity
+/// `1 << prefix_len` (the former outer loop).
+#[inline]
+fn sparse_eq_weight_rows(
+    point: &[QM31; 10],
+    prefix_len: usize,
+    trailing_boolean: usize,
+    suffix: usize,
+) -> Vec<(usize, QM31)> {
+    let count = 1usize << prefix_len;
+    let mut weights = Vec::with_capacity(count);
+    let mut prefix = 0;
+    while prefix < count {
+        let row = (prefix << trailing_boolean) | suffix;
+        let weight = sparse_eq_prefix_weight(point, prefix, prefix_len);
+        weights.push((row, weight));
+        prefix += 1;
+    }
+    weights
+}
+
+/// pv-aspis-rw: the weight of one prefix in `sparse_eq_weights`: starting from
+/// one, the product over the first `prefix_len` coordinates, in order, of
+/// `sparse_eq_weight_step` (the former inner loop, as a function of its own so
+/// that no loop is nested).
+#[inline]
+fn sparse_eq_prefix_weight(point: &[QM31; 10], prefix: usize, prefix_len: usize) -> QM31 {
+    let mut weight = QM31::ONE;
+    let mut coordinate = 0;
+    while coordinate < prefix_len {
+        weight = sparse_eq_weight_step(weight, prefix, prefix_len, coordinate, point[coordinate]);
+        coordinate += 1;
+    }
+    weight
+}
+
+/// pv-aspis-rw: one coordinate of the inner loop of `sparse_eq_weights`:
+/// `weight * (1 - value)` when bit `prefix_len - 1 - coordinate` of `prefix` is
+/// zero, `weight * value` otherwise.
+#[inline]
+fn sparse_eq_weight_step(
+    weight: QM31,
+    prefix: usize,
+    prefix_len: usize,
+    coordinate: usize,
+    value: QM31,
+) -> QM31 {
+    let bit = (prefix >> (prefix_len - 1 - coordinate)) & 1;
+    weight.mul(if bit == 0 {
+        QM31::ONE.sub(value)
+    } else {
+        value
+    })
+}
+
+/// Pin body of `sparse_eq_weights` (c7593d23fdc), kept only for the
+/// rewrite-equivalence test.
+#[cfg(test)]
+fn sparse_eq_weights_pin(point: &[QM31; 10]) -> Vec<(usize, QM31)> {
+    let trailing_boolean = point
+        .iter()
+        .rev()
+        .take_while(|value| **value == QM31::ZERO || **value == QM31::ONE)
+        .count();
+    let prefix_len = point.len() - trailing_boolean;
+    let mut suffix = 0usize;
+    for coordinate in &point[prefix_len..] {
+        suffix = (suffix << 1) | usize::from(*coordinate == QM31::ONE);
+    }
     let mut weights = Vec::with_capacity(1usize << prefix_len);
     for prefix in 0..(1usize << prefix_len) {
         let row = (prefix << trailing_boolean) | suffix;
@@ -624,6 +705,55 @@ fn sparse_eq_weights(point: &[QM31; 10]) -> Vec<(usize, QM31)> {
         weights.push((row, weight));
     }
     weights
+}
+
+#[cfg(test)]
+mod pv_aspis_rw_tests {
+    use super::*;
+    use aspis_core::field::{CM31, P};
+
+    /// pv-aspis-rw: the rewritten `sparse_eq_weights` against the pin body, for
+    /// every number of trailing Boolean coordinates (0 to 10), every pattern of
+    /// zeros and ones in a short Boolean tail, Boolean values inside the
+    /// prefix, and generated field values including 0, 1, P - 1 per limb.
+    #[test]
+    fn pv_aspis_rw_sparse_eq_weights_matches_pin_body() {
+        let mut state = 0x1319_8a2e_0370_7344u64;
+        let mut next = move || {
+            state ^= state << 13;
+            state ^= state >> 7;
+            state ^= state << 17;
+            M31((state >> 20) as u32 % P)
+        };
+        let mut random = move |edge: usize| match edge % 7 {
+            0 => QM31 { c0: CM31::new(M31(P - 1), M31(P - 1)), c1: CM31::new(M31(P - 1), M31(P - 1)) },
+            1 => QM31 { c0: CM31::new(M31(1), M31(0)), c1: CM31::new(M31(0), M31(1)) },
+            2 => QM31 { c0: CM31::new(M31(0), M31(1)), c1: CM31::new(M31(0), M31(0)) },
+            _ => QM31 { c0: CM31::new(next(), next()), c1: CM31::new(next(), next()) },
+        };
+        let mut cases = 0usize;
+        for trailing in 0..=10usize {
+            let patterns = if trailing <= 4 { 1usize << trailing } else { 16 };
+            for pattern in 0..patterns {
+                for round in 0..(if trailing >= 7 { 6 } else { 2 }) {
+                    let mut point = [QM31::ZERO; 10];
+                    for (index, value) in point.iter_mut().enumerate() {
+                        *value = if index >= 10 - trailing {
+                            if (pattern >> (index % 4)) & 1 == 1 { QM31::ONE } else { QM31::ZERO }
+                        } else if round == 1 && index % 3 == 0 && index + 1 < 10 - trailing {
+                            // A Boolean value inside the prefix (not trailing).
+                            if index % 2 == 0 { QM31::ONE } else { QM31::ZERO }
+                        } else {
+                            random(index + pattern + round)
+                        };
+                    }
+                    assert_eq!(sparse_eq_weights(&point), sparse_eq_weights_pin(&point));
+                    cases += 1;
+                }
+            }
+        }
+        assert!(cases > 150, "{cases}");
+    }
 }
 
 #[derive(Clone, Copy)]
