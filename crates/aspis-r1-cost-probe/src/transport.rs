@@ -6,7 +6,7 @@ impl Variant {
     pub fn tag(self) -> u8 { match self { Self::S1=>1,Self::S2=>2,Self::D=>3 } }
     pub fn from_tag(tag:u8) -> Option<Self> { match tag {1=>Some(Self::S1),2=>Some(Self::S2),3=>Some(Self::D),_=>None} }
     pub fn folds(self) -> usize { if self == Self::S1 { 1 } else { 2 } }
-    pub fn final_len(self) -> usize { 1024 >> (2*self.folds()) }
+    pub fn final_len(self) -> usize { 1024 >> ((2*self.folds()) as u32) }
     pub fn row(self, j:usize) -> usize {
         if self == Self::D { return aspis_core::r0::transport::COEFFICIENT_TO_ROW[j] as usize; }
         let mut out=0;

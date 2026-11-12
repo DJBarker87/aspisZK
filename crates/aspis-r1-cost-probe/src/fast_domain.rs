@@ -282,7 +282,7 @@ fn table_value(value: (u32, u32)) -> CM31 {
 pub fn fibre_point(u: FibreIndex) -> Point<M31> {
     let index = u.get();
     let left = table_value(TABLE_A[index & 511]);
-    let right = table_value(TABLE_B[index >> 9]);
+    let right = table_value(TABLE_B[index >> 9u32]);
     let point = left.mul(right);
     Point {
         x: point.a,

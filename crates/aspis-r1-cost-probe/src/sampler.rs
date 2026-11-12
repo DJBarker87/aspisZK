@@ -10,7 +10,7 @@ fn qm31_div_pass(mut rank: [u32; 8]) -> ([u32; 8], u32) {
     let mut j = 8usize;
     while j > 0 {
         j -= 1;
-        let dividend = (remainder << 32) | u64::from(rank[j]);
+        let dividend = (remainder << 32u32) | u64::from(rank[j]);
         rank[j] = (dividend / u64::from(P)) as u32;
         remainder = dividend % u64::from(P);
     }

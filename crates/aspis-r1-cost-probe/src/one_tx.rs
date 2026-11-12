@@ -440,7 +440,7 @@ fn base_query(acc: &mut [u64; 416], q: &[u8; 480], c: &[K; 4]) {
         let w = v2 + v3;
         let x = v0 + P64 - v1;
         let y = v3 + P64 - v2;
-        let fold = |z: u64| (z & P64) + (z >> 31);
+        let fold = |z: u64| (z & P64) + (z >> 31u32);
         let signed = [fold(u + w), fold(x + y), fold(u + 2 * P64 - w), fold(x + 2 * P64 - y)];
         let base = 16 * lane;
         for k in 0..4 {
@@ -457,14 +457,14 @@ fn base_fold(acc: &mut [u64; 416]) {
     let mut t = 0;
     while t < 52 {
         let b = 8 * t;
-        acc[b] = (acc[b] & P64) + (acc[b] >> 31);
-        acc[b + 1] = (acc[b + 1] & P64) + (acc[b + 1] >> 31);
-        acc[b + 2] = (acc[b + 2] & P64) + (acc[b + 2] >> 31);
-        acc[b + 3] = (acc[b + 3] & P64) + (acc[b + 3] >> 31);
-        acc[b + 4] = (acc[b + 4] & P64) + (acc[b + 4] >> 31);
-        acc[b + 5] = (acc[b + 5] & P64) + (acc[b + 5] >> 31);
-        acc[b + 6] = (acc[b + 6] & P64) + (acc[b + 6] >> 31);
-        acc[b + 7] = (acc[b + 7] & P64) + (acc[b + 7] >> 31);
+        acc[b] = (acc[b] & P64) + (acc[b] >> 31u32);
+        acc[b + 1] = (acc[b + 1] & P64) + (acc[b + 1] >> 31u32);
+        acc[b + 2] = (acc[b + 2] & P64) + (acc[b + 2] >> 31u32);
+        acc[b + 3] = (acc[b + 3] & P64) + (acc[b + 3] >> 31u32);
+        acc[b + 4] = (acc[b + 4] & P64) + (acc[b + 4] >> 31u32);
+        acc[b + 5] = (acc[b + 5] & P64) + (acc[b + 5] >> 31u32);
+        acc[b + 6] = (acc[b + 6] & P64) + (acc[b + 6] >> 31u32);
+        acc[b + 7] = (acc[b + 7] & P64) + (acc[b + 7] >> 31u32);
         t += 1;
     }
 }
@@ -875,7 +875,7 @@ fn merged_keys(queries: &[u32; 22], folded: bool) -> [u64; 22] {
     let mut keys = [0u64; 22];
     for j in 0..22 {
         let index = if folded { queries[j] / 4 } else { queries[j] };
-        keys[j] = (u64::from(index) << 8) | j as u64;
+        keys[j] = (u64::from(index) << 8u32) | j as u64;
     }
     for i in 1..22 {
         let mut j = i;
@@ -896,7 +896,7 @@ fn merged_tree<H: Digest32>(proof: &[u8], keys: &[u64; 22], root: &[u8; 32], tre
     let mut val = [[0u8; 32]; multiproof::MAX_MERGED];
     let mut d = 0;
     for &key in keys {
-        let index = (key >> 8) as u32;
+        let index = (key >> 8u32) as u32;
         let leaf = batch_leaf(hash, tree, opening(proof, (key & 0xff) as usize));
         if d > 0 && idx[d - 1] == index {
             if val[d - 1] != leaf {
@@ -1663,7 +1663,7 @@ mod tests {
                     let mut d = 0;
                     for position in 0..n {
                         let key = keys[position];
-                        let index = (key >> 8) as u32;
+                        let index = (key >> 8u32) as u32;
                         let leaf = batch_leaf(Sha, tree, opening(proof, lo + (key & 0xff) as usize));
                         if d > 0 && idx[d - 1] == index {
                             continue;

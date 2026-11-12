@@ -403,7 +403,7 @@ fn merged_level<H: Digest32>(
     while i < n {
         let has_next = i + 1 < n;
         let next = if has_next { idx[i + 1] } else { 0 };
-        let parent = index >> 1;
+        let parent = index >> 1u32;
         if has_next && next == index ^ 1 {
             hash.digest_into(&[&tag, &cur[i], &cur[i + 1]], &mut nxt[w]);
             i += 2;

@@ -327,7 +327,7 @@ fn internal_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
     for lane in 1..POSEIDON2_WIDTH {
         let limbs = extension_limbs(state[lane]);
         state[lane] = extension_from_raw_limbs(core::array::from_fn(|limb| {
-            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[lane - 1])
+            full_sum[limb] + (u64::from(limbs[limb]) << u32::from(SHIFTS[lane - 1]))
         }));
     }
 }

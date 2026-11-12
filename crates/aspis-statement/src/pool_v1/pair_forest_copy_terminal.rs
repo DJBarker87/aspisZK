@@ -173,7 +173,7 @@ impl Selectors {
     #[inline(always)]
     pub(crate) fn row(&self, row: usize) -> QM31 {
         debug_assert!(row < POOL_V1_PAIR_FOREST_COPY_TERMINAL_ROWS_V1);
-        self.high[row >> 4].mul(self.low[row & 15])
+        self.high[row >> 4u32].mul(self.low[row & 15])
     }
 
     #[cfg(any(test, not(feature = "pool-v1-pair-forest-active-mask-basis-audit")))]
@@ -393,8 +393,8 @@ fn link_weight(
         2 => M31(u32::from(
             variant == PoolV1PairForestCompiledVariantV1::Withdrawal,
         )),
-        3 => M31(1 - ((append_index >> link.weight_level) & 1) as u32),
-        4 => M31(((append_index >> link.weight_level) & 1) as u32),
+        3 => M31(1 - ((append_index >> u32::from(link.weight_level)) & 1) as u32),
+        4 => M31(((append_index >> u32::from(link.weight_level)) & 1) as u32),
         _ => unreachable!("generated Pool V1 pair-forest Copy weight"),
     }
 }
@@ -837,7 +837,7 @@ fn accumulate_endpoint_selector_tensor_basis(
     let group = side + usize::from(endpoint.slot);
     let row = usize::from(endpoint.row);
     let local = row & 15;
-    let high = selectors.high[row >> 4];
+    let high = selectors.high[row >> 4u32];
     let group_local = usize::from(COPY_GROUP_LOCAL_COORDINATES[group][local]);
     #[cfg(not(feature = "pool-v1-pair-forest-copy-tag-dot-basis-audit"))]
     {

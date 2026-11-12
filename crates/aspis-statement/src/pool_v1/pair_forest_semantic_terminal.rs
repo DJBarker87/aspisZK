@@ -213,7 +213,7 @@ fn validate_transition(
         if level == carry && carry < 20 {
             continue;
         }
-        let expected = if level < carry || ((index >> level) & 1) == 0 {
+        let expected = if level < carry || ((index >> (level as u32)) & 1) == 0 {
             empty_root(level)
         } else {
             source.frontier[level]
@@ -512,8 +512,8 @@ fn add_value_lanes(
         index += 1;
     }
     let reconstructed = reconstruct_10(&openings.z)
-        .add(reconstruct_10(&openings.succ_z).mul_m31(M31(1 << 10)))
-        .add(reconstruct_10(&openings.xor12_z).mul_m31(M31(1 << 20)));
+        .add(reconstruct_10(&openings.succ_z).mul_m31(M31(1 << 10u32)))
+        .add(reconstruct_10(&openings.xor12_z).mul_m31(M31(1 << 20u32)));
     range[30] = openings.z[10].sub(reconstructed);
     range[31] = openings.succ_z[10];
     range[32] = openings.xor12_z[10];
@@ -912,7 +912,7 @@ fn append_level_packed_selector_tensor(
     [QM31; DIGEST_ELEMS / 4],
 ) {
     let prepared_high = PreparedQm31Multiplier::new(high);
-    if ((next_pair_index >> level) & 1) == 0 {
+    if ((next_pair_index >> (level as u32)) & 1) == 0 {
         let expected = empty_root(level);
         let residual0 = [
             opened[RATE].sub(lift_m31(expected[0])),
