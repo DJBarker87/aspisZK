@@ -98,7 +98,15 @@ All of the following, for each of the three programs, on the candidate commit:
   emitted with the reason.
 - The silent-fault checks, each first shown to fire on a planted case: no write through a
   reversed mutable iterator; no write through a copied box in a dependency crate; no translated
-  body that reaches a mutable account handle (section 5).
+  body that reaches a mutable account handle (section 5). On 12 November the privacy lead showed,
+  with this tool pair, five shapes that lose the write with exit 0 and no error and that the first
+  scans missed: `(&mut *a).into_iter().rev()`, `rev()` on an `IterMut` returned by a helper,
+  `iter_mut` and `rev` split across two functions, `RefCell::replace`, `Cell::set`. The gates are
+  therefore type-based: no `Rev<I>` in an Aspis body where `I` is or yields a mutable reference,
+  however it is obtained; and no call from an Aspis body to a `core::cell` method that stores or
+  exposes a value for mutation (`set`, `replace`, `replace_with`, `swap`, `take`, `get_mut`,
+  `as_ptr`, the `borrow_mut` family, `UnsafeCell::get`, `core::ptr` writes), except the
+  write-boundary functions within their grammar.
 - Every site where the Solana build compiles different Aspis code from the translated host build
   is a runtime-boundary call, the allocator, the entry point, or test code unreachable at the
   deployed features. No arithmetic, parsing, transcript or Merkle code differs by target.
