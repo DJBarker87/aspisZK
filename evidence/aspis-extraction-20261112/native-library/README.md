@@ -376,6 +376,37 @@ Predicted next failures, not yet compiled (skipped behind the blocker): `OracleP
 `OraclePortStoredProjectionC4.frame_eq`) and `OraclePortStoredReductionC7.{annotated_fixed, annotated_selected}`
 (use `recorded_view`); none of the six is in `top_closure.tsv.gz`.
 
+### Revision 5 (research 92082be2d50): current state, stopped on a keep-and-trim case
+
+Lists of record: `OMIT_MODULES.txt` 12 modules, `DROP_DECLS.tsv` 21 rows (`R15WriterModel`, `R16DecisionErasure`,
+`R19BudgetOriginalReads`, `R9PoolSavedTenModel` kept and trimmed). File hashes: `aspis-lib-r5.sha256`. Run with
+`host/fv_x3_cascade.py` (the lead's cascade rule and tie-breaker; attempt `X3-C-cas5-1`), which drives
+`host/fv_x3_pipeline4.sh` (library directory `W/x3/aspis-lib5`) and the gated compile.
+
+- Gate (`gate-r5.tsv`): carried set clean, 0 violations. LEAN_PATH as in revision 4 (own objects, hardlinked unchanged
+  L187 objects, `base_ref`; L187 `objs` absent).
+- Chain trim (`chain-import-diff-r5.txt`): again only `AspisOneTxDecision` changes, only import lines.
+- Compile, Lean 4.32.0 (wall 0:47.71, peak RSS 4,229,740 kB, no memory events; `trimmed-l187-compile-r5.tsv`): of
+  208 modules, 82 compile, 4 fail, 122 skipped.
+- Two failures repeat revision 4 and are recorded in `omit-drop-additions.tsv` (not yet applied, the run stopped
+  first): `OracleDecisionPrereqStarts.{not_initial_of_head, leaf_not_initial, node_not_initial}` (omitted
+  `BinInitialQueryAccounting`) and `OraclePortStoredProjectionC4.{recorded_view, frame_eq}` (dropped `original_view`).
+  The two `OracleDecisionFeasibility*` failures of revision 4 do not recur (`R19BudgetOriginalReads` is kept).
+- **Stop:** `R16DecisionErasure` (line 21) and `D0InstanceAdmission` (line 13, 7 needed constants) each fail with
+  exactly one error, `unknown namespace DecoderInstanceBoundaryBin` at an `open` line; every declaration in both
+  modules elaborates, the needed ones included. `DecoderInstanceBoundaryBin` is a kind (d) carrier without a base,
+  so the script cannot keep it; by the tie-breaker the run stops here. Nothing from that namespace is used (no other
+  error), so the `open` names a namespace that is empty in the carrier-free set. The remedy is the lead's (for
+  example, the trim removing a carrier name from an `open` line when the module uses nothing from it).
+- `open-of-removed-namespaces-r5.tsv`: every `open` line in the carried sources that names a carrier or omitted
+  module (41). Most name `RecordedBinaryExperimentBin`, whose namespace exists through `AspisLib_Recorded` (it
+  declares the names under the original namespace); the ones that can fail the same way name a carrier without a
+  base or an omitted module (`DecoderInstanceBoundaryBin`, `OraclePortStoredConsumerC7`, `OraclePortFrozen2Consumer`).
+
+The chain, the five checks and the chain-import commit (step 5) are not reached. Step 6 (port patches under the new
+toolchain, `FS2.DuplexTrace` first, pass 2 behind it) is not started; a worker can take it from this README, the
+pass-2 tables above and `host/fv_x3_closure_compile.sh` (resumable by source key, objects in `W/x3/pass2`).
+
 ### Pass 2 under the new toolchain (partial)
 
 Pass 2 was run on the set of the mapped version (6032f9ef5bd): CompPoly (87), the 1,116 kind (c) modules whose

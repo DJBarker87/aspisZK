@@ -10,24 +10,43 @@
 #     W/x3/l187-carried4; the L187 objs directory is not put on LEAN_PATH
 set -eu
 W=/home/dombarker/project-offloads/future-version-20261111
-X=$W/x3; A=$X/aspis-lib4; C=$X/closure; T=$X/trimmed4; CS=$X/chain4-src; CT=$X/chain4-trimmed
+X=$W/x3; A=${X3_LIB:-$X/aspis-lib4}; C=$X/closure; T=$X/trimmed4; CS=$X/chain4-src; CT=$X/chain4-trimmed
 L=/home/dombarker/project-offloads/codex-cx-replay-l187-20261109
 cd $A; sha256sum $(find . -maxdepth 1 -type f ! -name SHA256SUMS.host | sort) > SHA256SUMS.host
 mkdir -p bases; rm -f bases/*.lean; cp AspisLib_*.lean AspisHonestBudgetBase.lean bases/
 MAP=""; while IFS== read -r k v; do [ -n "$k" ] && MAP="$MAP --map $k=$v"; done < $A/IMPORT_MAP.txt
 DLIST=$C/d-report.tsv
+# working omit list: the record's OMIT_MODULES.txt plus X3 cascade additions (W/x3/omit4.txt, created if absent)
+OM=$X/omit4.txt; [ -f $OM ] || cp $A/OMIT_MODULES.txt $OM
+# closure table with omitted modules as kind d, and the trim list (kind (c) modules importing a carrier or omitted)
+python3 -I - $C/closure-modules.tsv $OM $C/closure4.tsv $C/trim4-list.txt <<'PYEOF'
+import sys
+cl, om, out, tl = sys.argv[1:5]
+omit = {l.strip() for l in open(om) if l.strip()}
+rows = [l.rstrip("\n").split("\t") for l in open(cl)]
+h = rows[0]; ki = h.index("kind"); ci = h.index("closure_imports")
+kind = {r[0]: ("d" if r[0] in omit else r[ki]) for r in rows[1:]}
+with open(out, "w") as f:
+    f.write("\t".join(h) + "\n")
+    for r in rows[1:]:
+        r = list(r); r[ki] = kind[r[0]]; f.write("\t".join(r) + "\n")
+with open(tl, "w") as f:
+    for r in rows[1:]:
+        if kind[r[0]] == "c" and any(kind.get(i) == "d" for i in r[ci].split(",") if i):
+            f.write(r[0] + "\n")
+PYEOF
 # 2
 rm -rf $T; mkdir -p $T
-python3 -I $A/trim_imports.py $L/src $T $DLIST --omit $A/OMIT_MODULES.txt $MAP $(cat $C/trim3-list.txt) > $X/trim4.log
+python3 -I $A/trim_imports.py $L/src $T $DLIST --omit $OM $MAP $(cat $C/trim4-list.txt) > $X/trim4.log
 # 3
 python3 -I $A/drop_decls.py $L/src $T $X/drop-decls4.tsv > $X/drop4.log
 # 4
 rm -rf $CS $CT; mkdir -p $CS $CT
 cp $X/chain-src-d012/*.lean $CS/
-for m in $(tail -n +2 $DLIST | cut -f1) $(cat $A/OMIT_MODULES.txt); do
+for m in $(tail -n +2 $DLIST | cut -f1) $(cat $OM); do
   r=${m//.//}; mkdir -p $CS/$(dirname $r); cp $L/src/$r.lean $CS/$r.lean
 done
-python3 -I $A/trim_imports.py $CS $CT $DLIST --omit $A/OMIT_MODULES.txt $MAP $(cat $X/bin/host-order-77.txt) > $X/chain4-trim.log
+python3 -I $A/trim_imports.py $CS $CT $DLIST --omit $OM $MAP $(cat $X/bin/host-order-77.txt) > $X/chain4-trim.log
 : > $X/chain4-diff.txt
 for m in $(cat $X/bin/host-order-77.txt); do
   diff $X/chain-src-d012/$m.lean $CT/$m.lean > /tmp/x3d.$$ || true
@@ -39,7 +58,7 @@ for m in $(cat $X/bin/host-order-77.txt); do
 done
 rm -f /tmp/x3d.$$
 # 5
-python3 -I $X/bin/fv_x3_plan4.py $C/closure3.tsv $T $A/bases $CT $X/bin/host-order-77.txt \
+python3 -I $X/bin/fv_x3_plan4.py $C/closure4.tsv $T $A/bases $CT $X/bin/host-order-77.txt \
   $C/plan4-table.tsv $C/plan4-link.txt $C/plan4-gate.tsv
 # 6
 rm -rf $X/l187-carried4; mkdir -p $X/l187-carried4; n=0
