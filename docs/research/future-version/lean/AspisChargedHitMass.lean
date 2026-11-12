@@ -1,5 +1,6 @@
 import AspisChargedWeight
 import Frozen2StartChargeProbability
+import AspisLib_Namespaces
 
 /-! Per-step accounting, composition of (a), (b), (c) for R1's 33-row charged
 experiment: the restricted classifier-hit mass is at most `Q · capMax +

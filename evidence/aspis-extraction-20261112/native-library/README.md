@@ -407,42 +407,59 @@ The chain, the five checks and the chain-import commit (step 5) are not reached.
 toolchain, `FS2.DuplexTrace` first, pass 2 behind it) is not started; a worker can take it from this README, the
 pass-2 tables above and `host/fv_x3_closure_compile.sh` (resumable by source key, objects in `W/x3/pass2`).
 
-### Revision 6 (research 8a493a87b55): current state, stopped on an `open` of a constant of a lead-omitted module
+### Revision 6 (research 8a493a87b55): the model module compiles; the five checks
 
 Lists of record: 12 omits, 21 drops, namespace stub `AspisLib_Namespaces` (`STUB_MAP.txt`, passed as `--stub` to
-every trim call). Hashes: `aspis-lib-r6.sha256`. Cascade driver `host/fv_x3_cascade.py` (rule and tie-breaker of
-the lead; attempts `X3-C-cas6-1..12`, `X3-C-cas6b-1..2`, `X3-C-cas6c-1..8`, `X3-C-cas6d-1..4`, steps in
-`cascade-steps-r6.txt`; one slot each, largest peak RSS about 4.2 GB, no memory events). The link to the host was
-down 11:45 to 12:35 UTC; the cascade kept running on the host and its results were read afterwards.
+every trim call); hashes `aspis-lib-r6.sha256`. Driver `host/fv_x3_cascade.py` with the lead's cascade rule and
+tie-breaker (attempts `X3-C-cas6-*`, `cas6b` to `cas6g`, one slot each, steps in `cascade-steps-r6.txt`; largest peak
+RSS about 4.2 GB, no memory events). The host link was down 11:45 to 12:35 UTC; jobs kept running and were read
+afterwards.
 
-- Gate (`gate-r6.tsv`): 0 violations. LEAN_PATH as in revision 4 (no L187 `objs`).
-- Chain trim (`chain-import-diff-r6.txt`): `AspisOneTxDecision` (frontier of the omitted
-  `OraclePortFrozenOrderDecision`) and the three 33-row modules `AspisChargedWeight`, `AspisChargedHitMass`,
-  `AspisChargedHitMassCheck` (stub import for `open OraclePortFrozen2Consumer`); import lines only.
-- Additions (`omit-drop-additions.tsv`, one row each with step, first error and dependency; needed-constant count
-  from `uses/top_closure.tsv.gz`): 27 declarations dropped and 16 modules omitted, of which two omissions were
-  reversed by the tie-breaker (`OraclePortRuntimeBindingC7`, opened by `OraclePortJoinSplitCore`;
-  `OraclePortFrozen2Reached`, opened by `OraclePortFrozen2Roots`): those two are kept (`keep-modules-r6.txt`) and
-  their failing declarations dropped. Final working lists: `omit-modules-r6.txt` (26), `drop-decls-r6.tsv` (48).
-  Every omitted module has 0 needed constants; every dropped declaration is absent from the closure file.
-- The driver first stopped on an "overloaded, errors" message (`OraclePortRuntimeBindingC7`): the overload lists
-  `Unknown identifier dV`, a name of the stubbed `OraclePortStoredConsumerC7`, i.e. the intended failure of a real
-  use. The driver now reads the missing name inside an overload message.
-- Compile (`trimmed-l187-compile-r6.tsv`): of 195 modules, **177 compile, 1 fails, 17 skipped**.
+Cascade additions (`omit-drop-additions.tsv`; one row each with step, first error, the omitted or dropped item it
+depended on, and the needed-constant count of the module from `uses/top_closure.tsv.gz`): 37 declarations dropped,
+20 module omissions, 4 omissions reversed by the tie-breaker because an `open` line needs the module:
+`OraclePortRuntimeBindingC7` (opened by `OraclePortJoinSplitCore`), `OraclePortFrozen2Reached` (by
+`OraclePortFrozen2Roots`), `OraclePortFrozen2Roots` (by `OraclePortFrozen2ActualChecks`), and, by the lead's decision
+applied to its own base list, **`OraclePortFrozenOrderDecision` ("base omit reversed by the tie-breaker",
+`OraclePortFrozen2Reached` line 18 `open OraclePortFrozenOrder (slotPrograms)`)**; `OraclePortShortCircuitDecision`,
+which declares a second `slotPrograms`, was reversed with it. `slotPrograms` is protected in both
+(`protected-names-r6.txt`) and survived; their other failing declarations were dropped. Final working lists:
+`omit-modules-r6.txt` (27), `drop-decls-r6.tsv` (63), kept modules `keep-modules-r6.txt` (5). No needed declaration
+failed at any step. Every omitted module has 0 needed constants and no dropped declaration is in the closure file;
+`Frozen2StartChargePrefix` (5 needed constants) and `Frozen2StartChargeCompletion` (2) lost only declarations that
+are not in it.
 
-**Stop.** `OraclePortFrozen2Reached` line 18: `open OraclePortFrozenOrder (slotPrograms)` fails with "Unknown
-constant `AspisR1.OraclePortFrozenOrder.slotPrograms`". `slotPrograms` is declared in `OraclePortFrozenOrderDecision`,
-which is in the lead's own `OMIT_MODULES.txt`, so the cascade cannot reverse it, and an `open` command is not a
-declaration that `drop_decls.py` can remove. Everything left is behind this one line:
-`AspisFailureBoundModel -> AspisFailureBoundJoined -> AspisRec40CleanJoin -> AspisRec40Clean -> AspisRec40CleanRun ->
-Frozen2StartChargeCompletion -> Frozen2StartChargePrefix -> OraclePortFrozen2C6 -> OraclePortFrozen2CanonicalChecks ->
-OraclePortFrozen2ActualChecks -> OraclePortFrozen2Roots -> OraclePortFrozen2Reached`.
-`Frozen2StartChargePrefix` has needed constants; the four `OraclePortFrozen2*` modules in between have none, and
-`OraclePortFrozen2Reached` itself is by now almost entirely dropped (35 lines left). The decision is the lead's
-(for example: keep and trim `OraclePortFrozenOrderDecision` with drops, a stub for the namespace with the one
-constant, or omit the `OraclePortFrozen2*` chain if `Frozen2StartChargePrefix` does not need it).
+Driver details, in the committed script: missing names are read inside "overloaded" messages (the first case was
+`dV`, a name of the stubbed `OraclePortStoredConsumerC7`, the intended failure of a real use); an `open` naming a
+constant of an omitted module reverses the module that declares it; when the declaring module is already kept but
+has not compiled yet in that step, the driver waits a step; the four 33-row chain modules never steer the cascade.
 
-The five checks and the chain-import commit are not reached; no chain source was committed. Step 6 is not started.
+Gate and compile (Lean 4.32.0, LEAN_PATH: own objects, hardlinked unchanged carried L187 objects, `base_ref`; no L187
+`objs`): `gate-r6.tsv` 0 violations; `trimmed-l187-compile-r6.tsv`: of 194 modules, 192 compile; `AspisFailureBoundModel`
+exit 0. The one failure and one skip are the 33-row side modules `AspisChargedHitMass` ("unknown module prefix
+`Frozen2StartChargeProbability`": it imports L187 modules outside the model closure, which the carried set does not
+cover) and `AspisChargedHitMassCheck` behind it.
+
+Chain text (`chain-import-diff-r6.txt`): three modules change, each by one added line `import AspisLib_Namespaces`
+(they `open OraclePortFrozen2Consumer`): `AspisChargedWeight`, `AspisChargedHitMass`, `AspisChargedHitMassCheck`.
+`AspisOneTxDecision` is unchanged: its import `OraclePortFrozenOrderDecision` was rewritten only while that module
+was omitted. Checked by `git diff`: no changed line other than these three imports.
+
+Five checks (`host/fv_x3_checks4.sh`, attempt `X3-C-checks6`, wall 0:14.21, peak RSS 4,240,100 kB, no memory events;
+outputs in `checks-r6/`):
+- a. both `#print axioms` lines read `[propext, Classical.choice, Quot.sound]`;
+- b. `X5Statements.out` is byte-identical to `statements-before.out` (sha256
+  f474e291bcb458ce09753aacea0fb34a2a4f2eea291bd62a00e44774d9c0c9cf, both files);
+- c. `AspisChainUsesD`: `lines 0`, `uses_d_after.tsv` empty;
+- d. import closure of `AspisFailureBoundModel` (7,066 modules, `checks-r6/import_graph.tsv.xz`): 0 kind (d) modules
+  (`check-d.txt`), and 0 kind (d) or omitted modules with the current omit list (`check-d-omit-current.txt`);
+- e. `in_closure ... False` for all four 33-row modules; `AspisRowStarts33` and `AspisChargedWeight` compile,
+  `AspisChargedHitMass` and `AspisChargedHitMassCheck` do not (the missing objects outside the model closure above).
+
+Not done: step 6 (port patches under Lean 4.36.0-rc2, `FS2.DuplexTrace` first, pass 2 behind it) is not started.
+Pass 2 must now run over this object set: the carried 1,407-module set changed with the cascade (re-run
+`host/fv_x3_plan4.py` through `fv_x3_pipeline4.sh` with `X3_LIB=W/x3/aspis-lib6` to regenerate it). The 33-row side
+modules need the L187 closure of `Frozen2StartChargeProbability` added to the carried set.
 
 ### Pass 2 under the new toolchain (partial)
 

@@ -1,5 +1,6 @@
 import AspisRowStarts33
 import Frozen2StartChargePrefix
+import AspisLib_Namespaces
 
 /-! Per-step accounting, piece (c): the weighted start count of R1's charged
 experiment (refines `Frozen2StartChargePrefix.starts`, `≤ Q + 34`).

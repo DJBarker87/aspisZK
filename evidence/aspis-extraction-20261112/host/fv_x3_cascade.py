@@ -71,7 +71,13 @@ for it in range(1, maxit + 1):
         f.write(f"step {it} {att} {st}\n")
     if res.get("AspisFailureBoundModel", ["", ""])[1] == "0":
         open(X + "/CASCADE_DONE", "w").write(f"step {it}\n"); sys.exit(0)
-    failed = [m for m, v in res.items() if v[1] not in ("0", "skipped")]
+    # the four 33-row chain modules are a side check outside the model theorems' closure: they never steer the cascade
+    SIDE = {"AspisRowStarts33", "AspisChargedWeight", "AspisChargedHitMass", "AspisChargedHitMassCheck"}
+    with open(X + "/side-failures.txt", "a") as f:
+        for m in SIDE:
+            if res.get(m, ["", ""])[1] not in ("0", "skipped", ""):
+                f.write(f"step {it}\t{m}\t{res[m][5][:200] if len(res[m]) > 5 else ''}\n")
+    failed = [m for m, v in res.items() if v[1] not in ("0", "skipped") and m not in SIDE]
     if not failed:
         open(X + "/STOP.txt", "w").write(f"step {it}: no failure but model not compiled\n"); sys.exit(1)
     plan = {l.split("\t")[0]: l.split("\t")[2] for l in list(open(X + "/closure/plan4-table.tsv"))[1:]}
@@ -89,21 +95,49 @@ for it in range(1, maxit + 1):
         dep = re.search(r"`([^`]+)`", first)
         dep = dep.group(1) if dep else ""
         nn = len(needed.get(m, ()))
-        if "unknown namespace" in first:
-            # tie-breaker of 2026-11-12: a failure at an `open X` line means X must be kept and trimmed; never omit.
-            # If X is an omit addition of this cascade (not in the lead's list), reverse it: X goes to the keep list,
-            # its failing declarations are dropped at the next step. Otherwise stop and report.
-            ns = re.search(r"`([^`]+)`", first).group(1).split(".")[-1]
-            base_omit = {l.strip() for l in open(os.environ["X3_LIB"] + "/OMIT_MODULES.txt") if l.strip()}
+        src_now = open(plan[m], errors="replace").read().split("\n")
+        ln0 = int(errs[0][0]) if errs else 0
+        at_open = ln0 > 0 and re.match(r"\s*open\b", src_now[ln0 - 1])
+        if at_open:
+            # tie-breaker (lead, 2026-11-12, applies to the base omit list too): an `open` that fails because of an
+            # omitted module reverses that omission; the module is kept, trimmed, and the opened name is protected.
             cur = [l.strip() for l in open(X + "/omit4.txt") if l.strip()]
-            if ns in cur and ns not in base_omit:
-                open(X + "/omit4.txt", "w").write("\n".join(c for c in cur if c != ns) + "\n")
-                open(X + "/keep4.txt", "a").write(ns + "\n")
-                with open(ADD, "a") as f:
-                    f.write(f"{ns}\tomit REVERSED (kept: {m} opens its namespace)\t{it}\t{first[:200]}\t\t0\n")
-                continue
-            open(X + "/STOP.txt", "w").write(f"step {it}: {m}: open of a removed namespace (keep-and-trim case): {first}\n")
-            sys.exit(3)
+            base_omit = {l.strip() for l in open(os.environ["X3_LIB"] + "/OMIT_MODULES.txt") if l.strip()}
+            tok = re.search(r"`([^`]+)`", first).group(1)
+            target, name = None, ""
+            if "unknown namespace" in first and tok.split(".")[-1] in cur:
+                target = tok.split(".")[-1]
+            else:
+                name = tok.split(".")[-1]
+                for c in cur:
+                    pth = os.path.join(L, "src", c.replace(".", "/") + ".lean")
+                    if os.path.exists(pth) and re.search(r"^(?:@\[[^\]]*\]\s*)?(?:noncomputable\s+|private\s+)*"
+                                                       r"(?:def|abbrev|theorem|lemma|structure)\s+" + re.escape(name) + r"\b",
+                                                       open(pth, errors="replace").read(), re.M):
+                        target = c; break
+            if target is None and name:
+                # the name may come from a module already kept whose own compile has not succeeded yet (failed or
+                # skipped this step): wait for the cascade on that module instead of stopping
+                kept = [l.strip() for l in open(X + "/keep4.txt")] if os.path.exists(X + "/keep4.txt") else []
+                pend = [k for k in kept if res.get(k, ["", "0"])[1] != "0" and os.path.exists(
+                    os.path.join(L, "src", k.replace(".", "/") + ".lean")) and re.search(
+                    r"^(?:noncomputable\s+|private\s+)*(?:def|abbrev|theorem|lemma|structure)\s+" + re.escape(name) + r"\b",
+                    open(os.path.join(L, "src", k.replace(".", "/") + ".lean"), errors="replace").read(), re.M)]
+                if pend:
+                    continue
+            if target is None:
+                open(X + "/STOP.txt", "w").write(f"step {it}: {m}: open line {ln0} fails and no omitted module provides it "
+                                                 f"(a kept module cannot provide the opened name): {first}\n")
+                sys.exit(3)
+            open(X + "/omit4.txt", "w").write("\n".join(c for c in cur if c != target) + "\n")
+            open(X + "/keep4.txt", "a").write(target + "\n")
+            if name:
+                open(X + "/protect4.txt", "a").write(f"{target}\t{name}\n")
+            who = "base omit" if target in base_omit else "omit addition"
+            with open(ADD, "a") as f:
+                f.write(f"{target}\t{who} REVERSED by the tie-breaker ({m} line {ln0}: {src_now[ln0-1].strip()})\t{it}\t"
+                        f"{first[:200]}\t{name}\t{len(needed.get(target, ()))}\n")
+            continue
         if not MISSING.search(first):
             open(X + "/STOP.txt", "w").write(f"step {it}: {m}: first error is not a missing name: {first}\n"); sys.exit(1)
         keep = {l.strip() for l in open(X + "/keep4.txt")} if os.path.exists(X + "/keep4.txt") else set()
@@ -112,6 +146,11 @@ for it in range(1, maxit + 1):
         src = open(plan[m], errors="replace").read().split("\n")
         decls = sorted({d for ln, _ in errs if (d := decl_of(src, int(ln)))})
         need = [d for d in decls if is_needed(m, d)]
+        prot = {l.split("\t")[1].strip() for l in open(X + "/protect4.txt") if l.split("\t")[0] == m} \
+            if os.path.exists(X + "/protect4.txt") else set()
+        if prot & set(decls):
+            open(X + "/STOP.txt", "w").write(f"step {it}: {m}: protected opened name fails: {sorted(prot & set(decls))}: {first}\n")
+            sys.exit(4)
         if need or not decls:
             open(X + "/STOP.txt", "w").write(f"step {it}: NEEDED declaration fails: {m} {need or '(no enclosing decl)'}: {first}\n")
             sys.exit(2)

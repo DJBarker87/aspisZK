@@ -1,0 +1,125 @@
+AspisFailureBoundModel.failure_bound40P_model : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (P : AspisR1.OraclePortStoredExperimentC4.Prover) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    AspisV8R19.MemoizedProgramLaw.lazyMean (AspisFailureBound.exp D P) FS.emptyTable
+          AspisR1.RawRecordedOracleExtractionMassBin.failureMass +
+        AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18) ≤
+      AspisR1.BinCombinedMerkleCollision.kappa (Q + 1111) +
+            (↑Q * AspisPerStep.RowStarts.capMax + AspisRowStarts40.verifierCharge40) +
+          1 / 2 ^ 126 +
+        1 / 2 ^ 454
+AspisFailureBoundModel.failure_le_per_query_model : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (P : AspisR1.OraclePortStoredExperimentC4.Prover),
+  ∀ Q ≤ 2 ^ 150,
+    (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+      AspisV8R19.MemoizedProgramLaw.lazyMean (AspisFailureBound.exp D P) FS.emptyTable
+            AspisR1.RawRecordedOracleExtractionMassBin.failureMass +
+          AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18) ≤
+        (↑Q + 1) / 2 ^ 100
+'AspisFailureBoundModel.failure_bound40P_model' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisFailureBoundModel.failure_le_per_query_model' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisFailureBoundModel.failure_bound40P_model : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (P : AspisR1.OraclePortStoredExperimentC4.Prover) (Q : Nat)
+  (hq :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            AspisR1.OraclePortStoredExperimentC4.Input
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              AspisR1.OraclePortStoredExperimentC4.Input H P)))
+        Q),
+  @LE.le.{0} Rat Rat.instLE
+    (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+      (@AspisV8R19.MemoizedProgramLaw.lazyMean AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+        (Prod.{0, 0} (Prod.{0, 0} AspisR1.LiteralTranscript.Public (Nat → AspisR1.LiteralTranscript.Message)) Bool)
+        (@Pi.instFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))))
+          (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))) =>
+            AspisV8R19.DuplexFrames.Byte)
+          (instDecidableEqFin (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))))
+          (SimplexCategory.instFintypeToTypeOrderHomFinHAddNatLenOfNat
+            (SimplexCategory.mk (@OfNat.ofNat.{0} Nat (nat_lit 31) (instOfNatNat (nat_lit 31)))))
+          fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))) =>
+          SimplexCategory.instFintypeToTypeOrderHomFinHAddNatLenOfNat
+            (SimplexCategory.mk (@OfNat.ofNat.{0} Nat (nat_lit 255) (instOfNatNat (nat_lit 255)))))
+        (fun (a b : AspisV8R19.DuplexFrames.Bytes) =>
+          @instDecidableEqList.{0} AspisV8R19.DuplexFrames.Byte
+            (instDecidableEqFin (@OfNat.ofNat.{0} Nat (nat_lit 256) (instOfNatNat (nat_lit 256)))) a b)
+        (AspisFailureBound.exp D P) (@FS.emptyTable AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+        AspisR1.RawRecordedOracleExtractionMassBin.failureMass)
+      (AspisR1.QueryScanModelFailure.failureProbability
+        (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+          (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 18) (instOfNatNat (nat_lit 18))))))
+    (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+      (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+        (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+          (AspisR1.BinCombinedMerkleCollision.kappa
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q
+              (@OfNat.ofNat.{0} Nat (nat_lit 1111) (instOfNatNat (nat_lit 1111)))))
+          (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+            (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul) (@Nat.cast.{0} Rat Rat.instNatCast Q)
+              AspisPerStep.RowStarts.capMax)
+            AspisRowStarts40.verifierCharge40))
+        (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+          (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+          (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+            (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+            (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+            (@OfNat.ofNat.{0} Nat (nat_lit 126) (instOfNatNat (nat_lit 126))))))
+      (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+        (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+        (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+          (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+          (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 454) (instOfNatNat (nat_lit 454))))))
+AspisFailureBoundModel.failure_le_per_query_model : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (P : AspisR1.OraclePortStoredExperimentC4.Prover) (Q : Nat)
+  (hQ :
+    @LE.le.{0} Nat instLENat Q
+      (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+        (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+        (@OfNat.ofNat.{0} Nat (nat_lit 150) (instOfNatNat (nat_lit 150)))))
+  (hq :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            AspisR1.OraclePortStoredExperimentC4.Input
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              AspisR1.OraclePortStoredExperimentC4.Input H P)))
+        Q),
+  @LE.le.{0} Rat Rat.instLE
+    (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+      (@AspisV8R19.MemoizedProgramLaw.lazyMean AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+        (Prod.{0, 0} (Prod.{0, 0} AspisR1.LiteralTranscript.Public (Nat → AspisR1.LiteralTranscript.Message)) Bool)
+        (@Pi.instFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))))
+          (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))) =>
+            AspisV8R19.DuplexFrames.Byte)
+          (instDecidableEqFin (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))))
+          (SimplexCategory.instFintypeToTypeOrderHomFinHAddNatLenOfNat
+            (SimplexCategory.mk (@OfNat.ofNat.{0} Nat (nat_lit 31) (instOfNatNat (nat_lit 31)))))
+          fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))) =>
+          SimplexCategory.instFintypeToTypeOrderHomFinHAddNatLenOfNat
+            (SimplexCategory.mk (@OfNat.ofNat.{0} Nat (nat_lit 255) (instOfNatNat (nat_lit 255)))))
+        (fun (a b : AspisV8R19.DuplexFrames.Bytes) =>
+          @instDecidableEqList.{0} AspisV8R19.DuplexFrames.Byte
+            (instDecidableEqFin (@OfNat.ofNat.{0} Nat (nat_lit 256) (instOfNatNat (nat_lit 256)))) a b)
+        (AspisFailureBound.exp D P) (@FS.emptyTable AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+        AspisR1.RawRecordedOracleExtractionMassBin.failureMass)
+      (AspisR1.QueryScanModelFailure.failureProbability
+        (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+          (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 18) (instOfNatNat (nat_lit 18))))))
+    (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+      (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd) (@Nat.cast.{0} Rat Rat.instNatCast Q)
+        (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1))))
+      (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+        (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+        (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+        (@OfNat.ofNat.{0} Nat (nat_lit 100) (instOfNatNat (nat_lit 100)))))

@@ -1,4 +1,5 @@
 import AspisChargedHitMass
+import AspisLib_Namespaces
 
 /-! Check of the per-step generalisation against R1 (not a change to R1).
 
