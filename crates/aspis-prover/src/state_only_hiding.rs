@@ -1064,7 +1064,79 @@ pub fn apply_state_only_mask_material(
     apply_mask_material_for_layout(trace, material, &cells, &copy_active_rows())
 }
 
-// pv-aspis-rw: the counted column loop of `apply_mask_material_for_layout`
+/// pv-aspis-rw: for every C1 column, the row of the last cell of `cells` (in
+/// order) that lies in that column on an inactive row, or `None` (the pin's
+/// `for cell in cells` loop of `apply_mask_material_for_layout`).
+fn inactive_dependent_rows(
+    cells: &[aspis_statement::TraceCell],
+    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+) -> [Option<usize>; STATE_ONLY_HIDING_C1_COLUMNS] {
+    let mut inactive_dependents = [None; STATE_ONLY_HIDING_C1_COLUMNS];
+    let mut index = 0;
+    while index < cells.len() {
+        inactive_dependent_rows_step(&mut inactive_dependents, cells[index], active);
+        index += 1;
+    }
+    inactive_dependents
+}
+
+/// pv-aspis-rw: one cell of `inactive_dependent_rows` (branch outside the
+/// loop): row and column are read, `active[row]` is tested, and only for an
+/// inactive row is the column's entry written, in that order, as in the pin.
+fn inactive_dependent_rows_step(
+    inactive_dependents: &mut [Option<usize>; STATE_ONLY_HIDING_C1_COLUMNS],
+    cell: aspis_statement::TraceCell,
+    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+) {
+    let row = usize::from(cell.row);
+    let column = usize::from(cell.column);
+    if !active[row] {
+        inactive_dependents[column] = Some(row);
+    }
+}
+
+/// pv-aspis-rw: the first loop of `apply_mask_material_for_layout`: mask
+/// `index` is added to cell `index`, in order. `masks` has `cells.len()`
+/// entries (checked by the caller) and is released on return.
+fn add_cell_masks(
+    trace: &mut StateOnlyTraceFoundation,
+    cells: &[aspis_statement::TraceCell],
+    masks: Vec<M31>,
+) {
+    let mut index = 0;
+    while index < cells.len() {
+        add_cell_mask(trace, cells[index], masks[index]);
+        index += 1;
+    }
+}
+
+/// pv-aspis-rw: the second loop of `apply_mask_material_for_layout`: every C1
+/// column, in order, is balanced on its dependent row; the first failure is
+/// returned with the earlier columns already balanced. Every entry of
+/// `dependents` is `Some` (checked by the caller).
+fn balance_trace_columns(
+    trace: &mut StateOnlyTraceFoundation,
+    dependents: &[Option<usize>; STATE_ONLY_HIDING_C1_COLUMNS],
+    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+) -> Result<(), StateOnlyMaskBuildError> {
+    let mut column = 0;
+    while column < STATE_ONLY_HIDING_C1_COLUMNS {
+        balance_m31_copy_inactive(&mut trace.c1[column], dependents[column].unwrap(), active)?;
+        column += 1;
+    }
+    Ok(())
+}
+
+/// pv-aspis-rw: `trace.c1[cell.column][cell.row] += mask`, one step of the
+/// loop of `add_cell_masks` (column indexed before row,
+/// as in the pin).
+fn add_cell_mask(trace: &mut StateOnlyTraceFoundation, cell: aspis_statement::TraceCell, mask: M31) {
+    let column = usize::from(cell.column);
+    let row = usize::from(cell.row);
+    trace.c1[column][row] = trace.c1[column][row].add(mask);
+}
+
+// pv-aspis-rw: the counted column loop of `balance_trace_columns`
 // relies on the trace having exactly as many C1 columns as the hiding layout.
 const _: () = assert!(
     aspis_statement::state_only_trace::STATE_ONLY_C1_COLUMNS == STATE_ONLY_HIDING_C1_COLUMNS
@@ -1093,14 +1165,10 @@ fn apply_mask_material_for_layout(
     {
         return Err(StateOnlyMaskBuildError::TraceShape);
     }
-    let mut inactive_dependents = [None; STATE_ONLY_HIDING_C1_COLUMNS];
-    for cell in cells {
-        let row = usize::from(cell.row);
-        let column = usize::from(cell.column);
-        if !active[row] {
-            inactive_dependents[column] = Some(row);
-        }
-    }
+    // pv-aspis-rw (extraction rewrite, behaviour unchanged): the loop
+    // `for cell in cells` that records, per column, the row of its last
+    // inactive cell is the counted loop of `inactive_dependent_rows`.
+    let inactive_dependents = inactive_dependent_rows(cells, active);
     // pv-rw-a (extraction rewrite): closure in place of the `Option::is_none`
     // function item (the closure form of `any` above extracts).
     if inactive_dependents
@@ -1109,33 +1177,18 @@ fn apply_mask_material_for_layout(
     {
         return Err(StateOnlyMaskBuildError::Layout);
     }
-    // pv-aspis-rw (extraction rewrite, behaviour unchanged): counted loops in
-    // place of `cells.iter().copied().zip(take(c1))` and of
-    // `trace.c1.iter_mut().zip(inactive_dependents)`. The masks are taken out of
-    // `material` as before and released when the first loop is over, as the
-    // pin's consumed iterator was; `material.c1.len() == cells.len()` was
-    // checked above, so the zip had exactly `cells.len()` items; `trace.c1` and
-    // `inactive_dependents` both have STATE_ONLY_HIDING_C1_COLUMNS entries
+    // pv-aspis-rw (extraction rewrite, behaviour unchanged): the two loops
+    // `for (cell, mask) in cells.iter().copied().zip(take(c1))` and
+    // `for (column, dependent) in trace.c1.iter_mut().zip(inactive_dependents)`
+    // are the counted loops of `add_cell_masks` and `balance_trace_columns`.
+    // The masks are taken out of `material` as before and released when the
+    // first loop is over, as the pin's consumed iterator was;
+    // `material.c1.len() == cells.len()` was checked above, so the zip had
+    // exactly `cells.len()` items; `trace.c1` and `inactive_dependents` both
+    // have STATE_ONLY_HIDING_C1_COLUMNS entries
     // (evidence/pv-aspis-rewrite-20261111/notes/03-apply_mask_material.md).
-    {
-        let masks = core::mem::take(&mut material.c1);
-        let mut index = 0;
-        while index < cells.len() {
-            let column = usize::from(cells[index].column);
-            let row = usize::from(cells[index].row);
-            trace.c1[column][row] = trace.c1[column][row].add(masks[index]);
-            index += 1;
-        }
-    }
-    let mut column = 0;
-    while column < STATE_ONLY_HIDING_C1_COLUMNS {
-        balance_m31_copy_inactive(
-            &mut trace.c1[column],
-            inactive_dependents[column].unwrap(),
-            active,
-        )?;
-        column += 1;
-    }
+    add_cell_masks(trace, cells, core::mem::take(&mut material.c1));
+    balance_trace_columns(trace, &inactive_dependents, active)?;
     Ok(AppliedStateOnlyMasks {
         mask_only_c1: core::mem::take(&mut material.mask_only_c1),
         g: core::mem::take(&mut material.g),
