@@ -609,23 +609,52 @@ fn sparse_eq_weights(point: &[QM31; 10]) -> Vec<(usize, QM31)> {
     for coordinate in &point[prefix_len..] {
         suffix = (suffix << 1) | usize::from(*coordinate == QM31::ONE);
     }
-    let mut weights = Vec::with_capacity(1usize << prefix_len);
-    for prefix in 0..(1usize << prefix_len) {
+    // pv-aspis-rw (extraction rewrite, behaviour unchanged): the loop over the
+    // prefixes is `sparse_eq_weight_rows` and its inner loop
+    // `for (coordinate, value) in point[..prefix_len].iter().enumerate()` is
+    // `sparse_eq_prefix_weight`, each a function with one counted loop, the
+    // branch in a third; same prefixes and coordinates, same order, same
+    // `mul` and `sub`, same pushes
+    // (evidence/pv-aspis-rewrite-20261111/notes/05-sparse_eq_weights.md).
+    sparse_eq_weight_rows(point, prefix_len, trailing_boolean, suffix)
+}
+
+/// pv-aspis-rw: the output of `sparse_eq_weights` once the split of `point`
+/// into a prefix and a Boolean suffix is known: for every prefix in increasing
+/// order, the pair (row, weight), pushed to a vector created with capacity
+/// `1 << prefix_len` (the former outer loop).
+#[inline]
+fn sparse_eq_weight_rows(
+    point: &[QM31; 10],
+    prefix_len: usize,
+    trailing_boolean: usize,
+    suffix: usize,
+) -> Vec<(usize, QM31)> {
+    let count = 1usize << prefix_len;
+    let mut weights = Vec::with_capacity(count);
+    let mut prefix = 0;
+    while prefix < count {
         let row = (prefix << trailing_boolean) | suffix;
-        let mut weight = QM31::ONE;
-        // pv-aspis-rw (extraction rewrite, behaviour unchanged): counted loop
-        // over the first `prefix_len` coordinates in place of
-        // `point[..prefix_len].iter().enumerate()`, the branch in a helper; same
-        // coordinates, same order, same `mul` and `sub`
-        // (evidence/pv-aspis-rewrite-20261111/notes/05-sparse_eq_weights.md).
-        let mut coordinate = 0;
-        while coordinate < prefix_len {
-            weight = sparse_eq_weight_step(weight, prefix, prefix_len, coordinate, point[coordinate]);
-            coordinate += 1;
-        }
+        let weight = sparse_eq_prefix_weight(point, prefix, prefix_len);
         weights.push((row, weight));
+        prefix += 1;
     }
     weights
+}
+
+/// pv-aspis-rw: the weight of one prefix in `sparse_eq_weights`: starting from
+/// one, the product over the first `prefix_len` coordinates, in order, of
+/// `sparse_eq_weight_step` (the former inner loop, as a function of its own so
+/// that no loop is nested).
+#[inline]
+fn sparse_eq_prefix_weight(point: &[QM31; 10], prefix: usize, prefix_len: usize) -> QM31 {
+    let mut weight = QM31::ONE;
+    let mut coordinate = 0;
+    while coordinate < prefix_len {
+        weight = sparse_eq_weight_step(weight, prefix, prefix_len, coordinate, point[coordinate]);
+        coordinate += 1;
+    }
+    weight
 }
 
 /// pv-aspis-rw: one coordinate of the inner loop of `sparse_eq_weights`:
