@@ -1,0 +1,20 @@
+--- a/crates/aspis-r1-cost-probe/src/one_tx.rs
++++ b/crates/aspis-r1-cost-probe/src/one_tx.rs
+@@ -896,7 +896,7 @@
+     let mut val = [[0u8; 32]; multiproof::MAX_MERGED];
+     let mut d = 0;
+     for &key in keys {
+-        let index = (key >> 8) as u32;
++        let index = (key >> 8u32) as u32;
+         let leaf = batch_leaf(hash, tree, opening(proof, (key & 0xff) as usize));
+         if d > 0 && idx[d - 1] == index {
+             if val[d - 1] != leaf {
+@@ -1663,7 +1663,7 @@
+                     let mut d = 0;
+                     for position in 0..n {
+                         let key = keys[position];
+-                        let index = (key >> 8) as u32;
++                        let index = (key >> 8u32) as u32;
+                         let leaf = batch_leaf(Sha, tree, opening(proof, lo + (key & 0xff) as usize));
+                         if d > 0 && idx[d - 1] == index {
+                             continue;

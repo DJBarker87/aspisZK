@@ -1,0 +1,11 @@
+--- a/crates/aspis-r1-cost-probe/src/one_tx.rs
++++ b/crates/aspis-r1-cost-probe/src/one_tx.rs
+@@ -440,7 +440,7 @@
+         let w = v2 + v3;
+         let x = v0 + P64 - v1;
+         let y = v3 + P64 - v2;
+-        let fold = |z: u64| (z & P64) + (z >> 31);
++        let fold = |z: u64| (z & P64) + (z >> 31u32);
+         let signed = [fold(u + w), fold(x + y), fold(u + 2 * P64 - w), fold(x + 2 * P64 - y)];
+         let base = 16 * lane;
+         for k in 0..4 {

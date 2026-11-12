@@ -1,0 +1,63 @@
+--- a/crates/aspis-r1-cost-probe/src/compact.rs
++++ b/crates/aspis-r1-cost-probe/src/compact.rs
+@@ -124,11 +124,11 @@
+ /// stored `y1` values in its strict scan and the rebuilt semantic records in
+ /// the shipped `Prefix::parse` (one check per value, as in the shipped path).
+ #[inline(always)]
+-pub fn expand_values(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {
+-    if compact.len() % 16 != 0 || out.len() != 2 * compact.len() {
++pub fn expand_values(encoded: &[u8], out: &mut [u8]) -> Result<(), CodecError> {
++    if encoded.len() % 16 != 0 || out.len() != 2 * encoded.len() {
+         return Err(CodecError::Length);
+     }
+-    for (c, o) in compact.chunks_exact(16).zip(out.chunks_exact_mut(32)) {
++    for (c, o) in encoded.chunks_exact(16).zip(out.chunks_exact_mut(32)) {
+         o[..16].copy_from_slice(c);
+         o[16..].fill(0);
+     }
+@@ -136,8 +136,8 @@
+ }
+ 
+ /// Every stored compact value is a canonical QM31.
+-pub fn check_values(compact: &[u8]) -> Result<(), CodecError> {
+-    for c in compact.chunks_exact(16) {
++pub fn check_values(encoded: &[u8]) -> Result<(), CodecError> {
++    for c in encoded.chunks_exact(16) {
+         QM31::from_le_bytes(c).ok_or(CodecError::NonCanonical)?;
+     }
+     Ok(())
+@@ -145,27 +145,27 @@
+ 
+ /// Decoder: compact semantic -> logical semantic (framing bytes copied;
+ /// the shipped `Prefix::parse` then checks tag, length and every limb).
+-pub fn expand_semantic(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {
+-    if compact.len() != COMPACT_SEMANTIC || out.len() != LOGICAL_SEMANTIC {
++pub fn expand_semantic(encoded: &[u8], out: &mut [u8]) -> Result<(), CodecError> {
++    if encoded.len() != COMPACT_SEMANTIC || out.len() != LOGICAL_SEMANTIC {
+         return Err(CodecError::Length);
+     }
+-    out[..32].copy_from_slice(&compact[..32]);
++    out[..32].copy_from_slice(&encoded[..32]);
+     let (mut src, mut dst) = (32, 32);
+     for row in 0..SEMANTIC_ROWS {
+         let size = row_shape(row).ok_or(CodecError::Length)?.1;
+-        out[dst..dst + 5].copy_from_slice(&compact[src..src + 5]);
++        out[dst..dst + 5].copy_from_slice(&encoded[src..src + 5]);
+         src += 5;
+         dst += 5;
+         if compact_row(row) {
+-            expand_values(&compact[src..src + size / 2], &mut out[dst..dst + size])?;
++            expand_values(&encoded[src..src + size / 2], &mut out[dst..dst + size])?;
+             src += size / 2;
+         } else {
+-            out[dst..dst + size].copy_from_slice(&compact[src..src + size]);
++            out[dst..dst + size].copy_from_slice(&encoded[src..src + size]);
+             src += size;
+         }
+         dst += size;
+     }
+-    if src != compact.len() || dst != out.len() {
++    if src != encoded.len() || dst != out.len() {
+         return Err(CodecError::Length);
+     }
+     Ok(())

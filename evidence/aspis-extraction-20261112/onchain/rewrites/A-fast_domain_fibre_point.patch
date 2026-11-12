@@ -1,0 +1,11 @@
+--- a/crates/aspis-r1-cost-probe/src/fast_domain.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_domain.rs
+@@ -282,7 +282,7 @@
+ pub fn fibre_point(u: FibreIndex) -> Point<M31> {
+     let index = u.get();
+     let left = table_value(TABLE_A[index & 511]);
+-    let right = table_value(TABLE_B[index >> 9]);
++    let right = table_value(TABLE_B[index >> 9u32]);
+     let point = left.mul(right);
+     Point {
+         x: point.a,

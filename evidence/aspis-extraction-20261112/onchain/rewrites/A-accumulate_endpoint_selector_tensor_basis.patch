@@ -1,0 +1,11 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+@@ -837,7 +837,7 @@
+     let group = side + usize::from(endpoint.slot);
+     let row = usize::from(endpoint.row);
+     let local = row & 15;
+-    let high = selectors.high[row >> 4];
++    let high = selectors.high[row >> 4u32];
+     let group_local = usize::from(COPY_GROUP_LOCAL_COORDINATES[group][local]);
+     #[cfg(not(feature = "pool-v1-pair-forest-copy-tag-dot-basis-audit"))]
+     {

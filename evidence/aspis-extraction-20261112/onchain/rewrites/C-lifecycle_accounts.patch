@@ -1,0 +1,18 @@
+--- a/programs/r1-cost-probe/src/r1_pool_adapter.rs
++++ b/programs/r1-cost-probe/src/r1_pool_adapter.rs
+@@ -248,13 +248,13 @@
+     program_id: &Pubkey,
+     accounts: &'a [AccountInfo<'info>],
+ ) -> Result<(&'a AccountInfo<'info>, &'a AccountInfo<'info>), ProgramError> {
+-    let [target, authority] = accounts else {
++    if accounts.len() != 2 { // X1: indexed form of `let [target, authority] = accounts else`
+         return Err(if accounts.len() < 2 {
+             ProgramError::NotEnoughAccountKeys
+         } else {
+             ProgramError::InvalidArgument
+         });
+-    };
++    } let (target, authority) = (&accounts[0], &accounts[1]);
+     if target.key == authority.key
+         || target.owner != program_id
+         || !target.is_writable

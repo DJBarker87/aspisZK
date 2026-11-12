@@ -1,0 +1,25 @@
+--- a/crates/aspis-r1-cost-probe/src/one_tx.rs
++++ b/crates/aspis-r1-cost-probe/src/one_tx.rs
+@@ -457,14 +457,14 @@
+     let mut t = 0;
+     while t < 52 {
+         let b = 8 * t;
+-        acc[b] = (acc[b] & P64) + (acc[b] >> 31);
+-        acc[b + 1] = (acc[b + 1] & P64) + (acc[b + 1] >> 31);
+-        acc[b + 2] = (acc[b + 2] & P64) + (acc[b + 2] >> 31);
+-        acc[b + 3] = (acc[b + 3] & P64) + (acc[b + 3] >> 31);
+-        acc[b + 4] = (acc[b + 4] & P64) + (acc[b + 4] >> 31);
+-        acc[b + 5] = (acc[b + 5] & P64) + (acc[b + 5] >> 31);
+-        acc[b + 6] = (acc[b + 6] & P64) + (acc[b + 6] >> 31);
+-        acc[b + 7] = (acc[b + 7] & P64) + (acc[b + 7] >> 31);
++        acc[b] = (acc[b] & P64) + (acc[b] >> 31u32);
++        acc[b + 1] = (acc[b + 1] & P64) + (acc[b + 1] >> 31u32);
++        acc[b + 2] = (acc[b + 2] & P64) + (acc[b + 2] >> 31u32);
++        acc[b + 3] = (acc[b + 3] & P64) + (acc[b + 3] >> 31u32);
++        acc[b + 4] = (acc[b + 4] & P64) + (acc[b + 4] >> 31u32);
++        acc[b + 5] = (acc[b + 5] & P64) + (acc[b + 5] >> 31u32);
++        acc[b + 6] = (acc[b + 6] & P64) + (acc[b + 6] >> 31u32);
++        acc[b + 7] = (acc[b + 7] & P64) + (acc[b + 7] >> 31u32);
+         t += 1;
+     }
+ }

@@ -1,0 +1,11 @@
+--- a/crates/aspis-r1-cost-probe/src/weights.rs
++++ b/crates/aspis-r1-cost-probe/src/weights.rs
+@@ -389,7 +389,7 @@
+     /// The inactive row through its tensor form.
+     fn inactive_tensor(ap0:&[E;4],ap1:&[E;4],groups:&[K;12])->Result<E,Error> {
+         let mut m=[K::ZERO;16];
+-        for g in 0..12 { for bit in 0..16 { if S2_INACTIVE_MASKS[g]&(1<<bit)!=0 {m[bit]=m[bit].add(groups[g]);} } }
++        for g in 0..12 { for bit in 0..16 { if S2_INACTIVE_MASKS[g]&(1<<(bit as u32))!=0 {m[bit]=m[bit].add(groups[g]);} } }
+         let mut total=E::ZERO;
+         for b in 0..4 {
+             let inner=perm_dot(ap0,&m,4*b)?;

@@ -1,0 +1,11 @@
+--- a/crates/aspis-r1-cost-probe/src/one_tx.rs
++++ b/crates/aspis-r1-cost-probe/src/one_tx.rs
+@@ -875,7 +875,7 @@
+     let mut keys = [0u64; 22];
+     for j in 0..22 {
+         let index = if folded { queries[j] / 4 } else { queries[j] };
+-        keys[j] = (u64::from(index) << 8) | j as u64;
++        keys[j] = (u64::from(index) << 8u32) | j as u64;
+     }
+     for i in 1..22 {
+         let mut j = i;

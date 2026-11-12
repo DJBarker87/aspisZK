@@ -349,3 +349,46 @@ the shim-directory lookup added later), `fv_x1_rows.py` 8ba0b78566b8b7187b284ce4
 0fc43c5146d8d0f479d414d9e07b7bd283ea23e1bf27721c1e6e9146f1400824 (= off2 `config.json`), `fv_x1_cfg_on.json`
 e7a60f789dc85090df48c2b104e6257059fe45f16a434136e71dd7a8bcedcaa8 (= on2 `config.json`). The withdrawn shift shim `AspisX1ShiftLib.lean` (sha256
 581258ce104c664ebbdfa3e05e8c74cd137c50ec4aefe6b0842edcdc03a083d0) is not part of this record.
+
+## Stage 2 (rewrites in scratch copies), interim record
+
+The source stays frozen. Rewrites are applied by scripts (`../host/fv_x1_rw*.py`) to copies of `W/src-frz-a` under
+`W/x1/` (`rw-base` an unmodified copy, `rw-tree`, `rw-ab`, `rw2`, `rw3`). One `diff -u` patch per function against the
+frozen file is in `rewrites/`, and the table is `rewrites.tsv`. Nothing is applied to the repository. ELF test: the
+lead's `W/fv_frz_build.sh <attempt> <tree> aspis 37hdATMkskKX1hiCWhz4nnzkD7GauYwX8EQwcpUDb3Zt
+9pWwAcBgwhnkA8JWSA6GvjpYqGzSibLF6GqGH8v6EC9Q` in a slot (`fv_x1_build2.sh`). The unmodified copy (`X1-rwbase`)
+reproduces the frozen measurement ELF 827aaec1cbd92e37767d3d76b9fc6174ef2851a498e2e7935e1b55bc68ccb12b.
+
+Native-library probe (`fv_x1_probe.sh`): the RAW Aeneas output of a run compiled with zero edits against X3's build
+of the pinned commit's library (Lean 4.36.0-rc2, objects by reference). Errors in `Funs` (other modules: 0):
+stage 1 `off2` 73; after A (`rwA`) 44; after A, B, C2, I (`rw2b`) 44.
+
+| Item | Result |
+|---|---|
+| A (19 shift rows) | u32 shift amounts (literal suffix, `as u32`, `u32::from`), same lines. All 19 rows elaborate at overflow off (L187), the 29 native shift errors are gone, and the ELF is byte-identical (`X1-rwA`). The QM31 kernel closures are under `fast-kmul`/`lazy-horner`/`fast-square`; the client (`tools/r1-cost-probe --features r1p-check`) resolves aspis-core with `r0` only (`W/x1/tree-client`), so those lines are not prover-compiled. For the other rows only crate membership was checked. |
+| B (`CM31::inv`) | Direct call of `M31::inv` in place of the function value; same operations in the same order. `CM31::inv` and `M31::inv` translate and elaborate, and the `_::inv` opaque flag is dropped. `inv_with` is unchanged and no longer reached. The 7-line first form left the instruction stream identical but changed 3 panic-location line numbers in `.rodata`. The line-preserving form B2 (the patch) gives a byte-identical ELF together with A, C2 and I (`X1-rw3`). Tests: aspis-core lib 283 passed; differential test passed; exhaustive (v,0),(0,v) for every nonzero v passed in 410.8 s (release, 4 threads). For the privacy lead. |
+| C (`lifecycle_accounts`, `close_checkpoint`) | The slice-pattern error is gone. Both then stop at Aeneas "Unreachable" (interp/InterpProjectors.ml line 84): `lifecycle_accounts` over the whole function (AccountInfo field reads), `close_checkpoint` at the SDK `AccountInfo::try_lamports` signature. Both stay opaque. The ELF is byte-identical in its line-preserving form C2. Program lib tests with `--features aspis`: the same 25 tests fail on the unmodified copy (two-transaction tests); no new failure. |
+| I (binder names) | No effect in this emission: the modules are crate-qualified in the single namespace, so the shadowing errors of the per-scope probe do not occur (44 before and after). The rename must keep the name length: a shorter name moved 4 panic-location column numbers. |
+| D, E, F, J, K, L, M, G, H | not done yet. Remaining native errors in `rw2b`: 20 "Application type mismatch" (the `ok_or` sites, item J), 10 in `authenticate_invariant_release_registry` (line breaks, item L), 8 in `expand_values` / the `ChunksExactMut` iterator (F, K), 3 lifecycle handlers (D), 2 `TABLE_A`/`TABLE_B` recursion depth (M), 1 other. |
+
+### Translator fault checks (privacy lead's warning)
+
+- Fault 2, control case (`fv_x1_boxcase.sh`, `W/x1/probe/boxcase`, receipt `X1-boxcase`). The case is
+  `fn n_set(b: &mut Box<S>, v: u64) { b.x = v }`, plus the same for `Box<[u64]>` and `Box<[u64; 4]>`, translated with
+  this tool pair and the X1 flags. Root form: `boxlib` as the crate, `--mir built`. Dependency form: `boxroot` with
+  `boxlib` included, so `boxlib` is read from optimized MIR. In both forms the write is kept: `ok { b with x := v }`,
+  `Slice.update b 0#usize v`, `Array.update b 1#usize v`. The fault was not reproduced with this exact control case.
+  Other shapes (a copy of the Box before the write) were not tried.
+- Fault 2, (a) and (b) on the emission. Functions with a Box in the library crates (optimized MIR):
+  - `r1_semantic::claims` (`r1_semantic.rs` 42-53) writes through a `Box<[[QM31; 29]; 3]>` (`out[0..3] = ...`). Its
+    emitted body (off2) returns `out2`, which contains all three writes (`index_mut_back val2`, `index_mut_back1 val3`,
+    `Array.update out1 2#usize val4`). The freeze body (`AspisTPv`, built MIR) is the same up to one local
+    (`let q ← QM31.ZERO`). No write is lost.
+  - `heap::filled` returns a `Vec` at the frozen tree, not a Box; its callers write through `Vec` indexing.
+  - The statement `*_boxed_v1` decoders only build boxes with `Box::new` and move them; there is no write through a box.
+
+  The program crate's boxes are in the root crate (built MIR) and were not compared one by one.
+- Fault 1: the reversed-mutable-iterator source search is unchanged on every rewrite tree (no rewrite adds or removes
+  a `rev()`).
+- Not done yet: (d) whether this Charon can read dependency crates from built MIR; (e) the bodies in
+  `compare-frza.tsv` that differ by more than local renaming, listed with their lines.

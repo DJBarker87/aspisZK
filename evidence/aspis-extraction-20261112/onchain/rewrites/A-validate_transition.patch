@@ -1,0 +1,11 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -213,7 +213,7 @@
+         if level == carry && carry < 20 {
+             continue;
+         }
+-        let expected = if level < carry || ((index >> level) & 1) == 0 {
++        let expected = if level < carry || ((index >> (level as u32)) & 1) == 0 {
+             empty_root(level)
+         } else {
+             source.frontier[level]

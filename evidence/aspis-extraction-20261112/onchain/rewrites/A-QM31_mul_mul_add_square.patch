@@ -1,0 +1,29 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -961,7 +961,7 @@
+             let p = P as u64;
+             let (a, b, c, d) = (self.c0.a.0 as u64, self.c0.b.0 as u64, self.c1.a.0 as u64, self.c1.b.0 as u64);
+             let (e, f, g, h) = (rhs.c0.a.0 as u64, rhs.c0.b.0 as u64, rhs.c1.a.0 as u64, rhs.c1.b.0 as u64);
+-            let partial = |x: u64| (x & p).wrapping_add(x >> 31);
++            let partial = |x: u64| (x & p).wrapping_add(x >> 31u32);
+             let u = partial((c * g).wrapping_add(PP).wrapping_sub(d * h));
+             let v = partial((c * h).wrapping_add(d * g));
+             return QM31 {
+@@ -1001,7 +1001,7 @@
+             let p = P as u64;
+             let (a, b, c, d) = (self.c0.a.0 as u64, self.c0.b.0 as u64, self.c1.a.0 as u64, self.c1.b.0 as u64);
+             let (e, f, g, h) = (rhs.c0.a.0 as u64, rhs.c0.b.0 as u64, rhs.c1.a.0 as u64, rhs.c1.b.0 as u64);
+-            let partial = |x: u64| (x & p).wrapping_add(x >> 31);
++            let partial = |x: u64| (x & p).wrapping_add(x >> 31u32);
+             let u = partial((c * g).wrapping_add(PP).wrapping_sub(d * h));
+             let v = partial((c * h).wrapping_add(d * g));
+             return QM31 {
+@@ -1037,7 +1037,7 @@
+             const PP: u64 = (P as u64) * (P as u64);
+             let p = P as u64;
+             let (a, b, c, d) = (self.c0.a.0 as u64, self.c0.b.0 as u64, self.c1.a.0 as u64, self.c1.b.0 as u64);
+-            let partial = |x: u64| (x & p).wrapping_add(x >> 31);
++            let partial = |x: u64| (x & p).wrapping_add(x >> 31u32);
+             let u = partial((c * c).wrapping_add(PP).wrapping_sub(d * d));
+             let v = partial(2 * (c * d));
+             return QM31 {

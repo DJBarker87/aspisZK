@@ -1,0 +1,11 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -912,7 +912,7 @@
+     [QM31; DIGEST_ELEMS / 4],
+ ) {
+     let prepared_high = PreparedQm31Multiplier::new(high);
+-    if ((next_pair_index >> level) & 1) == 0 {
++    if ((next_pair_index >> (level as u32)) & 1) == 0 {
+         let expected = empty_root(level);
+         let residual0 = [
+             opened[RATE].sub(lift_m31(expected[0])),

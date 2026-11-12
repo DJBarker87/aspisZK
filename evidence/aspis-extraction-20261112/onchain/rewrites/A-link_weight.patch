@@ -1,0 +1,13 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+@@ -393,8 +393,8 @@
+         2 => M31(u32::from(
+             variant == PoolV1PairForestCompiledVariantV1::Withdrawal,
+         )),
+-        3 => M31(1 - ((append_index >> link.weight_level) & 1) as u32),
+-        4 => M31(((append_index >> link.weight_level) & 1) as u32),
++        3 => M31(1 - ((append_index >> u32::from(link.weight_level)) & 1) as u32),
++        4 => M31(((append_index >> u32::from(link.weight_level)) & 1) as u32),
+         _ => unreachable!("generated Pool V1 pair-forest Copy weight"),
+     }
+ }

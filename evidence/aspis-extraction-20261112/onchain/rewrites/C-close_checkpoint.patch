@@ -1,0 +1,14 @@
+--- a/programs/r1-cost-probe/src/r1_pool_adapter.rs
++++ b/programs/r1-cost-probe/src/r1_pool_adapter.rs
+@@ -1030,9 +1030,9 @@
+     if !crate::pool_route::is_close_checkpoint(data) {
+         return Err(ProgramError::InvalidInstructionData);
+     }
+-    let [checkpoint, base] = accounts else {
++    if accounts.len() != 2 { // X1: indexed form of `let [checkpoint, base] = accounts else`
+         return Err(ProgramError::NotEnoughAccountKeys);
+-    };
++    } let (checkpoint, base) = (&accounts[0], &accounts[1]);
+     if checkpoint.owner != program_id || !checkpoint.is_writable || checkpoint.executable {
+         return Err(ProgramError::InvalidAccountData);
+     }

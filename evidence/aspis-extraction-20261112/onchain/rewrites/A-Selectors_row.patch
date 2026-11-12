@@ -1,0 +1,11 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+@@ -173,7 +173,7 @@
+     #[inline(always)]
+     pub(crate) fn row(&self, row: usize) -> QM31 {
+         debug_assert!(row < POOL_V1_PAIR_FOREST_COPY_TERMINAL_ROWS_V1);
+-        self.high[row >> 4].mul(self.low[row & 15])
++        self.high[row >> 4u32].mul(self.low[row & 15])
+     }
+ 
+     #[cfg(any(test, not(feature = "pool-v1-pair-forest-active-mask-basis-audit")))]
