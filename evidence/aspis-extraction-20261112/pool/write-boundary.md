@@ -44,11 +44,14 @@ There is no lamports boundary: the Pool never writes lamports directly. Every la
 is a System or Token program invocation (`create_or_allocate_*`, `initialize_vault_account`, the token transfer
 CPIs). The only `try_borrow_mut_lamports` sites in the crate are in test mocks (`pair_forest.rs` test module).
 
-Grammar check: `../host/fv_x2c_write_boundary_check.py` (Python; a strict token matcher, no third-party parser) accepts
-exactly two forms (data: one `try_borrow_mut_data` with the error returned unchanged, then
-`G[START..END].copy_from_slice(SRC)` with all three operands parameters; lamports: one `try_borrow_mut_lamports`,
-then `**G = AMOUNT`), nothing else: no arithmetic, branch, loop, other call, read of the contents, second account.
-Output on the boundary module and on the planted cases (`rewrites3/checker-negatives/output.txt`):
+Grammar check: `../host/fv_x2c_write_boundary_check.py` (Python; a strict token matcher, no third-party parser,
+program-independent). After one SDK borrow of one account's mutable handle, spelled `match ... { Ok(x) => x,
+Err(err) => return Err(err) }`, it accepts exactly three forms of the single operation: L, `**G = AMOUNT;` (lamports,
+parameter value); D, `G[START..END].copy_from_slice(SRC);` (data, all three operands parameters); Z, `G.fill(LITERAL);`
+(the whole data, an integer literal); then `Ok(())`. Nothing else: no arithmetic, branch, loop, other call, read of
+the contents, second account, string literal. `--only name,...` checks named functions inside a larger file (each
+function's own text is cut out and checked; nothing else in the file is examined). Output
+(`rewrites3/checker-negatives/output.txt`):
 
 | File | Verdict |
 |---|---|
@@ -58,6 +61,15 @@ Output on the boundary module and on the planted cases (`rewrites3/checker-negat
 | `neg-arith.rs` (`data[start..start + bytes.len()]`) | FAIL: expected `]`, found `+` |
 | `neg-read.rs` (`let first = data[0];` before the copy) | FAIL: expected a name, found `let` |
 | `neg-second-account.rs` (a second `&AccountInfo` parameter) | FAIL: parameter list outside the grammar |
+| `positive-zero.rs` (the verifier's `write_zero_data` text) | pass, form Z |
+| `neg-fill-partial.rs` (`data[..8].fill(0)`) | FAIL: expected `.`, found `[` |
+| `neg-fill-param.rs` (`data.fill(value)` with a parameter) | FAIL (parameter list read as the lamports form; the data borrow does not match it) |
+| verifier program `programs/r1-cost-probe/src/r1_pool_adapter.rs` (worktree `aspis-next`, read only, sha256 7877ed3269556ce444da48109042af3b8afe0348574053593d9b82e8f87b6e0b), `--only write_zero_data,write_lamports` | pass: `write_zero_data` lines 1092-1097 (6 lines) form Z; `write_lamports` lines 1101-1106 (6 lines) form L |
+
+Shared vocabulary with the verifier program: the Pool needs neither a whole-data zero fill nor a lamports write (no
+direct lamports write; a fresh page receives only its header-and-roots prefix because it is checked entirely zero
+first), so it has no `write_zero_data` or `write_lamports`; it needs only form D, `write_account_data_v1`. If a later
+change needs either operation, the verifier's names and texts are to be used.
 
 ## Callers (all in `programs/aspis-pool/src/pair_forest.rs`, rewrite tree)
 
@@ -67,7 +79,7 @@ Output on the boundary module and on the planted cases (`rewrites3/checker-negat
 | `write_terminal_accounts_v1` (settlement) | 2363, 2377 | lane image; nullifier marker |
 | `write_terminal_page_v1` (settlement page) | 2406, 2415, 2424, 2438 | page (one of three modes) |
 | `write_initialize_accounts_v1` (initialize stage 6) | 3030, 3039, 3048, 3057, 3066, 3075, 3084, 3093, 3102 | master image; lanes 0 to 7 |
-| `process_pair_forest_checkpoint_with_runtime_v1` | 3176, 3185 | checkpoint image; master image |
+| `process_pair_forest_checkpoint_with_runtime_v1` | 3194, 3203 | checkpoint image; master image |
 
 ## Writes per handler: frozen order and boundary calls
 
@@ -78,8 +90,8 @@ Frozen lines are in the frozen `programs/aspis-pool/src/pair_forest.rs` and `his
 | # | Frozen (pair_forest.rs) | Boundary call (rewrite) | Account | Range | Bytes |
 |---|---|---|---|---|---|
 | - | 2183-2184 acquire master, then checkpoint borrows | (none; each borrow is taken at its write) | | | |
-| 1 | 2185 `checkpoint_data.copy_from_slice(&planned.checkpoint_image)` | 3176 | accounts[9] checkpoint | 0..192 | planned checkpoint image |
-| 2 | 2186 `master_data.copy_from_slice(&planned.next_master_image)` | 3185 | accounts[0] master | 0..384 | planned master image |
+| 1 | 2185 `checkpoint_data.copy_from_slice(&planned.checkpoint_image)` | 3194 | accounts[9] checkpoint | 0..192 | planned checkpoint image |
+| 2 | 2186 `master_data.copy_from_slice(&planned.next_master_image)` | 3203 | accounts[0] master | 0..384 | planned master image |
 
 Lengths: checkpoint by `require_program_owned_zeroed` (exact 192), master by `decode_pool_v1_pair_forest_master_v1`
 (exact 384) in the planner.
@@ -140,4 +152,33 @@ call; a later rejection leaves that creation in the instruction's view, and the 
 back). This is the same in both trees; see the state comparison in `README-stage2c.md` (test
 `terminal_marker_creation_fails_closed_rolls_back_and_rejects_replay`, the one rejected call with changed accounts).
 
-EMISSION_CHECKS
+## Emission checks (run `X2c-pool-c9`, the final tree; `../host/fv_x2c_emission_checks.py`, output `rewrites3/emission-checks-c9.txt`)
+
+(a) Single route. Source search over the Pool, `aspis_statement` and `aspis_core` (`try_borrow_mut_data`,
+`try_borrow_mut_lamports`, `.data.borrow_mut()`, `.lamports.borrow_mut()`): outside `#[cfg(test)]` items, one site in
+the boundary (`account_write.rs` line 20) and eight in the legacy `pair_processor.rs` (lines 383, 391, 399, 403, 543,
+545, 547, 548, functions `process_pair_private_transfer_with_verifier_v1` and `process_pair_withdrawal_with_verifier_v1`,
+reached only under the feature `pair-afterstate-evidence`, off in the deployed build); neither function has an emitted
+definition. Emission: no name containing `borrow_mut` or `lamports_mut` in `Funs.lean` or in the external template;
+the boundary is a bodiless `axiom account_write.write_account_data_v1` in the external template and has no definition
+in `Funs.lean`. The two agree: no translated body reaches a mutable handle. Pass.
+
+(b) Read before write (conservative, textual). Eleven emitted definitions write (directly or through calls). Two are
+flagged, both examined:
+- `processor.dispatch_pool_instruction_v1`: the four handler calls sit on mutually exclusive branches of the magic
+  dispatch (`AS8I`, `AS8C`, `AS8D`, `ASQ8`); a later branch's handler textually follows an earlier branch's. No path
+  runs two handlers.
+- `pair_forest.process_pair_forest_terminal_v1`: the flagged "reading" name is the production host instance
+  (`SolanaPairForestTerminalHostV1`) passed as an argument of the same handler call; there is no later call.
+No handler definition reads account data after its first boundary call. (The checkpoint handler was flagged in
+run c4 because Charon duplicated its tail after the creation branch; the creation branch is now a stage helper.)
+
+(c) Write order in the emission (Funs.lean of c9) beside the frozen order:
+
+| Handler | Emitted boundary calls, in text order (account; start; end) | Frozen writes |
+|---|---|---|
+| Checkpoint (`process_pair_forest_checkpoint_with_runtime_v1`) | line 28435: checkpoint; 0; CHECKPOINT_ACCOUNT_BYTES. line 28442: master; 0; MASTER_ACCOUNT_BYTES | 2185 checkpoint, 2186 master |
+| Deposit (`write_deposit_accounts_v1`) | 18490: lane; 0; lane bytes. Then one branch: 18501 genesis page; 0; 128. Same page: 18506 page; root_start; root_end, then 18511 page; filled_start; filled_end. 18521 rollover page; 0; 96 | 1173 lane, then 1175 / 1183 / 1187 page |
+| Settlement (`write_terminal_accounts_v1`, `write_terminal_page_v1`) | 25559: lane; 0; lane bytes. Then the page call (25521 genesis 0..128; 25527 then 25532 same page; 25542 rollover 0..96). 25572: marker; 0; MARKER_ACCOUNT_BYTES | 1796 lane, 1798 / 1805 / 1810 page, 1818 marker |
+| Initialize (`write_initialize_accounts_v1`) | 27130: master; 0; MASTER_ACCOUNT_BYTES. 27143, 27152, 27161, 27170, 27179, 27188, 27198, 27208: lanes 0 to 7; 0; lane bytes | 2119 master, 2120-2122 lanes 0 to 7 |
+

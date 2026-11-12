@@ -271,7 +271,7 @@
          || !token_program.executable
          || token_program.is_signer
          || token_program.is_writable
-@@ -408,17 +461,96 @@
+@@ -408,17 +461,103 @@
      }
  
      let expected_mint = Pubkey::new_from_array(identity.asset_mint);
@@ -294,11 +294,23 @@
 +    // X2c rewrite (emitter line break): the authority derivation and check, and the plan built from the checked
 +    // values, are helpers in the same order; the emitted body was nested deep enough that the emitter broke a match
 +    // arm across lines ("unexpected identifier; expected '=>'").
-+    let (expected_authority, authority_bump) =
-+        match withdrawal_vault_authority_v1(program_id, pool, vault_authority, bump_hints) {
-+            Ok(value) => value,
-+            Err(err) => return Err(err),
-+        };
++    // The authority's fields are read here and passed as values (a helper taking the account reference made the
++    // later vault-address match fail with nested borrows, run X2c-pool-c6). `data_is_empty` is evaluated before the
++    // helper's checks instead of last in their `||` chain: it reads the data length only and cannot fail.
++    let (expected_authority, authority_bump) = match withdrawal_vault_authority_v1(
++        program_id,
++        pool,
++        *vault_authority.key,
++        *vault_authority.owner,
++        vault_authority.executable,
++        vault_authority.is_signer,
++        vault_authority.is_writable,
++        vault_authority.data_is_empty(),
++        bump_hints,
++    ) {
++        Ok(value) => value,
++        Err(err) => return Err(err),
++    };
 +    if *destination_account.key != *destination {
 +        return Err(PoolV1ProgramError::InvalidDestinationTokenAccount.into());
 +    }
@@ -317,19 +329,7 @@
 +        };
 +        parse_legacy_token_account_v1(&data)?
 +    };
-+    let vault_address_ok = match bump_hints {
-+        Some(hints) => crate::registry::stored_bump_address_matches(
-+            &[
-+                POOL_V1_VAULT_TOKEN_ACCOUNT_SEED,
-+                pool.as_ref(),
-+                &[hints.vault_token_account],
-+            ],
-+            program_id,
-+            vault_account.key,
-+        ),
-+        None => *vault_account.key == pool_v1_vault_token_account_address(program_id, pool).0,
-+    };
-+    if !vault_address_ok {
++    if !withdrawal_vault_address_ok_v1(program_id, pool, *vault_account.key, bump_hints) {
 +        return Err(PoolV1ProgramError::InvalidVaultTokenAddress.into());
 +    }
 +    if vault_state.mint != expected_mint
@@ -360,28 +360,51 @@
 +    )
 +}
 +
-+/// X2c: the vault-authority part of `plan_legacy_withdrawal_transfer_from_identity_v1` (frozen order and errors).
++/// X2c: the vault-authority part of `plan_legacy_withdrawal_transfer_from_identity_v1` (frozen order and errors),
++/// over the authority account's key, owner and flags as values.
++#[allow(clippy::too_many_arguments)]
 +fn withdrawal_vault_authority_v1(
 +    program_id: &Pubkey,
 +    pool: &Pubkey,
-+    vault_authority: &AccountInfo,
++    authority_key: Pubkey,
++    authority_owner: Pubkey,
++    authority_executable: bool,
++    authority_is_signer: bool,
++    authority_is_writable: bool,
++    authority_data_is_empty: bool,
 +    bump_hints: Option<VaultBumpHintsV1>,
 +) -> Result<(Pubkey, u8), ProgramError> {
      // With hints (B4-style, Pool-only): one `create_program_address` each.
      // A hinted non-canonical authority cannot pass, because the vault token
      // account (authenticated below) records the canonical authority, and the
-@@ -442,8 +574,8 @@
+@@ -432,9 +571,9 @@
+                     &[hints.vault_authority],
+                 ],
+                 program_id,
+-                vault_authority.key,
++                &authority_key,
+             ) {
+-                *vault_authority.key
++                authority_key
+             } else {
+                 return Err(PoolV1ProgramError::InvalidVaultAuthority.into());
+             },
+@@ -442,28 +581,27 @@
          ),
          None => pool_v1_vault_authority_address(program_id, pool),
      };
 -    if vault_authority.key != &expected_authority
 -        || vault_authority.owner != &system_program::id()
-+    if *vault_authority.key != expected_authority
-+        || *vault_authority.owner != system_program::id()
-         || vault_authority.executable
-         || vault_authority.is_signer
-         || vault_authority.is_writable
-@@ -451,83 +583,59 @@
+-        || vault_authority.executable
+-        || vault_authority.is_signer
+-        || vault_authority.is_writable
+-        || !vault_authority.data_is_empty()
++    if authority_key != expected_authority
++        || authority_owner != system_program::id()
++        || authority_executable
++        || authority_is_signer
++        || authority_is_writable
++        || !authority_data_is_empty
      {
          return Err(PoolV1ProgramError::InvalidVaultAuthority.into());
      }
@@ -394,48 +417,37 @@
 -    let vault = {
 -        let data = vault_account.try_borrow_data()?;
 -        parse_legacy_token_account_v1(&data)?
-+/// X2c: the tail of `plan_legacy_withdrawal_transfer_from_identity_v1` over plain values (frozen order and errors).
-+#[allow(clippy::too_many_arguments)]
-+fn withdrawal_plan_from_checked_values_v1(
-+    mint_key: Pubkey,
-+    vault_key: Pubkey,
-+    destination_key: Pubkey,
-+    authority_key: Pubkey,
-+    amount: u32,
-+    vault_amount: u64,
-+    destination_amount: u64,
-+    decimals: u8,
-+    authority_bump: u8,
-+) -> Result<LegacyWithdrawalTransferPlanV1, ProgramError> {
-+    let amount = u64::from(amount);
-+    let vault_after = match vault_amount
-+        .checked_sub(amount) {
-+        Some(value) => value,
-+        None => return Err(PoolV1ProgramError::InsufficientVaultFunds.into()),
-     };
+-    };
 -    let destination_state = {
 -        let data = destination_account.try_borrow_data()?;
 -        parse_legacy_token_account_v1(&data)?
-+    let destination_after = match destination_amount
-+        .checked_add(amount) {
-+        Some(value) => value,
-+        None => return Err(PoolV1ProgramError::ArithmeticOverflow.into()),
-     };
+-    };
 -    let vault_address_ok = match bump_hints {
--        Some(hints) => crate::registry::stored_bump_address_matches(
--            &[
--                POOL_V1_VAULT_TOKEN_ACCOUNT_SEED,
--                pool.as_ref(),
--                &[hints.vault_token_account],
--            ],
--            program_id,
++/// X2c: the vault token account address check of `plan_legacy_withdrawal_transfer_from_identity_v1`, over the
++/// vault's key as a value.
++fn withdrawal_vault_address_ok_v1(
++    program_id: &Pubkey,
++    pool: &Pubkey,
++    vault_key: Pubkey,
++    bump_hints: Option<VaultBumpHintsV1>,
++) -> bool {
++    match bump_hints {
+         Some(hints) => crate::registry::stored_bump_address_matches(
+             &[
+                 POOL_V1_VAULT_TOKEN_ACCOUNT_SEED,
+@@ -471,63 +609,62 @@
+                 &[hints.vault_token_account],
+             ],
+             program_id,
 -            vault_account.key,
--        ),
++            &vault_key,
+         ),
 -        None => vault_account.key == &pool_v1_vault_token_account_address(program_id, pool).0,
 -    };
 -    if !vault_address_ok {
 -        return Err(PoolV1ProgramError::InvalidVaultTokenAddress.into());
--    }
++        None => vault_key == pool_v1_vault_token_account_address(program_id, pool).0,
+     }
 -    if vault.mint != expected_mint
 -        || destination_state.mint != expected_mint
 -        || vault.authority != expected_authority
@@ -450,8 +462,22 @@
 -    {
 -        return Err(PoolV1ProgramError::UnsupportedTokenConfiguration.into());
 -    }
--
--    let amount = u64::from(amount);
++}
+ 
++/// X2c: the tail of `plan_legacy_withdrawal_transfer_from_identity_v1` over plain values (frozen order and errors).
++#[allow(clippy::too_many_arguments)]
++fn withdrawal_plan_from_checked_values_v1(
++    mint_key: Pubkey,
++    vault_key: Pubkey,
++    destination_key: Pubkey,
++    authority_key: Pubkey,
++    amount: u32,
++    vault_amount: u64,
++    destination_amount: u64,
++    decimals: u8,
++    authority_bump: u8,
++) -> Result<LegacyWithdrawalTransferPlanV1, ProgramError> {
+     let amount = u64::from(amount);
 -    let vault_after = vault
 -        .amount
 -        .checked_sub(amount)
@@ -460,6 +486,16 @@
 -        .amount
 -        .checked_add(amount)
 -        .ok_or(PoolV1ProgramError::ArithmeticOverflow)?;
++    let vault_after = match vault_amount
++        .checked_sub(amount) {
++        Some(value) => value,
++        None => return Err(PoolV1ProgramError::InsufficientVaultFunds.into()),
++    };
++    let destination_after = match destination_amount
++        .checked_add(amount) {
++        Some(value) => value,
++        None => return Err(PoolV1ProgramError::ArithmeticOverflow.into()),
++    };
      let mut data = Vec::with_capacity(10);
      data.push(SPL_TOKEN_TRANSFER_CHECKED_DISCRIMINANT);
      data.extend_from_slice(&amount.to_le_bytes());
@@ -501,7 +537,7 @@
          authority_bump,
      })
  }
-@@ -535,14 +643,18 @@
+@@ -535,14 +672,18 @@
  pub(crate) fn exact_withdrawal_transfer_account_infos_v1<'a>(
      accounts: &[AccountInfo<'a>],
  ) -> Result<[AccountInfo<'a>; 5], ProgramError> {
@@ -527,7 +563,7 @@
      ])
  }
  
-@@ -553,27 +665,36 @@
+@@ -553,27 +694,36 @@
      plan: &LegacyWithdrawalTransferPlanV1,
  ) -> Result<(), ProgramError> {
      let [mint_account, vault_account, destination_account, vault_authority, token_program] =
@@ -576,7 +612,7 @@
          || destination.amount != plan.destination_after
      {
          return Err(PoolV1ProgramError::TokenBalanceDeltaMismatch.into());
-@@ -588,28 +709,37 @@
+@@ -588,28 +738,37 @@
      plan: &LegacyDepositTransferPlanV1,
  ) -> Result<(), ProgramError> {
      let [mint_account, source_account, source_authority, vault_account, token_program] =

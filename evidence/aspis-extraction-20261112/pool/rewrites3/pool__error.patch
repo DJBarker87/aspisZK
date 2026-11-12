@@ -1,13 +1,20 @@
 --- a/programs/aspis-pool/src/error.rs
 +++ b/programs/aspis-pool/src/error.rs
-@@ -60,7 +60,8 @@
+@@ -60,7 +60,15 @@
  }
  
  impl From<PoolV1ProgramError> for ProgramError {
 -    fn from(error: PoolV1ProgramError) -> Self {
 -        Self::Custom(error as u32)
-+    // X2c rewrite (class 2): the parameter is not named `error` (the name of an emitted module).
++    // X2c rewrite: the discriminant cast is a free function. Inside this impl the emitted `read_discriminant`
++    // resolved to `ProgramError`'s own (runs X2c-pool-c4, c8); the parameter is no longer named `error` (a module).
 +    fn from(value: PoolV1ProgramError) -> Self {
-+        Self::Custom(value as u32)
++        Self::Custom(pool_v1_program_error_code(value))
      }
  }
++
++/// X2c: the error's custom code (`value as u32`, as in the frozen `From` impl).
++#[inline(always)]
++fn pool_v1_program_error_code(value: PoolV1ProgramError) -> u32 {
++    value as u32
++}

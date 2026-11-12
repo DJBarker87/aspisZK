@@ -154,7 +154,7 @@
          decode_verifier_registry_entry_v2(&data).ok()
      };
      let entry_address_matches = entry.as_ref().is_some_and(|entry| {
-@@ -373,7 +398,10 @@
+@@ -373,14 +398,40 @@
      {
          return Err(PoolV1ProgramError::InvalidVerifierEntryAddress.into());
      }
@@ -166,12 +166,43 @@
      if !entry_address_matches {
          return Err(PoolV1ProgramError::InvalidVerifierEntry.into());
      }
-@@ -414,7 +442,7 @@
++    // X2c rewrite (emitter line break): the entry checks and the result are a helper, in the same order; at this
++    // nesting depth the emitted record literal was broken across lines (run X2c-pool-c8, 64 errors).
++    verifier_selection_from_entry_v2(
++        pool,
++        policy,
++        &selection,
++        &entry,
++        registry_image.generation,
++        &loader,
++        current_slot,
++    )
++}
++
++/// X2c: the tail of `authenticate_verifier_selection_v2` (frozen order and errors) over the decoded entry.
++fn verifier_selection_from_entry_v2(
++    pool: &Pubkey,
++    policy: &VerifierPolicyV1,
++    selection: &VerifierSelectionV1,
++    entry: &aspis_statement::pool_v1::VerifierRegistryEntryV2,
++    registry_generation: u64,
++    loader: &Pubkey,
++    current_slot: u64,
++) -> Result<AuthenticatedVerifierSelectionV1, ProgramError> {
+     let selected_program = Pubkey::new_from_array(selection.verifier_program);
+     let expected_verifier_programdata = Pubkey::create_program_address(
+         &[selected_program.as_ref(), &[entry.programdata_bump]],
+-        &loader,
++        loader,
+     )
+     .map_err(|_| PoolV1ProgramError::VerifierSelectionMismatch)?;
+     if entry.pool != pool.to_bytes()
+@@ -414,7 +465,7 @@
          profile_binding: entry.profile_binding,
          release_binding: entry.release_binding,
          statement_version: entry.statement_version,
 -        registry_generation: registry.generation,
-+        registry_generation: registry_image.generation,
++        registry_generation,
          expected_verifier_loader: Some(loader.to_bytes()),
          authenticated_at_slot: current_slot,
      })

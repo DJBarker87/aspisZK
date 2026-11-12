@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """X2c: grammar check for account write-boundary functions (Solana SDK `AccountInfo`), program-independent.
 
-usage: fv_x2c_write_boundary_check.py <rust file> [<rust file> ...]
+usage: fv_x2c_write_boundary_check.py [--only name,name,...] <rust file> [<rust file> ...]
 
-Every `fn` item in each file must match one of the two accepted forms below, token for token (comments, whitespace
+Without --only, every `fn` item in each file must match one of the three accepted forms below (a file that holds
+only boundary functions). With --only, the named functions are located in the file and each must match; other
+items are not examined. Every function must match one of the three accepted forms below, token for token (comments, whitespace
 and the parameter and local names are free; nothing else is). Exit status 0 iff every function passes and at least
 one function was found.
 
@@ -15,6 +17,13 @@ Form D (account data):
         Ok(())
     }
   (the four parameters in any order; SRC may also be `&[u8; N]` with N a literal or an UPPER_CASE constant path)
+
+Form Z (the whole data of one account set to a literal):
+    [attribute] [pub | pub(crate)] fn NAME(ACC: &AccountInfo<LT>) -> ProgramResult {
+        let mut G = match ACC.try_borrow_mut_data() { Ok(X) => X, Err(E) => return Err(E), };
+        G.fill(LITERAL);
+        Ok(())
+    }
 
 Form L (lamports of one account):
     [attribute as above] [pub | pub(crate)] fn NAME(ACC: &AccountInfo<LT>, AMOUNT: u64) -> ProgramResult {
@@ -216,6 +225,17 @@ def check_fn(c):
         if src != by['bytes'][0]:
             raise Fail("line %d: the source is not the byte parameter" % c.line())
         form = 'D'
+    elif kinds == ['acc']:
+        acc = by['acc'][0]
+        guard = parse_borrow(c, acc, 'try_borrow_mut_data')
+        if c.ident() != guard:
+            raise Fail("line %d: the fill is not through the borrowed guard" % c.line())
+        c.seq('. fill (')
+        lit = c.take()
+        if not re.match(r'[0-9][0-9_]*(?:u8)?$', lit):
+            raise Fail("line %d: the fill value is not an integer literal" % c.line())
+        c.seq(') ;')
+        form = 'Z'
     elif kinds == ['acc', 'u64']:
         acc = by['acc'][0]
         guard = parse_borrow(c, acc, 'try_borrow_mut_lamports')
@@ -231,6 +251,42 @@ def check_fn(c):
         raise Fail("parameter list %s is outside the grammar" % kinds)
     c.seq('Ok ( ( ) ) }')
     return name, first, c.t[c.i - 1][1], form
+
+
+def check_named(path, wanted):
+    """Check only the named functions. Each function's own text (an `#[inline..]` attribute line directly above it,
+    then the item through its matching closing brace) is cut out and tokenized; the rest of the file is not read."""
+    text = open(path).read()
+    results, ok = [], True
+    for name in wanted:
+        found = list(re.finditer(r'(?m)^[ \t]*(?:#\[inline[^\]\n]*\]\s*\n[ \t]*)?(?:pub(?:\(crate\))?[ \t]+)?fn[ \t]+' + re.escape(name) + r'\b', text))
+        if len(found) != 1:
+            results.append((name, 0, 0, '-', 'FAIL', 'found %d definitions' % len(found)))
+            ok = False
+            continue
+        start = found[0].start()
+        brace = text.index('{', found[0].end())
+        depth, k = 0, brace
+        while k < len(text):
+            if text[k] == '{':
+                depth += 1
+            elif text[k] == '}':
+                depth -= 1
+                if depth == 0:
+                    break
+            k += 1
+        offset = text.count('\n', 0, start)
+        try:
+            toks = [(t, line + offset) for t, line in tokens(text[start:k + 1])]
+            c = Cursor(toks, 0)
+            n, first, last, form = check_fn(c)
+            if c.i != len(toks):
+                raise Fail("trailing tokens after the function")
+            results.append((n, first, last, form, 'pass', ''))
+        except (Fail, ValueError) as exc:
+            ok = False
+            results.append((name, offset + 1, text.count('\n', 0, k) + 1, '-', 'FAIL', str(exc)))
+    return ok and bool(results), results
 
 
 def check_file(path):
@@ -272,8 +328,13 @@ def check_file(path):
 
 def main():
     all_ok = True
-    for path in sys.argv[1:]:
-        ok, results = check_file(path)
+    args = sys.argv[1:]
+    wanted = None
+    if args and args[0] == '--only':
+        wanted = args[1].split(',')
+        args = args[2:]
+    for path in args:
+        ok, results = check_named(path, wanted) if wanted else check_file(path)
         all_ok &= ok
         print("file %s" % path)
         if not results:
