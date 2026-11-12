@@ -31,6 +31,11 @@ In the owner's words, in order:
   together with the privacy lead's request to delete its superseded build output on the build
   host: "yes to both". The owner gave the same approval for the compute item to the soundness lead
   directly, the same day: "yes".
+- Asked whether proof work could start on the verifier program before the prover is translated, the
+  owner answered: "no if hte prover cou;ld still mean a rewrite of onchain then lets wait". No proof
+  work starts on either on-chain program while a prover fix could still require a change to code an
+  on-chain program reaches. From 12 November the functions the on-chain emissions reach are treated as
+  frozen: a prover-side fix that needs one goes to the lead and is batched into one more gated round.
 
 Consequences. No proof work on Aspis starts until one commit has a clean translation of the
 verifier program, the Pool program and the prover. Code the tools reject is rewritten, in gated
