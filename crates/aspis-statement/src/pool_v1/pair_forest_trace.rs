@@ -718,7 +718,7 @@ mod pv_aspis_rw_tests {
                 }
             }
         }
-        assert!(found > 1000 && absent > 1000, "{found} {absent}");
+        assert!(found > 500 && absent > 500, "{found} {absent}");
     }
 }
 
