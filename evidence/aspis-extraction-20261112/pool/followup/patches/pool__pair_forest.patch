@@ -1,0 +1,495 @@
+--- a/programs/aspis-pool/src/pair_forest.rs
++++ b/programs/aspis-pool/src/pair_forest.rs
+@@ -1278,6 +1278,13 @@
+ /// `require_program_owned_zeroed` (fresh pages, which it also checks entirely zero) or `validate_root_page_bytes`
+ /// (same page). A fresh page receives only its header-and-roots prefix: the rest is zero before and after, as after
+ /// the frozen `write_new_page_unchecked`, which first zeroed the whole page.
++///
++/// X2d item 1: the write boundary's precondition (`start <= end`, `end - start == bytes.len()`, `end <=` data length)
++/// is checked here for both accounts before the first write, on data lengths read before that write. The page bytes
++/// are decided first (pure; in the frozen code they were computed after the lane write, which no one observes). The
++/// errors are those the frozen handler returns for a malformed account at the same place: the lane decoder's
++/// `InvalidAccountType`; for a fresh page `require_program_owned_zeroed`'s `InvalidFreshAccount`, for the same page
++/// `validate_root_page_bytes`'s `InvalidAccountType`. No accepted input reaches them (see the decoders named above).
+ fn write_deposit_accounts_v1(
+     accounts: &[AccountInfo<'_>],
+     writable_page_index: usize,
+@@ -1285,6 +1292,40 @@
+     inputs: &DepositInputsV1,
+ ) -> ProgramResult {
+     let lane_account = &accounts[FOREST_DEPOSIT_LANE_ACCOUNT_INDEX];
++    let page = &accounts[writable_page_index];
++    let (page_write, page_error) = match mode {
++        PairForestDepositPageModeV1::FreshGenesis { .. } => (
++            RootPageWriteV1::TwoRootPrefix(crate::history::new_root_page_prefix_two_v1(
++                lane_account.key,
++                0,
++                0,
++                &inputs.lane.tree.root,
++                &inputs.append.root,
++            )),
++            PoolV1ProgramError::InvalidFreshAccount,
++        ),
++        PairForestDepositPageModeV1::ExistingSamePage { header } => (
++            RootPageWriteV1::AppendOne(crate::history::root_page_append_one_v1(header, &inputs.append.root)),
++            PoolV1ProgramError::InvalidAccountType,
++        ),
++        PairForestDepositPageModeV1::FreshRollover { next_page_number, .. } => (
++            RootPageWriteV1::OneRootPrefix(crate::history::new_root_page_prefix_one_v1(
++                lane_account.key,
++                next_page_number,
++                inputs.append.root_sequence,
++                &inputs.append.root,
++            )),
++            PoolV1ProgramError::InvalidFreshAccount,
++        ),
++    };
++    let lane_data_len = lane_account.data_len();
++    let page_data_len = page.data_len();
++    if !write_range_fits_v1(lane_data_len, 0, POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES, inputs.next_lane_image.len()) {
++        return Err(PoolV1ProgramError::InvalidAccountType.into());
++    }
++    if !root_page_write_fits_v1(&page_write, page_data_len) {
++        return Err(page_error.into());
++    }
+     match crate::account_write::write_account_data_v1(
+         lane_account,
+         0,
+@@ -1294,25 +1335,56 @@
+         Ok(()) => {}
+         Err(err) => return Err(err),
+     }
+-    let page = &accounts[writable_page_index];
+-    match mode {
+-        PairForestDepositPageModeV1::FreshGenesis { .. } => {
+-            let prefix = crate::history::new_root_page_prefix_two_v1(
+-                lane_account.key,
+-                0,
+-                0,
+-                &inputs.lane.tree.root,
+-                &inputs.append.root,
+-            );
+-            crate::account_write::write_account_data_v1(
+-                page,
+-                0,
+-                crate::history::ROOT_PAGE_TWO_ROOT_PREFIX_BYTES,
+-                &prefix,
+-            )
++    write_root_page_v1(page, &page_write)
++}
++
++/// X2d item 1: the write boundary's precondition for one call, as plain values (`start <= end`, then
++/// `end - start == bytes_len`, then `end <= data_len`; the subtraction runs only when `start <= end`).
++#[inline(always)]
++fn write_range_fits_v1(data_len: usize, start: usize, end: usize, bytes_len: usize) -> bool {
++    start <= end && end - start == bytes_len && end <= data_len
++}
++
++/// X2d item 1: the bytes of one root-history page write (deposit and settlement), decided before the handler's first
++/// write: a fresh page's prefix with two roots (genesis) or one root (rollover), or a same-page append (the root, then
++/// the filled counter).
++#[derive(Clone, Copy)]
++enum RootPageWriteV1 {
++    TwoRootPrefix([u8; crate::history::ROOT_PAGE_TWO_ROOT_PREFIX_BYTES]),
++    AppendOne(crate::history::RootPageAppendOneV1),
++    OneRootPrefix([u8; crate::history::ROOT_PAGE_ONE_ROOT_PREFIX_BYTES]),
++}
++
++/// X2d item 1: `write_range_fits_v1` for every boundary call `write_root_page_v1` makes with `write`.
++fn root_page_write_fits_v1(write: &RootPageWriteV1, data_len: usize) -> bool {
++    match write {
++        RootPageWriteV1::TwoRootPrefix(prefix) => {
++            write_range_fits_v1(data_len, 0, crate::history::ROOT_PAGE_TWO_ROOT_PREFIX_BYTES, prefix.len())
+         }
+-        PairForestDepositPageModeV1::ExistingSamePage { header } => {
+-            let append = crate::history::root_page_append_one_v1(header, &inputs.append.root);
++        RootPageWriteV1::AppendOne(append) => {
++            write_range_fits_v1(data_len, append.root_start, append.root_end, append.root_bytes.len())
++                && write_range_fits_v1(data_len, append.filled_start, append.filled_end, append.filled_bytes.len())
++        }
++        RootPageWriteV1::OneRootPrefix(prefix) => {
++            write_range_fits_v1(data_len, 0, crate::history::ROOT_PAGE_ONE_ROOT_PREFIX_BYTES, prefix.len())
++        }
++    }
++}
++
++/// The root-history page write through the write boundary (the former page branches of the deposit and settlement
++/// write stages, same calls with the same arguments in the same order). A fresh page receives its header-and-roots
++/// prefix only: it was checked entirely zero before (see the write stages), as after the frozen
++/// `write_new_page_unchecked`, which first zeroed the whole page. A same-page append writes the root, then the filled
++/// counter, as `append_roots_unchecked` did.
++fn write_root_page_v1(page: &AccountInfo<'_>, write: &RootPageWriteV1) -> ProgramResult {
++    match write {
++        RootPageWriteV1::TwoRootPrefix(prefix) => crate::account_write::write_account_data_v1(
++            page,
++            0,
++            crate::history::ROOT_PAGE_TWO_ROOT_PREFIX_BYTES,
++            prefix,
++        ),
++        RootPageWriteV1::AppendOne(append) => {
+             match crate::account_write::write_account_data_v1(
+                 page,
+                 append.root_start,
+@@ -1327,22 +1399,14 @@
+                 append.filled_start,
+                 append.filled_end,
+                 &append.filled_bytes,
+-            )
+-        }
+-        PairForestDepositPageModeV1::FreshRollover { next_page_number, .. } => {
+-            let prefix = crate::history::new_root_page_prefix_one_v1(
+-                lane_account.key,
+-                next_page_number,
+-                inputs.append.root_sequence,
+-                &inputs.append.root,
+-            );
+-            crate::account_write::write_account_data_v1(
+-                page,
+-                0,
+-                crate::history::ROOT_PAGE_ONE_ROOT_PREFIX_BYTES,
+-                &prefix,
+             )
+         }
++        RootPageWriteV1::OneRootPrefix(prefix) => crate::account_write::write_account_data_v1(
++            page,
++            0,
++            crate::history::ROOT_PAGE_ONE_ROOT_PREFIX_BYTES,
++            prefix,
++        ),
+     }
+ }
+ 
+@@ -2352,6 +2416,14 @@
+ /// lane decoder, the marker's by `classify_nullifier_marker_account_v1` (recheck after creation), the page's by the
+ /// page checks of `plan_pair_forest_spend_layout_v1` (fresh: `account_is_zeroed_program_page`; same page:
+ /// `validate_root_page_bytes`).
++///
++/// X2d item 1: the write boundary's precondition is checked here for the three accounts before the first write, on
++/// data lengths read before that write; the page bytes are decided first (`terminal_page_write_v1`, pure; formerly
++/// computed after the lane write, which no one observes). The errors are those the frozen handler returns for a
++/// malformed account at the same place: the lane decoder's `InvalidAccountType`; for the genesis or same page
++/// `InvalidAccountType` (a page that is not an exact zeroed page falls to `validate_root_page_bytes`), for the
++/// rollover page `InvalidFreshAccount` (`plan_pair_forest_spend_layout_v1`); for the marker
++/// `InvalidNullifierMarkerAccount` (`classify_nullifier_marker_account_v1`). No accepted input reaches them.
+ fn write_terminal_accounts_v1(
+     accounts: &[AccountInfo<'_>],
+     layout: PairForestSpendLayoutV1,
+@@ -2360,6 +2432,28 @@
+     marker_image: &[u8; aspis_statement::pool_v1::POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES],
+ ) -> ProgramResult {
+     let lane_account = &accounts[2];
++    let afterstate = verified.authenticated.value().verified_afterstate;
++    let (page_index, page_write, page_error) =
++        terminal_page_write_v1(layout.page, lane_account.key, lane.tree.root, &afterstate);
++    let page = &accounts[page_index];
++    let marker = &accounts[layout.marker_index];
++    let lane_data_len = lane_account.data_len();
++    let page_data_len = page.data_len();
++    let marker_data_len = marker.data_len();
++    if !write_range_fits_v1(lane_data_len, 0, POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES, verified.next_lane_image.len()) {
++        return Err(PoolV1ProgramError::InvalidAccountType.into());
++    }
++    if !root_page_write_fits_v1(&page_write, page_data_len) {
++        return Err(page_error.into());
++    }
++    if !write_range_fits_v1(
++        marker_data_len,
++        0,
++        aspis_statement::pool_v1::POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES,
++        marker_image.len(),
++    ) {
++        return Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into());
++    }
+     match crate::account_write::write_account_data_v1(
+         lane_account,
+         0,
+@@ -2369,79 +2463,57 @@
+         Ok(()) => {}
+         Err(err) => return Err(err),
+     }
+-    let afterstate = verified.authenticated.value().verified_afterstate;
+-    match write_terminal_page_v1(accounts, layout.page, lane_account.key, lane.tree.root, &afterstate) {
++    match write_root_page_v1(page, &page_write) {
+         Ok(()) => {}
+         Err(err) => return Err(err),
+     }
+     crate::account_write::write_account_data_v1(
+-        &accounts[layout.marker_index],
++        marker,
+         0,
+         aspis_statement::pool_v1::POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES,
+         marker_image,
+     )
+ }
+ 
+-/// Settlement stage (split into stages; write boundary): the root-history page write for the page mode. A fresh
++/// Settlement stage (split into stages; write boundary): the root-history page write for the page mode, as plain
++/// values: the index of the page account, its bytes and the error for a page that does not fit (X2d item 1). A fresh
+ /// page (genesis at index 3, rollover at `next_index`) was checked entirely zero by `account_is_zeroed_program_page`
+ /// in the layout, and no write reaches it before this one, so writing the header-and-roots prefix gives the page the
+ /// frozen `write_new_page_unchecked` gave (which first zeroed the whole page). A same-page append writes the root, then
+ /// the filled counter, as `append_roots_unchecked` did.
+-fn write_terminal_page_v1(
+-    accounts: &[AccountInfo<'_>],
++fn terminal_page_write_v1(
+     page: PairForestSpendPageV1,
+     lane_key: &Pubkey,
+     lane_root: Digest,
+     afterstate: &aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1,
+-) -> ProgramResult {
++) -> (usize, RootPageWriteV1, PoolV1ProgramError) {
+     match page {
+-        PairForestSpendPageV1::Genesis => {
+-            let prefix = crate::history::new_root_page_prefix_two_v1(
++        PairForestSpendPageV1::Genesis => (
++            3,
++            RootPageWriteV1::TwoRootPrefix(crate::history::new_root_page_prefix_two_v1(
+                 lane_key,
+                 0,
+                 0,
+                 &lane_root,
+                 &afterstate.next_root,
+-            );
+-            crate::account_write::write_account_data_v1(
+-                &accounts[3],
+-                0,
+-                crate::history::ROOT_PAGE_TWO_ROOT_PREFIX_BYTES,
+-                &prefix,
+-            )
+-        }
+-        PairForestSpendPageV1::SamePage(header) => {
+-            let append = crate::history::root_page_append_one_v1(header, &afterstate.next_root);
+-            match crate::account_write::write_account_data_v1(
+-                &accounts[3],
+-                append.root_start,
+-                append.root_end,
+-                &append.root_bytes,
+-            ) {
+-                Ok(()) => {}
+-                Err(err) => return Err(err),
+-            }
+-            crate::account_write::write_account_data_v1(
+-                &accounts[3],
+-                append.filled_start,
+-                append.filled_end,
+-                &append.filled_bytes,
+-            )
+-        }
+-        PairForestSpendPageV1::Rollover { next_index, page_number } => {
+-            let prefix = crate::history::new_root_page_prefix_one_v1(
++            )),
++            PoolV1ProgramError::InvalidAccountType,
++        ),
++        PairForestSpendPageV1::SamePage(header) => (
++            3,
++            RootPageWriteV1::AppendOne(crate::history::root_page_append_one_v1(header, &afterstate.next_root)),
++            PoolV1ProgramError::InvalidAccountType,
++        ),
++        PairForestSpendPageV1::Rollover { next_index, page_number } => (
++            next_index,
++            RootPageWriteV1::OneRootPrefix(crate::history::new_root_page_prefix_one_v1(
+                 lane_key,
+                 page_number,
+                 afterstate.next_pair_index,
+                 &afterstate.next_root,
+-            );
+-            crate::account_write::write_account_data_v1(
+-                &accounts[next_index],
+-                0,
+-                crate::history::ROOT_PAGE_ONE_ROOT_PREFIX_BYTES,
+-                &prefix,
+-            )
+-        }
++            )),
++            PoolV1ProgramError::InvalidFreshAccount,
++        ),
+     }
+ }
+ 
+@@ -3022,11 +3094,17 @@
+ 
+ /// Initialize stage 6: the nine writes in the frozen order (master, then lanes 0 to 7) through the write boundary.
+ /// Lengths: each account's data length was checked equal to its image length by `require_program_owned_zeroed`.
++/// X2d item 1: the write boundary's precondition for the nine writes is checked before the first one
++/// (`initialize_writes_fit_v1`); the error is `require_program_owned_zeroed`'s `InvalidFreshAccount`, which no accepted
++/// input reaches.
+ fn write_initialize_accounts_v1(
+     accounts: &[AccountInfo<'_>],
+     master_image: &[u8; POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES],
+     lane_images: &[Box<[u8; POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES]>],
+ ) -> ProgramResult {
++    if !initialize_writes_fit_v1(accounts, master_image, lane_images) {
++        return Err(PoolV1ProgramError::InvalidFreshAccount.into());
++    }
+     match crate::account_write::write_account_data_v1(
+         &accounts[FOREST_MASTER_ACCOUNT_INDEX],
+         0,
+@@ -3111,6 +3189,24 @@
+     Ok(())
+ }
+ 
++/// X2d item 1: `write_range_fits_v1` for the nine writes of `write_initialize_accounts_v1` (master, then lanes 0 to
++/// 7), on data lengths read before the first write (the frozen lane loop written out).
++fn initialize_writes_fit_v1(
++    accounts: &[AccountInfo<'_>],
++    master_image: &[u8; POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES],
++    lane_images: &[Box<[u8; POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES]>],
++) -> bool {
++    write_range_fits_v1(accounts[FOREST_MASTER_ACCOUNT_INDEX].data_len(), 0, POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES, master_image.len())
++        && write_range_fits_v1(accounts[FOREST_FIRST_LANE_ACCOUNT_INDEX + 0].data_len(), 0, POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES, lane_images[0].len())
++        && write_range_fits_v1(accounts[FOREST_FIRST_LANE_ACCOUNT_INDEX + 1].data_len(), 0, POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES, lane_images[1].len())
++        && write_range_fits_v1(accounts[FOREST_FIRST_LANE_ACCOUNT_INDEX + 2].data_len(), 0, POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES, lane_images[2].len())
++        && write_range_fits_v1(accounts[FOREST_FIRST_LANE_ACCOUNT_INDEX + 3].data_len(), 0, POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES, lane_images[3].len())
++        && write_range_fits_v1(accounts[FOREST_FIRST_LANE_ACCOUNT_INDEX + 4].data_len(), 0, POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES, lane_images[4].len())
++        && write_range_fits_v1(accounts[FOREST_FIRST_LANE_ACCOUNT_INDEX + 5].data_len(), 0, POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES, lane_images[5].len())
++        && write_range_fits_v1(accounts[FOREST_FIRST_LANE_ACCOUNT_INDEX + 6].data_len(), 0, POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES, lane_images[6].len())
++        && write_range_fits_v1(accounts[FOREST_FIRST_LANE_ACCOUNT_INDEX + 7].data_len(), 0, POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES, lane_images[7].len())
++}
++
+ /// Checkpoint stage : the checkpoint PDA's creation (System CPI) when it is system-owned, as in the frozen
+ /// handler.
+ fn create_checkpoint_account_if_needed_v1<'info, R: PoolCpiRuntimeV1>(
+@@ -3191,6 +3287,22 @@
+     // just above, the master's by `decode_master_account` in the planner. The frozen code acquired both borrows
+     // before the first write; the accounts are distinct (`require_unique_accounts`) and no other borrow is live,
+     // so neither borrow can fail at either point.
++    // X2d item 1: the boundary's precondition for both writes, on data lengths read before the first write. Errors:
++    // `require_program_owned_zeroed`'s `InvalidFreshAccount` (checkpoint), the master decoder's `InvalidAccountType`
++    // (master); no accepted input reaches them.
++    let checkpoint_data_len = checkpoint.data_len();
++    let master_data_len = master.data_len();
++    if !write_range_fits_v1(
++        checkpoint_data_len,
++        0,
++        POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES,
++        planned.checkpoint_image.len(),
++    ) {
++        return Err(PoolV1ProgramError::InvalidFreshAccount.into());
++    }
++    if !write_range_fits_v1(master_data_len, 0, POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES, planned.next_master_image.len()) {
++        return Err(PoolV1ProgramError::InvalidAccountType.into());
++    }
+     match crate::account_write::write_account_data_v1(
+         checkpoint,
+         0,
+@@ -7330,3 +7442,120 @@
+         assert_eq!(compared, 6000);
+     }
+ }
++
++/// X2d item 1: the range check before the first write. Outside `pair_forest::tests`, so the handler-state recorder
++/// (which runs that module's tests one per process) sees the same test list as for the frozen tree.
++#[cfg(test)]
++mod x2d_write_range {
++    use super::*;
++    use crate::history::RootPageHeaderV1;
++    use solana_program::clock::Epoch;
++
++    /// Oracle independent of the checked expression: `data[start..end].copy_from_slice(bytes)` does not panic iff
++    /// the range exists in the data and has the bytes' length.
++    fn copy_would_succeed(data_len: usize, start: usize, end: usize, bytes_len: usize) -> bool {
++        let data = alloc::vec![0u8; data_len];
++        data.get(start..end).map_or(false, |range| range.len() == bytes_len)
++    }
++
++    #[test]
++    fn x2d_range_check_is_the_boundary_precondition() {
++        let mut compared = 0;
++        for data_len in 0..10usize {
++            for start in 0..10usize {
++                for end in 0..10usize {
++                    for bytes_len in 0..10usize {
++                        assert_eq!(
++                            write_range_fits_v1(data_len, start, end, bytes_len),
++                            copy_would_succeed(data_len, start, end, bytes_len),
++                            "{data_len} {start} {end} {bytes_len}"
++                        );
++                        compared += 1;
++                    }
++                }
++            }
++        }
++        assert_eq!(compared, 10_000);
++        assert!(write_range_fits_v1(usize::MAX, usize::MAX, usize::MAX, 0));
++        assert!(!write_range_fits_v1(usize::MAX, 1, 0, usize::MAX));
++    }
++
++    #[test]
++    fn x2d_page_writes_fit_exactly_up_to_the_last_slot() {
++        let header = |filled: u16| RootPageHeaderV1 {
++            pool: Pubkey::new_from_array([7; 32]),
++            page_number: 0,
++            first_sequence: 0,
++            filled,
++        };
++        let page = POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES;
++        let root = [M31(5); 8];
++        for filled in 0..=255u16 {
++            let write = RootPageWriteV1::AppendOne(crate::history::root_page_append_one_v1(header(filled), &root));
++            assert!(root_page_write_fits_v1(&write, page));
++            assert!(!root_page_write_fits_v1(&write, 64 + 32 * usize::from(filled) + 31));
++        }
++        let full = RootPageWriteV1::AppendOne(crate::history::root_page_append_one_v1(header(256), &root));
++        assert!(!root_page_write_fits_v1(&full, page));
++        let key = Pubkey::new_from_array([9; 32]);
++        let two = RootPageWriteV1::TwoRootPrefix(crate::history::new_root_page_prefix_two_v1(&key, 0, 0, &root, &root));
++        let one = RootPageWriteV1::OneRootPrefix(crate::history::new_root_page_prefix_one_v1(&key, 1, 256, &root));
++        assert!(root_page_write_fits_v1(&two, page) && root_page_write_fits_v1(&one, page));
++        assert!(root_page_write_fits_v1(&two, 128) && !root_page_write_fits_v1(&two, 127));
++        assert!(root_page_write_fits_v1(&one, 96) && !root_page_write_fits_v1(&one, 95));
++    }
++
++    /// Runs `write_initialize_accounts_v1` on nine accounts of the given data lengths; returns the result and the
++    /// data of every account after the call.
++    fn run_initialize_writes(lengths: [usize; 9]) -> (ProgramResult, Vec<Vec<u8>>) {
++        let keys: Vec<Pubkey> = (0..9u8).map(|k| Pubkey::new_from_array([k + 1; 32])).collect();
++        let owner = Pubkey::new_from_array([0xee; 32]);
++        let mut lamports = alloc::vec![0u64; 9];
++        let mut data: Vec<Vec<u8>> = lengths.iter().map(|&n| alloc::vec![0u8; n]).collect();
++        let master_image = [0xcdu8; POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES];
++        let lane_images: Vec<Box<[u8; POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES]>> =
++            (0..8u8).map(|k| Box::new([k + 1; POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES])).collect();
++        let result = {
++            let accounts: Vec<AccountInfo<'_>> = keys
++                .iter()
++                .zip(lamports.iter_mut())
++                .zip(data.iter_mut())
++                .map(|((key, lamports), data)| {
++                    AccountInfo::new(key, false, true, lamports, data.as_mut_slice(), &owner, false, Epoch::default())
++                })
++                .collect();
++            write_initialize_accounts_v1(&accounts, &master_image, &lane_images)
++        };
++        (result, data)
++    }
++
++    #[test]
++    fn x2d_initialize_writes_all_or_returns_the_error_before_any_write() {
++        let exact = [
++            POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES,
++            POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES,
++            POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES,
++            POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES,
++            POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES,
++            POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES,
++            POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES,
++            POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES,
++            POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES,
++        ];
++        let (result, data) = run_initialize_writes(exact);
++        assert_eq!(result, Ok(()));
++        assert!(data[0].iter().all(|b| *b == 0xcd));
++        for lane in 0..8 {
++            assert!(data[1 + lane].iter().all(|b| usize::from(*b) == lane + 1));
++        }
++        // One account one byte short, at each of the nine positions: the frozen writes (and the boundary without
++        // the check) would have written the accounts before it and then panicked; now nothing is written.
++        for short in 0..9 {
++            let mut lengths = exact;
++            lengths[short] -= 1;
++            let (result, data) = run_initialize_writes(lengths);
++            assert_eq!(result, Err(PoolV1ProgramError::InvalidFreshAccount.into()), "position {short}");
++            assert!(data.iter().all(|account| account.iter().all(|b| *b == 0)), "position {short}");
++        }
++    }
++}
