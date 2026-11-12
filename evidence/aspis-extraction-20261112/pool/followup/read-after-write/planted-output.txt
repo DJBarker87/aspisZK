@@ -1,0 +1,78 @@
+$ fv_emit_read_after_write.py --funs planted/positive/Funs.lean --write account_write.write_account_data_v1 --read solana_account_info.AccountInfo.try_borrow_data,solana_account_info.AccountInfo.data_len,solana_account_info.AccountInfo.data_is_empty,solana_account_info.AccountInfo.impl.lamports --root test.p1_write_then_read,test.p2_write_then_call_reader,test.p3_write_on_one_branch_then_read,test.p4_loop,test.p5_write_then_trait_method,test.p6_match_arm_write_then_read
+files: planted/positive/Funs.lean
+definitions parsed: 10 (instances 1); fixed point after 2 rounds
+write boundaries: account_write.write_account_data_v1
+read externals: solana_account_info.AccountInfo.data_is_empty, solana_account_info.AccountInfo.data_len, solana_account_info.AccountInfo.impl.lamports, solana_account_info.AccountInfo.try_borrow_data
+== root test.p1_write_then_read: FAIL
+   reached definitions 1; that may read 1; that may write 1; that may read after a write 1
+   root summary: may read True, may write True, may read after write True (line 20: solana_account_info.AccountInfo.try_borrow_data (reads) after a possible write)
+   read after write in test.p1_write_then_read: line 20: solana_account_info.AccountInfo.try_borrow_data (reads) after a possible write
+== root test.p2_write_then_call_reader: FAIL
+   reached definitions 2; that may read 2; that may write 1; that may read after a write 1
+   root summary: may read True, may write True, may read after write True (line 30: test.reads_data (may read) after a possible write)
+   read after write in test.p2_write_then_call_reader: line 30: test.reads_data (may read) after a possible write
+== root test.p3_write_on_one_branch_then_read: FAIL
+   reached definitions 1; that may read 1; that may write 1; that may read after a write 1
+   root summary: may read True, may write True, may read after write True (line 43: solana_account_info.AccountInfo.data_is_empty (reads) after a possible write)
+   read after write in test.p3_write_on_one_branch_then_read: line 43: solana_account_info.AccountInfo.data_is_empty (reads) after a possible write
+== root test.p4_loop: FAIL
+   reached definitions 2; that may read 2; that may write 2; that may read after a write 1
+   root summary: may read True, may write True, may read after write True (line 62: test.p4_loop.body (may read) after a possible write)
+   read after write in test.p4_loop: line 62: test.p4_loop.body (may read) after a possible write
+== root test.p5_write_then_trait_method: FAIL
+   reached definitions 2; that may read 2; that may write 1; that may read after a write 1
+   root summary: may read True, may write True, may read after write True (line 87: test.ReadingHost.Insts.TestHost.look (may read) after a possible write)
+   read after write in test.p5_write_then_trait_method: line 87: test.ReadingHost.Insts.TestHost.look (may read) after a possible write
+== root test.p6_match_arm_write_then_read: FAIL
+   reached definitions 1; that may read 1; that may write 1; that may read after a write 1
+   root summary: may read True, may write True, may read after write True (line 99: solana_account_info.AccountInfo.impl.lamports (reads) after a possible write)
+   read after write in test.p6_match_arm_write_then_read: line 99: solana_account_info.AccountInfo.impl.lamports (reads) after a possible write
+overall FAIL
+exit 1
+
+$ fv_emit_read_after_write.py --funs planted/negative/Funs.lean --write account_write.write_account_data_v1 --read solana_account_info.AccountInfo.try_borrow_data,solana_account_info.AccountInfo.data_len,solana_account_info.AccountInfo.data_is_empty,solana_account_info.AccountInfo.impl.lamports --root test.n1_dispatch,test.n2_instance_argument,test.n3_match_arms
+files: planted/negative/Funs.lean
+definitions parsed: 8 (instances 1); fixed point after 2 rounds
+write boundaries: account_write.write_account_data_v1
+read externals: solana_account_info.AccountInfo.data_is_empty, solana_account_info.AccountInfo.data_len, solana_account_info.AccountInfo.impl.lamports, solana_account_info.AccountInfo.try_borrow_data
+== root test.n1_dispatch: PASS
+   reached definitions 3; that may read 2; that may write 3; that may read after a write 0
+   root summary: may read True, may write True, may read after write False
+   reads before any write only: yes
+== root test.n2_instance_argument: PASS
+   reached definitions 3; that may read 3; that may write 2; that may read after a write 0
+   root summary: may read True, may write True, may read after write False
+   reads before any write only: yes
+== root test.n3_match_arms: PASS
+   reached definitions 3; that may read 2; that may write 3; that may read after a write 0
+   root summary: may read True, may write True, may read after write False
+   reads before any write only: yes
+overall PASS
+exit 0
+
+$ fv_x2c_emission_checks.py planted/negative account_write.write_account_data_v1 solana_account_info.AccountInfo.try_borrow_data,solana_account_info.AccountInfo.data_len,solana_account_info.AccountInfo.data_is_empty,solana_account_info.AccountInfo.impl.lamports <empty source dir> <empty file>   (X2c's textual check, its section (b) shown, for comparison)
+== (b) read before write
+  FLAG test.n1_dispatch: reading call(s) ['test.handler_reads_then_writes'] after its first writing call
+  FLAG test.n2_instance_argument: reading call(s) ['test.ReadingHost.Insts.TestHost'] after its first writing call
+  FLAG test.n3_match_arms: reading call(s) ['solana_account_info.AccountInfo.data_is_empty'] after its first writing call
+  definitions that write (directly or through calls): 6; flagged: 3
+    writes: test.generic_handler
+    writes: test.handler_reads_then_writes
+    writes: test.handler_writes
+    writes: test.n1_dispatch
+    writes: test.n2_instance_argument
+    writes: test.n3_match_arms
+$ fv_x2c_emission_checks.py planted/positive account_write.write_account_data_v1 solana_account_info.AccountInfo.try_borrow_data,solana_account_info.AccountInfo.data_len,solana_account_info.AccountInfo.data_is_empty,solana_account_info.AccountInfo.impl.lamports <empty source dir> <empty file>   (X2c's textual check, its section (b) shown, for comparison)
+== (b) read before write
+  FLAG test.p1_write_then_read: reading call(s) ['solana_account_info.AccountInfo.try_borrow_data'] after its first writing call
+  FLAG test.p2_write_then_call_reader: reading call(s) ['test.reads_data'] after its first writing call
+  FLAG test.p3_write_on_one_branch_then_read: reading call(s) ['solana_account_info.AccountInfo.data_is_empty'] after its first writing call
+  FLAG test.p6_match_arm_write_then_read: reading call(s) ['solana_account_info.AccountInfo.impl.lamports'] after its first writing call
+  definitions that write (directly or through calls): 7; flagged: 4
+    writes: test.p1_write_then_read
+    writes: test.p2_write_then_call_reader
+    writes: test.p3_write_on_one_branch_then_read
+    writes: test.p4_loop
+    writes: test.p4_loop.body
+    writes: test.p5_write_then_trait_method
+    writes: test.p6_match_arm_write_then_read
