@@ -1,0 +1,12 @@
+src-tp1-p0 and src-tp1-p0s moved in place from the first version of the restoration patch (sha256 22adb5a3...) to the second (tp1/p0v2.patch) at 2026-11-11T22:21:48Z
+TP-C20 stopped by hand at 2026-11-11T22:29:35Z: the tree under it (src-tp1-b1) held the first version of the restoration patch and the spec named aspis-core/future-lazy-horner; superseded by TP-C30
+src-tp1-p0sc = src-tp1-p0s (base2 + restoration patch second version + pinned sampler.rs) with the pinned aspis-core src/field.rs and src/digest.rs, made 2026-11-11T22:34:28Z
+src-tp1-b1 = src-tp1-p0 (base2 + restoration patch second version) + tp1/b1v2.patch, made 2026-11-11T22:34:45Z
+src-tp1-b1 = src-tp1-p0 (base2 + restoration patch second version) + tp1/b1v3.patch (lane helper placed before the decoder attributes; claims in the order of the R1 rewritten text), made 2026-11-11T22:43:15Z
+src-tp1-var = src-tp1-p0 + tp1/b1v4.patch (batch with the flag form of canonical_scan), scratch tree of the bisect, made 2026-11-11T22:53:44Z
+src-tp1-p0sc: digest.rs put back to the base tree text (the pinned digest.rs lacks Digest32::digest_into, which the head verifier calls; first build TP-R1-src-tp1-p0sc failed to compile); only src/field.rs of aspis-core is pinned now, 2026-11-11T22:55:33Z
+src-tp1-var = src-base2 + tp1/p0v3.patch (restoration without prepared_claim) + tp1/r.patch (batch with canonical_scan left pinned, for_range backward pass in a helper, second_alpha not inlined), reference of bisect b3, made 2026-11-11T23:05:43Z
+2026-11-11T23:19:32Z: src-tp1-p0 = src-base2 + tp1/p0v3.patch (restoration, third version: prepared_claim left to patch 1); src-tp1-b1 and src-tp1-var = that + tp1/f.patch (candidate final batch)
+2026-11-11T23:33:21Z: src-tp1-b1 and src-tp1-var = src-base2 + tp1/p0v3.patch + tp1/f2.patch (final batch: lane frontier loop with a straight-line body); src-tp1-p0 unchanged (src-base2 + tp1/p0v3.patch)
+2026-11-11T23:35:33Z: src-tp1-var = src-base2 + tp1/p0v3.patch + tp1/f3.patch (lane frontier loop in a function of its own)
+2026-11-11T23:42:37Z: src-tp1-b1 = src-base2 + tp1/p0v3.patch + tp1/f3.patch (lane frontier loop in a function of its own): the tree of gate tp1-f3

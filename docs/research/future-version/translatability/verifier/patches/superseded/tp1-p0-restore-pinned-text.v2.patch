@@ -1,0 +1,610 @@
+diff -ruN a/crates/aspis-r1-cost-probe/Cargo.toml b/crates/aspis-r1-cost-probe/Cargo.toml
+--- a/crates/aspis-r1-cost-probe/Cargo.toml	2026-11-11 15:58:37
++++ b/crates/aspis-r1-cost-probe/Cargo.toml	2026-11-11 22:19:58
+@@ -38,6 +38,9 @@
+ future-fold-shared = []
+ # Round 4, H1: lean dot accumulators (no per-push scalar check or term counter).
+ future-lean-dot = []
++# G2 seen from this crate: selects the Aspis `semantic_value` and turns on the single-reduction
++# multiply-add of aspis-core. Builds of this crate must name THIS feature, not `aspis-core/future-lazy-horner`.
++future-lazy-horner = ["aspis-core/future-lazy-horner"]
+ # Existing exact terminal kernels from the selected V7/R117 bundle.
+ # This changes arithmetic evaluation only; the isolated R1 protocol is unproved.
+ optimized-terminal = [
+diff -ruN a/crates/aspis-r1-cost-probe/src/candidate.rs b/crates/aspis-r1-cost-probe/src/candidate.rs
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs	2026-11-11 15:58:37
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs	2026-11-11 22:19:58
+@@ -48,15 +48,36 @@
+     Ok(Variant::S2)
+ }
+ 
++#[cfg(not(feature = "future-word-scan"))]
+ /// The shipped strict scan for every field outside the semantic prefix
+ /// (the semantic prefix is checked by `Prefix::parse` after expansion).
+ #[inline(never)]
+ fn canonical_scan(proof: &[u8]) -> Result<(), Error> {
+-    if cfg!(feature = "future-word-scan") {
+-        return canonical_scan_words(proof);
++    compact::check_values(&proof[compact::OFF_Y1..compact::OFF_INACTIVE])?;
++    echeck(&proof[compact::OFF_INACTIVE..compact::OFF_INACTIVE + 32], false)?;
++    echeck(&proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT], false)?;
++    echeck(&proof[compact::OFF_ROUND1..compact::OFF_OPENINGS], false)?;
++    for i in 0..22 {
++        let q = opening(proof, i);
++        for s in 0..4 {
++            for l in 0..26 {
++                M31::from_le_bytes(q[s * 120 + l * 4..s * 120 + l * 4 + 4].try_into().unwrap()).ok_or(Error::Parse)?;
++            }
++            K::from_le_bytes(&q[s * 120 + 104..s * 120 + 120]).ok_or(Error::Parse)?;
++            for l in 0..2 {
++                K::from_le_bytes(&q[480 + s * 32 + l * 16..480 + s * 32 + l * 16 + 16]).ok_or(Error::Parse)?;
++            }
++        }
++        echeck(&q[672..800], false)?;
+     }
+-    canonical_scan_pinned(proof)
++    Ok(())
+ }
++/// Aspis new gate (replaces the pinned `canonical_scan` when `future-word-scan` is on); equality with the pinned function is owed.
++#[cfg(feature = "future-word-scan")]
++#[inline(never)]
++fn canonical_scan(proof: &[u8]) -> Result<(), Error> {
++    canonical_scan_words(proof)
++}
+ 
+ /// FUTURE-VERSION EXPERIMENT G3. Every check of the pinned scan is "this
+ /// little-endian 32-bit limb is below P", over byte ranges whose lengths are
+@@ -91,6 +112,8 @@
+     if ok { Ok(()) } else { Err(Error::Parse) }
+ }
+ 
++/// Test oracle only: a copy of the pinned body of `canonical_scan`.
++#[cfg(test)]
+ #[inline(never)]
+ fn canonical_scan_pinned(proof: &[u8]) -> Result<(), Error> {
+     compact::check_values(&proof[compact::OFF_Y1..compact::OFF_INACTIVE])?;
+@@ -210,6 +233,7 @@
+     Ok(())
+ }
+ 
++#[cfg(not(feature = "future-merkle-single-pass"))]
+ #[inline(always)]
+ fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], batch: usize, tree: usize, idx: &mut [u32; multiproof::MAX_BATCH], val: &mut [[u8; 32]; multiproof::MAX_BATCH], hash: H) -> Result<(), Error> {
+     let (lo, hi) = if batch == 0 { (0, SPLIT) } else { (SPLIT, 22) };
+@@ -234,15 +258,47 @@
+         val[d] = leaf;
+         d += 1;
+     }
++    let count = multiproof::node_count(Arity::Two, &idx[..d]).ok_or(Error::Merkle)?;
+     let nodes = slot(proof, s);
++    // Padding is whole 32-byte words: scan it 8 bytes at a time.
++    if count > SLOT_NODES[s] || nodes[32 * count..].chunks_exact(8).any(|w| u64::from_le_bytes(w.try_into().unwrap()) != 0) {
++        return Err(Error::Parse);
++    }
++    if !multiproof::verify_in_place(hash, Arity::Two, &root, idx, val, d, &nodes[..32 * count]) {
++        return Err(Error::Merkle);
++    }
++    Ok(())
++}
++/// Aspis new gate (replaces the pinned `batch_tree` when `future-merkle-single-pass` is on); equality with the pinned function is owed.
++#[cfg(feature = "future-merkle-single-pass")]
++#[inline(always)]
++fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], batch: usize, tree: usize, idx: &mut [u32; multiproof::MAX_BATCH], val: &mut [[u8; 32]; multiproof::MAX_BATCH], hash: H) -> Result<(), Error> {
++    let (lo, hi) = if batch == 0 { (0, SPLIT) } else { (SPLIT, 22) };
++    let n = hi - lo;
++    let s = 3 * batch + tree;
++    let keys = sort_batch_keys(batch_keys(&queries, lo, n, tree), n);
++    let mut d = 0;
++    let mut key_position = 0;
++    while key_position < n {
++        let key = batch_key_at(&keys, key_position);
++        key_position += 1;
++        let index = (key >> 8) as u32;
++        let q = opening(proof, lo + (key & 0xff) as usize);
++        let leaf = batch_leaf(hash, tree, q);
++        if d > 0 && same_batch_index(idx, d - 1, index) {
++            if !same_batch_leaf(val, d - 1, leaf) {
++                return Err(Error::Merkle);
++            }
++            continue;
++        }
++        idx[d] = index;
++        val[d] = leaf;
++        d += 1;
++    }
++    let nodes = slot(proof, s);
+     debug_assert_eq!(nodes.len(), 32 * SLOT_NODES[s]);
+-    #[cfg(feature = "future-merkle-single-pass")]
+     {
+         merkle_tail_single_pass(hash, &root, idx, val, d, nodes)
+-    }
+-    #[cfg(not(feature = "future-merkle-single-pass"))]
+-    {
+-        merkle_tail_two_pass(hash, &root, idx, val, d, nodes)
+     }
+ }
+ 
+diff -ruN a/crates/aspis-r1-cost-probe/src/fast_pairing.rs b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs	2026-11-11 17:38:29
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs	2026-11-11 22:19:58
+@@ -180,18 +180,22 @@
+         Self { c0: canonical::Dot::new(), c1: canonical::Dot::new(), count: 0 }
+     }
+ 
++    #[cfg(not(feature = "future-lean-dot"))]
+     #[inline(always)]
+     pub fn push(&mut self, value: E, scalar: QM31) -> Result<(), ()> {
+-        if cfg!(feature = "future-lean-dot") {
+-            self.push_lean(value, scalar);
+-            return Ok(());
+-        }
+         if self.count >= MAX_TERMS { return Err(()); }
+         let [value_c0,value_c1] = canonical::Q::from_wide(value);
+         let scalar = checked_q(scalar)?;
+         self.c0.push(value_c0, scalar);
+         self.c1.push(value_c1, scalar);
+         self.count += 1;
++        Ok(())
++    }
++    /// Aspis new gate (replaces the pinned `EbyKDot::push` when `future-lean-dot` is on); equality with the pinned function is owed.
++    #[cfg(feature = "future-lean-dot")]
++    #[inline(always)]
++    pub fn push(&mut self, value: E, scalar: QM31) -> Result<(), ()> {
++        self.push_lean(value, scalar);
+         Ok(())
+     }
+ 
+diff -ruN a/crates/aspis-r1-cost-probe/src/r1_semantic.rs b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs	2026-11-11 17:38:29
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs	2026-11-11 22:19:58
+@@ -79,11 +79,17 @@
+     let _=(obs,i);
+ }
+ 
++#[cfg(not(feature = "future-lazy-boundary"))]
+ fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {
++        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
++    boundary
++}
++/// Aspis new gate (replaces the pinned `semantic_boundary` when `future-lazy-boundary` is on); equality with the pinned function is owed.
++#[cfg(feature = "future-lazy-boundary")]
++fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {
+     // FUTURE-VERSION EXPERIMENT E8 (default off): the same sum
+     // `p[0] + (p[0] + ... + p[27])` with one reduction per limb. The 29
+     // canonical limbs sum below 2^36.
+-    #[cfg(feature = "future-lazy-boundary")]
+     {
+         use aspis_core::field::{CM31, M31};
+         let first = polynomial[0];
+@@ -97,11 +103,6 @@
+         let [a, b, c, d] = sums.map(M31::reduce_u64);
+         return QM31 { c0: CM31 { a, b }, c1: CM31 { a: c, b: d } };
+     }
+-    #[cfg(not(feature = "future-lazy-boundary"))]
+-    {
+-        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+-    boundary
+-    }
+ }
+ 
+ #[cfg(test)]
+@@ -137,6 +138,16 @@
+     }
+ }
+ 
++#[cfg(not(feature = "future-lazy-horner"))]
++fn semantic_value(polynomial: &[QM31; 28], alpha: &[QM31; 10], round: usize) -> QM31 {
++        let value = polynomial
++            .iter()
++            .rev()
++            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
++    value
++}
++/// Aspis new gate (replaces the pinned `semantic_value` when `future-lazy-horner` is on); equality with the pinned function is owed.
++#[cfg(feature = "future-lazy-horner")]
+ fn semantic_value(polynomial: &[QM31; 28], alpha: &[QM31; 10], round: usize) -> QM31 {
+         // FUTURE-VERSION EXPERIMENT G2: `mul_add` is `mul` then `add` unless
+         // `aspis-core/future-lazy-horner` is on, when it reduces once.
+diff -ruN a/crates/aspis-r1-cost-probe/src/r1_wire.rs b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs	2026-11-11 17:38:29
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs	2026-11-11 22:19:58
+@@ -48,13 +48,24 @@
+     }
+ }
+ 
++#[cfg(not(feature = "future-lean-parse"))]
+ fn validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {
+-    if cfg!(feature = "future-lean-parse") {
+-        return validate_record_fields_lean(row, payload);
++    for (value, bytes) in payload.chunks_exact(32).enumerate() {
++        let x = WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;
++        if x.c1() != QM31::ZERO {
++            return Err(Error::NonCanonical { row, value });
++        }
+     }
+-    validate_record_fields_pinned(row, payload)
++    Ok(())
+ }
++/// Aspis new gate (replaces the pinned `validate_record_fields` when `future-lean-parse` is on); equality with the pinned function is owed.
++#[cfg(feature = "future-lean-parse")]
++fn validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {
++    validate_record_fields_lean(row, payload)
++}
+ 
++/// Test oracle only: a copy of the pinned body of `validate_record_fields`.
++#[cfg(test)]
+ fn validate_record_fields_pinned(row: u8, payload: &[u8]) -> Result<(), Error> {
+     for (value, bytes) in payload.chunks_exact(32).enumerate() {
+         let x = WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;
+@@ -225,6 +236,7 @@
+         &self.framed[5..]
+     }
+ 
++    #[cfg(not(feature = "future-validated-decode"))]
+     /// Decode checked base-field limbs from a semantic record. The
+     /// validation token proves the 16-byte high half is zero and the
+     /// low QM31 encoding canonical, while this method still checks the
+@@ -248,19 +260,44 @@
+             .get(byte_offset..end)
+             .ok_or(Error::Length { row: self.row })?;
+         let mut out = [QM31::ZERO; N];
+-        // FUTURE-VERSION EXPERIMENT E3: the token was issued by `Prefix::parse`
+-        // over these same immutable bytes, which already checked every limb
+-        // canonical and the high half zero; load the four limbs directly.
+-        #[cfg(feature = "future-validated-decode")]
+-        {
+-            out = validated_values::<N>(bytes);
+-        }
+-        #[cfg(not(feature = "future-validated-decode"))]
+         for (value, part) in bytes.chunks_exact(32).enumerate() {
+             out[value] = QM31::from_le_bytes(&part[..16]).ok_or(Error::NonCanonical {
+                 row: self.row,
+                 value: offset_values + value,
+             })?;
++        }
++        Ok(out)
++    }
++    /// Aspis new gate (replaces the pinned `decode_k` when `future-validated-decode` is on); equality with the pinned function is owed.
++    #[cfg(feature = "future-validated-decode")]
++    /// Decode checked base-field limbs from a semantic record. The
++    /// validation token proves the 16-byte high half is zero and the
++    /// low QM31 encoding canonical, while this method still checks the
++    /// requested range and record class.
++    pub(crate) fn decode_k<const N: usize>(
++        &self,
++        offset_values: usize,
++    ) -> Result<[QM31; N], Error> {
++        if self.row < 14 {
++            return Err(Error::InvalidRow);
++        }
++        let byte_offset = offset_values
++            .checked_mul(32)
++            .ok_or(Error::Length { row: self.row })?;
++        let byte_len = N.checked_mul(32).ok_or(Error::Length { row: self.row })?;
++        let end = byte_offset
++            .checked_add(byte_len)
++            .ok_or(Error::Length { row: self.row })?;
++        let bytes = self
++            .payload()
++            .get(byte_offset..end)
++            .ok_or(Error::Length { row: self.row })?;
++        let mut out = [QM31::ZERO; N];
++        // FUTURE-VERSION EXPERIMENT E3: the token was issued by `Prefix::parse`
++        // over these same immutable bytes, which already checked every limb
++        // canonical and the high half zero; load the four limbs directly.
++        {
++            out = validated_values::<N>(bytes);
+         }
+         Ok(out)
+     }
+diff -ruN a/crates/aspis-r1-cost-probe/src/verifier.rs b/crates/aspis-r1-cost-probe/src/verifier.rs
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs	2026-11-11 15:58:37
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs	2026-11-11 22:19:58
+@@ -50,21 +50,10 @@
+     pub variant:Variant,pub roots:[[u8;32];2],pub gamma:E,pub kappa:E,pub alpha:[E;2],pub rho:K,
+     pub queries:[u32;22],pub semantic_alpha:[K;10],pub z:[SecureCirclePoint;2],pub claim:E,pub state:[u8;32],
+ }
++#[cfg(not(feature="future-claim-rows"))]
+ fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error> {
+         let k=powers::<7>(kappa);
+         let mut parts=[E::ZERO;7];parts[0]=inactive;
+-        if cfg!(feature="future-claim-rows") {
+-            // FUTURE-VERSION EXPERIMENT G5: the same 174 products, with each
+-            // point's 29 scalars copied to one row first.
+-            for point in 0..6 {
+-                let row:[K;29]=match point {0..=2=>sem.claims[point],3=>sem.extra,4=>sem.before_z1,_=>core::array::from_fn(|l|field(y1,l).c0())};
+-                let mut dot=crate::fast_pairing::EbyKDot::new();
+-                for (power,scalar) in g.iter().zip(row.iter()) {
+-                    dot.push(*power,*scalar).map_err(|_|Error::Parse)?;
+-                }
+-                parts[point+1]=dot.finish();
+-            }
+-        } else {
+         for point in 0..6 {
+             let mut dot=crate::fast_pairing::EbyKDot::new();
+             for l in 0..29 {
+@@ -73,6 +62,25 @@
+             }
+             parts[point+1]=dot.finish();
+         }
++        let mut claim=E::ZERO;
++        for i in 0..7 {crate::trace::value(14,i,parts[i]);claim=claim.add(k[i].mul(parts[i]));}
++        crate::trace::value(14,7,claim);
++        Ok(claim)
++}
++/// Aspis new gate (replaces the pinned `prepared_claim` when `future-claim-rows` is on); equality with the pinned function is owed.
++#[cfg(feature="future-claim-rows")]
++fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error> {
++        let k=powers::<7>(kappa);
++        let mut parts=[E::ZERO;7];parts[0]=inactive;
++        // FUTURE-VERSION EXPERIMENT G5: the same 174 products, with each
++        // point's 29 scalars copied to one row first.
++        for point in 0..6 {
++            let row:[K;29]=match point {0..=2=>sem.claims[point],3=>sem.extra,4=>sem.before_z1,_=>core::array::from_fn(|l|field(y1,l).c0())};
++            let mut dot=crate::fast_pairing::EbyKDot::new();
++            for (power,scalar) in g.iter().zip(row.iter()) {
++                dot.push(*power,*scalar).map_err(|_|Error::Parse)?;
++            }
++            parts[point+1]=dot.finish();
+         }
+         let mut claim=E::ZERO;
+         for i in 0..7 {crate::trace::value(14,i,parts[i]);claim=claim.add(k[i].mul(parts[i]));}
+diff -ruN a/programs/r1-cost-probe/Cargo.toml b/programs/r1-cost-probe/Cargo.toml
+--- a/programs/r1-cost-probe/Cargo.toml	2026-11-11 15:58:37
++++ b/programs/r1-cost-probe/Cargo.toml	2026-11-11 22:19:58
+@@ -28,7 +28,7 @@
+ future-d-pair-expansion = ["aspis-r1-cost-probe/future-d-pair-expansion"]
+ future-merkle-in-place = ["aspis-r1-cost-probe/future-merkle-in-place"]
+ future-lean-parse = ["aspis-r1-cost-probe/future-lean-parse"]
+-future-lazy-horner = ["aspis-core/future-lazy-horner"]
++future-lazy-horner = ["aspis-core/future-lazy-horner", "aspis-r1-cost-probe/future-lazy-horner"]
+ future-word-scan = ["aspis-r1-cost-probe/future-word-scan"]
+ future-dot-scale = ["aspis-r1-cost-probe/future-dot-scale"]
+ future-claim-rows = ["aspis-r1-cost-probe/future-claim-rows"]
+diff -ruN a/programs/r1-cost-probe/src/lib.rs b/programs/r1-cost-probe/src/lib.rs
+--- a/programs/r1-cost-probe/src/lib.rs	2026-11-11 15:58:37
++++ b/programs/r1-cost-probe/src/lib.rs	2026-11-11 22:19:58
+@@ -68,6 +68,44 @@
+ mod r1_pool_adapter;
+ #[cfg(feature="pool-adapter")]
+ mod pool_route;
++#[cfg(feature = "pool-adapter")]
++pub fn process_r1_cost_probe_instruction(program_id:&Pubkey,accounts:&[AccountInfo],data:&[u8])->ProgramResult{
++    #[cfg(feature="pool-adapter")]
++    {
++        // Reject before inspecting or borrowing any account. Lifecycle loaders
++        // are not part of the release instruction surface.
++        if !pool_route::admitted(data) {
++            return Err(ProgramError::InvalidInstructionData);
++        }
++        return r1_pool_adapter::process(program_id,accounts,data);
++    }
++
++    #[cfg(not(feature="pool-adapter"))]
++    {
++    if accounts.len()!=3||!matches!(data,[1,0..=22]|[2]) {return Err(ProgramError::InvalidInstructionData);}
++    for (i,a) in accounts.iter().enumerate(){if a.owner!=program_id||a.executable||a.is_writable!=(i==2){return Err(ProgramError::InvalidAccountData);}}
++    let proof=accounts[0].try_borrow_data()?;let public=accounts[1].try_borrow_data()?;let mut checkpoint=accounts[2].try_borrow_mut_data()?;
++    msg!("UNPROVED R1 COST PROBE");msg!("r1:begin");sol_log_compute_units();
++    if data[0]==1 {
++        if checkpoint.iter().any(|&b|b!=0){return Err(ProgramError::AccountAlreadyInitialized);}
++        let bytes=first(&public,&proof,data[1]as usize)?;
++        if checkpoint.len()!=bytes.len(){return Err(ProgramError::InvalidAccountData);}
++        checkpoint.copy_from_slice(&bytes);
++    } else {
++        verifier::tx2(&public,&proof,&checkpoint,SolanaDigest,observer()).map_err(error)?;
++        checkpoint[10]=2;let end=checkpoint.len()-32;let sum=hashv(&[b"UNPROVED:R1:checkpoint",&checkpoint[..end]]).to_bytes();checkpoint[end..].copy_from_slice(&sum);
++    }
++    msg!("r1:account-write");sol_log_compute_units();
++    #[cfg(target_os="solana")]
++    unsafe {
++        let cursor=*(solana_program::entrypoint::HEAP_START_ADDRESS as *const usize);
++        msg!("r1:heap-high-water");solana_program::log::sol_log_64((solana_program::entrypoint::HEAP_START_ADDRESS as usize+256*1024-cursor+core::mem::size_of::<usize>())as u64,0,0,0,0);
++    }
++    Ok(())
++    }
++}
++/// Measurement entry of the experiment (no Pool adapter); never part of a deployed program.
++#[cfg(not(feature = "pool-adapter"))]
+ pub fn process_r1_cost_probe_instruction(program_id:&Pubkey,accounts:&[AccountInfo],data:&[u8])->ProgramResult{
+     #[cfg(feature="pool-adapter")]
+     {
+diff -ruN a/programs/r1-cost-probe/src/r1_pool_adapter.rs b/programs/r1-cost-probe/src/r1_pool_adapter.rs
+--- a/programs/r1-cost-probe/src/r1_pool_adapter.rs	2026-11-11 15:58:37
++++ b/programs/r1-cost-probe/src/r1_pool_adapter.rs	2026-11-11 22:19:58
+@@ -776,13 +776,42 @@
+     })
+ }
+ 
++#[cfg(not(feature = "future-one-tx"))]
+ #[inline(never)]
+ fn scan_proof_buffer(bytes: &[u8]) -> Result<ScannedAsqaProof, ProgramError> {
++    let proof_length = verifier::PROOF_BYTES;
++    let expected_body = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
++        .checked_add(proof_length)
++        .ok_or(ProgramError::InvalidAccountData)?;
++    if bytes.len() != expected_body {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let candidate_start = 0;
++    let proof_start = candidate_start + POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
++    let candidate_bytes = &bytes[candidate_start..proof_start];
++    let candidate = Box::new(
++        decode_pool_v1_pair_verified_afterstate_v1(candidate_bytes)
++            .map_err(|_| ProgramError::InvalidAccountData)?,
++    );
++    if encode_pool_v1_pair_verified_afterstate_v1(&candidate)
++        .map_err(|_| ProgramError::InvalidAccountData)?
++        .as_ref()
++        != candidate_bytes
++        || bytes[proof_start + 8] != Variant::S2.tag()
++    {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    Ok(ScannedAsqaProof {
++        candidate_afterstate: candidate,
++        proof_length,
++    })
++}
++/// Aspis new gate (replaces the pinned `scan_proof_buffer` when `future-one-tx` is on); equality with the pinned function is owed.
++#[cfg(feature = "future-one-tx")]
++#[inline(never)]
++fn scan_proof_buffer(bytes: &[u8]) -> Result<ScannedAsqaProof, ProgramError> {
+     // FUTURE-VERSION EXPERIMENT: the one-transaction entry reads the summed format.
+-    #[cfg(feature = "future-one-tx")]
+     let proof_length = verifier::candidate::fused::summed_format::PROOF_BYTES;
+-    #[cfg(not(feature = "future-one-tx"))]
+-    let proof_length = verifier::PROOF_BYTES;
+     let expected_body = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+         .checked_add(proof_length)
+         .ok_or(ProgramError::InvalidAccountData)?;
+diff -ruN a/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs b/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs
+--- a/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs	2026-11-11 15:58:37
++++ b/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs	2026-11-11 22:19:58
+@@ -413,6 +413,7 @@
+     Ok(checkpoint)
+ }
+ 
++#[cfg(not(feature = "future-one-tx"))]
+ #[inline(never)]
+ fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], current_slot: Result<u64, ProgramError>) -> ProgramResult {
+     if accounts.len() != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..])
+@@ -428,6 +429,38 @@
+     if proof_data.len() != proof_end {
+         return Err(ProgramError::InvalidAccountData);
+     }
++    let public_bytes = encode_pool_v1_pair_forest_terminal_statement_v1(&validated.statement)
++        .map_err(|_| ProgramError::InvalidInstructionData)?;
++    if public_bytes.len() != POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES {
++        return Err(ProgramError::InvalidInstructionData);
++    }
++    verifier::tx2_authenticated(
++        &public_bytes,
++        &proof_data[proof_start..proof_end],
++        &checkpoint_data,
++        super::super::SolanaDigest,
++        super::super::observer(),
++    )
++    .map_err(super::super::error)?;
++    emit_result(&validated.statement)
++}
++/// Aspis new gate (replaces the pinned `stage2_owned` when `future-one-tx` is on); equality with the pinned function is owed.
++#[cfg(feature = "future-one-tx")]
++#[inline(never)]
++fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], current_slot: Result<u64, ProgramError>) -> ProgramResult {
++    if accounts.len() != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..])
++    {
++        return Err(ProgramError::InvalidInstructionData);
++    }
++    let validated = validate_asq8(program_id, accounts, data, current_slot)?;
++    let proof_data = accounts[0].data()?;
++    let checkpoint_data = accounts[6].data()?;
++    let proof_start = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
++    let proof_end = proof_start.checked_add(validated.proof_length)
++        .ok_or(ProgramError::InvalidAccountData)?;
++    if proof_data.len() != proof_end {
++        return Err(ProgramError::InvalidAccountData);
++    }
+     // FUTURE-VERSION EXPERIMENT (default off): one transaction. No checkpoint is
+     // resumed and the seventh account is not read. The statement reconstructed
+     // from the request and the authenticated accounts is validated here
+@@ -435,7 +468,6 @@
+     // summed-format proof, which carries the stage D certificate, is verified
+     // in this invocation. The candidate prefix is the one the statement was
+     // reconstructed from, so no separate prefix comparison is needed.
+-    #[cfg(feature = "future-one-tx")]
+     {
+         let _ = &checkpoint_data;
+         validate_pool_v1_pair_forest_terminal_statement_v1(&validated.statement)
+@@ -452,36 +484,10 @@
+         .map_err(super::super::error)?;
+         return emit_result(&validated.statement);
+     }
+-    #[cfg(not(feature = "future-one-tx"))]
+-    {
+-    let public_bytes = encode_pool_v1_pair_forest_terminal_statement_v1(&validated.statement)
+-        .map_err(|_| ProgramError::InvalidInstructionData)?;
+-    if public_bytes.len() != POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES {
+-        return Err(ProgramError::InvalidInstructionData);
+-    }
+-    verifier::tx2_authenticated(
+-        &public_bytes,
+-        &proof_data[proof_start..proof_end],
+-        &checkpoint_data,
+-        super::super::SolanaDigest,
+-        super::super::observer(),
+-    )
+-    .map_err(super::super::error)?;
+-    emit_result(&validated.statement)
+-    }
+ }
+ 
++#[cfg(not(feature = "future-one-tx-lean"))]
+ pub(super) fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
+-    // FUTURE-VERSION EXPERIMENT (feature `future-one-tx-lean`, default off): the
+-    // one-transaction verifier has no stage 1. Rejecting here leaves the stage 1
+-    // pipeline unreachable, so it is not linked into the program.
+-    #[cfg(feature = "future-one-tx-lean")]
+-    {
+-        let _ = (program_id, accounts, data);
+-        return Err(ProgramError::InvalidInstructionData);
+-    }
+-    #[cfg(not(feature = "future-one-tx-lean"))]
+-    {
+     if !(data == &[3, 10] || data == &[3, 11]) || accounts.len() != 3 {
+         return Err(ProgramError::InvalidInstructionData);
+     }
+@@ -495,9 +501,20 @@
+     #[cfg(feature="cu-profiling")]
+     { msg!("r1:pool-adapter-stage1-checkpoint-written"); solana_program::log::sol_log_compute_units(); }
+     Ok(())
++}
++/// Aspis new gate (replaces the pinned `stage1` when `future-one-tx-lean` is on); equality with the pinned function is owed.
++#[cfg(feature = "future-one-tx-lean")]
++pub(super) fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
++    // FUTURE-VERSION EXPERIMENT (feature `future-one-tx-lean`, default off): the
++    // one-transaction verifier has no stage 1. Rejecting here leaves the stage 1
++    // pipeline unreachable, so it is not linked into the program.
++    {
++        let _ = (program_id, accounts, data);
++        return Err(ProgramError::InvalidInstructionData);
+     }
+ }
+ 
++#[cfg(not(feature = "future-one-tx"))]
+ pub(super) fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
+     if accounts.len() != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..]) {
+         return Err(ProgramError::InvalidInstructionData);
+@@ -505,11 +522,29 @@
+     program::set_return_data(&[]);
+     #[cfg(feature="cu-profiling")]
+     { msg!("r1:pool-adapter-stage2-begin"); solana_program::log::sol_log_compute_units(); }
++    let owned = [
++        snapshot(&accounts[0], POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::PROOF_BYTES, POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::PROOF_BYTES),
++        snapshot(&accounts[1], POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES),
++        snapshot(&accounts[2], POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES),
++        snapshot(&accounts[3], POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES),
++        snapshot(&accounts[4], POOL_V1_VERIFIER_REGISTRY_BYTES, POOL_V1_VERIFIER_REGISTRY_V2_BYTES),
++        snapshot(&accounts[5], POOL_V1_VERIFIER_ENTRY_BYTES, POOL_V1_VERIFIER_ENTRY_V2_BYTES),
++        snapshot(&accounts[6], CHECKPOINT_TAIL_BYTES, CHECKPOINT_TAIL_BYTES),
++    ];
++    let current_slot = match Clock::get() { Ok(clock) => Ok(clock.slot), Err(error) => Err(error) };
++    stage2_owned(program_id, &owned, data, current_slot)
++}
++/// Aspis new gate (replaces the pinned `stage2` when `future-one-tx` is on); equality with the pinned function is owed.
++#[cfg(feature = "future-one-tx")]
++pub(super) fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
++    if accounts.len() != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..]) {
++        return Err(ProgramError::InvalidInstructionData);
++    }
++    program::set_return_data(&[]);
++    #[cfg(feature="cu-profiling")]
++    { msg!("r1:pool-adapter-stage2-begin"); solana_program::log::sol_log_compute_units(); }
+     // FUTURE-VERSION EXPERIMENT: the one-transaction entry takes a summed-format proof buffer.
+-    #[cfg(feature = "future-one-tx")]
+     let proof_buffer_bytes = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::candidate::fused::summed_format::PROOF_BYTES;
+-    #[cfg(not(feature = "future-one-tx"))]
+-    let proof_buffer_bytes = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::PROOF_BYTES;
+     let owned = [
+         snapshot(&accounts[0], proof_buffer_bytes, proof_buffer_bytes),
+         snapshot(&accounts[1], POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES),
