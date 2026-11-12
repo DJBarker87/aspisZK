@@ -1,0 +1,155 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -49,8 +49,8 @@
+ }
+ 
+ fn validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {
+-    for (value, bytes) in payload.chunks_exact(32).enumerate() {
+-        let x = WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;
++    for (value, bytes) in payload.chunks_exact(32).enumerate() { let x = match
++                WideExact::from_le_bytes(bytes) { Some(v) => v, None => return Err(Error::NonCanonical { row, value }) };
+         if x.c1() != QM31::ZERO {
+             return Err(Error::NonCanonical { row, value });
+         }
+@@ -138,8 +138,8 @@
+ 
+ /// Reject malformed framing and every noncanonical E limb before hashing.
+ /// UNPROVED P2 subset: reject any nonzero E high component at parse.
+-pub fn parse_record(row: u8, record: &[u8]) -> Result<&[u8], Error> {
+-    let (tag, size) = row_shape(row).ok_or(Error::InvalidRow)?;
++pub fn parse_record(row: u8, record: &[u8]) -> Result<&[u8], Error> { let (tag, size) = match
++                      row_shape(row) { Some(v) => v, None => return Err(Error::InvalidRow) };
+     if record.len() != 5 + size {
+         return Err(Error::Length { row });
+     }
+@@ -275,17 +275,17 @@
+         if self.row < 14 {
+             return Err(Error::InvalidRow);
+         }
+-        let byte_offset = offset_values
++        let byte_offset = match offset_values
+             .checked_mul(32)
+-            .ok_or(Error::Length { row: self.row })?;
+-        let byte_len = N.checked_mul(32).ok_or(Error::Length { row: self.row })?;
+-        let end = byte_offset
++            { Some(v) => v, None => return Err(Error::Length { row: self.row }) };
++        let Some(byte_len) = N.checked_mul(32) else { return Err(Error::Length { row: self.row }) };
++        let end = match byte_offset
+             .checked_add(byte_len)
+-            .ok_or(Error::Length { row: self.row })?;
+-        let bytes = self
++            { Some(v) => v, None => return Err(Error::Length { row: self.row }) };
++        let bytes = match self
+             .payload()
+             .get(byte_offset..end)
+-            .ok_or(Error::Length { row: self.row })?;
++            { Some(v) => v, None => return Err(Error::Length { row: self.row }) };
+         let mut out = [QM31::ZERO; N];
+         // FUTURE-VERSION EXPERIMENT E3: the token was issued by `Prefix::parse`
+         // over these same immutable bytes, which already checked every limb
+@@ -413,9 +413,9 @@
+     offset: usize,
+ ) -> Result<(&'a [u8], usize), Error> {
+     let length = 5 + row_shape(row).unwrap().1;
+-    let framed = bytes
++    let framed = match bytes
+         .get(offset..offset + length)
+-        .ok_or(Error::Length { row })?;
++        { Some(v) => v, None => return Err(Error::Length { row }) };
+     parse_record(row, framed)?;
+     Ok((framed, offset + length))
+ }
+@@ -978,5 +978,93 @@
+         if x.c1()!=QM31::ZERO {return Err(Error::NonCanonical{row,value});}
+         let tail=payload[32..].to_vec();
+         finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
++    }
++}
++
++/// X1b item J: differential test of `validate_record_fields`, `parse_record` and `parse_record_at` against the
++/// frozen bodies (r1_wire.rs 51-60, 141-157, 410-421).
++#[cfg(test)]
++mod x1b_ok_or_rewrite {
++    extern crate std;
++    use super::*;
++    fn old_validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {
++        for (value, bytes) in payload.chunks_exact(32).enumerate() {
++            let x = WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;
++            if x.c1() != QM31::ZERO {
++                return Err(Error::NonCanonical { row, value });
++            }
++        }
++        Ok(())
++    }
++    fn old_parse_record(row: u8, record: &[u8]) -> Result<&[u8], Error> {
++        let (tag, size) = row_shape(row).ok_or(Error::InvalidRow)?;
++        if record.len() != 5 + size {
++            return Err(Error::Length { row });
++        }
++        if record[0] != tag {
++            return Err(Error::Tag { row });
++        }
++        if u32::from_le_bytes([record[1], record[2], record[3], record[4]]) as usize != size {
++            return Err(Error::Length { row });
++        }
++        let payload = &record[5..];
++        if row >= 14 {
++            old_validate_record_fields(row, payload)?;
++        }
++        Ok(payload)
+     }
++    fn old_parse_record_at<'a>(bytes: &'a [u8], row: u8, offset: usize) -> Result<(&'a [u8], usize), Error> {
++        let length = 5 + row_shape(row).unwrap().1;
++        let framed = bytes
++            .get(offset..offset + length)
++            .ok_or(Error::Length { row })?;
++        old_parse_record(row, framed)?;
++        Ok((framed, offset + length))
++    }
++    fn next(s: &mut u64) -> u64 { *s = s.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407); *s >> 11 }
++    /// Little-endian 4-byte limbs, mostly canonical M31 values, with the edges 0, p - 1, p, p + 1 and 2^32 - 1;
++    /// with probability 1/2 per 16-byte group the group is zero (so wide values with a zero high half occur).
++    fn limbs(s: &mut u64, n: usize) -> std::vec::Vec<u8> {
++        let mut out = std::vec::Vec::new();
++        while out.len() < n {
++            let zero = next(s) % 2 == 0;
++            for _ in 0..4 {
++                let v = if zero { 0 } else { match next(s) % 64 { 0 => 0, 1 => 0x7fff_fffe, 2 => 0x7fff_ffff, 3 => 0x8000_0000, 4 => u32::MAX, _ => (next(s) as u32) % 0x7fff_ffff } };
++                out.extend_from_slice(&v.to_le_bytes());
++            }
++        }
++        out.truncate(n);
++        out
++    }
++    fn framed(s: &mut u64, row: u8) -> std::vec::Vec<u8> {
++        let (tag, size) = row_shape(row).unwrap_or((0, 32));
++        let mut r = std::vec![tag];
++        r.extend_from_slice(&(size as u32).to_le_bytes());
++        r.extend(limbs(s, size));
++        match next(s) % 8 { 0 => r[0] ^= 1, 1 => r[1] ^= 1, 2 => { r.pop(); } 3 => r.push(0), _ => {} }
++        r
++    }
++    #[test]
++    fn same_result() {
++        let mut s = 13u64;
++        let mut seen = [0usize; 2];
++        for n in 0..6_000 {
++            let row = (n % 30) as u8;
++            let r = framed(&mut s, row);
++            let a = parse_record(row, &r);
++            seen[a.is_ok() as usize] += 1;
++            assert_eq!(a, old_parse_record(row, &r));
++            assert_eq!(validate_record_fields(row, &r[1..]), old_validate_record_fields(row, &r[1..]));
++            if row_shape(row).is_some() {
++                let mut buf = limbs(&mut s, (next(&mut s) % 64) as usize);
++                let offset = buf.len();
++                buf.extend_from_slice(&r);
++                if next(&mut s) % 4 == 0 { buf.truncate(buf.len() - 1); }
++                for off in [offset, offset.saturating_sub(1), offset + 1, usize::MAX / 2] {
++                    assert_eq!(parse_record_at(&buf, row, off), old_parse_record_at(&buf, row, off));
++                }
++            }
++        }
++        assert!(seen[0] > 500 && seen[1] > 500);
++    }
+ }

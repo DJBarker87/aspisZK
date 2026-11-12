@@ -1,0 +1,11 @@
+--- a/programs/r1-cost-probe/src/r1_checkpoint_tests.rs
++++ b/programs/r1-cost-probe/src/r1_checkpoint_tests.rs
+@@ -378,7 +378,7 @@
+     }
+ }
+ 
+-#[test]
++#[test] #[cfg(not(feature = "one-tx"))] // X1b: lifecycle compiled out under one-tx
+ fn r15_lifecycle_requires_recorded_signer_to_upload_or_seal() {
+     let program = Pubkey::new_unique();
+     let mut target = TestAccount::new(program, vec![0; ASPU_HEADER + ASRU_BODY_BYTES], true);

@@ -1,0 +1,62 @@
+--- a/crates/aspis-core/src/state_only_hiding.rs
++++ b/crates/aspis-core/src/state_only_hiding.rs
+@@ -499,7 +499,7 @@
+ fn selected_mask_linears(point: &[QM31; STATE_ONLY_HIDING_SUMCHECK_ROUNDS]) -> (QM31, QM31) {
+     let mut suffix = QM31::ZERO;
+     let mut weighted = QM31::ZERO;
+-    for variable in (0..STATE_ONLY_HIDING_SUMCHECK_ROUNDS).rev() {
++    let mut variable = STATE_ONLY_HIDING_SUMCHECK_ROUNDS; while variable > 0 { variable -= 1;
+         suffix = suffix.add(point[variable]);
+         if variable != 0 {
+             weighted = weighted.add(suffix);
+@@ -663,7 +663,7 @@
+ 
+     let prepared_linear = PreparedQm31Multiplier::new(linear);
+     let mut shared = coefficients[STATE_ONLY_HIDING_FACTOR_DEGREE];
+-    for exponent in (0..STATE_ONLY_HIDING_FACTOR_DEGREE).rev() {
++    let mut exponent = STATE_ONLY_HIDING_FACTOR_DEGREE; while exponent > 0 { exponent -= 1;
+         shared = prepared_linear.mul(shared).add(coefficients[exponent]);
+     }
+ 
+@@ -1212,5 +1212,41 @@
+         terminal: WideExact,
+     ) -> WideExact {
+         mask_value(&claims[0], alpha).add(WideExact::from_qm31(eta).mul(terminal))
++    }
++}
++
++/// X1b item K: differential test of `selected_mask_linears` against the frozen body (state_only_hiding.rs 499-512).
++#[cfg(test)]
++mod x1b_iter_rewrite {
++    use super::*;
++    fn old(point: &[QM31; STATE_ONLY_HIDING_SUMCHECK_ROUNDS]) -> (QM31, QM31) {
++        let mut suffix = QM31::ZERO;
++        let mut weighted = QM31::ZERO;
++        for variable in (0..STATE_ONLY_HIDING_SUMCHECK_ROUNDS).rev() {
++            suffix = suffix.add(point[variable]);
++            if variable != 0 {
++                weighted = weighted.add(suffix);
++            }
++        }
++        (
++            suffix.mul_m31(M31(3)).add(weighted.mul_m31(M31(22))),
++            suffix.mul_m31(M31(275)).add(weighted.mul_m31(M31(150))),
++        )
+     }
++    fn next(s: &mut u64) -> u64 { *s = s.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407); *s >> 11 }
++    /// A QM31 value from four canonical limbs, with the edges 0, 1 and p - 1 among them.
++    fn q(s: &mut u64) -> QM31 {
++        let mut b = [0u8; 16];
++        for k in 0..4 { let v = match next(s) % 8 { 0 => 0, 1 => 1, 2 => 0x7fff_fffe, _ => (next(s) as u32) % 0x7fff_ffff }; b[4 * k..4 * k + 4].copy_from_slice(&v.to_le_bytes()); }
++        QM31::from_le_bytes(&b).unwrap()
++    }
++    #[test]
++    fn same_result() {
++        let mut s = 21u64;
++        for _ in 0..5_000 {
++            let mut p = [QM31::ZERO; STATE_ONLY_HIDING_SUMCHECK_ROUNDS];
++            for x in p.iter_mut() { *x = q(&mut s); }
++            assert_eq!(selected_mask_linears(&p), old(&p));
++        }
++    }
+ }

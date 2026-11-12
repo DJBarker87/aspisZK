@@ -1,0 +1,101 @@
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -41,7 +41,7 @@
+     if proof.len() != compact::PROOF_BYTES
+         || &proof[..8] != compact::MAGIC
+         || proof[8] != Variant::S2.tag()
+-        || proof[9..16].iter().any(|&x| x != 0)
++        || proof[9..16] != [0u8; 7]
+     {
+         return Err(Error::Parse);
+     }
+@@ -65,17 +65,17 @@
+ #[inline(always)]
+ fn scan_slot_base(q: &[u8], s: usize) -> Result<(), Error> {
+     for l in 0..26 {
+-        M31::from_le_bytes(q[s * 120 + l * 4..s * 120 + l * 4 + 4].try_into().unwrap()).ok_or(Error::Parse)?;
++  match M31::from_le_bytes(q[s * 120 + l * 4..s * 120 + l * 4 + 4].try_into().unwrap()) { Some(_) => {} None => return Err(Error::Parse) }
+     }
+     Ok(())
+ }
+ /// Slot `s` of one opening: the 26 base-field limbs, the C1 tail value, the two C2 values.
+ #[inline(always)]
+ fn scan_slot(q: &[u8], s: usize) -> Result<(), Error> {
+-    scan_slot_base(q, s)?;
+-    K::from_le_bytes(&q[s * 120 + 104..s * 120 + 120]).ok_or(Error::Parse)?;
+-    K::from_le_bytes(&q[480 + s * 32..480 + s * 32 + 16]).ok_or(Error::Parse)?;
+-    K::from_le_bytes(&q[480 + s * 32 + 16..480 + s * 32 + 32]).ok_or(Error::Parse)?;
++    scan_slot_base(q, s)?; match
++    K::from_le_bytes(&q[s * 120 + 104..s * 120 + 120]) { Some(_) => {} None => return Err(Error::Parse) } match
++    K::from_le_bytes(&q[480 + s * 32..480 + s * 32 + 16]) { Some(_) => {} None => return Err(Error::Parse) } match
++    K::from_le_bytes(&q[480 + s * 32 + 16..480 + s * 32 + 32]) { Some(_) => {} None => return Err(Error::Parse) }
+     Ok(())
+ }
+ /// One opening: its four slots in order, then the folded values.
+@@ -152,8 +152,8 @@
+     Ok(View {
+         variant: Variant::S2,
+         semantic,
+-        y1,
+-        inactive: E::from_le_bytes(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?,
++        y1, inactive:
++        match     E::from_le_bytes(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]) { Some(v) => v, None => return Err(Error::Parse) },
+         round0: &proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT],
+         folded_root: Some(proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap()),
+         round1: &proof[compact::OFF_ROUND1..compact::OFF_FINAL],
+@@ -523,3 +523,55 @@
+ // verifiers. Unproved. Not reachable from the two-transaction entrypoints.
+ #[path = "one_tx.rs"]
+ pub mod one_tx;
++
++/// X1b item J: differential test of `scan_slot` (and through it `scan_slot_base`) against the frozen bodies
++/// (candidate.rs 65-79).
++#[cfg(test)]
++mod x1b_ok_or_rewrite {
++    extern crate std;
++    use super::*;
++    fn old_scan_slot_base(q: &[u8], s: usize) -> Result<(), Error> {
++        for l in 0..26 {
++            M31::from_le_bytes(q[s * 120 + l * 4..s * 120 + l * 4 + 4].try_into().unwrap()).ok_or(Error::Parse)?;
++        }
++        Ok(())
++    }
++    fn old_scan_slot(q: &[u8], s: usize) -> Result<(), Error> {
++        old_scan_slot_base(q, s)?;
++        K::from_le_bytes(&q[s * 120 + 104..s * 120 + 120]).ok_or(Error::Parse)?;
++        K::from_le_bytes(&q[480 + s * 32..480 + s * 32 + 16]).ok_or(Error::Parse)?;
++        K::from_le_bytes(&q[480 + s * 32 + 16..480 + s * 32 + 32]).ok_or(Error::Parse)?;
++        Ok(())
++    }
++    fn next(s: &mut u64) -> u64 { *s = s.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407); *s >> 11 }
++    /// Little-endian 4-byte limbs, mostly canonical M31 values, with the edges 0, p - 1, p, p + 1 and 2^32 - 1;
++    /// with probability 1/4 per 16-byte group the group is zero (so wide values with a zero high half occur).
++    fn limbs(s: &mut u64, n: usize) -> std::vec::Vec<u8> {
++        let mut out = std::vec::Vec::new();
++        while out.len() < n {
++            let zero = next(s) % 4 == 0;
++            for _ in 0..4 {
++                let v = if zero { 0 } else { match next(s) % 32 { 0 => 0, 1 => 0x7fff_fffe, 2 => 0x7fff_ffff, 3 => 0x8000_0000, 4 => u32::MAX, _ => (next(s) as u32) % 0x7fff_ffff } };
++                out.extend_from_slice(&v.to_le_bytes());
++            }
++        }
++        out.truncate(n);
++        out
++    }
++    #[test]
++    fn same_result() {
++        let mut st = 9u64;
++        let mut seen = [0usize; 2];
++        for n in 0..20_000 {
++            let mut q = limbs(&mut st, 800);
++            // Mostly canonical openings, so that the later checks of a slot are reached.
++            if n % 2 == 0 { for x in q.iter_mut().skip(3).step_by(4) { *x &= 0x3f; } }
++            for s in 0..4 {
++                let r = scan_slot(&q, s);
++                seen[r.is_ok() as usize] += 1;
++                assert_eq!(r, old_scan_slot(&q, s));
++            }
++        }
++        assert!(seen[0] > 1000 && seen[1] > 1000);
++    }
++}

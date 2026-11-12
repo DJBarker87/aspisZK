@@ -1,0 +1,94 @@
+--- a/crates/aspis-r1-cost-probe/src/one_tx.rs
++++ b/crates/aspis-r1-cost-probe/src/one_tx.rs
+@@ -122,8 +122,8 @@
+ }
+ 
+ const NO_BYTES: &[u8] = &[];
+-fn relation_view(proof: &[u8]) -> Result<View<'_>, Error> {
+-    let inactive = E::from_le_bytes(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?;
++fn relation_view(proof: &[u8]) -> Result<View<'_>, Error> { let inactive = match
++                   E::from_le_bytes(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]) { Some(v) => v, None => return Err(Error::Parse) };
+     Ok(View {
+         variant: Variant::S2,
+         semantic: NO_BYTES,
+@@ -440,7 +440,7 @@
+         let w = v2 + v3;
+         let x = v0 + P64 - v1;
+         let y = v3 + P64 - v2;
+-        let fold = |z: u64| (z & P64) + (z >> 31);
++        let fold = |z: u64| (z & P64) + (z >> 31u32);
+         let signed = [fold(u + w), fold(x + y), fold(u + 2 * P64 - w), fold(x + 2 * P64 - y)];
+         let base = 16 * lane;
+         for k in 0..4 {
+@@ -457,14 +457,14 @@
+     let mut t = 0;
+     while t < 52 {
+         let b = 8 * t;
+-        acc[b] = (acc[b] & P64) + (acc[b] >> 31);
+-        acc[b + 1] = (acc[b + 1] & P64) + (acc[b + 1] >> 31);
+-        acc[b + 2] = (acc[b + 2] & P64) + (acc[b + 2] >> 31);
+-        acc[b + 3] = (acc[b + 3] & P64) + (acc[b + 3] >> 31);
+-        acc[b + 4] = (acc[b + 4] & P64) + (acc[b + 4] >> 31);
+-        acc[b + 5] = (acc[b + 5] & P64) + (acc[b + 5] >> 31);
+-        acc[b + 6] = (acc[b + 6] & P64) + (acc[b + 6] >> 31);
+-        acc[b + 7] = (acc[b + 7] & P64) + (acc[b + 7] >> 31);
++        acc[b] = (acc[b] & P64) + (acc[b] >> 31u32);
++        acc[b + 1] = (acc[b + 1] & P64) + (acc[b + 1] >> 31u32);
++        acc[b + 2] = (acc[b + 2] & P64) + (acc[b + 2] >> 31u32);
++        acc[b + 3] = (acc[b + 3] & P64) + (acc[b + 3] >> 31u32);
++        acc[b + 4] = (acc[b + 4] & P64) + (acc[b + 4] >> 31u32);
++        acc[b + 5] = (acc[b + 5] & P64) + (acc[b + 5] >> 31u32);
++        acc[b + 6] = (acc[b + 6] & P64) + (acc[b + 6] >> 31u32);
++        acc[b + 7] = (acc[b + 7] & P64) + (acc[b + 7] >> 31u32);
+         t += 1;
+     }
+ }
+@@ -652,9 +652,9 @@
+     let mut current = start;
+     let mut r = [K::ZERO; 6];
+     for b in 0..6 {
+-        let bytes = &certificate[64 * b..64 * b + 64];
+-        let c0 = E::from_le_bytes(&bytes[..32]).ok_or(Error::Parse)?;
+-        let c2 = E::from_le_bytes(&bytes[32..]).ok_or(Error::Parse)?;
++        let bytes = &certificate[64 * b..64 * b + 64]; let c0 = match
++                 E::from_le_bytes(&bytes[..32]) { Some(v) => v, None => return Err(Error::Parse) }; let c2 = match
++                 E::from_le_bytes(&bytes[32..]) { Some(v) => v, None => return Err(Error::Parse) };
+         r[b] = t.scalar_k(ROW_ROUND + b as u8, bytes);
+         // s(0) + s(1) = 2 c0 + c1 + c2 is the running claim.
+         let c1 = current.sub(c0).sub(c0).sub(c2);
+@@ -862,7 +862,7 @@
+     if proof.len() != format::PROOF_BYTES
+         || &proof[..8] != format::MAGIC
+         || proof[8] != Variant::S2.tag()
+-        || proof[9..16].iter().any(|&x| x != 0)
++        || proof[9..16] != [0u8; 7]
+     {
+         return Err(Error::Parse);
+     }
+@@ -875,7 +875,7 @@
+     let mut keys = [0u64; 22];
+     for j in 0..22 {
+         let index = if folded { queries[j] / 4 } else { queries[j] };
+-        keys[j] = (u64::from(index) << 8) | j as u64;
++        keys[j] = (u64::from(index) << 8u32) | j as u64;
+     }
+     for i in 1..22 {
+         let mut j = i;
+@@ -896,7 +896,7 @@
+     let mut val = [[0u8; 32]; multiproof::MAX_MERGED];
+     let mut d = 0;
+     for &key in keys {
+-        let index = (key >> 8) as u32;
++        let index = (key >> 8u32) as u32;
+         let leaf = batch_leaf(hash, tree, opening(proof, (key & 0xff) as usize));
+         if d > 0 && idx[d - 1] == index {
+             if val[d - 1] != leaf {
+@@ -1663,7 +1663,7 @@
+                     let mut d = 0;
+                     for position in 0..n {
+                         let key = keys[position];
+-                        let index = (key >> 8) as u32;
++                        let index = (key >> 8u32) as u32;
+                         let leaf = batch_leaf(Sha, tree, opening(proof, lo + (key & 0xff) as usize));
+                         if d > 0 && idx[d - 1] == index {
+                             continue;

@@ -1,0 +1,92 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -183,10 +183,10 @@
+ 
+ #[inline(always)]
+ fn reconstruct_10(view: &[QM31; 16]) -> QM31 {
+-    view[..9]
+-        .iter()
+-        .rev()
+-        .fold(view[9], |acc, bit| acc.add(acc).add(*bit))
++    let mut acc = view[9]; let mut i = 9;
++    while i > 0 { i -= 1;
++        acc = acc.add(acc).add(view[i]); }
++    acc
+ }
+ 
+ #[inline(always)]
+@@ -213,7 +213,7 @@
+         if level == carry && carry < 20 {
+             continue;
+         }
+-        let expected = if level < carry || ((index >> level) & 1) == 0 {
++        let expected = if level < carry || ((index >> (level as u32)) & 1) == 0 {
+             empty_root(level)
+         } else {
+             source.frontier[level]
+@@ -512,8 +512,8 @@
+         index += 1;
+     }
+     let reconstructed = reconstruct_10(&openings.z)
+-        .add(reconstruct_10(&openings.succ_z).mul_m31(M31(1 << 10)))
+-        .add(reconstruct_10(&openings.xor12_z).mul_m31(M31(1 << 20)));
++        .add(reconstruct_10(&openings.succ_z).mul_m31(M31(1 << 10u32)))
++        .add(reconstruct_10(&openings.xor12_z).mul_m31(M31(1 << 20u32)));
+     range[30] = openings.z[10].sub(reconstructed);
+     range[31] = openings.succ_z[10];
+     range[32] = openings.xor12_z[10];
+@@ -912,7 +912,7 @@
+     [QM31; DIGEST_ELEMS / 4],
+ ) {
+     let prepared_high = PreparedQm31Multiplier::new(high);
+-    if ((next_pair_index >> level) & 1) == 0 {
++    if ((next_pair_index >> (level as u32)) & 1) == 0 {
+         let expected = empty_root(level);
+         let residual0 = [
+             opened[RATE].sub(lift_m31(expected[0])),
+@@ -1291,10 +1291,10 @@
+     );
+     let prepared_theta = PreparedQm31Multiplier::new(theta);
+     let mut composition = copy.residual;
+-    for index in (0..semantic.len()).rev() {
++    let mut index = semantic.len(); while index > 0 { index -= 1;
+         composition = prepared_theta.mul(composition).add(semantic[index]);
+     }
+-    for index in (0..poseidon.len()).rev() {
++    let mut index = poseidon.len(); while index > 0 { index -= 1;
+         composition = prepared_theta.mul(composition).add(poseidon[index]);
+     }
+     Ok((
+@@ -2618,3 +2618,32 @@
+         assert_eq!(hex(&new_w[..OLD_WITHDRAWAL_BYTES]), WITHDRAWAL_PREFIX_SHA256);
+     }
+ }
++
++/// X1b item K: differential test of `reconstruct_10` against the frozen body (pair_forest_semantic_terminal.rs
++/// 184-190).
++#[cfg(test)]
++mod x1b_iter_rewrite {
++    use super::*;
++    fn old(view: &[QM31; 16]) -> QM31 {
++        view[..9]
++            .iter()
++            .rev()
++            .fold(view[9], |acc, bit| acc.add(acc).add(*bit))
++    }
++    fn next(s: &mut u64) -> u64 { *s = s.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407); *s >> 11 }
++    /// A QM31 value from four canonical limbs, with the edges 0, 1 and p - 1 among them.
++    fn q(s: &mut u64) -> QM31 {
++        let mut b = [0u8; 16];
++        for k in 0..4 { let v = match next(s) % 8 { 0 => 0, 1 => 1, 2 => 0x7fff_fffe, _ => (next(s) as u32) % 0x7fff_ffff }; b[4 * k..4 * k + 4].copy_from_slice(&v.to_le_bytes()); }
++        QM31::from_le_bytes(&b).unwrap()
++    }
++    #[test]
++    fn same_result() {
++        let mut s = 25u64;
++        for _ in 0..5_000 {
++            let mut v = [QM31::ZERO; 16];
++            for x in v.iter_mut() { *x = q(&mut s); }
++            assert_eq!(reconstruct_10(&v), old(&v));
++        }
++    }
++}

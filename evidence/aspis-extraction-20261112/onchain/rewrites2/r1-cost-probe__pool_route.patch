@@ -1,0 +1,11 @@
+--- a/programs/r1-cost-probe/src/pool_route.rs
++++ b/programs/r1-cost-probe/src/pool_route.rs
+@@ -10,7 +10,7 @@
+     data.len() >= 3
+         && data[0] == CLOSE_CHECKPOINT_TAG
+         && data[1] as usize == data.len() - 2
+-        && (1..=32).contains(&data[1])
++        && 1 <= data[1] && data[1] <= 32
+ }
+ 
+ pub(super) fn admitted(data: &[u8]) -> bool {

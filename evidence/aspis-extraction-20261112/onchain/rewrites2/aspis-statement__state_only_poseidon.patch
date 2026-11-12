@@ -1,0 +1,26 @@
+--- a/crates/aspis-statement/src/state_only_poseidon.rs
++++ b/crates/aspis-statement/src/state_only_poseidon.rs
+@@ -327,7 +327,7 @@
+     for lane in 1..POSEIDON2_WIDTH {
+         let limbs = extension_limbs(state[lane]);
+         state[lane] = extension_from_raw_limbs(core::array::from_fn(|limb| {
+-            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[lane - 1])
++            full_sum[limb] + (u64::from(limbs[limb]) << u32::from(SHIFTS[lane - 1]))
+         }));
+     }
+ }
+@@ -591,10 +591,10 @@
+     selectors: &StateOnlyPoseidonSelectors,
+ ) -> [QM31; STATE_ONLY_POSEIDON_PACKED_LANES] {
+     let leading_low = selectors.local[0];
+-    let full_low = [1usize, 9, 10]
+-        .into_iter()
+-        .fold(QM31::ZERO, |sum, row| sum.add(selectors.local[row]));
+-    let internal_low = (2usize..=8).fold(QM31::ZERO, |sum, row| sum.add(selectors.local[row]));
++    let full_low = QM31::ZERO
++        .add(selectors.local[1]).add(selectors.local[9])
++        .add(selectors.local[10]);
++    let internal_low = QM31::ZERO.add(selectors.local[2]).add(selectors.local[3]).add(selectors.local[4]).add(selectors.local[5]).add(selectors.local[6]).add(selectors.local[7]).add(selectors.local[8]);
+     let leading = leading_pair_packed(openings);
+     let full = interpolated_full_pair_packed(openings.z, &selectors.local);
+     let internal = interpolated_internal_pair(openings.z, &selectors.local);
