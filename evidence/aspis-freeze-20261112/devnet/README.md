@@ -74,6 +74,48 @@ the request and the account list; in the account list only; in the request only)
 8. The 15 writes are confirmed within 15 seconds of the first send and none is re-sent. This one
    depends on the public endpoint and is the least certain.
 
-## Results
+## Results of the registered run (devnet, 12 November 2026, 05:16 to 05:28 UTC)
 
-(to be filled in after the run)
+Receipts: `receipts/ASPIS_spend` (70 recorded transactions and the cleanup), logs
+`receipts/ASPIS_spend.log` and `receipts/ASPIS_cleanup.log`. The run was not interrupted and
+nothing was re-sent. Predictions were committed at 9f8500f42a6 before the first signature.
+
+| Prediction | Result |
+|---|---|
+| 1. Transfer settles in one transaction, 1,224,000 to 1,240,000 | Settled at 1,234,048. Met. 165,952 under the limit of 1,400,000. |
+| 1. Withdrawal settles in one transaction, 1,236,000 to 1,250,000 | Settled at 1,238,634. Met. 161,366 under the limit. |
+| 2. Changed certificate byte rejected, 1,010,000 to 1,035,000 | InvalidInstructionData after 1,018,609 and 1,023,962. Met. |
+| 2. Changed node byte rejected, 1,078,000 to 1,104,000 | InvalidInstructionData after 1,089,131 and 1,093,217. Met. |
+| 2. Replay rejected, protected accounts unchanged | Custom 0x41532026 both times, accounts unchanged. Met. |
+| 3. Redirect in the request and the accounts rejected, 125,000 to 140,000 | InvalidInstructionData after 132,167; no protected account and neither token account changed. Met. |
+| 3. Redirect in the accounts only, and in the request only, rejected, 20,000 to 25,000 | Custom 1095966770 after 22,276 each; nothing changed. Met. |
+| 4. 18 transactions per payment, payer signs one, fees 20,000 and 15,000 | Met for both payments. |
+| 5. Payer balance change 2,086,880 (transfer) and 2,131,880 (withdrawal) | 2,086,880 and 2,131,880. Session key, proof account and checkpoint account gone. Met. |
+| 6. Cleanup returns 2,976,880 lamports | 2,976,880. Met. |
+| 7. Payer ends between 18.814 and 18.818 SOL | 18.816106048 SOL. Met. The run cost 137,132,000 lamports outside the deployments. |
+| 8. 15 writes confirmed within 15 s, none re-sent | 10.69 s and 10.70 s, none re-sent, 15 different slots each time. Met; the figure measures this script, which spaces its calls. |
+
+Settlement transactions:
+transfer 2UN82ys58uXKAWWRovbYpxb4mp8nrPKNkZE5ViCR24ugcW7jfKeqEcYQT742Gs5zqrcr6VoqRsfJMGYqtpZCzcht (slot 521356085),
+withdrawal 2x4Hy6bA8wcEMHHtYiv98RRvUi73aT2YZpfojbnba3jT1NvRMNiHwHnqRxcnnTiL6pXbBmGwhLGci4kFLfmyCa8J (slot 521357198).
+
+Other transactions of the run with the new Pool: Pool initialize 96,504 compute units, deposits
+1,067,235 and 1,064,230, forest checkpoint 1,152,988. The Pool's changed page check ran on the
+cluster in the initialize (it validates the new root page accounts as zeroed).
+
+What stays spent: the two nullifier markers (1,706,880 lamports each, permanent by design), the
+Pool state for the new mint, the registry entry, the mint and vault (no close path in these
+programs; `receipts/ASPIS_spend/rent-ledger.json`), and the fees. Everything a payment creates
+besides its marker was closed by that payment.
+
+Two labels in the receipts are the unchanged script's and are not corrected: `complete.json`
+names the route by its earlier experiment label, and its `negative_checks` list does not name the
+three redirect attempts, which are in `withdrawal-redirect-validation.json` and in the
+transaction records.
+
+The rehearsal with the frozen artifacts on a local validator (frzlocal3) was still waiting for
+host slots when the devnet run started; its result is recorded in the freeze record when it ends.
+
+These are test transactions on a test cluster with fixture witnesses. They show that this build
+verifies and settles these two payments in one transaction each and rejects these nine altered
+attempts. They are not evidence of soundness.
