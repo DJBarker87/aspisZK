@@ -1,0 +1,222 @@
+--- a/programs/aspis-pool/src/history.rs
++++ b/programs/aspis-pool/src/history.rs
+@@ -159,9 +159,11 @@
+             .unwrap(),
+     );
+     let filled = u16::from_le_bytes(data[PAGE_FILLED_OFFSET..58].try_into().unwrap());
+-    let expected_first = page_number
+-        .checked_mul(POOL_V1_ROOT_HISTORY_CAPACITY as u64)
+-        .ok_or(PoolV1ProgramError::ArithmeticOverflow)?;
++    let expected_first = match page_number
++        .checked_mul(POOL_V1_ROOT_HISTORY_CAPACITY as u64) {
++        Some(value) => value,
++        None => return Err(PoolV1ProgramError::ArithmeticOverflow.into()),
++    };
+     if pool != *expected_pool
+         || page_number != expected_page_number
+         || first_sequence != expected_first
+@@ -169,11 +171,20 @@
+     {
+         return Err(PoolV1ProgramError::StateHistoryMismatch.into());
+     }
+-    for slot in 0..usize::from(filled) {
++    // X2 rewrite (class b): no early return inside the loop; the loop stops at the first
++    // non-canonical root and the same error is returned at the same point.
++    let mut slot = 0;
++    let mut roots_canonical = true;
++    while slot < usize::from(filled) && roots_canonical {
+         let start = PAGE_ROOTS_OFFSET + slot * 32;
+-        decode_digest_canonical(data[start..start + 32].try_into().unwrap())
+-            .map_err(|_| ProgramError::InvalidAccountData)?;
++        if decode_digest_canonical(data[start..start + 32].try_into().unwrap()).is_err() {
++            roots_canonical = false;
++        }
++        slot += 1;
+     }
++    if !roots_canonical {
++        return Err(ProgramError::InvalidAccountData);
++    }
+     let unused_start = PAGE_ROOTS_OFFSET + usize::from(filled) * 32;
+     if !page_bytes_are_zero(&data[unused_start..]) {
+         return Err(ProgramError::InvalidAccountData);
+@@ -224,9 +235,11 @@
+             .unwrap(),
+     );
+     let filled = u16::from_le_bytes(data[PAGE_FILLED_OFFSET..58].try_into().unwrap());
+-    let expected_first = page_number
+-        .checked_mul(POOL_V1_ROOT_HISTORY_CAPACITY as u64)
+-        .ok_or(PoolV1ProgramError::ArithmeticOverflow)?;
++    let expected_first = match page_number
++        .checked_mul(POOL_V1_ROOT_HISTORY_CAPACITY as u64) {
++        Some(value) => value,
++        None => return Err(PoolV1ProgramError::ArithmeticOverflow.into()),
++    };
+     if pool != *expected_pool
+         || page_number != expected_page_number
+         || first_sequence != expected_first
+@@ -291,8 +304,89 @@
+     }
+     let filled = header.filled + roots.len() as u16;
+     data[PAGE_FILLED_OFFSET..58].copy_from_slice(&filled.to_le_bytes());
++}
++
++/// X2c (write boundary): the bytes that `write_new_page_unchecked` sets in a fresh page, as plain values.
++/// The header of a fresh page (bytes `0..64`; bytes 7 and `58..64` are zero).
++pub(crate) fn root_page_header_bytes_v1(
++    pool: &Pubkey,
++    page_number: u64,
++    first_sequence: u64,
++    filled: u16,
++) -> [u8; PAGE_ROOTS_OFFSET] {
++    let mut header = [0u8; PAGE_ROOTS_OFFSET];
++    header[..4].copy_from_slice(&POOL_V1_ROOT_HISTORY_PAGE_MAGIC);
++    header[4] = POOL_V1_ROOT_HISTORY_PAGE_VERSION;
++    header[5] = POOL_V1_ROOT_HISTORY_CAPACITY_LOG2;
++    header[6] = POOL_V1_DIGEST_ENCODING_VERSION;
++    header[PAGE_POOL_OFFSET..PAGE_NUMBER_OFFSET].copy_from_slice(&pool.to_bytes());
++    header[PAGE_NUMBER_OFFSET..PAGE_FIRST_SEQUENCE_OFFSET].copy_from_slice(&page_number.to_le_bytes());
++    header[PAGE_FIRST_SEQUENCE_OFFSET..PAGE_FILLED_OFFSET].copy_from_slice(&first_sequence.to_le_bytes());
++    header[PAGE_FILLED_OFFSET..58].copy_from_slice(&filled.to_le_bytes());
++    header
+ }
+ 
++/// Length of the written prefix of a fresh page holding one root.
++pub(crate) const ROOT_PAGE_ONE_ROOT_PREFIX_BYTES: usize = PAGE_ROOTS_OFFSET + 32;
++/// Length of the written prefix of a fresh page holding two roots.
++pub(crate) const ROOT_PAGE_TWO_ROOT_PREFIX_BYTES: usize = PAGE_ROOTS_OFFSET + 64;
++
++/// The prefix `0..96` of a fresh page holding one root, equal to the same bytes of
++/// `write_new_page_unchecked(data, pool, page_number, first_sequence, &[root])`. Every later byte of that page is
++/// zero; callers write this prefix only into a page they have checked to be entirely zero, so the page after the
++/// write equals the frozen writer's page (which first zeroes the whole page).
++pub(crate) fn new_root_page_prefix_one_v1(
++    pool: &Pubkey,
++    page_number: u64,
++    first_sequence: u64,
++    root: &Digest,
++) -> [u8; ROOT_PAGE_ONE_ROOT_PREFIX_BYTES] {
++    let mut prefix = [0u8; ROOT_PAGE_ONE_ROOT_PREFIX_BYTES];
++    prefix[..PAGE_ROOTS_OFFSET].copy_from_slice(&root_page_header_bytes_v1(pool, page_number, first_sequence, 1));
++    prefix[PAGE_ROOTS_OFFSET..ROOT_PAGE_ONE_ROOT_PREFIX_BYTES].copy_from_slice(&encode_digest_canonical(root));
++    prefix
++}
++
++/// The prefix `0..128` of a fresh page holding two roots (see `new_root_page_prefix_one_v1`).
++pub(crate) fn new_root_page_prefix_two_v1(
++    pool: &Pubkey,
++    page_number: u64,
++    first_sequence: u64,
++    first_root: &Digest,
++    second_root: &Digest,
++) -> [u8; ROOT_PAGE_TWO_ROOT_PREFIX_BYTES] {
++    let mut prefix = [0u8; ROOT_PAGE_TWO_ROOT_PREFIX_BYTES];
++    prefix[..PAGE_ROOTS_OFFSET].copy_from_slice(&root_page_header_bytes_v1(pool, page_number, first_sequence, 2));
++    prefix[PAGE_ROOTS_OFFSET..ROOT_PAGE_ONE_ROOT_PREFIX_BYTES].copy_from_slice(&encode_digest_canonical(first_root));
++    prefix[ROOT_PAGE_ONE_ROOT_PREFIX_BYTES..ROOT_PAGE_TWO_ROOT_PREFIX_BYTES]
++        .copy_from_slice(&encode_digest_canonical(second_root));
++    prefix
++}
++
++/// The two writes of `append_roots_unchecked(data, header, &[root])`, as plain values in its order: the root at
++/// `root_start..root_end`, then the filled counter at `filled_start..filled_end`.
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub(crate) struct RootPageAppendOneV1 {
++    pub(crate) root_start: usize,
++    pub(crate) root_end: usize,
++    pub(crate) root_bytes: [u8; 32],
++    pub(crate) filled_start: usize,
++    pub(crate) filled_end: usize,
++    pub(crate) filled_bytes: [u8; 2],
++}
++
++pub(crate) fn root_page_append_one_v1(header: RootPageHeaderV1, root: &Digest) -> RootPageAppendOneV1 {
++    let root_start = PAGE_ROOTS_OFFSET + usize::from(header.filled) * 32;
++    RootPageAppendOneV1 {
++        root_start,
++        root_end: root_start + 32,
++        root_bytes: encode_digest_canonical(root),
++        filled_start: PAGE_FILLED_OFFSET,
++        filled_end: 58,
++        filled_bytes: (header.filled + 1).to_le_bytes(),
++    }
++}
++
+ pub(crate) fn validate_new_page_account(
+     program_id: &Pubkey,
+     pool: &Pubkey,
+@@ -416,9 +510,11 @@
+                 .unwrap(),
+         );
+         let filled = u16::from_le_bytes(data[PAGE_FILLED_OFFSET..58].try_into().unwrap());
+-        let expected_first = page_number
+-            .checked_mul(POOL_V1_ROOT_HISTORY_CAPACITY as u64)
+-            .ok_or(PoolV1ProgramError::ArithmeticOverflow)?;
++        let expected_first = match page_number
++            .checked_mul(POOL_V1_ROOT_HISTORY_CAPACITY as u64) {
++            Some(value) => value,
++            None => return Err(PoolV1ProgramError::ArithmeticOverflow.into()),
++        };
+         if pool != *expected_pool
+             || page_number != expected_page_number
+             || first_sequence != expected_first
+@@ -660,7 +756,60 @@
+                 let old = oracle_validate_new_page_account(&program_id, &pool, page_number, &info);
+                 assert_eq!(new, old, "len {len} position {position:?}");
+                 assert_eq!(new.is_ok(), len == PAGE && (position.is_none() || position.unwrap() >= len));
++            }
++        }
++    }
++}
++
++/// X2c: the plain-value page writes against the frozen in-place writers, on zeroed pages (the only pages the
++/// handlers write fresh) and on valid pages for the append.
++#[cfg(test)]
++mod x2c_page_write_tests {
++    use super::*;
++    use aspis_core::field::M31;
++    use std::vec;
++
++    fn digest(seed: u64) -> Digest {
++        core::array::from_fn(|i| M31(((seed.wrapping_mul(2654435761).wrapping_add(i as u64 * 97)) % u64::from(P)) as u32))
++    }
++
++    #[test]
++    fn fresh_prefix_equals_frozen_writer_on_zeroed_page() {
++        for round in 0..400u64 {
++            let pool = Pubkey::new_from_array([(round % 251) as u8; 32]);
++            let page_number = round.wrapping_mul(0x9e37_79b9_7f4a_7c15);
++            let first = round.wrapping_mul(31);
++            let (a, b) = (digest(round), digest(round + 1000));
++            let mut frozen = vec![0u8; POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES];
++            let mut new = vec![0u8; POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES];
++            if round % 2 == 0 {
++                write_new_page_unchecked(&mut frozen, &pool, page_number, first, &[a]);
++                new[..ROOT_PAGE_ONE_ROOT_PREFIX_BYTES]
++                    .copy_from_slice(&new_root_page_prefix_one_v1(&pool, page_number, first, &a));
++            } else {
++                write_new_page_unchecked(&mut frozen, &pool, page_number, first, &[a, b]);
++                new[..ROOT_PAGE_TWO_ROOT_PREFIX_BYTES]
++                    .copy_from_slice(&new_root_page_prefix_two_v1(&pool, page_number, first, &a, &b));
+             }
++            assert_eq!(frozen, new);
+         }
+     }
++
++    #[test]
++    fn append_one_equals_frozen_writer() {
++        for filled in 0..POOL_V1_ROOT_HISTORY_CAPACITY as u16 {
++            let pool = Pubkey::new_from_array([3u8; 32]);
++            let roots: std::vec::Vec<Digest> = (0..u64::from(filled)).map(digest).collect();
++            let mut frozen = vec![0u8; POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES];
++            write_new_page_unchecked(&mut frozen, &pool, 4, 4 * POOL_V1_ROOT_HISTORY_CAPACITY as u64, &roots);
++            let header = RootPageHeaderV1 { pool, page_number: 4, first_sequence: 4 * POOL_V1_ROOT_HISTORY_CAPACITY as u64, filled };
++            let mut new = frozen.clone();
++            let root = digest(5000 + u64::from(filled));
++            append_roots_unchecked(&mut frozen, header, &[root]);
++            let w = root_page_append_one_v1(header, &root);
++            new[w.root_start..w.root_end].copy_from_slice(&w.root_bytes);
++            new[w.filled_start..w.filled_end].copy_from_slice(&w.filled_bytes);
++            assert_eq!(frozen, new);
++        }
++    }
+ }

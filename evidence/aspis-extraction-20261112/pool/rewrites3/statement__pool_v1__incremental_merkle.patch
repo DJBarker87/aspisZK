@@ -1,0 +1,168 @@
+--- a/crates/aspis-statement/src/pool_v1/incremental_merkle.rs
++++ b/crates/aspis-statement/src/pool_v1/incremental_merkle.rs
+@@ -111,11 +111,21 @@
+     let next_leaf_index = u64::from_le_bytes(bytes[8..16].try_into().unwrap());
+     let root = decode_digest_canonical(bytes[16..48].try_into().unwrap())
+         .map_err(|_| PoolV1TreeError::NonCanonicalDigest)?;
++    // X2c rewrite (class 9/g): a `while` loop with a flag instead of `iter_mut().enumerate()` with `?` inside; it
++    // stops at the first non-canonical level and returns the same error after the loop.
+     let mut frontier = [[M31::ZERO; DIGEST_ELEMS]; POOL_V1_TREE_DEPTH];
+-    for (level, node) in frontier.iter_mut().enumerate() {
++    let mut canonical = true;
++    let mut level = 0;
++    while canonical && level < POOL_V1_TREE_DEPTH {
+         let start = POOL_V1_TREE_STATE_HEADER_BYTES + level * 32;
+-        *node = decode_digest_canonical(bytes[start..start + 32].try_into().unwrap())
+-            .map_err(|_| PoolV1TreeError::NonCanonicalDigest)?;
++        match decode_digest_canonical(bytes[start..start + 32].try_into().unwrap()) {
++            Ok(node) => frontier[level] = node,
++            Err(_) => canonical = false,
++        }
++        level += 1;
++    }
++    if !canonical {
++        return Err(PoolV1TreeError::NonCanonicalDigest);
+     }
+     Ok(IncrementalMerkleTreeV1 {
+         next_leaf_index,
+@@ -484,9 +494,57 @@
+         bytes: &[u8],
+         empty: &[Digest; POOL_V1_TREE_DEPTH + 1],
+     ) -> Result<Self, PoolV1TreeError> {
+-        ValidatedIncrementalMerkleTreeV1::decode(bytes, empty)
+-            .map(ValidatedIncrementalMerkleTreeV1::into_inner)
++        // X2b rewrite (class d): explicit match instead of `Result::map` with the method path as a function
++        // value, which the translator rejects. Same value, same error.
++        match ValidatedIncrementalMerkleTreeV1::decode(bytes, empty) {
++            Ok(validated) => Ok(validated.into_inner()),
++            Err(err) => Err(err),
++        }
++    }
++}
++
++#[cfg(test)]
++mod x2b_decode_with_empty_roots_differential {
++    use super::*;
++
++    /// The frozen body of `IncrementalMerkleTreeV1::decode_with_empty_roots` (commit 3d700effcabe).
++    fn frozen(bytes: &[u8], empty: &[Digest; POOL_V1_TREE_DEPTH + 1]) -> Result<IncrementalMerkleTreeV1, PoolV1TreeError> {
++        ValidatedIncrementalMerkleTreeV1::decode(bytes, empty).map(ValidatedIncrementalMerkleTreeV1::into_inner)
++    }
++
++    fn next(state: &mut u64) -> u64 {
++        *state = state.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
++        *state >> 33
+     }
++
++    #[test]
++    fn same_result_as_frozen_body() {
++        let empty = pool_v1_empty_roots();
++        let mut state = 0xdec0_de_u64;
++        let mut tree = IncrementalMerkleTreeV1::empty();
++        for step in 0..40u32 {
++            let bytes = tree.encode().unwrap();
++            assert_eq!(IncrementalMerkleTreeV1::decode_with_empty_roots(&bytes, &empty), frozen(&bytes, &empty));
++            // one-byte mutations at random positions (mostly rejected, some accepted)
++            for _ in 0..20 {
++                let mut mutated = bytes;
++                let at = (next(&mut state) as usize) % mutated.len();
++                mutated[at] ^= 1u8 << (next(&mut state) % 8);
++                assert_eq!(
++                    IncrementalMerkleTreeV1::decode_with_empty_roots(&mutated, &empty),
++                    frozen(&mutated, &empty)
++                );
++            }
++            // wrong lengths
++            assert_eq!(
++                IncrementalMerkleTreeV1::decode_with_empty_roots(&bytes[..bytes.len() - 1], &empty),
++                frozen(&bytes[..bytes.len() - 1], &empty)
++            );
++            assert_eq!(IncrementalMerkleTreeV1::decode_with_empty_roots(&[], &empty), frozen(&[], &empty));
++            let leaf = core::array::from_fn(|i| aspis_core::field::M31((step * 31 + i as u32 * 7) % aspis_core::field::P));
++            tree = tree.append_one(leaf).unwrap().0;
++        }
++    }
+ }
+ 
+ impl Default for IncrementalMerkleTreeV1 {
+@@ -764,3 +822,80 @@
+ #[cfg(any(kani, aeneas_ref))]
+ #[path = "../../../../tools/r1-builder-reference/tree.rs"]
+ pub mod tree_reference;
++
++/// X2c: `decode_tree_image_unvalidated` against its frozen frontier loop (commit 3d700effcabe), kept here; and the
++/// nullifier marker's digest check against `iter().all`.
++#[cfg(test)]
++mod x2c_tree_image_differential {
++    use super::*;
++
++    fn frozen(bytes: &[u8]) -> Result<IncrementalMerkleTreeV1, PoolV1TreeError> {
++        if bytes.len() != POOL_V1_TREE_STATE_ACCOUNT_BYTES {
++            return Err(PoolV1TreeError::WrongLength);
++        }
++        if bytes[..4] != POOL_V1_TREE_STATE_MAGIC {
++            return Err(PoolV1TreeError::WrongMagic);
++        }
++        if bytes[4] != POOL_V1_TREE_STATE_VERSION {
++            return Err(PoolV1TreeError::WrongVersion);
++        }
++        if bytes[5] != POOL_V1_TREE_DEPTH as u8 {
++            return Err(PoolV1TreeError::WrongDepth);
++        }
++        if bytes[6] != POOL_V1_TREE_HASH_VERSION {
++            return Err(PoolV1TreeError::WrongTreeHash);
++        }
++        if bytes[7] != POOL_V1_DIGEST_ENCODING_VERSION {
++            return Err(PoolV1TreeError::WrongDigestEncoding);
++        }
++        let next_leaf_index = u64::from_le_bytes(bytes[8..16].try_into().unwrap());
++        let root = decode_digest_canonical(bytes[16..48].try_into().unwrap())
++            .map_err(|_| PoolV1TreeError::NonCanonicalDigest)?;
++        let mut frontier = [[M31::ZERO; DIGEST_ELEMS]; POOL_V1_TREE_DEPTH];
++        for (level, node) in frontier.iter_mut().enumerate() {
++            let start = POOL_V1_TREE_STATE_HEADER_BYTES + level * 32;
++            *node = decode_digest_canonical(bytes[start..start + 32].try_into().unwrap())
++                .map_err(|_| PoolV1TreeError::NonCanonicalDigest)?;
++        }
++        Ok(IncrementalMerkleTreeV1 { next_leaf_index, root, frontier })
++    }
++
++    #[test]
++    fn x2c_same_result_as_frozen_body() {
++        let mut seed = 77u64;
++        let mut next = || {
++            seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
++            seed >> 33
++        };
++        for round in 0..4_000u64 {
++            let mut bytes = alloc::vec![0u8; POOL_V1_TREE_STATE_ACCOUNT_BYTES];
++            bytes[..4].copy_from_slice(&POOL_V1_TREE_STATE_MAGIC);
++            bytes[4] = POOL_V1_TREE_STATE_VERSION;
++            bytes[5] = POOL_V1_TREE_DEPTH as u8;
++            bytes[6] = POOL_V1_TREE_HASH_VERSION;
++            bytes[7] = POOL_V1_DIGEST_ENCODING_VERSION;
++            let mut at = 8;
++            while at + 4 <= bytes.len() {
++                let v = (next() as u32) % aspis_core::field::P;
++                bytes[at..at + 4].copy_from_slice(&v.to_le_bytes());
++                at += 4;
++            }
++            match round % 4 {
++                0 => {}
++                1 => {
++                    let level = (next() as usize) % POOL_V1_TREE_DEPTH;
++                    let at = POOL_V1_TREE_STATE_HEADER_BYTES + level * 32 + 4 * ((next() as usize) % 8);
++                    bytes[at..at + 4].copy_from_slice(&aspis_core::field::P.to_le_bytes());
++                }
++                2 => {
++                    let at = (next() as usize) % 8;
++                    bytes[at] ^= 1;
++                }
++                _ => {
++                    bytes.pop();
++                }
++            }
++            assert_eq!(decode_tree_image_unvalidated(&bytes), frozen(&bytes));
++        }
++    }
++}

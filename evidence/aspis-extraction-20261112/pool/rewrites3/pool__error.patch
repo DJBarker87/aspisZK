@@ -1,0 +1,13 @@
+--- a/programs/aspis-pool/src/error.rs
++++ b/programs/aspis-pool/src/error.rs
+@@ -60,7 +60,8 @@
+ }
+ 
+ impl From<PoolV1ProgramError> for ProgramError {
+-    fn from(error: PoolV1ProgramError) -> Self {
+-        Self::Custom(error as u32)
++    // X2c rewrite (class 2): the parameter is not named `error` (the name of an emitted module).
++    fn from(value: PoolV1ProgramError) -> Self {
++        Self::Custom(value as u32)
+     }
+ }

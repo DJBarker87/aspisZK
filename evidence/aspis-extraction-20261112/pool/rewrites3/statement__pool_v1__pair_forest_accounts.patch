@@ -1,0 +1,12 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
+@@ -361,7 +361,8 @@
+     if master == [0u8; 32] {
+         return Err(PoolV1PairForestAccountErrorV1::ZeroRequiredBinding);
+     }
+-    if bytes[73..LANE_TREE_OFFSET].iter().any(|byte| *byte != 0) {
++    // X2c rewrite (class 9): the crate's `any_nonzero_byte` instead of `iter().any` (same result).
++    if any_nonzero_byte(&bytes[73..LANE_TREE_OFFSET]) {
+         return Err(PoolV1PairForestAccountErrorV1::NonZeroReserved);
+     }
+     let tree = IncrementalMerkleTreeV1::decode_with_empty_roots(

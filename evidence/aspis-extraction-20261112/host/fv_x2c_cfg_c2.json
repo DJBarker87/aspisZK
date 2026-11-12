@@ -1,0 +1,45 @@
+{
+ "note": "X2c c2: c1 plus lane_keys_alias through keys_repeat; single root; Aeneas -abort-on-error",
+ "source": "/home/dombarker/project-offloads/future-version-20261111/x2c/rw-tree",
+ "manifest": "programs/aspis-pool/Cargo.toml",
+ "features": "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+ "overflow_checks": false,
+ "target_dir": "/home/dombarker/project-offloads/future-version-20261111/x2c/target/emit",
+ "crate": "aspis_pool",
+ "lib_crates": [
+  "aspis_statement",
+  "aspis_core"
+ ],
+ "crate_dirs": [
+  "programs/aspis-pool/src",
+  "crates/aspis-statement/src",
+  "crates/aspis-core/src"
+ ],
+ "roots": [
+  "crate::processor::process_instruction"
+ ],
+ "opaque": [
+  "crate::account_write::write_account_data_v1",
+  "aspis_statement::pool_v1::pair_forest_accounts::plan_pool_v1_pair_forest_checkpoint_v1",
+  "aspis_statement::pool_v1::pair_forest_accounts::encode_pool_v1_pair_forest_checkpoint_v1",
+  "aspis_statement::pool_v1::incremental_merkle::_::validate_with_empty_roots",
+  "aspis_statement::pool_v1::pair_tree_profile::_::validate",
+  "aspis_statement::pool_v1::incremental_merkle::_::append_one",
+  "solana_rent::Rent",
+  "crate::processor::runtime_stack_height_v1"
+ ],
+ "include": [
+  "aspis_statement",
+  "aspis_core"
+ ],
+ "exclude": [],
+ "ns": "AspisX2",
+ "lean_prefix": "AspisX2c",
+ "adapt": "TP_adapt.py",
+ "rules": "fv_x2_rules.json",
+ "shims": [
+  "AspisTPNewLib"
+ ],
+ "emission": "release",
+ "lean_timeout": 1200
+}

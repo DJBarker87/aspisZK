@@ -1,0 +1,131 @@
+--- a/programs/aspis-pool/src/pair_forest.rs
++++ b/programs/aspis-pool/src/pair_forest.rs
+@@ -2239,6 +2239,128 @@
+     use solana_sdk_ids::{bpf_loader, native_loader, system_program};
+ 
+     use super::*;
++
++    // ---- X2c handler-state recorder (test only; identical text in the frozen and the rewritten test trees) ----
++    // The four handler names are shadowed here (local items take precedence over the glob import), so every test
++    // call of a handler is recorded: the result, and for every account passed in, its key, owner, lamports and
++    // complete data before and after the call. Enabled only when X2C_STATE_DUMP names a directory.
++    fn x2c_snapshot(accounts: &[AccountInfo<'_>]) -> std::string::String {
++        use std::fmt::Write as _;
++        let mut out = std::string::String::new();
++        for (index, account) in accounts.iter().enumerate() {
++            let data = account.try_borrow_data().map(|d| d.to_vec()).unwrap_or_default();
++            let _ = write!(out, " [{} key={} owner={} lamports={} len={} data=", index, account.key, account.owner, account.lamports(), data.len());
++            for byte in &data {
++                let _ = write!(out, "{:02x}", byte);
++            }
++            out.push(']');
++        }
++        out
++    }
++
++    fn x2c_record(handler: &str, before: &str, accounts: &[AccountInfo<'_>], result: &ProgramResult) {
++        let Ok(dir) = std::env::var("X2C_STATE_DUMP") else { return };
++        let after = x2c_snapshot(accounts);
++        let test = std::thread::current().name().unwrap_or("unnamed").replace("::", "__");
++        let line = std::format!(
++            "{} result={:?} unchanged={}\n  before{}\n  after{}\n",
++            handler,
++            result,
++            before == after,
++            before,
++            after
++        );
++        use std::io::Write as _;
++        let mut file = std::fs::OpenOptions::new()
++            .create(true)
++            .append(true)
++            .open(std::format!("{}/{}.txt", dir, test))
++            .unwrap();
++        file.write_all(line.as_bytes()).unwrap();
++    }
++
++    fn process_pair_forest_initialize_with_runtime_v1<'info, R: PoolCpiRuntimeV1>(
++        program_id: &Pubkey,
++        accounts: &[AccountInfo<'info>],
++        instruction_data: &[u8],
++        rent: &Rent,
++        runtime: &mut R,
++    ) -> ProgramResult {
++        let before = x2c_snapshot(accounts);
++        let result = super::process_pair_forest_initialize_with_runtime_v1(program_id, accounts, instruction_data, rent, runtime);
++        x2c_record("initialize", &before, accounts, &result);
++        result
++    }
++
++    fn process_pair_forest_checkpoint_with_runtime_v1<'info, R: PoolCpiRuntimeV1>(
++        program_id: &Pubkey,
++        accounts: &[AccountInfo<'info>],
++        instruction_data: &[u8],
++        rent: &Rent,
++        runtime: &mut R,
++    ) -> ProgramResult {
++        let before = x2c_snapshot(accounts);
++        let result = super::process_pair_forest_checkpoint_with_runtime_v1(program_id, accounts, instruction_data, rent, runtime);
++        x2c_record("checkpoint", &before, accounts, &result);
++        result
++    }
++
++    fn process_pair_forest_deposit_with_runtime_v1<'info, R: PoolCpiRuntimeV1>(
++        program_id: &Pubkey,
++        accounts: &[AccountInfo<'info>],
++        instruction_data: &[u8],
++        rent: &Rent,
++        runtime: &mut R,
++    ) -> ProgramResult {
++        let before = x2c_snapshot(accounts);
++        let result = super::process_pair_forest_deposit_with_runtime_v1(program_id, accounts, instruction_data, rent, runtime);
++        x2c_record("deposit", &before, accounts, &result);
++        result
++    }
++
++    #[allow(clippy::too_many_arguments)]
++    fn process_pair_forest_terminal_with_verifier_v1<'info, R, V, S>(
++        program_id: &Pubkey,
++        accounts: &[AccountInfo<'info>],
++        instruction_data: &[u8],
++        current_slot: u64,
++        rent: &Rent,
++        runtime: &mut R,
++        verify: V,
++        set_return_data: S,
++    ) -> ProgramResult
++    where
++        R: PoolCpiRuntimeV1,
++        V: FnOnce(
++            &Pubkey,
++            &AccountInfo<'info>,
++            &AccountInfo<'info>,
++            &AccountInfo<'info>,
++            &aspis_statement::pool_v1::VerifierPolicyV1,
++            &[AccountInfo<'info>],
++            &AccountInfo<'info>,
++            &AccountInfo<'info>,
++            Option<&AccountInfo<'info>>,
++            &PoolV1PairForestTerminalRequestV1,
++            u64,
++        ) -> Result<AuthenticatedPairForestResultV1, ProgramError>,
++        S: FnOnce(&[u8]),
++    {
++        let before = x2c_snapshot(accounts);
++        let result = super::process_pair_forest_terminal_with_verifier_v1(
++            program_id,
++            accounts,
++            instruction_data,
++            current_slot,
++            rent,
++            runtime,
++            verify,
++            set_return_data,
++        );
++        x2c_record("terminal", &before, accounts, &result);
++        result
++    }
++    // ---- end of the X2c recorder ----
+ 
+     #[derive(Clone)]
+     struct TestAccount {
