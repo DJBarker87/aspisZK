@@ -16,6 +16,8 @@ cd $A; sha256sum $(find . -maxdepth 1 -type f ! -name SHA256SUMS.host | sort) > 
 mkdir -p bases; rm -f bases/*.lean; cp AspisLib_*.lean AspisHonestBudgetBase.lean bases/
 MAP=""; while IFS== read -r k v; do [ -n "$k" ] && MAP="$MAP --map $k=$v"; done < $A/IMPORT_MAP.txt
 DLIST=$C/d-report.tsv
+# revision 6: namespace stub (STUB_MAP.txt, line "STUB_MAP: Stub=Mod1,Mod2,..."), passed to every trim call
+STUB=""; [ -f $A/STUB_MAP.txt ] && STUB="--stub $(sed -n 's/^STUB_MAP: *//p' $A/STUB_MAP.txt | head -1)"
 # working omit list: the record's OMIT_MODULES.txt plus X3 cascade additions (W/x3/omit4.txt, created if absent)
 OM=$X/omit4.txt; [ -f $OM ] || cp $A/OMIT_MODULES.txt $OM
 # closure table with omitted modules as kind d, and the trim list (kind (c) modules importing a carrier or omitted)
@@ -37,7 +39,7 @@ with open(tl, "w") as f:
 PYEOF
 # 2
 rm -rf $T; mkdir -p $T
-python3 -I $A/trim_imports.py $L/src $T $DLIST --omit $OM $MAP $(cat $C/trim4-list.txt) > $X/trim4.log
+python3 -I $A/trim_imports.py $L/src $T $DLIST --omit $OM $MAP $STUB $(cat $C/trim4-list.txt) > $X/trim4.log
 # 3
 python3 -I $A/drop_decls.py $L/src $T $X/drop-decls4.tsv > $X/drop4.log
 # 4
@@ -46,7 +48,7 @@ cp $X/chain-src-d012/*.lean $CS/
 for m in $(tail -n +2 $DLIST | cut -f1) $(cat $OM); do
   r=${m//.//}; mkdir -p $CS/$(dirname $r); cp $L/src/$r.lean $CS/$r.lean
 done
-python3 -I $A/trim_imports.py $CS $CT $DLIST --omit $OM $MAP $(cat $X/bin/host-order-77.txt) > $X/chain4-trim.log
+python3 -I $A/trim_imports.py $CS $CT $DLIST --omit $OM $MAP $STUB $(cat $X/bin/host-order-77.txt) > $X/chain4-trim.log
 : > $X/chain4-diff.txt
 for m in $(cat $X/bin/host-order-77.txt); do
   diff $X/chain-src-d012/$m.lean $CT/$m.lean > /tmp/x3d.$$ || true

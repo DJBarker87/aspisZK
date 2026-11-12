@@ -407,6 +407,43 @@ The chain, the five checks and the chain-import commit (step 5) are not reached.
 toolchain, `FS2.DuplexTrace` first, pass 2 behind it) is not started; a worker can take it from this README, the
 pass-2 tables above and `host/fv_x3_closure_compile.sh` (resumable by source key, objects in `W/x3/pass2`).
 
+### Revision 6 (research 8a493a87b55): current state, stopped on an `open` of a constant of a lead-omitted module
+
+Lists of record: 12 omits, 21 drops, namespace stub `AspisLib_Namespaces` (`STUB_MAP.txt`, passed as `--stub` to
+every trim call). Hashes: `aspis-lib-r6.sha256`. Cascade driver `host/fv_x3_cascade.py` (rule and tie-breaker of
+the lead; attempts `X3-C-cas6-1..12`, `X3-C-cas6b-1..2`, `X3-C-cas6c-1..8`, `X3-C-cas6d-1..4`, steps in
+`cascade-steps-r6.txt`; one slot each, largest peak RSS about 4.2 GB, no memory events). The link to the host was
+down 11:45 to 12:35 UTC; the cascade kept running on the host and its results were read afterwards.
+
+- Gate (`gate-r6.tsv`): 0 violations. LEAN_PATH as in revision 4 (no L187 `objs`).
+- Chain trim (`chain-import-diff-r6.txt`): `AspisOneTxDecision` (frontier of the omitted
+  `OraclePortFrozenOrderDecision`) and the three 33-row modules `AspisChargedWeight`, `AspisChargedHitMass`,
+  `AspisChargedHitMassCheck` (stub import for `open OraclePortFrozen2Consumer`); import lines only.
+- Additions (`omit-drop-additions.tsv`, one row each with step, first error and dependency; needed-constant count
+  from `uses/top_closure.tsv.gz`): 27 declarations dropped and 16 modules omitted, of which two omissions were
+  reversed by the tie-breaker (`OraclePortRuntimeBindingC7`, opened by `OraclePortJoinSplitCore`;
+  `OraclePortFrozen2Reached`, opened by `OraclePortFrozen2Roots`): those two are kept (`keep-modules-r6.txt`) and
+  their failing declarations dropped. Final working lists: `omit-modules-r6.txt` (26), `drop-decls-r6.tsv` (48).
+  Every omitted module has 0 needed constants; every dropped declaration is absent from the closure file.
+- The driver first stopped on an "overloaded, errors" message (`OraclePortRuntimeBindingC7`): the overload lists
+  `Unknown identifier dV`, a name of the stubbed `OraclePortStoredConsumerC7`, i.e. the intended failure of a real
+  use. The driver now reads the missing name inside an overload message.
+- Compile (`trimmed-l187-compile-r6.tsv`): of 195 modules, **177 compile, 1 fails, 17 skipped**.
+
+**Stop.** `OraclePortFrozen2Reached` line 18: `open OraclePortFrozenOrder (slotPrograms)` fails with "Unknown
+constant `AspisR1.OraclePortFrozenOrder.slotPrograms`". `slotPrograms` is declared in `OraclePortFrozenOrderDecision`,
+which is in the lead's own `OMIT_MODULES.txt`, so the cascade cannot reverse it, and an `open` command is not a
+declaration that `drop_decls.py` can remove. Everything left is behind this one line:
+`AspisFailureBoundModel -> AspisFailureBoundJoined -> AspisRec40CleanJoin -> AspisRec40Clean -> AspisRec40CleanRun ->
+Frozen2StartChargeCompletion -> Frozen2StartChargePrefix -> OraclePortFrozen2C6 -> OraclePortFrozen2CanonicalChecks ->
+OraclePortFrozen2ActualChecks -> OraclePortFrozen2Roots -> OraclePortFrozen2Reached`.
+`Frozen2StartChargePrefix` has needed constants; the four `OraclePortFrozen2*` modules in between have none, and
+`OraclePortFrozen2Reached` itself is by now almost entirely dropped (35 lines left). The decision is the lead's
+(for example: keep and trim `OraclePortFrozenOrderDecision` with drops, a stub for the namespace with the one
+constant, or omit the `OraclePortFrozen2*` chain if `Frozen2StartChargePrefix` does not need it).
+
+The five checks and the chain-import commit are not reached; no chain source was committed. Step 6 is not started.
+
 ### Pass 2 under the new toolchain (partial)
 
 Pass 2 was run on the set of the mapped version (6032f9ef5bd): CompPoly (87), the 1,116 kind (c) modules whose

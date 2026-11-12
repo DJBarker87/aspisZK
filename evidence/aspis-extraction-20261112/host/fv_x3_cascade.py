@@ -80,16 +80,34 @@ for it in range(1, maxit + 1):
         log = open(f"{X}/map4-old/log/{m}.log", errors="replace").read()
         errs = re.findall(r"\.lean:(\d+):\d+: error(?:\([\w.]+\))?: ?([^\n]*)", log)
         first = errs[0][1] if errs else "(no error line)"
+        if first.startswith("overloaded"):
+            # an overload error lists each alternative's error on the following lines; use the missing name there
+            k = log.find("overloaded")
+            inner = re.search(r"([Uu]nknown (?:identifier|constant|namespace) `[^`]+`)", log[k:k + 800])
+            if inner:
+                first = "overloaded: " + inner.group(1)
         dep = re.search(r"`([^`]+)`", first)
         dep = dep.group(1) if dep else ""
         nn = len(needed.get(m, ()))
         if "unknown namespace" in first:
-            # tie-breaker of 2026-11-12: a failure at an `open X` line means X must be kept and trimmed; never omit
+            # tie-breaker of 2026-11-12: a failure at an `open X` line means X must be kept and trimmed; never omit.
+            # If X is an omit addition of this cascade (not in the lead's list), reverse it: X goes to the keep list,
+            # its failing declarations are dropped at the next step. Otherwise stop and report.
+            ns = re.search(r"`([^`]+)`", first).group(1).split(".")[-1]
+            base_omit = {l.strip() for l in open(os.environ["X3_LIB"] + "/OMIT_MODULES.txt") if l.strip()}
+            cur = [l.strip() for l in open(X + "/omit4.txt") if l.strip()]
+            if ns in cur and ns not in base_omit:
+                open(X + "/omit4.txt", "w").write("\n".join(c for c in cur if c != ns) + "\n")
+                open(X + "/keep4.txt", "a").write(ns + "\n")
+                with open(ADD, "a") as f:
+                    f.write(f"{ns}\tomit REVERSED (kept: {m} opens its namespace)\t{it}\t{first[:200]}\t\t0\n")
+                continue
             open(X + "/STOP.txt", "w").write(f"step {it}: {m}: open of a removed namespace (keep-and-trim case): {first}\n")
             sys.exit(3)
         if not MISSING.search(first):
             open(X + "/STOP.txt", "w").write(f"step {it}: {m}: first error is not a missing name: {first}\n"); sys.exit(1)
-        if nn == 0:
+        keep = {l.strip() for l in open(X + "/keep4.txt")} if os.path.exists(X + "/keep4.txt") else set()
+        if nn == 0 and m not in keep:
             adds.append((m, "omit", first, dep, nn)); continue
         src = open(plan[m], errors="replace").read().split("\n")
         decls = sorted({d for ln, _ in errs if (d := decl_of(src, int(ln)))})
