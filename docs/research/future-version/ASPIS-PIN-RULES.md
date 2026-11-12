@@ -25,6 +25,11 @@ In the owner's words, in order:
   recommendastion". Read by the lead as acceptance of the named class of section 5, and said so
   to the owner.
 - Crate names stay as frozen ("A"); the lead's calls of the freeze night stand.
+- On the one rewrite of the verifier round that costs compute (`compact::expand_values`, +1,386
+  compute units per payment, 0.11 percent; the paired chunk iterators of the frozen form have no
+  form in the translator's library, and the indexed form adds one range check per value), put
+  together with the privacy lead's request to delete its superseded build output on the build
+  host: "yes to both".
 
 Consequences. No proof work on Aspis starts until one commit has a clean translation of the
 verifier program, the Pool program and the prover. Code the tools reject is rewritten, in gated
@@ -197,4 +202,3 @@ trimmed text, of the ported text, and the edit list).
 - The prover's untranslated shells and the third-party crates its emission leaves without bodies
   (the SHA-256 implementation, the entropy source and supporting crates): the privacy lead is
   preparing one list in the form of section 5.
-- Whether the privacy lead may delete its superseded build output on the build host.
