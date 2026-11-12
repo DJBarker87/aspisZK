@@ -101,5 +101,14 @@ lengths.
 
 `balance_m31_copy_inactive` is the subject of the Kani harness
 `prover_commit_balance7::balance_m31_caller` in the same file. The harness text is
-unchanged and was not run in this job; its earlier result was obtained on the pin
-body and does not carry over to the new body until it is run again.
+unchanged and was not run in this job.
+
+Correction, 12 November: the only earlier run of this harness (receipt
+`balance-m31-focused-v1` under
+`docs/research/100bit-spend-path-20261013/evidence/prover-commit7-20261021/receipts/`)
+ended at its 600 second limit with no verdict, so there was no earlier result to
+carry over. It was run again on 94e06159f32 with the same command and limits and
+again reached the limit with no verdict (record in
+`evidence/pv-prefreeze2-20261112/` on branch `codex/pv-prefreeze-20261111`).
+There is no Kani verdict for this harness on either body. The evidence for the
+new body is the differential test `pv_aspis_rw_balance_m31_matches_pin_body`.

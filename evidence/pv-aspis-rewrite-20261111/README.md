@@ -174,7 +174,9 @@ test-only change to item 2; the functions they concern did not change after that
   every gate passed on the whole set, no bisection was needed.
 * No per-function Charon run of the base source: the base errors are the ones recorded by the earlier jobs.
 * The Kani harness `prover_commit_balance7::balance_m31_caller`, whose subject
-  `balance_m31_copy_inactive` was rewritten, was not run.
+  `balance_m31_copy_inactive` was rewritten, was not run in this job. It was run
+  afterwards and reached its time limit with no verdict, as its only earlier run
+  did on the pin body; see the correction in `notes/03-apply_mask_material.md`.
 * The `z4` crate's own tests were not run (no file of it was changed).
 * Nothing was spliced into a package; package g2 is unchanged.
 * The on-chain program autofixer was not run: no program code was written or changed.
