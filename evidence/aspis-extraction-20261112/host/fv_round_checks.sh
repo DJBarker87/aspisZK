@@ -9,12 +9,17 @@
 #     compute of each is written beside the frozen figure;
 #   - the worst-case run is made twice: frozen Pool with the frozen and the round verifier side by side, and the
 #     round's Pool with the round verifier.
-# Usage: fv_round_checks.sh <name> <tree> <round verifier ELF (measurement ids)> <round pool ELF>
+# Usage: fv_round_checks.sh <name> <tree> <round verifier ELF (measurement ids)> <round pool ELF> [intended-removals.tsv]
+# intended-removals.tsv (tab-separated, '#' comments): test name as cargo prints it, the configuration it is absent
+# from (deployed | two-transaction), the reason, the configuration in which it still runs and must pass.
+# A program-test configuration passes only if: no test of the base changes its outcome; the tests of the base that
+# are absent are exactly the listed ones for that configuration; no listed test is present there; every listed test
+# passes in the configuration where it still runs; every test only in the round passes.
 # Time is expected in compilation (four cold target directories), about 6 minutes of client-configuration tests,
 # then about a minute of mutant runs and two minutes of worst-case runs.
 W=/home/dombarker/project-offloads/future-version-20261111
 cd $W
-N=$1; S=$2; E=$3; POOL=$4
+N=$1; S=$2; E=$3; POOL=$4; REMOVALS=${5:-}
 OUT=$W/rounds/$N; test ! -e $OUT || { echo "exists: $OUT"; exit 2; }
 mkdir -p $OUT/logs; ST=$OUT/steps.txt; : > $ST; LOGS=$OUT/logs
 BASE=$W/frz/c1
@@ -30,15 +35,8 @@ note "round verifier ELF $(sha256sum $E | cut -d' ' -f1); round pool ELF $(sha25
 note "frozen verifier ELF $(sha256sum $FRZ_ELF | cut -d' ' -f1); frozen pool ELF $(sha256sum $FRZ_POOL | cut -d' ' -f1)"
 [ "$(sha256sum $E | cut -d' ' -f1)" = "$(sha256sum $FRZ_ELF | cut -d' ' -f1)" ] && note "verifier ELF: byte-identical to the frozen one" || note "verifier ELF: DIFFERS from the frozen one"
 [ "$(sha256sum $POOL | cut -d' ' -f1)" = "$(sha256sum $FRZ_POOL | cut -d' ' -f1)" ] && note "pool ELF: byte-identical to the frozen one" || note "pool ELF: DIFFERS from the frozen one"
-# outcome lists: every test of the base keeps its outcome; tests only in the round must be ok
-outcomes() { grep -E "^test .* (ok|FAILED|ignored)$" "$1" | sort; }
-cmp_outcomes() { # label, round outcomes file, base outcomes file
-  local lost=$(comm -13 <(cat $2) <(cat $3) | wc -l)      # lines of the base not in the round (changed or missing)
-  local added=$(comm -23 <(cat $2) <(cat $3) | awk '{print $2}' | sort -u | comm -23 - <(awk '{print $2}' $3 | sort -u) | wc -l)
-  local addfail=$(comm -23 <(cat $2) <(cat $3) | grep -c 'FAILED$')
-  note "$1: $(wc -l < $2) tests, $(grep -c 'FAILED$' $2) failing; base lines changed or missing $lost; tests only in the round $added; failing lines not in the base $addfail"
-  [ "$lost" = 0 ] && [ "$addfail" = 0 ] || bad=1
-}
+# outcome comparison with intended removals (the same file is used by the harness test)
+source $W/fv_round_outcomes.sh
 # 1 unit tests of the verifier crate, deployed settings with the prover
 step unit-tests bash -c "cd $W/$S && taskset --cpu-list 0-3 env -i $ENVV CARGO_TARGET_DIR=$W/target/native-test-$S cargo +1.94.1 test --release --offline --locked -p aspis-r1-cost-probe --features 'prover aspis' --lib" || bad=1
 grep -E "test result|FAILED|panicked" $LOGS/unit-tests.log | head -5 >> $ST
@@ -54,10 +52,11 @@ grep -E "test result|FAILED|panicked" $LOGS/client-config.log | head -5 >> $ST
 ptest() { # label, features
   step program-tests-$1 bash -c "cd $W/$S && taskset --cpu-list 0-3 env -i $ENVV CARGO_TARGET_DIR=$W/target/native-ptest-$S cargo +1.94.1 test --release --offline --locked -p aspis-r1-cost-probe-program --features $2 --lib"
   outcomes $LOGS/program-tests-$1.log > $OUT/program-tests-$1.outcomes
-  cmp_outcomes "program tests ($1)" $OUT/program-tests-$1.outcomes $BASE/program-tests-$1.outcomes
+  cmp_outcomes "program tests ($1)" $1 $OUT/program-tests-$1.outcomes $BASE/program-tests-$1.outcomes
 }
 ptest deployed aspis
 ptest two-transaction pool-adapter,private-leaf-salts
+lp=$(check_listed_pass); [ -n "$lp" ] && echo "$lp" >> $ST; echo "$lp" | grep -q "DOES NOT PASS" && bad=1
 # 3b Pool crate tests, deployed feature list
 step pool-tests bash -c "cd $W/$S && taskset --cpu-list 0-3 env -i $ENVV CARGO_TARGET_DIR=$W/target/native-pooltest-$S cargo +1.94.1 test --release --offline --locked -p aspis-pool --features r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit" || bad=1
 grep -E "test result|FAILED|panicked" $LOGS/pool-tests.log | head -8 >> $ST
@@ -92,5 +91,5 @@ step worst-run-frozen-pool bash -c "ASPIS_SOURCE_REVISION=$REV taskset --cpu-lis
 step worst-run-round-pool bash -c "ASPIS_SOURCE_REVISION=$REV taskset --cpu-list 0-3 $OUT/one_tx_worst $W/devnet/PIN2_TRANSACTIONS.json $POOL $OUT/worst-round-pool.json '$SPECS' ROUND=$E" || bad=1
 note "worst case: compare $OUT/worst-frozen-pool.json (FROZEN against ROUND verifier, frozen Pool) and $OUT/worst-round-pool.json with $BASE/cmb3.json (frozen heaviest 1,262,410); the proof hashes in both must equal the frozen gate's"
 sha256sum $OUT/worst-*.json $OUT/one_tx_worst $OUT/replay-*.json $OUT/redirect-*.json >> $OUT/files.sha256 2>/dev/null
-[ $bad = 0 ] && note "status: OK" || note "status: FAILED"
+[ $bad = 0 ] && note "status: PASSED" || note "status: FAILED"
 exit $bad
