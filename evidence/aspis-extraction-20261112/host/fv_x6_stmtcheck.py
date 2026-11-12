@@ -17,7 +17,8 @@ Prints one row per finding; exit 0 iff there is none.
 Usage: fv_x6_stmtcheck.py <carried-src> <ported-src> <allowed-removals.txt> <allowed-header-edits.tsv> [module ...]
   (<allowed-header-edits.tsv>: rows `module<TAB>exact new line` (an allowed new header line, e.g. an added Mathlib
    import) and rows `ATTR<TAB>module<TAB>declaration<TAB>attribute` (an attribute that may be added to that one
-   declaration); without explicit modules, every .lean of carried-src)
+   declaration) and rows `STMT<TAB>module<TAB>declaration` (a theorem whose statement text may change, class
+   `statement text: Mathlib API rename`); without explicit modules, every .lean of carried-src)
   4. attribute lines: any added or removed line starting with `@[` or `attribute [` is a finding unless it is the
      same line with only an allowed attribute added (ATTR row, matched against the next declaration's name).
 """
@@ -100,6 +101,9 @@ def main():
     rows = [l.rstrip("\n").split("\t") for l in open(hdr_f) if l.strip()]
     allowed_hdr = {(r[0], r[1]) for r in rows if r[0] != "ATTR"}
     allowed_attr = {(r[1], r[2]): r[3] for r in rows if r[0] == "ATTR"}
+    # STMT rows: module, declaration whose statement text may change (class `statement text: Mathlib API rename`,
+    # each one checked separately by the 4.32 pp.all identity test)
+    allowed_stmt = {(r[1], r[2]) for r in rows if r[0] == "STMT"}
     mods = sys.argv[5:]
     if not mods:
         for dp, _, fs in os.walk(old_root):
@@ -120,6 +124,8 @@ def main():
         checked += 1
         da, db = decls(a), decls(b)
         def norm(x):
+            if (m, x[1]) in allowed_stmt:
+                return (x[0], x[1], "<statement edit allowed by STMT row>")
             at = allowed_attr.get((m, x[1]))
             return (x[0], x[1], strip_attr(x[2], at).strip() if at else x[2])
         sa = [norm(x) for x in da]
@@ -150,6 +156,8 @@ def main():
                     break
                 # the statement's last line may also hold the start of the proof (`... := by`, one-line
                 # instances): that line is covered by the exact statement comparison of step 1
+                if (m, enc[1]) in allowed_stmt:
+                    continue
                 if tag != "insert" and ln < enc[4]:
                     findings.append((m, "before :=", f"{enc[0]} {enc[1]} old line {ln}", al[ln - 1][:200]))
                 if tag == "insert" and ln <= enc[4] and ln > enc[3]:

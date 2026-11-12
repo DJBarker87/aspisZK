@@ -1,0 +1,20 @@
+--- carried-src/CompPoly/Bivariate/GuruswamiSudan/CoreCorrectness.lean
++++ ported-src/CompPoly/Bivariate/GuruswamiSudan/CoreCorrectness.lean
+@@ -266,7 +266,7 @@
+     (Polynomial.taylorAlgHom x).toRingHom
+       (P.eval₂ (RingHom.id (Polynomial F)) (Polynomial.C y))
+   rw [Polynomial.hom_eval₂]
+-  simp [Polynomial.taylorAlgHom]
++  simp [Polynomial.taylor_C]
+ 
+ /-- Hasse derivatives in `X` commute with multiplication by an `X`-constant
+ polynomial. -/
+@@ -392,7 +392,7 @@
+   change (Polynomial.taylorAlgHom x).toRingHom
+       (Polynomial.eval₂ (RingHom.id (Polynomial F)) p.toPoly Q.toPoly) = _
+   rw [Polynomial.hom_eval₂]
+-  simp [Polynomial.eval_map, Polynomial.taylorAlgHom, Polynomial.taylor_apply]
++  simp [Polynomial.eval_map, Polynomial.taylor_apply]
+ 
+ /-- If `P(x) = y`, the nonconstant Taylor tail `P(X + x) - y` is divisible by
+ `X`. -/

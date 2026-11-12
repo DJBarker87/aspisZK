@@ -1,0 +1,44 @@
+--- carried-src/M31EightLimbAbortBound.lean
++++ ported-src/M31EightLimbAbortBound.lean
+@@ -36,26 +36,11 @@
+ theorem eightAbort_card_exact :
+     Nat.card EightAbortInput = ((2 ^ 32) ^ 16) ^ 8 - ((2 ^ 32) ^ 16 - 2 ^ 16) ^ 8 := by
+   classical
+-  letI : Fintype EightRetryInputs := inferInstance
+-  letI : Fintype EightSuccessInput := inferInstance
+-  letI : Fintype EightAbortInput := inferInstance
+-  have hcard : Fintype.card EightAbortInput =
+-      Fintype.card EightRetryInputs - Fintype.card EightSuccessInput := by
+-    change Fintype.card {xs : EightRetryInputs // ¬ EightSuccessProp xs} =
+-      Fintype.card EightRetryInputs - Fintype.card {xs : EightRetryInputs // EightSuccessProp xs}
+-    exact Fintype.card_subtype_compl _
+-  have habort : Nat.card EightAbortInput = Fintype.card EightAbortInput :=
+-    Nat.card_eq_fintype_card
+-  have htotal : Nat.card EightRetryInputs = Fintype.card EightRetryInputs :=
+-    Nat.card_eq_fintype_card
+-  have hsuccess : Nat.card EightSuccessInput = Fintype.card EightSuccessInput :=
+-    Nat.card_eq_fintype_card
+-  calc
+-    Nat.card EightAbortInput = Fintype.card EightAbortInput := habort
+-    _ = Fintype.card EightRetryInputs - Fintype.card EightSuccessInput := hcard
+-    _ = Nat.card EightRetryInputs - Nat.card EightSuccessInput := by rw [← htotal, ← hsuccess]
+-    _ = ((2 ^ 32) ^ 16) ^ 8 - ((2 ^ 32) ^ 16 - 2 ^ 16) ^ 8 := by
+-      rw [eightRetryInput_card, eightSuccessInput_card_exact]
++  have hsum : Nat.card EightSuccessInput + Nat.card EightAbortInput = Nat.card EightRetryInputs := by
++    rw [← Nat.card_sum]
++    exact Nat.card_congr (Equiv.sumCompl EightSuccessProp)
++  rw [eightRetryInput_card, eightSuccessInput_card_exact] at hsum
++  exact Nat.eq_sub_of_add_eq' hsum
+ 
+ theorem pow_failure_union_bound (p : ℚ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (n : Nat) :
+     1 - (1 - p) ^ n ≤ (n : ℚ) * p := by
+@@ -129,8 +114,7 @@
+   unfold eightAbortMass
+   let S : Nat := retryWordSuccess
+   let T : Nat := retryWordTotal
+-  have habort : Nat.card EightAbortInput = T ^ 8 - S ^ 8 := by
+-    simpa [S, T, retryWordSuccess, retryWordTotal] using eightAbort_card_exact
++  have habort : Nat.card EightAbortInput = T ^ 8 - S ^ 8 := eightAbort_card_exact
+   have htotal : Nat.card EightRetryInputs = T ^ 8 := by
+     simpa [T, retryWordTotal] using eightRetryInput_card
+   have hbase : S ≤ T := by exact retryWordSuccess_le_total

@@ -1,0 +1,23 @@
+--- carried-src/Wide/RegularWeights.lean
++++ ported-src/Wide/RegularWeights.lean
+@@ -148,7 +148,7 @@
+     Finset.exists_mem_eq_sup polynomial.support supportNonempty
+       (Finsupp.weight weight)
+   intro componentZero
+-  have coefficientZero := congrArg (MvPolynomial.coeff monomial) componentZero
++  have coefficientZero := congrArg (fun p : MvPolynomial σ K => p.coeff monomial) componentZero
+   rw [MvPolynomial.coeff_weightedHomogeneousComponent] at coefficientZero
+   have weightEquality : Finsupp.weight weight monomial =
+       polynomial.weightedTotalDegree weight := by
+@@ -183,9 +183,9 @@
+     intro pair pairMem
+     have decomposition : pair.1 + pair.2 = monomial :=
+       Finset.HasAntidiagonal.mem_antidiagonal.mp pairMem
+-    by_cases leftCoefficient : MvPolynomial.coeff pair.1 left = 0
++    by_cases leftCoefficient : left.coeff pair.1 = 0
+     · simp [leftCoefficient]
+-    by_cases rightCoefficient : MvPolynomial.coeff pair.2 right = 0
++    by_cases rightCoefficient : right.coeff pair.2 = 0
+     · simp [rightCoefficient]
+     have leftMem : pair.1 ∈ left.support :=
+       MvPolynomial.mem_support_iff.mpr leftCoefficient

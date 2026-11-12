@@ -1,0 +1,28 @@
+--- carried-src/WideExactInitialCirclePairInverseV5.lean
++++ ported-src/WideExactInitialCirclePairInverseV5.lean
+@@ -31,6 +31,7 @@
+   · have hm := monomialPolynomial_coeff
+       (fun i : Fin 513 => (circleNumerator p0 p1).coeff (2 * i.val))
+       ⟨n, hn⟩
++    unfold evenPart
+     calc
+       (monomialPolynomial (fun i : Fin 513 =>
+         (circleNumerator p0 p1).coeff (2 * i.val))).coeff n =
+@@ -62,6 +63,7 @@
+       (fun i : Fin 512 => (2 : K)⁻¹ *
+         (circleNumerator p0 p1).coeff (2 * i.val + 1))
+       ⟨n, hn⟩
++    unfold oddPart
+     calc
+       (monomialPolynomial (fun i : Fin 512 => (2 : K)⁻¹ *
+         (circleNumerator p0 p1).coeff (2 * i.val + 1))).coeff n =
+@@ -73,7 +75,8 @@
+         field_simp
+   · have hnge : 512 ≤ n := by omega
+     have hleft : (oddPart (circleNumerator p0 p1)).coeff n = 0 := by
+-      simpa only [oddPart] using
++      unfold oddPart
++      exact
+         (monomialPolynomial_coeff_eq_zero_of_ge
+           (fun i : Fin 512 => (2 : K)⁻¹ *
+             (circleNumerator p0 p1).coeff (2 * i.val + 1)) n hnge)

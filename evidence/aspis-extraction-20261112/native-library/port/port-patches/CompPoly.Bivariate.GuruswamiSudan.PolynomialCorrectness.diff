@@ -1,0 +1,16 @@
+--- carried-src/CompPoly/Bivariate/GuruswamiSudan/PolynomialCorrectness.lean
++++ ported-src/CompPoly/Bivariate/GuruswamiSudan/PolynomialCorrectness.lean
+@@ -842,7 +842,12 @@
+     (Polynomial.taylorAlgHom x).toRingHom
+       (P.eval₂ (RingHom.id (Polynomial F)) (Polynomial.C y))
+   rw [Polynomial.hom_eval₂]
+-  simp [Polynomial.taylorAlgHom]
++  -- The shift fixes constant inner coefficients, so the two `eval₂` constants agree.
++  -- Keep `taylorAlgHom` folded so `coe_taylorAlgHom` can fire.
++  have hC : (Polynomial.taylorAlgHom x).toRingHom (Polynomial.C y) = Polynomial.C y := by
++    simp [Polynomial.taylor_C]
++  rw [hC]
++  simp
+ 
+ /-- Hasse derivatives in `X` commute with multiplication by an `X`-constant
+ polynomial. -/
