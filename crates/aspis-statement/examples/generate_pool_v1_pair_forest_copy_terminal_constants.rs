@@ -96,8 +96,10 @@ fn main() {
     );
     for item in &patterns {
         println!(
-            "    CompiledPoolV1PairForestPattern {{ kinds: {:?}, columns: {:?}, offsets: {:?} }},",
-            item.kinds, item.columns, item.offsets
+            "    CompiledPoolV1PairForestPattern {{ kinds: {}, columns: {}, offsets: {} }},",
+            array_text(&item.kinds.map(u32::from), "U8"),
+            array_text(&item.columns.map(u32::from), "U8"),
+            array_text(&item.offsets, "U32"),
         );
     }
     println!("];");
@@ -148,4 +150,28 @@ fn main() {
         );
     }
     println!("];");
+    println!();
+    println!("// Arrays of sixteen equal entries are named constants: written in place inside");
+    println!("// COPY_PATTERNS they made the Lean text of that one constant, as the Charon and");
+    println!("// Aeneas pair prints it, need about 5.9 GiB to elaborate");
+    println!("// (evidence/pv-aspis-r2s-20261112). The compiled table is unchanged.");
+    println!("pub(crate) const PATTERN_U8_ALL_ZERO: [u8; 16] = [0; 16];");
+    println!("pub(crate) const PATTERN_U8_ALL_ONE: [u8; 16] = [1; 16];");
+    println!("pub(crate) const PATTERN_U32_ALL_ZERO: [u32; 16] = [0; 16];");
+}
+
+/// The text of one pattern array: the literal, or the named constant when all
+/// sixteen entries are equal (zero or one for `u8`, zero for `u32`). Any other
+/// array of equal entries needs a named constant added here first.
+fn array_text(values: &[u32; 16], ty: &str) -> String {
+    if values.iter().all(|value| *value == values[0]) {
+        match (ty, values[0]) {
+            ("U8", 0) => "PATTERN_U8_ALL_ZERO".to_string(),
+            ("U8", 1) => "PATTERN_U8_ALL_ONE".to_string(),
+            ("U32", 0) => "PATTERN_U32_ALL_ZERO".to_string(),
+            other => panic!("no named constant for an array of equal entries {other:?}"),
+        }
+    } else {
+        format!("{values:?}")
+    }
 }

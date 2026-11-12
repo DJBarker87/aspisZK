@@ -1663,3 +1663,21 @@ mod tp2_pattern_values_windowed_oracle {
         }
     }
 }
+
+/// pv-aspis-r2s: `constants::COPY_PATTERNS` with its arrays of sixteen equal
+/// entries written as named constants has the value of the literal it replaces.
+#[cfg(test)]
+mod pv_aspis_r2s_copy_patterns_literal {
+    use super::{constants, CompiledPoolV1PairForestPattern};
+    include!("pair_forest_copy_terminal_constants_literal_test.rs");
+
+    #[test]
+    fn pv_aspis_r2s_copy_patterns_equal_the_literal() {
+        assert_eq!(constants::COPY_PATTERNS.len(), COPY_PATTERNS_LITERAL.len());
+        for (new, old) in constants::COPY_PATTERNS.iter().zip(COPY_PATTERNS_LITERAL) {
+            assert_eq!(new.kinds, old.kinds);
+            assert_eq!(new.columns, old.columns);
+            assert_eq!(new.offsets, old.offsets);
+        }
+    }
+}

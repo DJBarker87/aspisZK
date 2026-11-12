@@ -8,20 +8,20 @@ pub(crate) const INACTIVE_ROW_GROUPS: [u8; 64] = [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
 pub(crate) const INACTIVE_GROUP_MASKS: [u16; 7] = [59391, 59390, 61438, 63487, 63486, 39321, 63786];
 
 pub(crate) const COPY_PATTERNS: [CompiledPoolV1PairForestPattern; 14] = [
-    CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-    CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], columns: [0, 1, 2, 3, 4, 5, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-    CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [2, 3, 4, 5, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-    CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [0, 1, 2, 3, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-    CompiledPoolV1PairForestPattern { kinds: [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-    CompiledPoolV1PairForestPattern { kinds: [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [6, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-    CompiledPoolV1PairForestPattern { kinds: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-    CompiledPoolV1PairForestPattern { kinds: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-    CompiledPoolV1PairForestPattern { kinds: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-    CompiledPoolV1PairForestPattern { kinds: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+    CompiledPoolV1PairForestPattern { kinds: PATTERN_U8_ALL_ONE, columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], offsets: PATTERN_U32_ALL_ZERO },
+    CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], columns: [0, 1, 2, 3, 4, 5, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0], offsets: PATTERN_U32_ALL_ZERO },
+    CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [2, 3, 4, 5, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: PATTERN_U32_ALL_ZERO },
+    CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [0, 1, 2, 3, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: PATTERN_U32_ALL_ZERO },
+    CompiledPoolV1PairForestPattern { kinds: [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: PATTERN_U32_ALL_ZERO },
+    CompiledPoolV1PairForestPattern { kinds: [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [6, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: PATTERN_U32_ALL_ZERO },
+    CompiledPoolV1PairForestPattern { kinds: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: PATTERN_U8_ALL_ZERO, offsets: PATTERN_U32_ALL_ZERO },
+    CompiledPoolV1PairForestPattern { kinds: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: PATTERN_U32_ALL_ZERO },
+    CompiledPoolV1PairForestPattern { kinds: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: PATTERN_U32_ALL_ZERO },
+    CompiledPoolV1PairForestPattern { kinds: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: PATTERN_U32_ALL_ZERO },
     CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], columns: [8, 9, 10, 11, 12, 13, 14, 15, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 1051521018, 0, 0, 0, 0, 0, 0, 0, 0] },
-    CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], columns: [2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-    CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], columns: [1, 2, 3, 4, 5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-    CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], columns: [8, 9, 10, 11, 12, 13, 14, 15, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+    CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], columns: [2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0, 0, 0, 0, 0, 0], offsets: PATTERN_U32_ALL_ZERO },
+    CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], columns: [1, 2, 3, 4, 5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0], offsets: PATTERN_U32_ALL_ZERO },
+    CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], columns: [8, 9, 10, 11, 12, 13, 14, 15, 0, 0, 0, 0, 0, 0, 0, 0], offsets: PATTERN_U32_ALL_ZERO },
 ];
 
 pub(crate) const COPY_LINKS: [CompiledPoolV1PairForestLink; 136] = [
@@ -162,3 +162,11 @@ pub(crate) const COPY_LINKS: [CompiledPoolV1PairForestLink; 136] = [
     CompiledPoolV1PairForestLink { tag: 1124073606, weight_kind: 0, weight_level: 0, producer: CompiledPoolV1PairForestEndpoint { row: 1006, slot: 0, pattern: 1 }, consumer: CompiledPoolV1PairForestEndpoint { row: 908, slot: 0, pattern: 1 } },
     CompiledPoolV1PairForestLink { tag: 1124073607, weight_kind: 0, weight_level: 0, producer: CompiledPoolV1PairForestEndpoint { row: 1006, slot: 1, pattern: 13 }, consumer: CompiledPoolV1PairForestEndpoint { row: 896, slot: 0, pattern: 10 } },
 ];
+
+// Arrays of sixteen equal entries are named constants: written in place inside
+// COPY_PATTERNS they made the Lean text of that one constant, as the Charon and
+// Aeneas pair prints it, need about 5.9 GiB to elaborate
+// (evidence/pv-aspis-r2s-20261112). The compiled table is unchanged.
+pub(crate) const PATTERN_U8_ALL_ZERO: [u8; 16] = [0; 16];
+pub(crate) const PATTERN_U8_ALL_ONE: [u8; 16] = [1; 16];
+pub(crate) const PATTERN_U32_ALL_ZERO: [u32; 16] = [0; 16];
