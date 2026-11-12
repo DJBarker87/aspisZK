@@ -25,12 +25,12 @@ import AspisV8R19.OracleFiniteSupport
 
 set_option autoImplicit false
 noncomputable section
-namespace AspisR1.AspisLib.InitialTagDecision
+namespace AspisR1.InitialTagDecision
 open FS FS2 R0C.V3
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 open RawCutProverCompiler RawCutTranscriptRun
-open AspisR1.AspisLib.RecordedBinaryExperimentBin
+open AspisR1.RecordedBinaryExperimentBin
 
 theorem erased_transcript_tag (D : LiteralByteProtocol.Decoder)
     (H : Bytes → State) (pub : LiteralTranscript.Public) (pf : LiteralProtocol.Proof)
@@ -42,4 +42,4 @@ theorem erased_transcript_tag (D : LiteralByteProtocol.Decoder)
   | zero => rfl
   | succ n ih => exact ih
 
-end AspisR1.AspisLib.InitialTagDecision
+end AspisR1.InitialTagDecision

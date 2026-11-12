@@ -16,7 +16,7 @@ import R1FinalSoundnessNumeric
 
 set_option autoImplicit false
 noncomputable section
-namespace AspisR1.AspisLib.R1FinalSoundness
+namespace AspisR1.R1FinalSoundness
 open FS FS2 R0C.V3
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
@@ -35,4 +35,4 @@ structure SourceInputs where
   rho : E
   state32 : State
 
-end AspisR1.AspisLib.R1FinalSoundness
+end AspisR1.R1FinalSoundness

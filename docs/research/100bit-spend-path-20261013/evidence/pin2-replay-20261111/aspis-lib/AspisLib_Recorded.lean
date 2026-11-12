@@ -20,17 +20,17 @@ import LiteralTableWordChoiceBin
 
 set_option autoImplicit false
 noncomputable section
-namespace AspisR1.AspisLib.RecordedBinaryExperimentBin
+namespace AspisR1.RecordedBinaryExperimentBin
 open FS FS2 R0C.V3
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 open RawCutProverCompiler RawCutTranscriptRun
 open RawRecordedOracleExtractionMassBin
 
-abbrev SourceInputs := AspisR1.AspisLib.R1FinalSoundness.SourceInputs
+abbrev SourceInputs := R1FinalSoundness.SourceInputs
 
 abbrev dec := RawAdaptiveLiteralDecoder.decode RawFullPublicSelection.select LiteralTableWordChoiceBin.choose
 abbrev binaryCollision (Q : Nat) (run : RunView) : Prop :=
   BinCombinedMerkleCollision.Coll SelectedTranscriptParams.params.iv Q run
 
-end AspisR1.AspisLib.RecordedBinaryExperimentBin
+end AspisR1.RecordedBinaryExperimentBin

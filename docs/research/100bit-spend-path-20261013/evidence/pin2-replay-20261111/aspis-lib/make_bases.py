@@ -23,21 +23,21 @@ def write(name,imports,ns,opn,body,extra_imports=()):
     txt='\n'.join('import '+i for i in list(dict.fromkeys(list(extra_imports)+imports)))+'\n\n'+hdr+f'namespace {ns}\n'+'\n'.join(opn)+'\n\n'+body+'\n\nend '+ns+'\n'
     open(f'trimmed/{name}.lean','w').write(txt); print('wrote',name,len(imports),'imports')
 # 1 SourceInputs
-write('AspisLib_SourceInputs',frontier('R1FinalSoundness'),'AspisR1.AspisLib.R1FinalSoundness',
+write('AspisLib_SourceInputs',frontier('R1FinalSoundness'),'AspisR1.R1FinalSoundness',
       opens('R1FinalSoundness',['DecoderInstanceBoundary']),decl('R1FinalSoundness','SourceInputs','structure'))
 # 2 Recorded: dec, binaryCollision, SourceInputs
-body='abbrev SourceInputs := AspisR1.AspisLib.R1FinalSoundness.SourceInputs\n\n'+decl('RecordedBinaryExperimentBin','dec')+'\n'+decl('RecordedBinaryExperimentBin','binaryCollision')
-write('AspisLib_Recorded',frontier('RecordedBinaryExperimentBin'),'AspisR1.AspisLib.RecordedBinaryExperimentBin',
+body='abbrev SourceInputs := R1FinalSoundness.SourceInputs\n\n'+decl('RecordedBinaryExperimentBin','dec')+'\n'+decl('RecordedBinaryExperimentBin','binaryCollision')
+write('AspisLib_Recorded',frontier('RecordedBinaryExperimentBin'),'AspisR1.RecordedBinaryExperimentBin',
       opens('RecordedBinaryExperimentBin',['DecoderInstanceBoundaryBin']),body,['AspisLib_SourceInputs'])
 # 3 Tag
-write('AspisLib_Tag',frontier('InitialTagDecision'),'AspisR1.AspisLib.InitialTagDecision',
-      opens('InitialTagDecision',['RecordedBinaryExperimentBin'])+['open AspisR1.AspisLib.RecordedBinaryExperimentBin'],
+write('AspisLib_Tag',frontier('InitialTagDecision'),'AspisR1.InitialTagDecision',
+      opens('InitialTagDecision',['RecordedBinaryExperimentBin'])+['open AspisR1.RecordedBinaryExperimentBin'],
       decl('InitialTagDecision','erased_transcript_tag','theorem'),['AspisLib_Recorded'])
 # 4 QueryAccounting
 body='variable {X M C I A Y : Type} [DecidableEq I]\n\n'+decl('DecoderQueryAccounting','starts_le_queries','theorem')+'\n\n'+decl('DecoderQueryAccounting','AdversaryQueries')
-write('AspisLib_QueryAccounting',frontier('DecoderQueryAccounting'),'AspisR1.AspisLib.DecoderQueryAccounting',
-      opens('DecoderQueryAccounting',['RecordedBinaryExperimentBin'])+['open AspisR1.AspisLib.RecordedBinaryExperimentBin'],body,['AspisLib_Recorded'])
+write('AspisLib_QueryAccounting',frontier('DecoderQueryAccounting'),'AspisR1.DecoderQueryAccounting',
+      opens('DecoderQueryAccounting',['RecordedBinaryExperimentBin'])+['open AspisR1.RecordedBinaryExperimentBin'],body,['AspisLib_Recorded'])
 # 5 Guard
-write('AspisLib_Guard',frontier('OraclePortAdmission'),'AspisR1.AspisLib.OraclePortAdmission',
-      opens('OraclePortAdmission',['open RecordedBinaryExperimentBin (SourceInputs)'])+['open AspisR1.AspisLib.RecordedBinaryExperimentBin (SourceInputs)'],
+write('AspisLib_Guard',frontier('OraclePortAdmission'),'AspisR1.OraclePortAdmission',
+      opens('OraclePortAdmission',['open RecordedBinaryExperimentBin (SourceInputs)'])+['open AspisR1.RecordedBinaryExperimentBin (SourceInputs)'],
       decl('OraclePortAdmission','Guard'),['AspisLib_Recorded'])

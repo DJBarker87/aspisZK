@@ -27,7 +27,7 @@ import AspisV8R19.OracleFiniteSupport
 
 set_option autoImplicit false
 noncomputable section
-namespace AspisR1.AspisLib.OraclePortAdmission
+namespace AspisR1.OraclePortAdmission
 open FS FS2
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
@@ -36,9 +36,9 @@ open RawCutTranscriptRun (ErasedPrefix ErasedMessage)
 open OraclePortExperiment (Decision verifier original recorded)
 open OracleDecisionFeasibilityCompiler (compiled_experiment_eval)
 
-open AspisR1.AspisLib.RecordedBinaryExperimentBin (SourceInputs)
+open AspisR1.RecordedBinaryExperimentBin (SourceInputs)
 
 def Guard (p : ErasedPrefix) : Prop :=
   p.statement.tag = 2 ∧ D0ScheduleAdmission.Schedule p ∧ ∃ i, D0InstanceAdmission.Fields p i
 
-end AspisR1.AspisLib.OraclePortAdmission
+end AspisR1.OraclePortAdmission
