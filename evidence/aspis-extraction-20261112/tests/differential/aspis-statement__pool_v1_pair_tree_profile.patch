@@ -1,0 +1,207 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs	2026-11-12 18:46:31
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs	2026-11-12 18:46:31
+@@ -1166,3 +1166,204 @@
+         assert!(accepted > 10_000, "{accepted}");
+     }
+ }
++
++/// Differential test of `PoolV1PairLeafWitnessV1::validate` against its frozen body (commit 3d700effcabe,
++/// pair_tree_profile.rs 124-158). The frozen body is kept verbatim; adapted only by its name and by taking the
++/// witness as the parameter `this` in place of `&self` (a free function in place of a method).
++#[cfg(test)]
++mod differential_pair_leaf_witness_validate {
++    extern crate std;
++    use super::*;
++
++    fn frozen_validate(this: &PoolV1PairLeafWitnessV1) -> Result<(), PoolV1PairLeafErrorV1> {
++        if !digest_is_canonical(&this.first_commitment)
++            || !digest_is_canonical(&this.second_commitment)
++        {
++            return Err(PoolV1PairLeafErrorV1::NonCanonicalCommitment);
++        }
++        if this.second_occupied.0 >= P {
++            return Err(PoolV1PairLeafErrorV1::NonCanonicalOccupancy);
++        }
++        if this.second_occupancy_inverse.0 >= P {
++            return Err(PoolV1PairLeafErrorV1::NonCanonicalInverse);
++        }
++
++        let one_minus_occupied = M31::ONE.sub(this.second_occupied);
++        if this.second_occupied.mul(this.second_occupied.sub(M31::ONE)) != M31::ZERO {
++            return Err(PoolV1PairLeafErrorV1::OccupancyNotBoolean);
++        }
++        if this.second_sentinel().mul(this.second_occupancy_inverse) != this.second_occupied {
++            return Err(PoolV1PairLeafErrorV1::SentinelInverseMismatch);
++        }
++        if one_minus_occupied.mul(this.second_occupancy_inverse) != M31::ZERO {
++            return Err(PoolV1PairLeafErrorV1::EmptyInverseNonZero);
++        }
++        if this
++            .second_commitment
++            .iter()
++            .any(|limb| one_minus_occupied.mul(*limb) != M31::ZERO)
++        {
++            return Err(PoolV1PairLeafErrorV1::EmptyCommitmentNonZero);
++        }
++        if this.second_occupied == M31::ONE && this.second_sentinel() == M31::ZERO {
++            return Err(PoolV1PairLeafErrorV1::OccupiedSentinelZero);
++        }
++        Ok(())
++    }
++
++    /// splitmix64 with a fixed seed.
++    struct Rng(u64);
++    impl Rng {
++        fn next(&mut self) -> u64 {
++            self.0 = self.0.wrapping_add(0x9e37_79b9_7f4a_7c15);
++            let mut z = self.0;
++            z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
++            z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
++            z ^ (z >> 31)
++        }
++        /// Any u32: the canonical edges 0, 1, 2, p - 2, p - 1, the non-canonical p, p + 1, 2^31 and u32::MAX, or
++        /// uniform below p.
++        fn any(&mut self) -> M31 {
++            const EDGES: [u32; 9] = [0, 1, 2, P - 2, P - 1, P, P + 1, 1 << 31, u32::MAX];
++            M31(if self.next() % 2 == 0 { EDGES[(self.next() % 9) as usize] } else { (self.next() % u64::from(P)) as u32 })
++        }
++        /// A canonical value: 0, 1, 2, p - 2 or p - 1 with probability 3/8, otherwise uniform below p.
++        fn canonical(&mut self) -> M31 {
++            M31(match self.next() % 8 {
++                0 => 0,
++                1 => 1,
++                2 => [2, P - 2, P - 1][(self.next() % 3) as usize],
++                _ => (self.next() % u64::from(P)) as u32,
++            })
++        }
++        fn nonzero(&mut self) -> M31 {
++            M31(1 + (self.next() % u64::from(P - 1)) as u32)
++        }
++    }
++
++    /// A witness that passes every check: occupied (sentinel non-zero, inverse its inverse) or empty (all zero).
++    fn valid(rng: &mut Rng, occupied: bool) -> PoolV1PairLeafWitnessV1 {
++        let first_commitment = core::array::from_fn(|_| rng.canonical());
++        if occupied {
++            let mut second_commitment: Digest = core::array::from_fn(|_| rng.canonical());
++            second_commitment[POOL_V1_PAIR_SECOND_SENTINEL_LANE] = rng.nonzero();
++            PoolV1PairLeafWitnessV1 {
++                first_commitment,
++                second_occupied: M31::ONE,
++                second_commitment,
++                second_occupancy_inverse: second_commitment[POOL_V1_PAIR_SECOND_SENTINEL_LANE].inv(),
++            }
++        } else {
++            PoolV1PairLeafWitnessV1 {
++                first_commitment,
++                second_occupied: M31::ZERO,
++                second_commitment: [M31::ZERO; 8],
++                second_occupancy_inverse: M31::ZERO,
++            }
++        }
++    }
++
++    fn index(result: Result<(), PoolV1PairLeafErrorV1>) -> usize {
++        match result {
++            Ok(()) => 0,
++            Err(PoolV1PairLeafErrorV1::NonCanonicalCommitment) => 1,
++            Err(PoolV1PairLeafErrorV1::NonCanonicalOccupancy) => 2,
++            Err(PoolV1PairLeafErrorV1::NonCanonicalInverse) => 3,
++            Err(PoolV1PairLeafErrorV1::OccupancyNotBoolean) => 4,
++            Err(PoolV1PairLeafErrorV1::SentinelInverseMismatch) => 5,
++            Err(PoolV1PairLeafErrorV1::EmptyInverseNonZero) => 6,
++            Err(PoolV1PairLeafErrorV1::EmptyCommitmentNonZero) => 7,
++            Err(PoolV1PairLeafErrorV1::OccupiedSentinelZero) => 8,
++            Err(PoolV1PairLeafErrorV1::SelectedSlotEmpty) => 9,
++        }
++    }
++
++    #[test]
++    fn same_result_as_frozen_body() {
++        let start = std::time::Instant::now();
++        let mut rng = Rng(0x1eaf_0000_0000_0005);
++        let mut seen = [0usize; 10];
++        let mut cases = 0usize;
++        let check = |w: &PoolV1PairLeafWitnessV1, seen: &mut [usize; 10]| {
++            let new = w.validate();
++            assert_eq!(new, frozen_validate(w), "{w:?}");
++            seen[index(new)] += 1;
++        };
++        let edges = [0, 1, 2, P - 2, P - 1, P, P + 1, 1 << 31, u32::MAX].map(M31);
++        // From a valid occupied and a valid empty witness: each single field (every commitment limb, the occupancy,
++        // the inverse) set to each edge value.
++        for _ in 0..20 {
++            for occupied in [false, true] {
++                let base = valid(&mut rng, occupied);
++                check(&base, &mut seen);
++                cases += 1;
++                for &e in &edges {
++                    for limb in 0..8 {
++                        let mut w = base;
++                        w.first_commitment[limb] = e;
++                        check(&w, &mut seen);
++                        let mut w = base;
++                        w.second_commitment[limb] = e;
++                        check(&w, &mut seen);
++                        cases += 2;
++                    }
++                    let mut w = base;
++                    w.second_occupied = e;
++                    check(&w, &mut seen);
++                    let mut w = base;
++                    w.second_occupancy_inverse = e;
++                    check(&w, &mut seen);
++                    cases += 2;
++                }
++            }
++        }
++        // Empty witness with one non-zero commitment limb (each lane), with and without a non-zero inverse.
++        for limb in 0..8 {
++            for inverse in [M31::ZERO, M31::ONE] {
++                let mut w = valid(&mut rng, false);
++                w.second_commitment[limb] = rng.nonzero();
++                w.second_occupancy_inverse = inverse;
++                check(&w, &mut seen);
++                cases += 1;
++            }
++        }
++        // Random witnesses: structured (occupancy 0 or 1, sentinel and inverse related or not) and unstructured.
++        for n in 0..300_000u64 {
++            let occupied = rng.next() % 2 == 0;
++            let w = match n % 4 {
++                0 => PoolV1PairLeafWitnessV1 {
++                    first_commitment: core::array::from_fn(|_| rng.any()),
++                    second_occupied: rng.any(),
++                    second_commitment: core::array::from_fn(|_| rng.any()),
++                    second_occupancy_inverse: rng.any(),
++                },
++                1 => {
++                    let mut w = valid(&mut rng, occupied);
++                    w.second_commitment[(rng.next() % 8) as usize] = rng.canonical();
++                    w
++                }
++                2 => {
++                    let mut w = valid(&mut rng, occupied);
++                    w.second_occupied = M31((rng.next() % 2) as u32);
++                    w.second_occupancy_inverse = rng.canonical();
++                    w
++                }
++                _ => valid(&mut rng, occupied),
++            };
++            check(&w, &mut seen);
++            cases += 1;
++        }
++        assert_eq!(cases, 20 * 2 * (1 + 9 * 18) + 16 + 300_000);
++        // Every error value of the frozen code is reached except OccupiedSentinelZero (an occupancy of one has
++        // already required sentinel * inverse = 1) and SelectedSlotEmpty (not returned by `validate`).
++        for k in 0..8 {
++            assert!(seen[k] > 100, "{seen:?}");
++        }
++        std::println!(
++            "differential_pair_leaf_witness_validate: {cases} cases; outcomes [Ok, NonCanonicalCommitment, \
++             NonCanonicalOccupancy, NonCanonicalInverse, OccupancyNotBoolean, SentinelInverseMismatch, \
++             EmptyInverseNonZero, EmptyCommitmentNonZero, OccupiedSentinelZero, SelectedSlotEmpty] = {seen:?}; {} ms",
++            start.elapsed().as_millis()
++        );
++    }
++}

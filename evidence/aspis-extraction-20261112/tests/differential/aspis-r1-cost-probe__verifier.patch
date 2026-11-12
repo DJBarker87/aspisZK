@@ -1,0 +1,135 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs	2026-11-12 18:46:31
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs	2026-11-12 18:46:31
+@@ -660,6 +660,132 @@
+             for i in 0..7 { bytes[32 * i..32 * i + 32].copy_from_slice(&wide(&mut s)); }
+             let x = E::from_le_bytes(&wide(&mut s)).unwrap();
+             assert_eq!(polynomial(&bytes, x), old(&bytes, x));
++        }
++    }
++}
++
++/// Differential test of `polynomial` against its frozen body (commit 3d700effcabe, verifier.rs 366) over the whole
++/// range of the wide field: all eight limbs of every coefficient and of the point drawn (the test above draws only
++/// the low four, so its high halves are zero). Also the inputs on which the frozen body panics (a coefficient with a
++/// non-canonical limb, fewer than 224 bytes): the new body must panic with the same message. The frozen body is kept
++/// verbatim; adapted only by its name.
++#[cfg(test)]
++mod differential_polynomial_full_range {
++    extern crate std;
++    use super::*;
++    use aspis_core::field::P;
++
++    fn frozen_polynomial(bytes:&[u8],x:E)->E {(0..7).rev().fold(E::ZERO,|a,i|a.mul(x).add(field(bytes,i)))}
++
++    /// splitmix64 with a fixed seed.
++    struct Rng(u64);
++    impl Rng {
++        fn next(&mut self) -> u64 {
++            self.0 = self.0.wrapping_add(0x9e37_79b9_7f4a_7c15);
++            let mut z = self.0;
++            z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
++            z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
++            z ^ (z >> 31)
++        }
++        /// A canonical limb: 0, 1, 2, p - 2 or p - 1 with probability 3/8, otherwise uniform below p.
++        fn limb(&mut self) -> u32 {
++            match self.next() % 8 {
++                0 => 0,
++                1 => 1,
++                2 => [2, P - 2, P - 1][(self.next() % 3) as usize],
++                _ => (self.next() % u64::from(P)) as u32,
++            }
++        }
++        /// A canonical wide value over the whole range (all eight limbs drawn).
++        fn wide(&mut self) -> E {
++            E::from_limbs(core::array::from_fn(|_| self.limb())).unwrap()
++        }
++    }
++
++    /// Eight little-endian limbs into 32 bytes.
++    fn put(out: &mut [u8], limbs: [u32; 8]) {
++        for (k, limb) in limbs.iter().enumerate() {
++            out[4 * k..4 * k + 4].copy_from_slice(&limb.to_le_bytes());
++        }
++    }
++
++    /// The panic message, or the value.
++    fn outcome<T>(f: impl FnOnce() -> T) -> Result<T, std::string::String> {
++        std::panic::catch_unwind(std::panic::AssertUnwindSafe(f)).map_err(|payload| {
++            if let Some(s) = payload.downcast_ref::<&str>() {
++                std::string::String::from(*s)
++            } else if let Some(s) = payload.downcast_ref::<std::string::String>() {
++                s.clone()
++            } else {
++                std::string::String::from("non-string panic payload")
++            }
++        })
++    }
++
++    /// Seven coefficients: canonical limbs over the whole range.
++    fn coefficients(rng: &mut Rng, length: usize) -> Vec<u8> {
++        let mut out = alloc::vec![0u8; length.max(224)];
++        for i in 0..7 {
++            put(&mut out[32 * i..32 * i + 32], core::array::from_fn(|_| rng.limb()));
+         }
++        out.truncate(length);
++        out
+     }
++
++    /// [value, panic]
++    fn compare(bytes: &[u8], x: E, seen: &mut [usize; 2]) {
++        let new = outcome(|| polynomial(bytes, x));
++        assert_eq!(new, outcome(|| frozen_polynomial(bytes, x)), "bytes {bytes:?} x {x:?}");
++        seen[usize::from(new.is_err())] += 1;
++    }
++
++    #[test]
++    fn same_result_as_frozen_body_over_the_whole_range() {
++        let start = std::time::Instant::now();
++        let mut rng = Rng(0x9017_0000_0000_0010);
++        let mut seen = [0usize; 2];
++        let mut cases = 0usize;
++        // Every coefficient zero, one, or all limbs p - 1 or p - 2, at the same edge points.
++        let edges = [E::ZERO, E::ONE, E::from_limbs([P - 1; 8]).unwrap(), E::from_limbs([P - 2; 8]).unwrap(), E::from_limbs([0, 0, 0, 0, P - 1, 0, 0, 0]).unwrap()];
++        for &c in &edges {
++            for &x in &edges {
++                let mut bytes = [0u8; 224];
++                for i in 0..7 {
++                    bytes[32 * i..32 * i + 32].copy_from_slice(&c.to_le_bytes());
++                }
++                compare(&bytes, x, &mut seen);
++                cases += 1;
++            }
++        }
++        // Lengths: one short (and shorter) panics in both; exact and longer read the first 224 bytes.
++        for length in [0usize, 1, 32, 192, 223, 224, 225, 256] {
++            let bytes = coefficients(&mut rng, length);
++            compare(&bytes, rng.wide(), &mut seen);
++            cases += 1;
++        }
++        // One non-canonical limb in one coefficient (each coefficient, low and high halves): panics in both.
++        for i in 0..7 {
++            for limb in [0usize, 3, 4, 7] {
++                let mut bytes = coefficients(&mut rng, 224);
++                let at = 32 * i + 4 * limb;
++                bytes[at..at + 4].copy_from_slice(&[P, u32::MAX][(rng.next() % 2) as usize].to_le_bytes());
++                compare(&bytes, rng.wide(), &mut seen);
++                cases += 1;
++            }
++        }
++        // Random coefficients and points over the whole range.
++        for _ in 0..200_000 {
++            let bytes = coefficients(&mut rng, 224);
++            compare(&bytes, rng.wide(), &mut seen);
++            cases += 1;
++        }
++        assert_eq!(cases, 5 * 5 + 8 + 7 * 4 + 200_000);
++        assert_eq!(seen[1], 5 + 7 * 4, "{seen:?}");
++        std::println!(
++            "differential_polynomial_full_range: {cases} cases (value {}, panic in both {}), {} ms",
++            seen[0],
++            seen[1],
++            start.elapsed().as_millis()
++        );
++    }
+ }

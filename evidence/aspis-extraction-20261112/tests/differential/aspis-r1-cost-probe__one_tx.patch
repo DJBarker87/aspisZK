@@ -1,0 +1,475 @@
+--- a/crates/aspis-r1-cost-probe/src/one_tx.rs	2026-11-12 18:46:31
++++ b/crates/aspis-r1-cost-probe/src/one_tx.rs	2026-11-12 18:46:31
+@@ -1950,6 +1950,472 @@
+             let mut low: Vec<u32> = set.iter().map(|u| u / 4).collect();
+             low.dedup();
+             assert!(multiproof::node_count_merged(&low).unwrap() <= format::SLOT_NODES[2]);
++        }
++    }
++}
++
++/// Differential test of `relation_view` against its frozen body (commit 3d700effcabe, one_tx.rs 125-138). The frozen
++/// body is kept verbatim; adapted only by its name. The complete result is compared (every field of the view, the
++/// slices by address and length, or the error value), and where the frozen body panics (a proof shorter than the
++/// fields it reads) the new one must panic with the same message.
++#[cfg(test)]
++mod differential_relation_view {
++    extern crate std;
++    use super::*;
++    use alloc::vec::Vec;
++    use aspis_core::field::P;
++
++    fn frozen_relation_view(proof: &[u8]) -> Result<View<'_>, Error> {
++        let inactive = E::from_le_bytes(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?;
++        Ok(View {
++            variant: Variant::S2,
++            semantic: NO_BYTES,
++            y1: NO_BYTES,
++            inactive,
++            round0: &proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT],
++            folded_root: None,
++            round1: &proof[compact::OFF_ROUND1..compact::OFF_FINAL],
++            final_message: &proof[compact::OFF_FINAL..compact::OFF_OPENINGS],
++            query_bytes: NO_BYTES,
++        })
++    }
++
++    /// splitmix64 with a fixed seed.
++    struct Rng(u64);
++    impl Rng {
++        fn next(&mut self) -> u64 {
++            self.0 = self.0.wrapping_add(0x9e37_79b9_7f4a_7c15);
++            let mut z = self.0;
++            z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
++            z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
++            z ^ (z >> 31)
++        }
++        /// A canonical limb: 0, 1, 2, p - 2 or p - 1 with probability 3/8, otherwise uniform below p.
++        fn limb(&mut self) -> u32 {
++            match self.next() % 8 {
++                0 => 0,
++                1 => 1,
++                2 => [2, P - 2, P - 1][(self.next() % 3) as usize],
++                _ => (self.next() % u64::from(P)) as u32,
++            }
++        }
++        /// Any limb: as `limb`, or with probability 1/16 one of p, p + 1, 2^31, u32::MAX.
++        fn any_limb(&mut self) -> u32 {
++            if self.next() % 16 == 0 {
++                [P, P + 1, 1 << 31, u32::MAX][(self.next() % 4) as usize]
++            } else {
++                self.limb()
++            }
++        }
++        fn bytes(&mut self, n: usize) -> Vec<u8> {
++            (0..n).map(|_| self.next() as u8).collect()
++        }
++    }
++
++    /// Eight little-endian limbs into 32 bytes.
++    fn put(out: &mut [u8], limbs: [u32; 8]) {
++        for (k, limb) in limbs.iter().enumerate() {
++            out[4 * k..4 * k + 4].copy_from_slice(&limb.to_le_bytes());
++        }
++    }
++
++    /// The panic message, or the value.
++    fn outcome<T>(f: impl FnOnce() -> T) -> Result<T, std::string::String> {
++        std::panic::catch_unwind(std::panic::AssertUnwindSafe(f)).map_err(|payload| {
++            if let Some(s) = payload.downcast_ref::<&str>() {
++                std::string::String::from(*s)
++            } else if let Some(s) = payload.downcast_ref::<std::string::String>() {
++                s.clone()
++            } else {
++                std::string::String::from("non-string panic payload")
++            }
++        })
++    }
++
++    /// Every field of a view: each slice as (address, length), an empty slice as (0, 0); the inactive value; the
++    /// folded root as (address, bytes).
++    type Key = (Variant, [(usize, usize); 6], E, Option<(usize, [u8; 32])>);
++    fn key(v: View<'_>) -> Key {
++        fn s(x: &[u8]) -> (usize, usize) {
++            if x.is_empty() {
++                (0, 0)
++            } else {
++                (x.as_ptr() as usize, x.len())
++            }
++        }
++        (
++            v.variant,
++            [s(v.semantic), s(v.y1), s(v.round0), s(v.round1), s(v.final_message), s(v.query_bytes)],
++            v.inactive,
++            v.folded_root.map(|r| (r.as_ptr() as usize, *r)),
++        )
++    }
++
++    /// Proof lengths: zero, and one short, exact and one long at the end of every field the view reads, and at
++    /// the full proof length.
++    fn lengths() -> [usize; 23] {
++        use compact::*;
++        [
++            0,
++            1,
++            OFF_INACTIVE,
++            OFF_ROUND0 - 1,
++            OFF_ROUND0,
++            OFF_ROUND0 + 1,
++            OFF_FOLDED_ROOT - 1,
++            OFF_FOLDED_ROOT,
++            OFF_FOLDED_ROOT + 1,
++            OFF_ROUND1 - 1,
++            OFF_ROUND1,
++            OFF_ROUND1 + 1,
++            OFF_FINAL - 1,
++            OFF_FINAL,
++            OFF_FINAL + 1,
++            OFF_OPENINGS - 1,
++            OFF_OPENINGS,
++            OFF_OPENINGS + 1,
++            PROOF_BYTES - 1,
++            PROOF_BYTES,
++            PROOF_BYTES + 1,
++            OFF_INACTIVE + 16,
++            OFF_INACTIVE + 31,
++        ]
++    }
++
++    /// The inactive field: canonical, or one limb (0 or 7) non-canonical.
++    fn inactive_variants(rng: &mut Rng) -> [[u32; 8]; 9] {
++        let good: [u32; 8] = core::array::from_fn(|_| rng.limb());
++        let mut out = [good; 9];
++        for (k, v) in [P, P + 1, 1 << 31, u32::MAX].into_iter().enumerate() {
++            out[1 + 2 * k][0] = v;
++            out[2 + 2 * k][7] = v;
++        }
++        out
++    }
++
++    /// [view, Parse, panic]
++    fn compare(proof: &[u8], seen: &mut [usize; 3]) {
++        let new = outcome(|| relation_view(proof).map(key));
++        let old = outcome(|| frozen_relation_view(proof).map(key));
++        assert_eq!(new, old, "proof length {} inactive {:?}", proof.len(), proof.get(compact::OFF_INACTIVE..compact::OFF_ROUND0));
++        seen[match new {
++            Ok(Ok(_)) => 0,
++            Ok(Err(_)) => 1,
++            Err(_) => 2,
++        }] += 1;
++    }
++
++    #[test]
++    fn same_result_as_frozen_body() {
++        let start = std::time::Instant::now();
++        let mut rng = Rng(0x7e1a_0000_0000_000c);
++        let mut seen = [0usize; 3];
++        let mut cases = 0usize;
++        // Every length edge (of the compact layout the function reads, and the one-transaction proof length) with
++        // three inactive fields (canonical, limb 0 = p, limb 7 = p).
++        for length in lengths().into_iter().chain([format::PROOF_BYTES - 1, format::PROOF_BYTES, format::PROOF_BYTES + 1]) {
++            let variants = inactive_variants(&mut rng);
++            for limbs in [variants[0], variants[1], variants[2]] {
++                let mut proof = rng.bytes(compact::PROOF_BYTES + 1);
++                put(&mut proof[compact::OFF_INACTIVE..compact::OFF_ROUND0], limbs);
++                compare(&proof[..length], &mut seen);
++                cases += 1;
++            }
++        }
++        // Full-length proofs of both formats: every inactive variant.
++        for _ in 0..20 {
++            for limbs in inactive_variants(&mut rng) {
++                for length in [compact::PROOF_BYTES, format::PROOF_BYTES] {
++                    let mut proof = rng.bytes(length);
++                    put(&mut proof[compact::OFF_INACTIVE..compact::OFF_ROUND0], limbs);
++                    compare(&proof, &mut seen);
++                    cases += 1;
++                }
++            }
++        }
++        // Random proofs: inactive limbs over the whole range, some non-canonical.
++        for n in 0..20_000 {
++            let mut proof = rng.bytes(if n % 2 == 0 { compact::PROOF_BYTES } else { format::PROOF_BYTES });
++            let limbs = core::array::from_fn(|_| rng.any_limb());
++            put(&mut proof[compact::OFF_INACTIVE..compact::OFF_ROUND0], limbs);
++            compare(&proof, &mut seen);
++            cases += 1;
++        }
++        assert_eq!(cases, 26 * 3 + 20 * 9 * 2 + 20_000);
++        assert!(seen[0] > 5_000 && seen[1] > 1_000 && seen[2] > 10, "{seen:?}");
++        std::println!(
++            "differential_relation_view: {cases} cases (view {}, Parse {}, panic in both {}), {} ms",
++            seen[0],
++            seen[1],
++            seen[2],
++            start.elapsed().as_millis()
++        );
++    }
++}
++
++/// Differential test of `final_rounds` against its frozen body (commit 3d700effcabe, one_tx.rs 651-664). The frozen
++/// body is kept verbatim; adapted only by its name and by dropping `#[inline(always)]`. Compared: the result (the
++/// running claim and the six challenges, or the error value) and the transcript state afterwards (the function
++/// absorbs one round into the transcript before it reads the next); where the frozen body panics (a certificate
++/// shorter than the rounds it reaches) the new one must panic with the same message and leave the same state.
++#[cfg(test)]
++mod differential_final_rounds {
++    extern crate std;
++    use super::*;
++    use alloc::vec::Vec;
++    use aspis_core::field::P;
++    use sha2::{Digest, Sha256};
++
++    fn frozen_final_rounds<H: Digest32>(t: &mut Transcript<H>, certificate: &[u8], start: E) -> Result<(E, [K; 6]), Error> {
++        let mut current = start;
++        let mut r = [K::ZERO; 6];
++        for b in 0..6 {
++            let bytes = &certificate[64 * b..64 * b + 64];
++            let c0 = E::from_le_bytes(&bytes[..32]).ok_or(Error::Parse)?;
++            let c2 = E::from_le_bytes(&bytes[32..]).ok_or(Error::Parse)?;
++            r[b] = t.scalar_k(ROW_ROUND + b as u8, bytes);
++            // s(0) + s(1) = 2 c0 + c1 + c2 is the running claim.
++            let c1 = current.sub(c0).sub(c0).sub(c2);
++            current = c0.add(c1.add(c2.mul_qm31(r[b])).mul_qm31(r[b]));
++        }
++        Ok((current, r))
++    }
++
++    #[derive(Clone, Copy)]
++    struct Sha;
++    impl Digest32 for Sha {
++        fn digest(&self, parts: &[&[u8]]) -> [u8; 32] {
++            let mut d = Sha256::new();
++            for part in parts {
++                d.update(part);
++            }
++            d.finalize().into()
+         }
+     }
++
++    /// splitmix64 with a fixed seed.
++    struct Rng(u64);
++    impl Rng {
++        fn next(&mut self) -> u64 {
++            self.0 = self.0.wrapping_add(0x9e37_79b9_7f4a_7c15);
++            let mut z = self.0;
++            z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
++            z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
++            z ^ (z >> 31)
++        }
++        /// A canonical limb: 0, 1, 2, p - 2 or p - 1 with probability 3/8, otherwise uniform below p.
++        fn limb(&mut self) -> u32 {
++            match self.next() % 8 {
++                0 => 0,
++                1 => 1,
++                2 => [2, P - 2, P - 1][(self.next() % 3) as usize],
++                _ => (self.next() % u64::from(P)) as u32,
++            }
++        }
++        /// A canonical wide value over the whole range (all eight limbs drawn).
++        fn wide(&mut self) -> E {
++            E::from_limbs(core::array::from_fn(|_| self.limb())).unwrap()
++        }
++    }
++
++    /// Eight little-endian limbs into 32 bytes.
++    fn put(out: &mut [u8], limbs: [u32; 8]) {
++        for (k, limb) in limbs.iter().enumerate() {
++            out[4 * k..4 * k + 4].copy_from_slice(&limb.to_le_bytes());
++        }
++    }
++
++    /// The panic message, or the value.
++    fn outcome<T>(f: impl FnOnce() -> T) -> Result<T, std::string::String> {
++        std::panic::catch_unwind(std::panic::AssertUnwindSafe(f)).map_err(|payload| {
++            if let Some(s) = payload.downcast_ref::<&str>() {
++                std::string::String::from(*s)
++            } else if let Some(s) = payload.downcast_ref::<std::string::String>() {
++                s.clone()
++            } else {
++                std::string::String::from("non-string panic payload")
++            }
++        })
++    }
++
++    /// A certificate of `length` bytes: canonical wide values over the whole range, then with probability 1/2 one
++    /// limb (of c0 or c2 of a random round) replaced by a non-canonical value.
++    fn certificate(rng: &mut Rng, length: usize) -> Vec<u8> {
++        let mut out = alloc::vec![0u8; length.max(CERTIFICATE_BYTES)];
++        for k in 0..CERTIFICATE_BYTES / 32 {
++            put(&mut out[32 * k..32 * k + 32], core::array::from_fn(|_| rng.limb()));
++        }
++        if rng.next() % 2 == 0 {
++            let limb = (rng.next() % (CERTIFICATE_BYTES as u64 / 4)) as usize;
++            out[4 * limb..4 * limb + 4].copy_from_slice(&[P, P + 1, 1 << 31, u32::MAX][(rng.next() % 4) as usize].to_le_bytes());
++        }
++        out.truncate(length);
++        out
++    }
++
++    type Run = (Result<Result<(E, [K; 6]), Error>, std::string::String>, [u8; 32]);
++
++    /// [Ok, Parse, panic]
++    fn compare(state: [u8; 32], certificate: &[u8], start: E, seen: &mut [usize; 3]) {
++        let mut t = Transcript::resume(Sha, state);
++        let new: Run = (outcome(|| final_rounds(&mut t, certificate, start)), t.state);
++        let mut t = Transcript::resume(Sha, state);
++        let old: Run = (outcome(|| frozen_final_rounds(&mut t, certificate, start)), t.state);
++        assert_eq!(new, old, "state {state:?} certificate {certificate:?} start {start:?}");
++        seen[match new.0 {
++            Ok(Ok(_)) => 0,
++            Ok(Err(_)) => 1,
++            Err(_) => 2,
++        }] += 1;
++    }
++
++    #[test]
++    fn same_result_and_transcript_as_frozen_body() {
++        let start_time = std::time::Instant::now();
++        let mut rng = Rng(0xf1a1_0000_0000_000d);
++        let mut seen = [0usize; 3];
++        let mut cases = 0usize;
++        // Every block boundary of the certificate: one short, exact and one long at the end of each c0 and c2.
++        let mut lengths = alloc::vec![0usize, 1];
++        for b in 1..=12 {
++            lengths.extend_from_slice(&[32 * b - 1, 32 * b, 32 * b + 1]);
++        }
++        lengths.push(2 * CERTIFICATE_BYTES);
++        for &length in &lengths {
++            for _ in 0..3 {
++                let state: [u8; 32] = core::array::from_fn(|_| rng.next() as u8);
++                let certificate = certificate(&mut rng, length);
++                compare(state, &certificate, rng.wide(), &mut seen);
++                cases += 1;
++            }
++        }
++        // Every limb of the exact-length certificate set to each non-canonical value in turn (an error at every
++        // round, in c0 and in c2), and to p - 1.
++        let mut base = alloc::vec![0u8; CERTIFICATE_BYTES];
++        for k in 0..CERTIFICATE_BYTES / 32 {
++            put(&mut base[32 * k..32 * k + 32], core::array::from_fn(|_| rng.limb()));
++        }
++        for limb in 0..CERTIFICATE_BYTES / 4 {
++            for v in [P - 1, P, P + 1, 1 << 31, u32::MAX] {
++                let mut c = base.clone();
++                c[4 * limb..4 * limb + 4].copy_from_slice(&v.to_le_bytes());
++                compare([7u8; 32], &c, E::ZERO, &mut seen);
++                cases += 1;
++            }
++        }
++        // Edge starts (zero, one, all limbs p - 1) on canonical certificates of zeros and of p - 1.
++        for start in [E::ZERO, E::ONE, E::from_limbs([P - 1; 8]).unwrap()] {
++            for fill in [0u32, 1, P - 1] {
++                let mut c = alloc::vec![0u8; CERTIFICATE_BYTES];
++                for k in 0..CERTIFICATE_BYTES / 32 {
++                    put(&mut c[32 * k..32 * k + 32], [fill; 8]);
++                }
++                compare([0u8; 32], &c, start, &mut seen);
++                cases += 1;
++            }
++        }
++        // Random exact-length certificates.
++        for _ in 0..20_000 {
++            let state: [u8; 32] = core::array::from_fn(|_| rng.next() as u8);
++            let certificate = certificate(&mut rng, CERTIFICATE_BYTES);
++            compare(state, &certificate, rng.wide(), &mut seen);
++            cases += 1;
++        }
++        assert_eq!(cases, 39 * 3 + 96 * 5 + 9 + 20_000);
++        assert!(seen[0] > 5_000 && seen[1] > 5_000 && seen[2] > 10, "{seen:?}");
++        std::println!(
++            "differential_final_rounds: {cases} cases (Ok {}, Parse {}, panic in both {}), {} ms",
++            seen[0],
++            seen[1],
++            seen[2],
++            start_time.elapsed().as_millis()
++        );
++    }
+ }
++
++/// Differential test of `parse_packed_shape` against its frozen body (commit 3d700effcabe, one_tx.rs 861-870). The
++/// frozen body is kept verbatim; adapted only by its name and by dropping `pub` and `#[inline(never)]`.
++#[cfg(test)]
++mod differential_parse_packed_shape {
++    extern crate std;
++    use super::*;
++    use alloc::vec::Vec;
++
++    fn frozen_parse_packed_shape(proof: &[u8]) -> Result<(), Error> {
++        if proof.len() != format::PROOF_BYTES
++            || &proof[..8] != format::MAGIC
++            || proof[8] != Variant::S2.tag()
++            || proof[9..16].iter().any(|&x| x != 0)
++        {
++            return Err(Error::Parse);
++        }
++        Ok(())
++    }
++
++    /// splitmix64 with a fixed seed.
++    struct Rng(u64);
++    impl Rng {
++        fn next(&mut self) -> u64 {
++            self.0 = self.0.wrapping_add(0x9e37_79b9_7f4a_7c15);
++            let mut z = self.0;
++            z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
++            z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
++            z ^ (z >> 31)
++        }
++        fn bytes(&mut self, n: usize) -> Vec<u8> {
++            (0..n).map(|_| self.next() as u8).collect()
++        }
++    }
++
++    #[test]
++    fn same_result_as_frozen_body() {
++        let start = std::time::Instant::now();
++        let mut rng = Rng(0x9ac4_0000_0000_000e);
++        // [Ok, Parse]
++        let mut seen = [0usize; 2];
++        let mut cases = 0usize;
++        let check = |proof: &[u8], seen: &mut [usize; 2]| {
++            let new = parse_packed_shape(proof);
++            assert_eq!(new, frozen_parse_packed_shape(proof), "length {} header {:?}", proof.len(), &proof[..proof.len().min(16)]);
++            seen[usize::from(new.is_err())] += 1;
++        };
++        let mut proof = rng.bytes(compact::PROOF_BYTES.max(format::PROOF_BYTES + 1));
++        proof[..8].copy_from_slice(&format::MAGIC[..]);
++        proof[8] = Variant::S2.tag();
++        proof[9..16].fill(0);
++        // Every length from 0 to 17, one short, exact and one long, and the two-transaction (compact) length.
++        for length in (0..=17).chain([format::PROOF_BYTES - 1, format::PROOF_BYTES, format::PROOF_BYTES + 1, compact::PROOF_BYTES]) {
++            check(&proof[..length], &mut seen);
++            cases += 1;
++        }
++        // Every value of every header byte, at the exact length.
++        for position in 0..16 {
++            for value in 0..=255u8 {
++                let mut p = proof[..format::PROOF_BYTES].to_vec();
++                p[position] = value;
++                check(&p, &mut seen);
++                cases += 1;
++            }
++        }
++        // Random headers: valid magic and tag, tail bytes zero or with up to three random bytes.
++        for n in 0..20_000 {
++            let mut p = proof[..format::PROOF_BYTES].to_vec();
++            for _ in 0..(n % 4) {
++                p[9 + (rng.next() % 7) as usize] = rng.next() as u8;
++            }
++            if n % 5 == 0 {
++                p[(rng.next() % 9) as usize] = rng.next() as u8;
++            }
++            check(&p, &mut seen);
++            cases += 1;
++        }
++        assert_eq!(cases, 22 + 16 * 256 + 20_000);
++        assert!(seen[0] > 1_000 && seen[1] > 1_000, "{seen:?}");
++        std::println!(
++            "differential_parse_packed_shape: {cases} cases (Ok {}, Parse {}), {} ms",
++            seen[0],
++            seen[1],
++            start.elapsed().as_millis()
++        );
++    }
++}

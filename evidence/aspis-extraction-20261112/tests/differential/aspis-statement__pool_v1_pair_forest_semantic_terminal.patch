@@ -1,0 +1,277 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs	2026-11-12 18:46:31
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs	2026-11-12 18:46:31
+@@ -2644,6 +2644,274 @@
+             let mut v = [QM31::ZERO; 16];
+             for x in v.iter_mut() { *x = q(&mut s); }
+             assert_eq!(reconstruct_10(&v), old(&v));
++        }
++    }
++}
++
++/// Differential test of `composition_parts` against its frozen body (commit 3d700effcabe,
++/// pair_forest_semantic_terminal.rs 1243-1308, with its attribute on 1242). The frozen body is kept verbatim; adapted
++/// only by its name. Both bodies call the same shipped helpers (`validate_transition`, `selected_claim`,
++/// `Selectors::boxed_at_point`, `evaluate_state_only_poseidon_oracle_projected`, `semantic_packed`,
++/// `evaluate_with_selectors`). The complete result is compared: the six returned values or the error value.
++#[cfg(test)]
++mod differential_composition_parts {
++    extern crate std;
++    use super::*;
++    use crate::pool_v1::{PoolV1PairLiveSnapshotV1, PoolV1PairVerifiedAfterstateV1};
++    use aspis_core::field::P;
++
++    #[allow(clippy::type_complexity)]
++    fn frozen_composition_parts(
++        public: SemanticPublic<'_>,
++        claims: &[QM31; POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_CLAIMS_V1],
++        point: &[QM31; 10],
++        lambda: QM31,
++        chi: QM31,
++        theta: QM31,
++    ) -> Result<
++        (
++            QM31,
++            [QM31; 16],
++            [QM31; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS],
++            QM31,
++            QM31,
++            QM31,
++        ),
++        PoolV1PairForestSemanticTerminalErrorV1,
++    > {
++        let invalid_amount = invalid_withdrawal_amount(public.withdrawal_amount);
++        if invalid_amount {
++            return Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount);
++        }
++        validate_transition(public)?;
++        let openings = StateOnlyPoseidonOpenings {
++            z: core::array::from_fn(|column| selected_claim(claims, 0, column)),
++            succ_z: core::array::from_fn(|column| selected_claim(claims, 1, column)),
++            xor12_z: core::array::from_fn(|column| selected_claim(claims, 2, column)),
++        };
++        let mask_only = core::array::from_fn(|column| {
++            selected_claim(
++                claims,
++                0,
++                POOL_V1_PAIR_FOREST_TERMINAL_C1_COLUMNS_V1 + column,
++            )
++        });
++        let selectors = Selectors::boxed_at_point(point);
++        let poseidon =
++            evaluate_state_only_poseidon_oracle_projected(&openings, &poseidon_selectors(&selectors));
++        let semantic = semantic_packed(public, &openings, &selectors);
++        let h1_z = selected_claim(claims, 0, SELECTED_H1_COLUMN);
++        let copy = evaluate_with_selectors(
++            &openings.z,
++            h1_z,
++            &selectors,
++            lambda,
++            chi,
++            public.transition.live_snapshot.next_pair_index,
++            copy_variant(public.variant),
++        );
++        let prepared_theta = PreparedQm31Multiplier::new(theta);
++        let mut composition = copy.residual;
++        for index in (0..semantic.len()).rev() {
++            composition = prepared_theta.mul(composition).add(semantic[index]);
++        }
++        for index in (0..poseidon.len()).rev() {
++            composition = prepared_theta.mul(composition).add(poseidon[index]);
++        }
++        Ok((
++            composition,
++            openings.z,
++            mask_only,
++            selected_claim(claims, 0, SELECTED_G_COLUMN),
++            h1_z,
++            copy.active,
++        ))
++    }
++
++    /// splitmix64 with a fixed seed.
++    struct Rng(u64);
++    impl Rng {
++        fn next(&mut self) -> u64 {
++            self.0 = self.0.wrapping_add(0x9e37_79b9_7f4a_7c15);
++            let mut z = self.0;
++            z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
++            z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
++            z ^ (z >> 31)
++        }
++        /// A canonical M31 limb: 0, 1, 2, p - 2 or p - 1 with probability 3/8, otherwise uniform below p.
++        fn limb(&mut self) -> u32 {
++            match self.next() % 8 {
++                0 => 0,
++                1 => 1,
++                2 => [2, P - 2, P - 1][(self.next() % 3) as usize],
++                _ => (self.next() % u64::from(P)) as u32,
++            }
++        }
++        fn qm31(&mut self) -> QM31 {
++            QM31 {
++                c0: CM31 { a: M31(self.limb()), b: M31(self.limb()) },
++                c1: CM31 { a: M31(self.limb()), b: M31(self.limb()) },
++            }
++        }
++        fn digest(&mut self) -> Digest {
++            core::array::from_fn(|_| M31(self.limb()))
++        }
++        fn bytes32(&mut self) -> [u8; 32] {
++            core::array::from_fn(|_| self.next() as u8)
++        }
++        /// An append index: an edge (0, 1, 2, 3, 2^19 - 1, 2^19, 2^20 - 2, 2^20 - 1) or uniform below 2^20.
++        fn index(&mut self) -> u64 {
++            const EDGES: [u64; 8] = [0, 1, 2, 3, (1 << 19) - 1, 1 << 19, (1 << 20) - 2, (1 << 20) - 1];
++            if self.next() % 2 == 0 {
++                EDGES[(self.next() % 8) as usize]
++            } else {
++                self.next() % POOL_V1_PAIR_CAPACITY
++            }
++        }
++    }
++
++    /// A transition that the frozen `validate_transition` accepts, built independently of it: the carry level holds
++    /// the new node (not checked), lower levels and levels with a zero index bit hold the empty roots, the others the
++    /// source frontier.
++    fn valid_transition(rng: &mut Rng, index: u64) -> PoolV1PairLatePublicStatementV1 {
++        let (pool, domain) = (rng.bytes32(), rng.bytes32());
++        let frontier: [Digest; 20] = core::array::from_fn(|_| rng.digest());
++        let carry = (index.trailing_ones() as usize).min(20);
++        let next_frontier = core::array::from_fn(|level| {
++            if level == carry {
++                rng.digest()
++            } else if level < carry || (index >> level) & 1 == 0 {
++                empty_root(level)
++            } else {
++                frontier[level]
++            }
++        });
++        PoolV1PairLatePublicStatementV1 {
++            live_snapshot: PoolV1PairLiveSnapshotV1 {
++                pool,
++                deployment_domain: domain,
++                sequence: index,
++                next_pair_index: index,
++                current_root: rng.digest(),
++                frontier,
++            },
++            candidate_afterstate: PoolV1PairVerifiedAfterstateV1 {
++                next_pair_index: index + 1,
++                next_root: rng.digest(),
++                next_frontier,
++            },
+         }
+     }
++
++    /// One way to break a valid transition (0: none), each a distinct check of `validate_transition`.
++    fn corrupt(rng: &mut Rng, t: &mut PoolV1PairLatePublicStatementV1, kind: u64) {
++        let s = &mut t.live_snapshot;
++        let a = &mut t.candidate_afterstate;
++        match kind {
++            0 => {}
++            1 => s.pool[(rng.next() % 32) as usize] ^= 1 << (rng.next() % 8),
++            2 => s.deployment_domain[(rng.next() % 32) as usize] ^= 1 << (rng.next() % 8),
++            3 => s.sequence = s.sequence.wrapping_add(1 + rng.next() % 3),
++            4 => {
++                let v = [POOL_V1_PAIR_CAPACITY, POOL_V1_PAIR_CAPACITY + 1, u64::MAX - 1, u64::MAX][(rng.next() % 4) as usize];
++                s.sequence = v;
++                s.next_pair_index = v;
++                a.next_pair_index = v.wrapping_add(1);
++            }
++            5 => a.next_pair_index = [s.next_pair_index, s.next_pair_index + 2, 0, u64::MAX][(rng.next() % 4) as usize],
++            _ => {
++                // One frontier level changed; at the carry level the change is accepted.
++                let level = (rng.next() % 20) as usize;
++                a.next_frontier[level][(rng.next() % 8) as usize].0 ^= 1;
++            }
++        }
++    }
++
++    fn public<'a>(
++        rng: &mut Rng,
++        transition: &'a PoolV1PairLatePublicStatementV1,
++        withdrawal: bool,
++        amount: u32,
++    ) -> SemanticPublic<'a> {
++        SemanticPublic {
++            variant: if withdrawal { CompiledVariant::Withdrawal } else { CompiledVariant::PrivateTransfer },
++            pool: transition.live_snapshot.pool,
++            deployment_domain: transition.live_snapshot.deployment_domain,
++            anchor: rng.digest(),
++            nullifier: rng.digest(),
++            asset_id: M31(rng.limb()),
++            recipient: if withdrawal { None } else { Some(rng.digest()) },
++            change: rng.digest(),
++            withdrawal_amount: if withdrawal { Some(amount) } else { None },
++            destination: if withdrawal { Some(rng.bytes32()) } else { None },
++            transition,
++        }
++    }
++
++    #[test]
++    fn same_result_as_frozen_body() {
++        let start = std::time::Instant::now();
++        let mut rng = Rng(0xc0b0_5171_0000_0003);
++        let mut cases = 0usize;
++        // [ok, InvalidPublicAmount, InvalidAppendTransition]
++        let mut outcomes = [0usize; 3];
++        let mut run = |rng: &mut Rng, public: SemanticPublic<'_>| {
++            let claims = core::array::from_fn(|_| rng.qm31());
++            let point = core::array::from_fn(|_| rng.qm31());
++            let (lambda, chi, theta) = (rng.qm31(), rng.qm31(), rng.qm31());
++            let new = composition_parts(public, &claims, &point, lambda, chi, theta);
++            let old = frozen_composition_parts(public, &claims, &point, lambda, chi, theta);
++            assert_eq!(new, old, "claims {claims:?} point {point:?} lambda {lambda:?} chi {chi:?} theta {theta:?}");
++            outcomes[match new {
++                Ok(_) => 0,
++                Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount) => 1,
++                Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition) => 2,
++            }] += 1;
++        };
++        // Withdrawal amounts at and around both bounds, on valid and on broken transitions.
++        for amount in [0u32, 1, 2, (1 << 30) - 2, (1 << 30) - 1, 1 << 30, (1 << 30) + 1, u32::MAX] {
++            for kind in 0..7 {
++                let index = rng.index();
++                let mut t = valid_transition(&mut rng, index);
++                corrupt(&mut rng, &mut t, kind);
++                let p = public(&mut rng, &t, true, amount);
++                run(&mut rng, p);
++                cases += 1;
++            }
++        }
++        // Every append index edge and every transition check, both variants.
++        for index in [0u64, 1, 2, 3, 7, (1 << 19) - 1, 1 << 19, (1 << 20) - 2, (1 << 20) - 1] {
++            for kind in 0..7 {
++                for withdrawal in [false, true] {
++                    let mut t = valid_transition(&mut rng, index);
++                    corrupt(&mut rng, &mut t, kind);
++                    let amount = 1 + (rng.next() % ((1 << 30) - 1)) as u32;
++                    let p = public(&mut rng, &t, withdrawal, amount);
++                    run(&mut rng, p);
++                    cases += 1;
++                }
++            }
++        }
++        // Random inputs: two thirds on valid transitions (the composition is computed), the rest broken.
++        for n in 0..40_000u64 {
++            let index = rng.index();
++            let mut t = valid_transition(&mut rng, index);
++            let kind = if n % 3 == 2 { 1 + rng.next() % 6 } else { 0 };
++            corrupt(&mut rng, &mut t, kind);
++            let withdrawal = rng.next() % 2 == 0;
++            let amount = if rng.next() % 8 == 0 { [0, 1 << 30, u32::MAX][(rng.next() % 3) as usize] } else { 1 + (rng.next() % ((1 << 30) - 1)) as u32 };
++            let p = public(&mut rng, &t, withdrawal, amount);
++            run(&mut rng, p);
++            cases += 1;
++        }
++        assert_eq!(cases, 8 * 7 + 9 * 7 * 2 + 40_000);
++        assert!(outcomes[0] > 20_000 && outcomes[1] > 1_000 && outcomes[2] > 5_000, "{outcomes:?}");
++        std::println!(
++            "differential_composition_parts: {cases} cases (ok {}, InvalidPublicAmount {}, InvalidAppendTransition {}), {} ms",
++            outcomes[0],
++            outcomes[1],
++            outcomes[2],
++            start.elapsed().as_millis()
++        );
++    }
+ }

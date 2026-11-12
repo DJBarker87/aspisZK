@@ -1,0 +1,975 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs	2026-11-12 18:46:31
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs	2026-11-12 18:46:31
+@@ -1334,6 +1334,972 @@
+                 b[lane] = (seed >> 40) % 3;
+             }
+             assert_eq!(checkpoint_lane_progress_v1(&a, &b), frozen(&a, &b));
++        }
++    }
++}
++
++/// Differential test of `decode_pool_v1_pair_forest_lane_state_v1` against its frozen body (commit 3d700effcabe,
++/// pair_forest_accounts.rs 335-380). The frozen body is kept verbatim; adapted only by its name and by dropping
++/// `pub`. Both bodies call the shipped `IncrementalMerkleTreeV1::decode_with_empty_roots` (which has its own
++/// differential test in incremental_merkle.rs).
++#[cfg(test)]
++mod differential_decode_pool_v1_pair_forest_lane_state_v1 {
++    extern crate std;
++    use super::*;
++    use crate::pool_v1::{pool_v1_empty_roots, pool_v1_tree_parent};
++    use aspis_core::field::M31;
++
++    fn frozen_decode_pool_v1_pair_forest_lane_state_v1(
++        bytes: &[u8],
++        pair_empty_roots: &[Digest; POOL_V1_TREE_DEPTH + 1],
++    ) -> Result<PoolV1PairForestLaneStateV1, PoolV1PairForestAccountErrorV1> {
++        if bytes.len() != POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES {
++            return Err(PoolV1PairForestAccountErrorV1::WrongLength);
++        }
++        if bytes[..4] != POOL_V1_PAIR_FOREST_LANE_MAGIC {
++            return Err(PoolV1PairForestAccountErrorV1::WrongMagic);
++        }
++        if bytes[4] != POOL_V1_PAIR_FOREST_LANE_VERSION {
++            return Err(PoolV1PairForestAccountErrorV1::WrongVersion);
++        }
++        if usize::from(bytes[5]) >= POOL_V1_PAIR_FOREST_LANE_COUNT {
++            return Err(PoolV1PairForestAccountErrorV1::InvalidLane);
++        }
++        if bytes[6] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8 {
++            return Err(PoolV1PairForestAccountErrorV1::WrongLaneCount);
++        }
++        if bytes[7] != POOL_V1_TREE_DEPTH as u8 {
++            return Err(PoolV1PairForestAccountErrorV1::WrongDepth);
++        }
++        if bytes[8..40] != POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING {
++            return Err(PoolV1PairForestAccountErrorV1::WrongFormatBinding);
++        }
++        let master: [u8; 32] = bytes[LANE_MASTER_OFFSET..72].try_into().unwrap();
++        if master == [0u8; 32] {
++            return Err(PoolV1PairForestAccountErrorV1::ZeroRequiredBinding);
++        }
++        if bytes[73..LANE_TREE_OFFSET].iter().any(|byte| *byte != 0) {
++            return Err(PoolV1PairForestAccountErrorV1::NonZeroReserved);
++        }
++        let tree = IncrementalMerkleTreeV1::decode_with_empty_roots(
++            &bytes[LANE_TREE_OFFSET..],
++            pair_empty_roots,
++        )?;
++        if tree.next_leaf_index > POOL_V1_PAIR_CAPACITY {
++            return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);
++        }
++        Ok(PoolV1PairForestLaneStateV1 {
++            bump: bytes[72],
++            master,
++            lane_id: bytes[5],
++            tree,
++        })
++    }
++
++    /// splitmix64 with a fixed seed.
++    struct Rng(u64);
++    impl Rng {
++        fn next(&mut self) -> u64 {
++            self.0 = self.0.wrapping_add(0x9e37_79b9_7f4a_7c15);
++            let mut z = self.0;
++            z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
++            z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
++            z ^ (z >> 31)
++        }
++        fn byte(&mut self) -> u8 {
++            self.next() as u8
++        }
++        /// A canonical digest limb: 0, 1, 2, p - 2 or p - 1 with probability 3/8, otherwise uniform below p.
++        fn canonical(&mut self) -> M31 {
++            M31(match self.next() % 8 {
++                0 => 0,
++                1 => 1,
++                2 => [2, P - 2, P - 1][(self.next() % 3) as usize],
++                _ => (self.next() % u64::from(P)) as u32,
++            })
++        }
++        fn digest(&mut self) -> Digest {
++            core::array::from_fn(|_| self.canonical())
++        }
++        /// A lane sequence: an edge (0, 1, capacity - 1, capacity, capacity + 1, u64::MAX - 1, u64::MAX), uniform up
++        /// to the capacity, or any u64.
++        fn sequence(&mut self) -> u64 {
++            const EDGES: [u64; 7] = [
++                0,
++                1,
++                POOL_V1_PAIR_CAPACITY - 1,
++                POOL_V1_PAIR_CAPACITY,
++                POOL_V1_PAIR_CAPACITY + 1,
++                u64::MAX - 1,
++                u64::MAX,
++            ];
++            match self.next() % 8 {
++                0 | 1 => EDGES[(self.next() % 7) as usize],
++                2 => self.next(),
++                _ => self.next() % (POOL_V1_PAIR_CAPACITY + 1),
++            }
++        }
++    }
++
++    fn error_index(error: PoolV1PairForestAccountErrorV1) -> usize {
++        use PoolV1PairForestAccountErrorV1 as A;
++        match error {
++            A::WrongLength => 1,
++            A::WrongMagic => 2,
++            A::WrongVersion => 3,
++            A::WrongLaneCount => 4,
++            A::WrongDigestEncoding => 5,
++            A::WrongDepth => 6,
++            A::WrongFormatBinding => 7,
++            A::NonZeroReserved => 8,
++            A::ZeroRequiredBinding => 9,
++            A::InvalidBoolean => 10,
++            A::InvalidMasterState => 11,
++            A::InvalidLane => 12,
++            A::LaneMasterMismatch => 13,
++            A::LaneOrderMismatch => 14,
++            A::LaneSequenceDecreased => 15,
++            A::DuplicateCheckpoint => 16,
++            A::CheckpointSequenceOverflow => 17,
++            A::NonCanonicalDigest => 18,
++            A::Identity => 19,
++            A::Policy => 20,
++            A::Tree(_) => 21,
++        }
++    }
++
++    /// Outcome names in the order of `error_index` (0 = accepted).
++    const OUTCOMES: [&str; 22] = [
++        "Ok", "WrongLength", "WrongMagic", "WrongVersion", "WrongLaneCount", "WrongDigestEncoding", "WrongDepth",
++        "WrongFormatBinding", "NonZeroReserved", "ZeroRequiredBinding", "InvalidBoolean", "InvalidMasterState",
++        "InvalidLane", "LaneMasterMismatch", "LaneOrderMismatch", "LaneSequenceDecreased", "DuplicateCheckpoint",
++        "CheckpointSequenceOverflow", "NonCanonicalDigest", "Identity", "Policy", "Tree",
++    ];
++
++    fn summary(seen: &[usize; 22]) -> std::string::String {
++        let mut out = std::string::String::new();
++        for (k, n) in seen.iter().enumerate() {
++            if *n > 0 {
++                out.push_str(&std::format!("{} {}, ", OUTCOMES[k], n));
++            }
++        }
++        out
++    }
++
++    fn pair_empty_roots() -> [Digest; POOL_V1_TREE_DEPTH + 1] {
++        let ordinary = pool_v1_empty_roots();
++        core::array::from_fn(|level| {
++            if level < POOL_V1_TREE_DEPTH {
++                ordinary[level + 1]
++            } else {
++                pool_v1_tree_parent(&ordinary[POOL_V1_TREE_DEPTH], &ordinary[POOL_V1_TREE_DEPTH])
++            }
++        })
++    }
++
++    /// Valid lane images (each checked to decode to its lane): trees with 0, 1, 2, 3 and 5 appended leaves and a
++    /// full tree (index 2^20, empty frontier), lane ids 0 to 7, bumps 0, 255 and random, random masters.
++    fn images(rng: &mut Rng, empty: &[Digest; POOL_V1_TREE_DEPTH + 1]) -> alloc::vec::Vec<[u8; POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES]> {
++        let mut out = alloc::vec::Vec::new();
++        let mut trees = alloc::vec::Vec::new();
++        let mut tree = IncrementalMerkleTreeV1 {
++            next_leaf_index: 0,
++            root: empty[POOL_V1_TREE_DEPTH],
++            frontier: core::array::from_fn(|level| empty[level]),
++        };
++        for leaves in 0..=5u64 {
++            if leaves != 4 {
++                trees.push(tree);
++            }
++            tree = tree.append_one_with_empty_roots(rng.digest(), empty).unwrap().0;
++        }
++        trees.push(IncrementalMerkleTreeV1 {
++            next_leaf_index: POOL_V1_PAIR_CAPACITY,
++            root: rng.digest(),
++            frontier: core::array::from_fn(|level| empty[level]),
++        });
++        for (k, tree) in trees.into_iter().enumerate() {
++            let lane = PoolV1PairForestLaneStateV1 {
++                bump: [0, 255, rng.byte()][k % 3],
++                master: core::array::from_fn(|_| rng.byte() | 1),
++                lane_id: (k % 8) as u8,
++                tree,
++            };
++            let image = encode_pool_v1_pair_forest_lane_state_v1(&lane, empty).unwrap();
++            assert_eq!(decode_pool_v1_pair_forest_lane_state_v1(&image, empty), Ok(lane));
++            out.push(image);
++        }
++        out
++    }
++
++    fn compare(bytes: &[u8], empty: &[Digest; POOL_V1_TREE_DEPTH + 1], seen: &mut [usize; 22]) {
++        let new = decode_pool_v1_pair_forest_lane_state_v1(bytes, empty);
++        assert_eq!(new, frozen_decode_pool_v1_pair_forest_lane_state_v1(bytes, empty), "{bytes:?}");
++        seen[match new {
++            Ok(_) => 0,
++            Err(e) => error_index(e),
++        }] += 1;
++    }
++
++    #[test]
++    fn same_result_as_frozen_body() {
++        let start = std::time::Instant::now();
++        let mut rng = Rng(0x1a7e_0000_0000_0006);
++        let empty = pair_empty_roots();
++        let mut seen = [0usize; 22];
++        let mut cases = 0usize;
++        let images = images(&mut rng, &empty);
++        assert_eq!(images.len(), 6);
++        for image in &images {
++            compare(image, &empty, &mut seen);
++            cases += 1;
++            // Every value of every header byte (magic, version, lane id, lane count, depth, format binding,
++            // master, bump, reserved bytes 73..80).
++            for position in 0..LANE_TREE_OFFSET {
++                for value in 0..=255u8 {
++                    let mut corrupted = *image;
++                    corrupted[position] = value;
++                    compare(&corrupted, &empty, &mut seen);
++                    cases += 1;
++                }
++            }
++            // Six values at every tree byte.
++            for position in LANE_TREE_OFFSET..POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES {
++                for value in [0u8, 1, 0x7f, 0x80, 0xff, image[position] ^ 1] {
++                    let mut corrupted = *image;
++                    corrupted[position] = value;
++                    compare(&corrupted, &empty, &mut seen);
++                    cases += 1;
++                }
++            }
++            // Every length from 0 to the account length plus 8 (one byte short, exact, one byte long among them).
++            let mut long = image.to_vec();
++            long.extend_from_slice(&[0u8; 8]);
++            for length in 0..=long.len() {
++                compare(&long[..length], &empty, &mut seen);
++                cases += 1;
++            }
++        }
++        // Random images: several reserved, master, lane id and tree-index bytes changed at once.
++        for _ in 0..20_000 {
++            let mut image = images[(rng.next() % 6) as usize];
++            for _ in 0..(1 + rng.next() % 3) {
++                match rng.next() % 5 {
++                    0 => image[73 + (rng.next() % 7) as usize] = rng.byte(),
++                    1 => image[LANE_MASTER_OFFSET..72].fill(0),
++                    2 => image[5] = rng.byte() % 10,
++                    3 => {
++                        let start = LANE_TREE_OFFSET + 8;
++                        image[start..start + 8].copy_from_slice(&rng.sequence().to_le_bytes());
++                    }
++                    _ => image[(rng.next() % 768) as usize] = rng.byte(),
++                }
++            }
++            compare(&image, &empty, &mut seen);
++            cases += 1;
++        }
++        assert_eq!(cases, 6 * (1 + 80 * 256 + 688 * 6 + 777) + 20_000);
++        assert!(seen[0] > 1_000 && seen[8] > 1_000 && seen[9] > 0 && seen[12] > 0 && seen[21] > 1_000, "{seen:?}");
++        std::println!(
++            "differential_decode_pool_v1_pair_forest_lane_state_v1: {cases} cases; {}{} ms",
++            summary(&seen),
++            start.elapsed().as_millis()
++        );
++    }
++}
++
++/// Differential test of `encode_pool_v1_pair_forest_checkpoint_v1` against its frozen body (commit 3d700effcabe,
++/// pair_forest_accounts.rs 382-416). The frozen body is kept verbatim; adapted only by its name and by dropping
++/// `pub`. The complete result is compared: the 192 output bytes or the error value.
++#[cfg(test)]
++mod differential_encode_pool_v1_pair_forest_checkpoint_v1 {
++    extern crate std;
++    use super::*;
++    use aspis_core::field::M31;
++
++    fn frozen_encode_pool_v1_pair_forest_checkpoint_v1(
++        checkpoint: &PoolV1PairForestCheckpointV1,
++    ) -> Result<[u8; POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES], PoolV1PairForestAccountErrorV1> {
++        if checkpoint.master == [0u8; 32] || checkpoint.deployment_domain == [0u8; 32] {
++            return Err(PoolV1PairForestAccountErrorV1::ZeroRequiredBinding);
++        }
++        if !digest_is_canonical(&checkpoint.global_root) {
++            return Err(PoolV1PairForestAccountErrorV1::NonCanonicalDigest);
++        }
++        if checkpoint
++            .lane_sequences
++            .iter()
++            .any(|sequence| *sequence > POOL_V1_PAIR_CAPACITY)
++        {
++            return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);
++        }
++        let mut output = [0u8; POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES];
++        output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_CHECKPOINT_MAGIC);
++        output[4] = POOL_V1_PAIR_FOREST_CHECKPOINT_VERSION;
++        output[5] = POOL_V1_PAIR_FOREST_LANE_COUNT as u8;
++        output[6] = POOL_V1_DIGEST_ENCODING_VERSION;
++        output[7] = checkpoint.bump;
++        output[CHECKPOINT_MASTER_OFFSET..CHECKPOINT_DOMAIN_OFFSET].copy_from_slice(&checkpoint.master);
++        output[CHECKPOINT_DOMAIN_OFFSET..CHECKPOINT_SEQUENCE_OFFSET]
++            .copy_from_slice(&checkpoint.deployment_domain);
++        output[CHECKPOINT_SEQUENCE_OFFSET..CHECKPOINT_GLOBAL_ROOT_OFFSET]
++            .copy_from_slice(&checkpoint.checkpoint_sequence.to_le_bytes());
++        output[CHECKPOINT_GLOBAL_ROOT_OFFSET..CHECKPOINT_LANE_SEQUENCES_OFFSET]
++            .copy_from_slice(&encode_digest_canonical(&checkpoint.global_root));
++        for (lane, sequence) in checkpoint.lane_sequences.iter().enumerate() {
++            let start = CHECKPOINT_LANE_SEQUENCES_OFFSET + 8 * lane;
++            output[start..start + 8].copy_from_slice(&sequence.to_le_bytes());
++        }
++        Ok(output)
++    }
++
++    /// splitmix64 with a fixed seed.
++    struct Rng(u64);
++    impl Rng {
++        fn next(&mut self) -> u64 {
++            self.0 = self.0.wrapping_add(0x9e37_79b9_7f4a_7c15);
++            let mut z = self.0;
++            z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
++            z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
++            z ^ (z >> 31)
++        }
++        fn byte(&mut self) -> u8 {
++            self.next() as u8
++        }
++        /// A canonical digest limb: 0, 1, 2, p - 2 or p - 1 with probability 3/8, otherwise uniform below p.
++        fn canonical(&mut self) -> M31 {
++            M31(match self.next() % 8 {
++                0 => 0,
++                1 => 1,
++                2 => [2, P - 2, P - 1][(self.next() % 3) as usize],
++                _ => (self.next() % u64::from(P)) as u32,
++            })
++        }
++        fn digest(&mut self) -> Digest {
++            core::array::from_fn(|_| self.canonical())
++        }
++        /// A digest with, with probability 1/4, one limb replaced by p, p + 1, 2^31 or u32::MAX.
++        fn maybe_noncanonical_digest(&mut self) -> Digest {
++            let mut d = self.digest();
++            if self.next() % 4 == 0 {
++                d[(self.next() % 8) as usize] = M31([P, P + 1, 1 << 31, u32::MAX][(self.next() % 4) as usize]);
++            }
++            d
++        }
++        /// 32 bytes: all zero, one non-zero byte, or random non-zero bytes.
++        fn binding(&mut self, zero_one_in: u64) -> [u8; 32] {
++            if self.next() % zero_one_in == 0 {
++                return [0u8; 32];
++            }
++            if self.next() % 4 == 0 {
++                let mut b = [0u8; 32];
++                b[(self.next() % 32) as usize] = 1 + (self.next() % 255) as u8;
++                return b;
++            }
++            core::array::from_fn(|_| self.byte() | 1)
++        }
++        /// A lane sequence: an edge (0, 1, capacity - 1, capacity, capacity + 1, u64::MAX - 1, u64::MAX), uniform up
++        /// to the capacity, or any u64.
++        fn sequence(&mut self) -> u64 {
++            const EDGES: [u64; 7] = [
++                0,
++                1,
++                POOL_V1_PAIR_CAPACITY - 1,
++                POOL_V1_PAIR_CAPACITY,
++                POOL_V1_PAIR_CAPACITY + 1,
++                u64::MAX - 1,
++                u64::MAX,
++            ];
++            match self.next() % 8 {
++                0 | 1 => EDGES[(self.next() % 7) as usize],
++                2 => self.next(),
++                _ => self.next() % (POOL_V1_PAIR_CAPACITY + 1),
++            }
++        }
++    }
++
++    fn error_index(error: PoolV1PairForestAccountErrorV1) -> usize {
++        use PoolV1PairForestAccountErrorV1 as A;
++        match error {
++            A::WrongLength => 1,
++            A::WrongMagic => 2,
++            A::WrongVersion => 3,
++            A::WrongLaneCount => 4,
++            A::WrongDigestEncoding => 5,
++            A::WrongDepth => 6,
++            A::WrongFormatBinding => 7,
++            A::NonZeroReserved => 8,
++            A::ZeroRequiredBinding => 9,
++            A::InvalidBoolean => 10,
++            A::InvalidMasterState => 11,
++            A::InvalidLane => 12,
++            A::LaneMasterMismatch => 13,
++            A::LaneOrderMismatch => 14,
++            A::LaneSequenceDecreased => 15,
++            A::DuplicateCheckpoint => 16,
++            A::CheckpointSequenceOverflow => 17,
++            A::NonCanonicalDigest => 18,
++            A::Identity => 19,
++            A::Policy => 20,
++            A::Tree(_) => 21,
++        }
++    }
++
++    /// Outcome names in the order of `error_index` (0 = accepted).
++    const OUTCOMES: [&str; 22] = [
++        "Ok", "WrongLength", "WrongMagic", "WrongVersion", "WrongLaneCount", "WrongDigestEncoding", "WrongDepth",
++        "WrongFormatBinding", "NonZeroReserved", "ZeroRequiredBinding", "InvalidBoolean", "InvalidMasterState",
++        "InvalidLane", "LaneMasterMismatch", "LaneOrderMismatch", "LaneSequenceDecreased", "DuplicateCheckpoint",
++        "CheckpointSequenceOverflow", "NonCanonicalDigest", "Identity", "Policy", "Tree",
++    ];
++
++    fn summary(seen: &[usize; 22]) -> std::string::String {
++        let mut out = std::string::String::new();
++        for (k, n) in seen.iter().enumerate() {
++            if *n > 0 {
++                out.push_str(&std::format!("{} {}, ", OUTCOMES[k], n));
++            }
++        }
++        out
++    }
++
++    fn compare(checkpoint: &PoolV1PairForestCheckpointV1, seen: &mut [usize; 22]) {
++        let new = encode_pool_v1_pair_forest_checkpoint_v1(checkpoint);
++        assert_eq!(new, frozen_encode_pool_v1_pair_forest_checkpoint_v1(checkpoint), "{checkpoint:?}");
++        seen[match new {
++            Ok(_) => 0,
++            Err(e) => error_index(e),
++        }] += 1;
++    }
++
++    fn valid(rng: &mut Rng) -> PoolV1PairForestCheckpointV1 {
++        PoolV1PairForestCheckpointV1 {
++            bump: rng.byte(),
++            master: core::array::from_fn(|_| rng.byte() | 1),
++            deployment_domain: core::array::from_fn(|_| rng.byte() | 1),
++            checkpoint_sequence: rng.next(),
++            global_root: rng.digest(),
++            lane_sequences: core::array::from_fn(|_| rng.next() % (POOL_V1_PAIR_CAPACITY + 1)),
++        }
++    }
++
++    #[test]
++    fn same_result_as_frozen_body() {
++        let start = std::time::Instant::now();
++        let mut rng = Rng(0xe9c0_de00_0000_0007);
++        let mut seen = [0usize; 22];
++        let mut cases = 0usize;
++        let sequences = [0, 1, POOL_V1_PAIR_CAPACITY - 1, POOL_V1_PAIR_CAPACITY, POOL_V1_PAIR_CAPACITY + 1, u64::MAX - 1, u64::MAX];
++        let limbs = [0, 1, 2, P - 2, P - 1, P, P + 1, 1 << 31, u32::MAX];
++        // From valid checkpoints: each lane sequence at each edge; each root limb at each edge; the bump, the
++        // checkpoint sequence at their edges; master and domain zero or with one non-zero byte at each position.
++        for _ in 0..50 {
++            let base = valid(&mut rng);
++            compare(&base, &mut seen);
++            cases += 1;
++            for lane in 0..8 {
++                for &s in &sequences {
++                    let mut c = base;
++                    c.lane_sequences[lane] = s;
++                    compare(&c, &mut seen);
++                    cases += 1;
++                }
++            }
++            for limb in 0..8 {
++                for &v in &limbs {
++                    let mut c = base;
++                    c.global_root[limb] = M31(v);
++                    compare(&c, &mut seen);
++                    cases += 1;
++                }
++            }
++            for bump in [0u8, 1, 254, 255] {
++                for s in [0u64, 1, u64::MAX - 1, u64::MAX] {
++                    let mut c = base;
++                    c.bump = bump;
++                    c.checkpoint_sequence = s;
++                    compare(&c, &mut seen);
++                    cases += 1;
++                }
++            }
++            for position in 0..32 {
++                for field in 0..2 {
++                    let mut c = base;
++                    if field == 0 {
++                        c.master = [0u8; 32];
++                    } else {
++                        c.deployment_domain = [0u8; 32];
++                    }
++                    compare(&c, &mut seen);
++                    if field == 0 {
++                        c.master[position] = 1;
++                    } else {
++                        c.deployment_domain[position] = 1;
++                    }
++                    compare(&c, &mut seen);
++                    cases += 2;
++                }
++            }
+         }
++        // Random checkpoints: every field drawn with its edge values, several errors at once possible.
++        for _ in 0..300_000 {
++            let c = PoolV1PairForestCheckpointV1 {
++                bump: rng.byte(),
++                master: rng.binding(16),
++                deployment_domain: rng.binding(16),
++                checkpoint_sequence: rng.sequence(),
++                global_root: rng.maybe_noncanonical_digest(),
++                lane_sequences: if rng.next() % 2 == 0 {
++                    core::array::from_fn(|_| rng.next() % (POOL_V1_PAIR_CAPACITY + 1))
++                } else {
++                    core::array::from_fn(|_| rng.sequence())
++                },
++            };
++            compare(&c, &mut seen);
++            cases += 1;
++        }
++        assert_eq!(cases, 50 * (1 + 8 * 7 + 8 * 9 + 16 + 32 * 2 * 2) + 300_000);
++        assert!(seen[0] > 10_000 && seen[9] > 1_000 && seen[11] > 1_000 && seen[18] > 1_000, "{seen:?}");
++        std::println!(
++            "differential_encode_pool_v1_pair_forest_checkpoint_v1: {cases} cases; {}{} ms",
++            summary(&seen),
++            start.elapsed().as_millis()
++        );
+     }
+ }
++
++/// Differential test of `plan_pool_v1_pair_forest_checkpoint_v1` as a whole against its frozen body (commit
++/// 3d700effcabe, pair_forest_accounts.rs 476-537). The frozen body is kept verbatim; adapted only by its name and by
++/// dropping `pub`. Both bodies call the shipped `validate_master` and `digest_is_canonical` (`validate_master` has
++/// its own differential test above). The complete result is compared: the plan (next master and checkpoint) or the
++/// error value.
++#[cfg(test)]
++mod differential_plan_pool_v1_pair_forest_checkpoint_v1 {
++    extern crate std;
++    use super::*;
++    use aspis_core::field::M31;
++
++    fn frozen_plan_pool_v1_pair_forest_checkpoint_v1(
++        master: &PoolV1PairForestMasterV1,
++        lanes: &[PoolV1PairForestLaneStateV1; POOL_V1_PAIR_FOREST_LANE_COUNT],
++        global_root: Digest,
++        checkpoint_bump: u8,
++    ) -> Result<PoolV1PairForestCheckpointPlanV1, PoolV1PairForestAccountErrorV1> {
++        validate_master(master)?;
++        if master.initialized_lane_mask != POOL_V1_PAIR_FOREST_ALL_LANES_MASK {
++            return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);
++        }
++        if !digest_is_canonical(&global_root) {
++            return Err(PoolV1PairForestAccountErrorV1::NonCanonicalDigest);
++        }
++        let mut lane_sequences = [0u64; POOL_V1_PAIR_FOREST_LANE_COUNT];
++        for (expected_lane, lane) in lanes.iter().enumerate() {
++            if lane.master != master.identity.pool {
++                return Err(PoolV1PairForestAccountErrorV1::LaneMasterMismatch);
++            }
++            if usize::from(lane.lane_id) != expected_lane {
++                return Err(PoolV1PairForestAccountErrorV1::LaneOrderMismatch);
++            }
++            if lane.tree.next_leaf_index > POOL_V1_PAIR_CAPACITY {
++                return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);
++            }
++            lane_sequences[expected_lane] = lane.tree.next_leaf_index;
++        }
++        if master.has_checkpoint {
++            let mut progressed = false;
++            for lane in 0..POOL_V1_PAIR_FOREST_LANE_COUNT {
++                if lane_sequences[lane] < master.last_checkpoint_lane_sequences[lane] {
++                    return Err(PoolV1PairForestAccountErrorV1::LaneSequenceDecreased);
++                }
++                progressed |= lane_sequences[lane] > master.last_checkpoint_lane_sequences[lane];
++            }
++            if !progressed {
++                return Err(PoolV1PairForestAccountErrorV1::DuplicateCheckpoint);
++            }
++        }
++        let next_sequence = master
++            .next_checkpoint_sequence
++            .checked_add(1)
++            .ok_or(PoolV1PairForestAccountErrorV1::CheckpointSequenceOverflow)?;
++        let checkpoint = PoolV1PairForestCheckpointV1 {
++            bump: checkpoint_bump,
++            master: master.identity.pool,
++            deployment_domain: master.identity.deployment_domain,
++            checkpoint_sequence: master.next_checkpoint_sequence,
++            global_root,
++            lane_sequences,
++        };
++        let next_master = PoolV1PairForestMasterV1 {
++            has_checkpoint: true,
++            next_checkpoint_sequence: next_sequence,
++            last_checkpoint_lane_sequences: lane_sequences,
++            ..*master
++        };
++        validate_master(&next_master)?;
++        Ok(PoolV1PairForestCheckpointPlanV1 {
++            next_master,
++            checkpoint,
++        })
++    }
++
++    /// splitmix64 with a fixed seed.
++    struct Rng(u64);
++    impl Rng {
++        fn next(&mut self) -> u64 {
++            self.0 = self.0.wrapping_add(0x9e37_79b9_7f4a_7c15);
++            let mut z = self.0;
++            z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
++            z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
++            z ^ (z >> 31)
++        }
++        fn byte(&mut self) -> u8 {
++            self.next() as u8
++        }
++        /// A canonical digest limb: 0, 1, 2, p - 2 or p - 1 with probability 3/8, otherwise uniform below p.
++        fn canonical(&mut self) -> M31 {
++            M31(match self.next() % 8 {
++                0 => 0,
++                1 => 1,
++                2 => [2, P - 2, P - 1][(self.next() % 3) as usize],
++                _ => (self.next() % u64::from(P)) as u32,
++            })
++        }
++        fn digest(&mut self) -> Digest {
++            core::array::from_fn(|_| self.canonical())
++        }
++    }
++
++    fn error_index(error: PoolV1PairForestAccountErrorV1) -> usize {
++        use PoolV1PairForestAccountErrorV1 as A;
++        match error {
++            A::WrongLength => 1,
++            A::WrongMagic => 2,
++            A::WrongVersion => 3,
++            A::WrongLaneCount => 4,
++            A::WrongDigestEncoding => 5,
++            A::WrongDepth => 6,
++            A::WrongFormatBinding => 7,
++            A::NonZeroReserved => 8,
++            A::ZeroRequiredBinding => 9,
++            A::InvalidBoolean => 10,
++            A::InvalidMasterState => 11,
++            A::InvalidLane => 12,
++            A::LaneMasterMismatch => 13,
++            A::LaneOrderMismatch => 14,
++            A::LaneSequenceDecreased => 15,
++            A::DuplicateCheckpoint => 16,
++            A::CheckpointSequenceOverflow => 17,
++            A::NonCanonicalDigest => 18,
++            A::Identity => 19,
++            A::Policy => 20,
++            A::Tree(_) => 21,
++        }
++    }
++
++    /// Outcome names in the order of `error_index` (0 = accepted).
++    const OUTCOMES: [&str; 22] = [
++        "Ok", "WrongLength", "WrongMagic", "WrongVersion", "WrongLaneCount", "WrongDigestEncoding", "WrongDepth",
++        "WrongFormatBinding", "NonZeroReserved", "ZeroRequiredBinding", "InvalidBoolean", "InvalidMasterState",
++        "InvalidLane", "LaneMasterMismatch", "LaneOrderMismatch", "LaneSequenceDecreased", "DuplicateCheckpoint",
++        "CheckpointSequenceOverflow", "NonCanonicalDigest", "Identity", "Policy", "Tree",
++    ];
++
++    fn summary(seen: &[usize; 22]) -> std::string::String {
++        let mut out = std::string::String::new();
++        for (k, n) in seen.iter().enumerate() {
++            if *n > 0 {
++                out.push_str(&std::format!("{} {}, ", OUTCOMES[k], n));
++            }
++        }
++        out
++    }
++
++    fn valid_master(rng: &mut Rng) -> PoolV1PairForestMasterV1 {
++        let immutable = rng.next() % 2 == 0;
++        let has_checkpoint = rng.next() % 4 != 0;
++        PoolV1PairForestMasterV1 {
++            bump: rng.byte(),
++            identity: PoolIdentityV1 {
++                pool: core::array::from_fn(|_| rng.byte() | 1),
++                asset_mint: core::array::from_fn(|_| rng.byte() | 1),
++                token_program: core::array::from_fn(|_| rng.byte() | 1),
++                asset_id: rng.canonical(),
++                deployment_domain: core::array::from_fn(|_| rng.byte() | 1),
++            },
++            verifier_policy: VerifierPolicyV1 {
++                flags: if immutable { 1 | (rng.byte() & 2) } else { 0 },
++                registry_program: core::array::from_fn(|_| rng.byte() | 1),
++                registry_authority: if immutable { [0u8; 32] } else { core::array::from_fn(|_| rng.byte() | 1) },
++                policy_binding: core::array::from_fn(|_| rng.byte() | 1),
++            },
++            initialized_lane_mask: POOL_V1_PAIR_FOREST_ALL_LANES_MASK,
++            has_checkpoint,
++            next_checkpoint_sequence: if has_checkpoint {
++                [1, 2, u64::MAX - 1, u64::MAX, 1 + rng.next() % 1000][(rng.next() % 5) as usize]
++            } else {
++                0
++            },
++            last_checkpoint_lane_sequences: [0u64; POOL_V1_PAIR_FOREST_LANE_COUNT],
++        }
++    }
++
++    /// A small lane sequence or an edge near the capacity (so equal, smaller and larger last sequences occur).
++    fn lane_sequence(rng: &mut Rng) -> u64 {
++        match rng.next() % 4 {
++            0 => [POOL_V1_PAIR_CAPACITY - 1, POOL_V1_PAIR_CAPACITY][(rng.next() % 2) as usize],
++            _ => rng.next() % 3,
++        }
++    }
++
++    fn lane(rng: &mut Rng, pool: [u8; 32], lane_id: u8, next_leaf_index: u64) -> PoolV1PairForestLaneStateV1 {
++        PoolV1PairForestLaneStateV1 {
++            bump: rng.byte(),
++            master: pool,
++            lane_id,
++            tree: IncrementalMerkleTreeV1 {
++                next_leaf_index,
++                root: rng.digest(),
++                frontier: core::array::from_fn(|_| rng.digest()),
++            },
++        }
++    }
++
++    #[test]
++    fn same_result_as_frozen_body() {
++        let start = std::time::Instant::now();
++        let mut rng = Rng(0x91a2_0000_0000_0008);
++        let mut seen = [0usize; 22];
++        let mut cases = 0usize;
++        for n in 0..300_000u64 {
++            let mut master = valid_master(&mut rng);
++            let pool = master.identity.pool;
++            let sequences: [u64; 8] = core::array::from_fn(|_| lane_sequence(&mut rng));
++            let mut lanes: [PoolV1PairForestLaneStateV1; 8] =
++                core::array::from_fn(|k| lane(&mut rng, pool, k as u8, sequences[k]));
++            if master.has_checkpoint {
++                // Last sequences equal to, one below or one above the lane sequences, within the capacity.
++                for k in 0..8 {
++                    master.last_checkpoint_lane_sequences[k] = match rng.next() % 6 {
++                        0 => sequences[k].saturating_sub(1),
++                        1 => (sequences[k] + 1).min(POOL_V1_PAIR_CAPACITY),
++                        _ => sequences[k],
++                    };
++                }
++            }
++            let mut root = rng.digest();
++            // From the fifth case on, up to three mutations, each a distinct check (several at once test which
++            // check fails first).
++            let mutations = if n % 5 == 0 { 0 } else { 1 + rng.next() % 3 };
++            for _ in 0..mutations {
++                let k = (rng.next() % 8) as usize;
++                match rng.next() % 12 {
++                    0 => master.identity.pool = [0u8; 32],
++                    1 => master.identity.deployment_domain = [0u8; 32],
++                    2 => master.verifier_policy.flags = rng.byte(),
++                    3 => master.last_checkpoint_lane_sequences[k] = POOL_V1_PAIR_CAPACITY + 1 + rng.next() % 2,
++                    4 => master.has_checkpoint = !master.has_checkpoint,
++                    5 => master.initialized_lane_mask = rng.byte() & 0x7f,
++                    6 => root[(rng.next() % 8) as usize] = M31([P, P + 1, u32::MAX][(rng.next() % 3) as usize]),
++                    7 => lanes[k].master[(rng.next() % 32) as usize] ^= 1 << (rng.next() % 8),
++                    8 => lanes.swap(k, (k + 1 + (rng.next() % 7) as usize) % 8),
++                    9 => lanes[k].lane_id = [8, 255, (k as u8 + 1) % 8][(rng.next() % 3) as usize],
++                    10 => lanes[k].tree.next_leaf_index = [POOL_V1_PAIR_CAPACITY + 1, u64::MAX][(rng.next() % 2) as usize],
++                    _ => master.next_checkpoint_sequence = [u64::MAX, u64::MAX - 1, 0][(rng.next() % 3) as usize],
++                }
++            }
++            let bump = rng.byte();
++            let new = plan_pool_v1_pair_forest_checkpoint_v1(&master, &lanes, root, bump);
++            assert_eq!(
++                new,
++                frozen_plan_pool_v1_pair_forest_checkpoint_v1(&master, &lanes, root, bump),
++                "master {master:?} lanes {lanes:?} root {root:?} bump {bump}"
++            );
++            seen[match new {
++                Ok(_) => 0,
++                Err(e) => error_index(e),
++            }] += 1;
++            cases += 1;
++        }
++        assert_eq!(cases, 300_000);
++        // Every error value the frozen planner returns is reached (validate_master's ZeroRequiredBinding, Policy
++        // and InvalidMasterState; the planner's own InvalidMasterState, NonCanonicalDigest, LaneMasterMismatch,
++        // LaneOrderMismatch, LaneSequenceDecreased, DuplicateCheckpoint, CheckpointSequenceOverflow).
++        for k in [0, 9, 11, 13, 14, 15, 16, 17, 18, 20] {
++            assert!(seen[k] > 100, "{}: {seen:?}", OUTCOMES[k]);
++        }
++        std::println!(
++            "differential_plan_pool_v1_pair_forest_checkpoint_v1: {cases} cases; {}{} ms",
++            summary(&seen),
++            start.elapsed().as_millis()
++        );
++    }
++}
++
++/// Differential test of `checkpoint_lane_sequence_v1`, a function the rewrite introduced, against one iteration of
++/// the frozen loop it replaces in `plan_pool_v1_pair_forest_checkpoint_v1` (commit 3d700effcabe,
++/// pair_forest_accounts.rs 490-501). The three checks are kept verbatim; adapted only by taking the pool key as the
++/// parameter `pool` (frozen: `master.identity.pool`) and returning the value the frozen loop stores into
++/// `lane_sequences[expected_lane]`.
++#[cfg(test)]
++mod differential_checkpoint_lane_sequence_v1 {
++    extern crate std;
++    use super::*;
++    use aspis_core::field::M31;
++
++    fn frozen_iteration(
++        lane: &PoolV1PairForestLaneStateV1,
++        expected_lane: usize,
++        pool: &[u8; 32],
++    ) -> Result<u64, PoolV1PairForestAccountErrorV1> {
++        if lane.master != *pool {
++            return Err(PoolV1PairForestAccountErrorV1::LaneMasterMismatch);
++        }
++        if usize::from(lane.lane_id) != expected_lane {
++            return Err(PoolV1PairForestAccountErrorV1::LaneOrderMismatch);
++        }
++        if lane.tree.next_leaf_index > POOL_V1_PAIR_CAPACITY {
++            return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);
++        }
++        Ok(lane.tree.next_leaf_index)
++    }
++
++    /// splitmix64 with a fixed seed.
++    struct Rng(u64);
++    impl Rng {
++        fn next(&mut self) -> u64 {
++            self.0 = self.0.wrapping_add(0x9e37_79b9_7f4a_7c15);
++            let mut z = self.0;
++            z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
++            z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
++            z ^ (z >> 31)
++        }
++        fn byte(&mut self) -> u8 {
++            self.next() as u8
++        }
++        /// A canonical digest limb: 0, 1, 2, p - 2 or p - 1 with probability 3/8, otherwise uniform below p.
++        fn canonical(&mut self) -> M31 {
++            M31(match self.next() % 8 {
++                0 => 0,
++                1 => 1,
++                2 => [2, P - 2, P - 1][(self.next() % 3) as usize],
++                _ => (self.next() % u64::from(P)) as u32,
++            })
++        }
++        fn digest(&mut self) -> Digest {
++            core::array::from_fn(|_| self.canonical())
++        }
++        /// 32 bytes: all zero, one non-zero byte, or random non-zero bytes.
++        fn binding(&mut self, zero_one_in: u64) -> [u8; 32] {
++            if self.next() % zero_one_in == 0 {
++                return [0u8; 32];
++            }
++            if self.next() % 4 == 0 {
++                let mut b = [0u8; 32];
++                b[(self.next() % 32) as usize] = 1 + (self.next() % 255) as u8;
++                return b;
++            }
++            core::array::from_fn(|_| self.byte() | 1)
++        }
++        /// A lane sequence: an edge (0, 1, capacity - 1, capacity, capacity + 1, u64::MAX - 1, u64::MAX), uniform up
++        /// to the capacity, or any u64.
++        fn sequence(&mut self) -> u64 {
++            const EDGES: [u64; 7] = [
++                0,
++                1,
++                POOL_V1_PAIR_CAPACITY - 1,
++                POOL_V1_PAIR_CAPACITY,
++                POOL_V1_PAIR_CAPACITY + 1,
++                u64::MAX - 1,
++                u64::MAX,
++            ];
++            match self.next() % 8 {
++                0 | 1 => EDGES[(self.next() % 7) as usize],
++                2 => self.next(),
++                _ => self.next() % (POOL_V1_PAIR_CAPACITY + 1),
++            }
++        }
++    }
++
++    #[test]
++    fn same_result_as_frozen_loop_iteration() {
++        let start = std::time::Instant::now();
++        let mut rng = Rng(0x1a9e_5e90_0000_0009);
++        // [Ok, LaneMasterMismatch, LaneOrderMismatch, InvalidMasterState]
++        let mut seen = [0usize; 4];
++        let mut cases = 0usize;
++        let indices = [0, 1, POOL_V1_PAIR_CAPACITY - 1, POOL_V1_PAIR_CAPACITY, POOL_V1_PAIR_CAPACITY + 1, u64::MAX];
++        let expected_lanes = [0usize, 1, 2, 3, 4, 5, 6, 7, 8, 255, 256, usize::MAX];
++        // Every lane id, every expected lane in and around 0..8, every index edge, three master relations.
++        for lane_id in 0..=255u8 {
++            for &expected_lane in &expected_lanes {
++                for &index in &indices {
++                    for relation in 0..3 {
++                        let pool: [u8; 32] = core::array::from_fn(|_| rng.byte() | 1);
++                        let mut master = pool;
++                        match relation {
++                            0 => {}
++                            1 => master[(rng.next() % 32) as usize] ^= 1 << (rng.next() % 8),
++                            _ => master = [0u8; 32],
++                        }
++                        let lane = PoolV1PairForestLaneStateV1 {
++                            bump: rng.byte(),
++                            master,
++                            lane_id,
++                            tree: IncrementalMerkleTreeV1 {
++                                next_leaf_index: index,
++                                root: rng.digest(),
++                                frontier: core::array::from_fn(|_| rng.digest()),
++                            },
++                        };
++                        let new = checkpoint_lane_sequence_v1(&lane, expected_lane, &pool);
++                        assert_eq!(new, frozen_iteration(&lane, expected_lane, &pool), "{lane:?} {expected_lane} {pool:?}");
++                        seen[match new {
++                            Ok(_) => 0,
++                            Err(PoolV1PairForestAccountErrorV1::LaneMasterMismatch) => 1,
++                            Err(PoolV1PairForestAccountErrorV1::LaneOrderMismatch) => 2,
++                            Err(PoolV1PairForestAccountErrorV1::InvalidMasterState) => 3,
++                            Err(e) => panic!("unexpected {e:?}"),
++                        }] += 1;
++                        cases += 1;
++                    }
++                }
++            }
++        }
++        // Random lanes, with the index drawn from the sequence edges.
++        for _ in 0..100_000 {
++            let pool: [u8; 32] = core::array::from_fn(|_| rng.byte() | 1);
++            let lane = PoolV1PairForestLaneStateV1 {
++                bump: rng.byte(),
++                master: if rng.next() % 4 == 0 { rng.binding(4) } else { pool },
++                lane_id: if rng.next() % 2 == 0 { (rng.next() % 8) as u8 } else { rng.byte() },
++                tree: IncrementalMerkleTreeV1 {
++                    next_leaf_index: rng.sequence(),
++                    root: rng.digest(),
++                    frontier: core::array::from_fn(|_| rng.digest()),
++                },
++            };
++            let expected_lane = (rng.next() % 9) as usize;
++            let new = checkpoint_lane_sequence_v1(&lane, expected_lane, &pool);
++            assert_eq!(new, frozen_iteration(&lane, expected_lane, &pool), "{lane:?} {expected_lane} {pool:?}");
++            seen[match new {
++                Ok(_) => 0,
++                Err(PoolV1PairForestAccountErrorV1::LaneMasterMismatch) => 1,
++                Err(PoolV1PairForestAccountErrorV1::LaneOrderMismatch) => 2,
++                Err(PoolV1PairForestAccountErrorV1::InvalidMasterState) => 3,
++                Err(e) => panic!("unexpected {e:?}"),
++            }] += 1;
++            cases += 1;
++        }
++        assert_eq!(cases, 256 * 12 * 6 * 3 + 100_000);
++        assert!(seen.iter().all(|n| *n > 1_000), "{seen:?}");
++        std::println!(
++            "differential_checkpoint_lane_sequence_v1: {cases} cases; Ok {}, LaneMasterMismatch {}, LaneOrderMismatch {}, \
++             InvalidMasterState {}; {} ms",
++            seen[0],
++            seen[1],
++            seen[2],
++            seen[3],
++            start.elapsed().as_millis()
++        );
++    }
++}

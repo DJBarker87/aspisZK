@@ -1,0 +1,151 @@
+--- a/crates/aspis-statement/src/state_only_poseidon.rs	2026-11-12 18:46:31
++++ b/crates/aspis-statement/src/state_only_poseidon.rs	2026-11-12 18:46:31
+@@ -1355,6 +1355,148 @@
+             external_linear_lazy_old(&mut b);
+             assert!(a == b, "case {case}");
+             case += 1;
++        }
++    }
++}
++
++/// Differential test of `evaluate_state_only_poseidon_oracle_projected` against its frozen body (commit
++/// 3d700effcabe, state_only_poseidon.rs 589-621). The frozen body is kept verbatim; adapted only by its name and
++/// by dropping `pub` and `#[inline(never)]`. Both bodies call the same shipped helpers.
++#[cfg(test)]
++mod differential_evaluate_state_only_poseidon_oracle_projected {
++    extern crate std;
++    use super::*;
++
++    fn frozen_evaluate_state_only_poseidon_oracle_projected(
++        openings: &StateOnlyPoseidonOpenings,
++        selectors: &StateOnlyPoseidonSelectors,
++    ) -> [QM31; STATE_ONLY_POSEIDON_PACKED_LANES] {
++        let leading_low = selectors.local[0];
++        let full_low = [1usize, 9, 10]
++            .into_iter()
++            .fold(QM31::ZERO, |sum, row| sum.add(selectors.local[row]));
++        let internal_low = (2usize..=8).fold(QM31::ZERO, |sum, row| sum.add(selectors.local[row]));
++        let leading = leading_pair_packed(openings);
++        let full = interpolated_full_pair_packed(openings.z, &selectors.local);
++        let internal = interpolated_internal_pair(openings.z, &selectors.local);
++        let prepared_weights = [leading_low, full_low, internal_low].map(PreparedQm31Multiplier::new);
++        let prepared_block = PreparedQm31Multiplier::new(selectors.block);
++
++        core::array::from_fn(|group| {
++            let start = 4 * group;
++            let target = qm31_pack_base4(&openings.succ_z[start..start + 4]);
++            let internal = qm31_pack_base4(&internal[start..start + 4]);
++            // `active_low = leading_low + full_low + internal_low`, so the
++            // four-product residual is exactly three weighted differences. This
++            // removes one QM31 product per packed group without changing the
++            // polynomial or its selector basis.
++            prepared_block.mul(qm31_sum_products3_prepared(
++                &prepared_weights,
++                &[
++                    target.sub(leading[group]),
++                    target.sub(full[group]),
++                    target.sub(internal),
++                ],
++            ))
++        })
++    }
++
++    /// splitmix64 with a fixed seed.
++    struct Rng(u64);
++    impl Rng {
++        fn next(&mut self) -> u64 {
++            self.0 = self.0.wrapping_add(0x9e37_79b9_7f4a_7c15);
++            let mut z = self.0;
++            z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
++            z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
++            z ^ (z >> 31)
++        }
++        /// A canonical M31 limb: 0, 1, 2, p - 2 or p - 1 with probability 3/8, otherwise uniform below p.
++        fn limb(&mut self) -> u32 {
++            match self.next() % 8 {
++                0 => 0,
++                1 => 1,
++                2 => [2, P - 2, P - 1][(self.next() % 3) as usize],
++                _ => (self.next() % u64::from(P)) as u32,
++            }
++        }
++        fn qm31(&mut self) -> QM31 {
++            qm31([self.limb(), self.limb(), self.limb(), self.limb()])
++        }
++        fn openings(&mut self) -> StateOnlyPoseidonOpenings {
++            StateOnlyPoseidonOpenings {
++                z: core::array::from_fn(|_| self.qm31()),
++                succ_z: core::array::from_fn(|_| self.qm31()),
++                xor12_z: core::array::from_fn(|_| self.qm31()),
++            }
+         }
+     }
++
++    fn qm31(l: [u32; 4]) -> QM31 {
++        QM31 { c0: CM31 { a: M31(l[0]), b: M31(l[1]) }, c1: CM31 { a: M31(l[2]), b: M31(l[3]) } }
++    }
++
++    /// Zero, one, the four unit limbs at p - 1, and every limb equal to 2, p - 2 or p - 1.
++    fn edges() -> [QM31; 9] {
++        [
++            QM31::ZERO,
++            QM31::ONE,
++            qm31([P - 1, 0, 0, 0]),
++            qm31([0, P - 1, 0, 0]),
++            qm31([0, 0, P - 1, 0]),
++            qm31([0, 0, 0, P - 1]),
++            qm31([2; 4]),
++            qm31([P - 2; 4]),
++            qm31([P - 1; 4]),
++        ]
++    }
++
++    fn check(openings: &StateOnlyPoseidonOpenings, selectors: &StateOnlyPoseidonSelectors) {
++        assert_eq!(
++            evaluate_state_only_poseidon_oracle_projected(openings, selectors),
++            frozen_evaluate_state_only_poseidon_oracle_projected(openings, selectors),
++            "openings {openings:?} selectors {selectors:?}"
++        );
++    }
++
++    #[test]
++    fn same_result_as_frozen_body() {
++        let start = std::time::Instant::now();
++        let mut rng = Rng(0x9050_1d0e_0000_0002);
++        let edges = edges();
++        let mut cases = 0usize;
++        // Every opening and selector at one edge value each.
++        for &opening in &edges {
++            for &selector in &edges {
++                let openings = StateOnlyPoseidonOpenings { z: [opening; 16], succ_z: [opening; 16], xor12_z: [opening; 16] };
++                check(&openings, &StateOnlyPoseidonSelectors { block: selector, local: [selector; 16] });
++                cases += 1;
++            }
++        }
++        // One local selector row at an edge value and the others zero (each summed row alone), random openings.
++        for row in 0..STATE_ONLY_POSEIDON_BLOCK_ROWS {
++            for &e in &edges {
++                let mut local = [QM31::ZERO; STATE_ONLY_POSEIDON_BLOCK_ROWS];
++                local[row] = e;
++                check(&rng.openings(), &StateOnlyPoseidonSelectors { block: rng.qm31(), local });
++                cases += 1;
++            }
++        }
++        // Selectors as the verifier builds them, at random points; and fully random selectors.
++        for n in 0..40_000 {
++            let openings = rng.openings();
++            let selectors = if n % 2 == 0 {
++                StateOnlyPoseidonSelectors::at_point(&core::array::from_fn(|_| rng.qm31()))
++            } else {
++                StateOnlyPoseidonSelectors { block: rng.qm31(), local: core::array::from_fn(|_| rng.qm31()) }
++            };
++            check(&openings, &selectors);
++            cases += 1;
++        }
++        assert_eq!(cases, 9 * 9 + 16 * 9 + 40_000);
++        std::println!(
++            "differential_evaluate_state_only_poseidon_oracle_projected: {cases} cases, {} ms",
++            start.elapsed().as_millis()
++        );
++    }
+ }

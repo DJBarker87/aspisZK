@@ -1,0 +1,163 @@
+--- a/crates/aspis-core/src/state_only_hiding.rs	2026-11-12 18:46:31
++++ b/crates/aspis-core/src/state_only_hiding.rs	2026-11-12 18:46:31
+@@ -1247,6 +1247,160 @@
+             let mut p = [QM31::ZERO; STATE_ONLY_HIDING_SUMCHECK_ROUNDS];
+             for x in p.iter_mut() { *x = q(&mut s); }
+             assert_eq!(selected_mask_linears(&p), old(&p));
++        }
++    }
++}
++
++/// Differential test of `state_only_selected_mask_value` against its frozen body (commit 3d700effcabe,
++/// state_only_hiding.rs 647-675). The frozen body is kept verbatim; adapted only by its name and by dropping
++/// `pub` and `#[inline(never)]`. Both bodies call the same shipped helpers (`selected_mask_linears`,
++/// `mul_tower_basis`, `mask_power_26`); `selected_mask_linears` has its own differential test above.
++#[cfg(test)]
++mod differential_state_only_selected_mask_value {
++    extern crate std;
++    use super::*;
++    use crate::field::P;
++
++    fn frozen_state_only_selected_mask_value(
++        c1: &[QM31; STATE_ONLY_HIDING_C1_COLUMNS],
++        mask_only_c1: &[QM31; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS],
++        explicit_g: QM31,
++        point: &[QM31; STATE_ONLY_HIDING_SUMCHECK_ROUNDS],
++    ) -> QM31 {
++        let (linear, explicit_linear) = selected_mask_linears(point);
++        let mut coefficients = [QM31::ZERO; STATE_ONLY_HIDING_FACTOR_DEGREE + 1];
++        for column in 0..STATE_ONLY_HIDING_C1_COLUMNS {
++            coefficients[usize::from(FACTOR_EXPONENTS[column])] =
++                mul_tower_basis(c1[column], column & 3);
++        }
++        for column in 0..STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS {
++            coefficients[usize::from(MASK_ONLY_FACTOR_EXPONENTS[column])] =
++                mul_tower_basis(mask_only_c1[column], column & 3);
++        }
++
++        let prepared_linear = PreparedQm31Multiplier::new(linear);
++        let mut shared = coefficients[STATE_ONLY_HIDING_FACTOR_DEGREE];
++        for exponent in (0..STATE_ONLY_HIDING_FACTOR_DEGREE).rev() {
++            shared = prepared_linear.mul(shared).add(coefficients[exponent]);
++        }
++
++        shared.add(
++            QM31::ONE
++                .add(mask_power_26(explicit_linear))
++                .mul(explicit_g),
++        )
++    }
++
++    /// splitmix64 with a fixed seed.
++    struct Rng(u64);
++    impl Rng {
++        fn next(&mut self) -> u64 {
++            self.0 = self.0.wrapping_add(0x9e37_79b9_7f4a_7c15);
++            let mut z = self.0;
++            z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
++            z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
++            z ^ (z >> 31)
++        }
++        /// A canonical M31 limb: 0, 1, 2, p - 2 or p - 1 with probability 3/8, otherwise uniform below p.
++        fn limb(&mut self) -> u32 {
++            match self.next() % 8 {
++                0 => 0,
++                1 => 1,
++                2 => [2, P - 2, P - 1][(self.next() % 3) as usize],
++                _ => (self.next() % u64::from(P)) as u32,
++            }
++        }
++        fn qm31(&mut self) -> QM31 {
++            qm31([self.limb(), self.limb(), self.limb(), self.limb()])
++        }
++    }
++
++    fn qm31(l: [u32; 4]) -> QM31 {
++        QM31 { c0: CM31 { a: M31(l[0]), b: M31(l[1]) }, c1: CM31 { a: M31(l[2]), b: M31(l[3]) } }
++    }
++
++    /// Zero, one, the four unit limbs at p - 1, and every limb equal to 2, p - 2 or p - 1.
++    fn edges() -> [QM31; 9] {
++        [
++            QM31::ZERO,
++            QM31::ONE,
++            qm31([P - 1, 0, 0, 0]),
++            qm31([0, P - 1, 0, 0]),
++            qm31([0, 0, P - 1, 0]),
++            qm31([0, 0, 0, P - 1]),
++            qm31([2; 4]),
++            qm31([P - 2; 4]),
++            qm31([P - 1; 4]),
++        ]
++    }
++
++    fn check(
++        c1: &[QM31; STATE_ONLY_HIDING_C1_COLUMNS],
++        mask_only_c1: &[QM31; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS],
++        explicit_g: QM31,
++        point: &[QM31; STATE_ONLY_HIDING_SUMCHECK_ROUNDS],
++    ) {
++        assert_eq!(
++            state_only_selected_mask_value(c1, mask_only_c1, explicit_g, point),
++            frozen_state_only_selected_mask_value(c1, mask_only_c1, explicit_g, point),
++            "c1 {c1:?} mask_only_c1 {mask_only_c1:?} explicit_g {explicit_g:?} point {point:?}"
++        );
++    }
++
++    #[test]
++    fn same_result_as_frozen_body() {
++        let start = std::time::Instant::now();
++        let mut rng = Rng(0x5e1e_c7ed_0000_0001);
++        let edges = edges();
++        let mut cases = 0usize;
++        // Every combination of one edge value for all columns, one for every point coordinate and one for
++        // the explicit mask.
++        for &column in &edges {
++            for &coordinate in &edges {
++                for &g in &edges {
++                    check(&[column; 16], &[column; 10], g, &[coordinate; 10]);
++                    cases += 1;
++                }
++            }
+         }
++        // One point coordinate at an edge value, the others zero; random columns.
++        for k in 0..STATE_ONLY_HIDING_SUMCHECK_ROUNDS {
++            for &e in &edges {
++                let mut point = [QM31::ZERO; STATE_ONLY_HIDING_SUMCHECK_ROUNDS];
++                point[k] = e;
++                let c1 = core::array::from_fn(|_| rng.qm31());
++                let mask_only = core::array::from_fn(|_| rng.qm31());
++                check(&c1, &mask_only, rng.qm31(), &point);
++                cases += 1;
++            }
++        }
++        // One column (semantic or mask-only) at an edge value, the others zero; random point.
++        for k in 0..STATE_ONLY_HIDING_C1_COLUMNS + STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS {
++            for &e in &edges {
++                let mut c1 = [QM31::ZERO; STATE_ONLY_HIDING_C1_COLUMNS];
++                let mut mask_only = [QM31::ZERO; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS];
++                if k < STATE_ONLY_HIDING_C1_COLUMNS {
++                    c1[k] = e;
++                } else {
++                    mask_only[k - STATE_ONLY_HIDING_C1_COLUMNS] = e;
++                }
++                let point = core::array::from_fn(|_| rng.qm31());
++                check(&c1, &mask_only, QM31::ZERO, &point);
++                cases += 1;
++            }
++        }
++        // Random inputs.
++        for _ in 0..200_000 {
++            let c1 = core::array::from_fn(|_| rng.qm31());
++            let mask_only = core::array::from_fn(|_| rng.qm31());
++            let point = core::array::from_fn(|_| rng.qm31());
++            check(&c1, &mask_only, rng.qm31(), &point);
++            cases += 1;
++        }
++        assert_eq!(cases, 9 * 9 * 9 + 10 * 9 + 26 * 9 + 200_000);
++        std::println!(
++            "differential_state_only_selected_mask_value: {cases} cases, {} ms",
++            start.elapsed().as_millis()
++        );
+     }
+ }
