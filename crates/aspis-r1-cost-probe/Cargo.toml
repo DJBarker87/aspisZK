@@ -65,6 +65,10 @@ optimized-terminal = [
     "aspis-statement/pool-v1-pair-forest-active-mask-basis-audit",
 ]
 prover = ["private-leaf-salts", "dep:aspis-prover", "dep:serde_json", "dep:sha2"]
+# Records verifier intermediate values in a thread-local for the privacy harness's auxiliary-trace comparison.
+# Not enabled by `prover` or `r1p-check`: a release client keeps no such record, and the translated client
+# compiles the empty branch of `trace::value`.
+trace = []
 private-leaf-salts = []
 # LOG D38.3: the prover-side P_R1 check (extracted C3 checker via the z4 probe
 # library) and the capped retry loop; requires private leaf salts.
