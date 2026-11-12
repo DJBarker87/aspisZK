@@ -1,0 +1,87 @@
+{
+ "note": "X7: the Pool at the flags of X2c's final run c9 (fv_x2c_cfg_c9.json): root processor::process_instruction, the deployed feature list, overflow checks off, the two library crates included (transparent), the write boundary and the one-line runtime wrapper opaque by name, the SDK type solana_rent::Rent opaque; no Aeneas extra flag",
+ "program": "pool",
+ "manifest": "programs/aspis-pool/Cargo.toml",
+ "package": "aspis-pool",
+ "features": "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+ "overflow_checks": false,
+ "overflow_env_explicit": false,
+ "extra_env": {},
+ "flag_order": [
+  "roots",
+  "opaque",
+  "include",
+  "exclude",
+  "extra"
+ ],
+ "roots": [
+  "crate::processor::process_instruction"
+ ],
+ "opaque": [
+  "crate::account_write::write_account_data_v1",
+  "solana_rent::Rent",
+  "crate::processor::runtime_stack_height_v1"
+ ],
+ "include": [
+  "aspis_statement",
+  "aspis_core"
+ ],
+ "exclude": [],
+ "aeneas_extra": [],
+ "ns": "AspisX2",
+ "crates": [
+  "aspis_pool",
+  "aspis_statement",
+  "aspis_core"
+ ],
+ "packages": [
+  "aspis-pool",
+  "aspis-statement",
+  "aspis-core"
+ ],
+ "crate_dirs": [
+  "programs/aspis-pool",
+  "crates/aspis-statement",
+  "crates/aspis-core"
+ ],
+ "own_crate": "aspis_pool",
+ "write_boundaries": [
+  "account_write.write_account_data_v1"
+ ],
+ "runtime_wrappers": [
+  "processor.runtime_stack_height_v1"
+ ],
+ "boundary_source": {
+  "programs/aspis-pool/src/account_write.rs": null
+ },
+ "hash_boundary": null,
+ "runtime_boundary_functions": [
+  "runtime_stack_height_v1"
+ ],
+ "read_externals": [
+  "solana_account_info.AccountInfo.try_borrow_data"
+ ],
+ "writers_checked": [
+  "processor.dispatch_pool_instruction_v1"
+ ],
+ "reference_raw": "/home/dombarker/project-offloads/future-version-20261111/x2c/pool-c9/runs/A-release/raw/AspisX2",
+ "reference_label": "X2c run c9 (tree x2c/rw-tree)",
+ "examined_flags": {
+  "processor.dispatch_pool_instruction_v1": "X2c (write-boundary.md, emission check b): the four handler calls are on mutually exclusive branches of the magic dispatch",
+  "pair_forest.process_pair_forest_terminal_v1": "X2c (write-boundary.md, emission check b): the reading name is the production host instance passed as an argument of the same handler call"
+ },
+ "raw_roots": [
+  "pair_forest.process_pair_forest_initialize_with_runtime_v1",
+  "pair_forest.process_pair_forest_checkpoint_with_runtime_v1",
+  "pair_forest.process_pair_forest_deposit_with_runtime_v1",
+  "pair_forest.process_pair_forest_terminal_v1",
+  "processor.process_instruction"
+ ],
+ "raw_reads": [
+  "solana_account_info.AccountInfo.try_borrow_data",
+  "solana_account_info.AccountInfo.data_len",
+  "solana_account_info.AccountInfo.data_is_empty",
+  "solana_account_info.AccountInfo.impl.lamports",
+  "solana_account_info.AccountInfo.try_lamports"
+ ]
+}

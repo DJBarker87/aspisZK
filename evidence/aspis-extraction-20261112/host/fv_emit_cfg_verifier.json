@@ -1,0 +1,99 @@
+{
+ "note": "X7: the verifier program at the flags of X1b's final run G (fv_x1b_cfg_G.json): root process_r1_cost_probe_instruction, features aspis, overflow checks off, the three library crates included (transparent), the two account write boundaries opaque by name, Aeneas -max-recdepth 4096; the deployment ids of the devnet build of the frozen tree",
+ "program": "verifier",
+ "manifest": "programs/r1-cost-probe/Cargo.toml",
+ "package": "aspis-r1-cost-probe-program",
+ "features": "aspis",
+ "overflow_checks": false,
+ "overflow_env_explicit": true,
+ "extra_env": {
+  "ASPIS_R1_POOL_PROGRAM_ID": "4hxEyoU8MC3oFMya8D8MAcvhCPhLfHKDP1Ji9byYycn1",
+  "ASPIS_R1_REGISTRY_PROGRAM_ID": "9pWwAcBgwhnkA8JWSA6GvjpYqGzSibLF6GqGH8v6EC9Q"
+ },
+ "flag_order": [
+  "roots",
+  "include",
+  "opaque",
+  "exclude"
+ ],
+ "roots": [
+  "crate::process_r1_cost_probe_instruction"
+ ],
+ "include": [
+  "aspis_r1_cost_probe",
+  "aspis_statement",
+  "aspis_core"
+ ],
+ "opaque": [
+  "crate::r1_pool_adapter::write_zero_data",
+  "crate::r1_pool_adapter::write_lamports"
+ ],
+ "exclude": [],
+ "aeneas_extra": [
+  "-max-recdepth",
+  "4096"
+ ],
+ "ns": "AspisX1",
+ "crates": [
+  "aspis_r1_cost_probe_program",
+  "aspis_r1_cost_probe",
+  "aspis_statement",
+  "aspis_core"
+ ],
+ "packages": [
+  "aspis-r1-cost-probe-program",
+  "aspis-r1-cost-probe",
+  "aspis-statement",
+  "aspis-core"
+ ],
+ "crate_dirs": [
+  "programs/r1-cost-probe",
+  "crates/aspis-r1-cost-probe",
+  "crates/aspis-statement",
+  "crates/aspis-core"
+ ],
+ "own_crate": "aspis_r1_cost_probe_program",
+ "write_boundaries": [
+  "r1_pool_adapter.write_zero_data",
+  "r1_pool_adapter.write_lamports"
+ ],
+ "runtime_wrappers": [],
+ "boundary_source": {
+  "programs/r1-cost-probe/src/r1_pool_adapter.rs": [
+   "write_zero_data",
+   "write_lamports"
+  ]
+ },
+ "hash_boundary": {
+  "file": "programs/r1-cost-probe/src/lib.rs",
+  "function": "digest_into"
+ },
+ "runtime_boundary_functions": [
+  "digest_into"
+ ],
+ "read_externals": [
+  "solana_account_info.AccountInfo.try_borrow_data",
+  "solana_account_info.AccountInfo.try_lamports",
+  "solana_account_info.AccountInfo.lamports",
+  "solana_account_info.AccountInfo.data_len",
+  "solana_account_info.AccountInfo.data_is_empty"
+ ],
+ "writers_checked": [
+  "r1_pool_adapter.close_checkpoint"
+ ],
+ "reference_raw": "/home/dombarker/project-offloads/future-version-20261111/x1b/runs/G/runs/A-release/raw/AspisX1",
+ "reference_label": "X1b run G (tree x1b/rw-G)",
+ "examined_flags": {
+  "r1_pool_adapter.process": "X7 (source programs/r1-cost-probe/src/r1_pool_adapter.rs, fn process, and its emitted body): close_checkpoint and stage2 are separate arms of one match on the first instruction byte (CLOSE_CHECKPOINT_TAG against the default arm); no path runs both"
+ },
+ "raw_roots": [
+  "r1_pool_adapter.close_checkpoint"
+ ],
+ "raw_reads": [
+  "solana_account_info.AccountInfo.try_borrow_data",
+  "solana_account_info.AccountInfo.data_len",
+  "solana_account_info.AccountInfo.data_is_empty",
+  "solana_account_info.AccountInfo.impl.lamports",
+  "solana_account_info.AccountInfo.try_lamports"
+ ]
+}
