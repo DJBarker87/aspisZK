@@ -1,0 +1,19 @@
+--- carried-src/CompPoly/Univariate/Roots/Correctness.lean
++++ ported-src/CompPoly/Univariate/Roots/Correctness.lean
+@@ -136,10 +136,12 @@
+     {p : CPolynomial.Raw F} {a : F} (hp : p.eval a = 0) :
+     (CPolynomial.Raw.monicNormalize p).eval a = 0 := by
+   unfold CPolynomial.Raw.monicNormalize
+-  by_cases hzero : p.trim = (#[] : CPolynomial.Raw F)
+-  · simp [hzero, CPolynomial.Raw.eval, CPolynomial.Raw.eval₂]
+-  · simp [hzero]
+-    change CPolynomial.Raw.eval a (CPolynomial.Raw.smul p.trim.leadingCoeff⁻¹ p.trim) = 0
++  show CPolynomial.Raw.eval a
++      (if p.trim == (0 : CPolynomial.Raw F) then 0 else p.trim.leadingCoeff⁻¹ • p.trim) = 0
++  split
++  · simp [CPolynomial.Raw.eval, CPolynomial.Raw.eval₂]
++    rfl
++  · change CPolynomial.Raw.eval a (CPolynomial.Raw.smul p.trim.leadingCoeff⁻¹ p.trim) = 0
+     rw [Raw.eval_smul, CPolynomial.Raw.eval_trim_eq_eval, hp]
+     simp
+ 

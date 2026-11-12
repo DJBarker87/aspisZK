@@ -1,0 +1,10 @@
+--- carried-src/RawMulSizeBoundV5.lean
++++ ported-src/RawMulSizeBoundV5.lean
+@@ -15,6 +15,7 @@
+     have hp : p.toPoly = 0 := by
+       rw [← CPolynomial.Raw.toPoly_trim, hpTrim]
+       simp [CPolynomial.Raw.toPoly, CPolynomial.Raw.eval₂]
++      all_goals rfl
+     simp [hp]
+   · have hpos : 0 < p.trim.size := Nat.pos_of_ne_zero hz
+     exact le_trans (Nat.le_of_lt

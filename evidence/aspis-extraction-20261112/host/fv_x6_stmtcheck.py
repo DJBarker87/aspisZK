@@ -15,7 +15,11 @@ For each module present in <carried-src> and differing in <ported-src>:
 Modules absent from <ported-src> are listed as `removed` and must be listed in <allowed-removals>.
 Prints one row per finding; exit 0 iff there is none.
 Usage: fv_x6_stmtcheck.py <carried-src> <ported-src> <allowed-removals.txt> <allowed-header-edits.tsv> [module ...]
-  (<allowed-header-edits.tsv>: module<TAB>exact new line; without explicit modules, every .lean of carried-src)
+  (<allowed-header-edits.tsv>: rows `module<TAB>exact new line` (an allowed new header line, e.g. an added Mathlib
+   import) and rows `ATTR<TAB>module<TAB>declaration<TAB>attribute` (an attribute that may be added to that one
+   declaration); without explicit modules, every .lean of carried-src)
+  4. attribute lines: any added or removed line starting with `@[` or `attribute [` is a finding unless it is the
+     same line with only an allowed attribute added (ATTR row, matched against the next declaration's name).
 """
 import difflib, os, re, sys
 
@@ -81,10 +85,21 @@ def decls(text):
     return res
 
 
+def strip_attr(text, attr):
+    """remove `attr` from every @[...] list in text; drop lists that become empty"""
+    def fix(mo):
+        items = [x.strip() for x in mo.group(1).split(",") if x.strip() and x.strip() != attr]
+        return ("@[" + ", ".join(items) + "]") if items else ""
+    out = re.sub(r"@\[([^\]]*)\]", fix, text)
+    return re.sub(r"^\s*\n", "", out)
+
+
 def main():
     old_root, new_root, rem_f, hdr_f = sys.argv[1:5]
     allowed_rem = {l.strip() for l in open(rem_f) if l.strip()}
-    allowed_hdr = {tuple(l.rstrip("\n").split("\t", 1)) for l in open(hdr_f) if l.strip()}
+    rows = [l.rstrip("\n").split("\t") for l in open(hdr_f) if l.strip()]
+    allowed_hdr = {(r[0], r[1]) for r in rows if r[0] != "ATTR"}
+    allowed_attr = {(r[1], r[2]): r[3] for r in rows if r[0] == "ATTR"}
     mods = sys.argv[5:]
     if not mods:
         for dp, _, fs in os.walk(old_root):
@@ -104,8 +119,11 @@ def main():
             continue
         checked += 1
         da, db = decls(a), decls(b)
-        sa = [(x[0], x[1], x[2]) for x in da]
-        sb = [(x[0], x[1], x[2]) for x in db]
+        def norm(x):
+            at = allowed_attr.get((m, x[1]))
+            return (x[0], x[1], strip_attr(x[2], at).strip() if at else x[2])
+        sa = [norm(x) for x in da]
+        sb = [norm(x) for x in db]
         if sa != sb:
             for x, y in zip(sa + [None] * (len(sb) - len(sa)), sb + [None] * (len(sa) - len(sb))):
                 if x != y:
@@ -124,6 +142,9 @@ def main():
                 enc = enc[-1] if enc else None
                 if enc is None:
                     for nl in bl[j1:j2]:
+                        # attribute lines are judged by step 4
+                        if re.match(r"^\s*(@\[|attribute\s*\[)", nl):
+                            continue
                         if (m, nl) not in allowed_hdr:
                             findings.append((m, "header", f"old line {ln}", nl[:200]))
                     break
@@ -133,6 +154,29 @@ def main():
                     findings.append((m, "before :=", f"{enc[0]} {enc[1]} old line {ln}", al[ln - 1][:200]))
                 if tag == "insert" and ln <= enc[4] and ln > enc[3]:
                     findings.append((m, "before :=", f"{enc[0]} {enc[1]} insertion at old line {ln}", ""))
+            # step 4: attribute lines
+            ATT = re.compile(r"^\s*(@\[|attribute\s*\[)")
+            olds, news = al[i1:i2], bl[j1:j2]
+            for k, nl in enumerate(news):
+                if not ATT.match(nl):
+                    continue
+                nxt = [d for d in db if d[3] >= j1 + k + 1]
+                name = nxt[0][1] if nxt else ""
+                at = allowed_attr.get((m, name))
+                ok = False
+                if at:
+                    stripped = strip_attr(nl, at)
+                    ok = (stripped.strip() == "" and tag == "insert") or (stripped in olds)
+                if not ok:
+                    findings.append((m, "attribute", f"new line {j1 + k + 1} (next declaration {name})", nl[:200]))
+            def allowed_strip(k, nl):
+                nxt = [d for d in db if d[3] >= j1 + k + 1]
+                at = allowed_attr.get((m, nxt[0][1] if nxt else ""))
+                return strip_attr(nl, at) if at else nl
+            for ol in olds:
+                if ATT.match(ol) and tag in ("delete", "replace") and not any(
+                        allowed_strip(k, nl) == ol for k, nl in enumerate(news)):
+                    findings.append((m, "attribute", "removed attribute line", ol[:200]))
             removed_text = "\n".join(al[i1:i2])
             for nl in bl[j1:j2]:
                 for tok in ("sorry", "admit", "native_decide", "maxHeartbeats", "maxRecDepth", "set_option", "axiom", "decide"):

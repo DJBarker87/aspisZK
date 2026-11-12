@@ -1,0 +1,20 @@
+--- carried-src/AspisFormal/V5FriInitialCircleEncoderIdentity.lean
++++ ported-src/AspisFormal/V5FriInitialCircleEncoderIdentity.lean
+@@ -386,7 +386,7 @@
+       ⟨(-1, 0), by show (-1 : ZMod P) ^ 2 + (0 : ZMod P) ^ 2 = 1; ring⟩ := by
+   rw [show (2 : Int) ^ 30 = ((2 ^ 30 : Nat) : Int) by norm_num, zpow_natCast]
+   rw [← sq_iterate 30 g]
+-  decide
++  exact Subtype.ext (by decide)
+ 
+ /-- Slot two is the half-turn rotation of slot zero. -/
+ theorem storedInitialCirclePoint_child_two (i : Fin 131072) :
+@@ -577,7 +577,7 @@
+     exact h
+   intro i slot
+   rw [encoder0, circleLiftEncoder, radix4LiftEncoder_apply_child]
+-  simp only [extend1, Pi.neg_apply, hcircleX, hcircleY]
++  simp only [extend1, Pi.neg_apply, hcircleX, hcircleY, hcircleX i, hcircleY i]
+   have hnode := storedFirstLineX_eq_doubled_algebraMap (K := K) i
+   have h0 := hencoder1 (coefficientLane 256 0 message) i
+   have h1 := hencoder1 (coefficientLane 256 1 message) i

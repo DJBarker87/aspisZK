@@ -1,24 +1,15 @@
 --- carried-src/M31RetryOutputMassNat.lean
 +++ ported-src/M31RetryOutputMassNat.lean
-@@ -8,17 +8,16 @@
- theorem natOutputMass_eq_P_mul_base :
-     natOutputMass = P31 * Nat.card (AnyOutputFiber (some r0)) := by
-   unfold natOutputMass
-+  have hcard : (Finset.univ : Finset Value).card = P31 := Finset.card_fin P31
-   calc
-     (∑ r : Value, Nat.card (AnyOutputFiber (some r))) =
-         ∑ _r : Value, Nat.card (AnyOutputFiber (some r0)) := by
-       apply Finset.sum_congr rfl
+@@ -15,10 +15,9 @@
        intro r _
        exact natOutputFiber_card_eq_base r
--    _ = Fintype.card Value * Nat.card (AnyOutputFiber (some r0)) := by
+     _ = Fintype.card Value * Nat.card (AnyOutputFiber (some r0)) := by
 -      change (Finset.univ.sum fun _ : Value => Nat.card (AnyOutputFiber (some r0))) = _
 -      rw [Finset.sum_const, Finset.card_univ, Nat.nsmul_eq_mul]
--    _ = P31 * Nat.card (AnyOutputFiber (some r0)) := by
++      rw [Finset.sum_const_nat (fun _ _ => rfl), Finset.card_univ]
+     _ = P31 * Nat.card (AnyOutputFiber (some r0)) := by
 -      rw [Fintype.card_fin]
-+    _ = (Finset.univ : Finset Value).card • Nat.card (AnyOutputFiber (some r0)) := Finset.sum_const _
-+    _ = P31 • Nat.card (AnyOutputFiber (some r0)) := by rw [hcard]
-+    _ = P31 * Nat.card (AnyOutputFiber (some r0)) := Nat.nsmul_eq_mul _ _
++      rw [show Fintype.card Value = P31 from Fintype.card_fin P31]
  
  theorem natEachOutputCard_mul_P31 (r : Value) :
      Nat.card (AnyOutputFiber (some r)) * P31 = (2 ^ 32) ^ 16 - 2 ^ 16 := by
