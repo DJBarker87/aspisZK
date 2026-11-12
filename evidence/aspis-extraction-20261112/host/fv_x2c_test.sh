@@ -6,7 +6,7 @@
 # Usage: fv_x2c_test.sh <tree dir> <target-name> <dump dir> [stmt filter]
 set -u
 W=/home/dombarker/project-offloads/future-version-20261111
-T=$1; N=$2; D=$3; F=${4:-x2b_}
+T=$1; N=$2; D=$3; F=${4-x2b_}
 mkdir -p $D
 cd $T
 E="env PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin RUSTUP_TOOLCHAIN=nightly-2026-09-17 CARGO_TARGET_DIR=$W/x2c/target/$N CARGO_NET_OFFLINE=true CARGO_BUILD_JOBS=4"

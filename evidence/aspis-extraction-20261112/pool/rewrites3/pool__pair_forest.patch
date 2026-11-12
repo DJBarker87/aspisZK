@@ -301,7 +301,7 @@
 +    match decode_lane_account(program_id, master, 0, &lane_accounts[0], false) {
 +        Ok(state) => lane_states.push(state),
 +        Err(err) => return Err(err),
-     }
++    }
 +    match decode_lane_account(program_id, master, 1, &lane_accounts[1], false) {
 +        Ok(state) => lane_states.push(state),
 +        Err(err) => return Err(err),
@@ -309,7 +309,7 @@
 +    match decode_lane_account(program_id, master, 2, &lane_accounts[2], false) {
 +        Ok(state) => lane_states.push(state),
 +        Err(err) => return Err(err),
-+    }
+     }
 +    match decode_lane_account(program_id, master, 3, &lane_accounts[3], false) {
 +        Ok(state) => lane_states.push(state),
 +        Err(err) => return Err(err),
@@ -1250,14 +1250,7 @@
 +        result_bytes,
 +    })
 +}
- 
--    let writable_page = match layout.page {
--        PairForestSpendPageV1::Genesis | PairForestSpendPageV1::SamePage(_) => &accounts[3],
--        PairForestSpendPageV1::Rollover { next_index, .. } => &accounts[next_index],
--    };
--    let mut lane_data = lane_account.try_borrow_mut_data()?;
--    let mut page_data = writable_page.try_borrow_mut_data()?;
--    let mut marker_data = marker.try_borrow_mut_data()?;
++
 +/// Settlement handler: the three writes in the frozen order (lane image, root-history page, nullifier marker),
 +/// through the write boundary. The frozen code acquired the three mutable borrows before the withdrawal CPI and wrote
 +/// after it; here each borrow is taken at its write, after the CPI. The three accounts are distinct
@@ -1392,7 +1385,14 @@
 +    // authenticates the resulting owner, size, zero image and rent reserve.
 +    Ok(withdrawal_plan)
 +}
-+
+ 
+-    let writable_page = match layout.page {
+-        PairForestSpendPageV1::Genesis | PairForestSpendPageV1::SamePage(_) => &accounts[3],
+-        PairForestSpendPageV1::Rollover { next_index, .. } => &accounts[next_index],
+-    };
+-    let mut lane_data = lane_account.try_borrow_mut_data()?;
+-    let mut page_data = writable_page.try_borrow_mut_data()?;
+-    let mut marker_data = marker.try_borrow_mut_data()?;
 +/// Settlement stage (X2b class f split): the withdrawal CPI (vault authority signs) and the exact balance check.
 +fn settle_terminal_withdrawal_v1<R: PoolCpiRuntimeV1>(
 +    runtime: &mut R,
@@ -1475,10 +1475,12 @@
                  request,
                  slot,
                  statement_bytes,
-@@ -1986,11 +2674,28 @@
+@@ -1984,6 +2672,16 @@
+         encode_pool_v1_pair_forest_lane_state_v1(&lane, &POOL_V1_PAIR_EMPTY_ROOTS)
+             .map_err(|_| PoolV1ProgramError::StateHistoryMismatch)?,
      ))
- }
- 
++}
++
 +/// X2c: the initialize handler's plan before any image or CPI (stage 2 of the initialize handler).
 +struct InitializePlanV1 {
 +    expected_master: Pubkey,
@@ -1487,10 +1489,10 @@
 +    vault_preparation: crate::processor::VaultPreparationV1,
 +    lane_preparations: [FreshPdaPreparationV1; POOL_V1_PAIR_FOREST_LANE_COUNT],
 +    lane_bumps: [u8; POOL_V1_PAIR_FOREST_LANE_COUNT],
-+}
-+
+ }
+ 
  /// Initialize
- /// `[master, lane_0, ..., lane_7, mint, vault, token_program, payer,
+@@ -1991,6 +2689,13 @@
  /// system_program]`.
  /// Every program account is either a fresh System account at its canonical PDA
  /// or an exactly sized, zeroed, precreated Pool-owned account.
@@ -1574,6 +1576,9 @@
 -        )?;
 -        lane_bumps[lane] = bump;
 -    }
+-
+-    // Freeze every program-owned output image before the first CPI.
+-    let master_image = forest_master_image_box_v1(&expected_master, &initialization, master_bump)?;
 +        plan_vault_initialization(program_id, &expected_master, mint.key, vault_account)?;
 +    const _: () = assert!(POOL_V1_PAIR_FOREST_LANE_COUNT == 8);
 +    let (lane_preparation_0, lane_bump_0) = match plan_initialize_lane_v1(program_id, &expected_master, &accounts[FOREST_FIRST_LANE_ACCOUNT_INDEX + 0], 0) {
@@ -1617,9 +1622,7 @@
 +        lane_bumps: [lane_bump_0, lane_bump_1, lane_bump_2, lane_bump_3, lane_bump_4, lane_bump_5, lane_bump_6, lane_bump_7],
 +    })
 +}
- 
--    // Freeze every program-owned output image before the first CPI.
--    let master_image = forest_master_image_box_v1(&expected_master, &initialization, master_bump)?;
++
 +/// One lane of the frozen planning loop: its canonical address and its fresh-PDA plan.
 +fn plan_initialize_lane_v1(
 +    program_id: &Pubkey,
@@ -1704,7 +1707,7 @@
          let seeds: &[&[u8]] = &[POOL_V1_PAIR_FOREST_MASTER_SEED, mint.key.as_ref(), &bump];
          create_or_allocate_pda(
              runtime,
-@@ -2061,65 +2882,232 @@
+@@ -2061,68 +2882,269 @@
              seeds,
          )?;
      }
@@ -1979,7 +1982,75 @@
      Ok(())
  }
  
-@@ -2180,11 +3168,26 @@
++/// Checkpoint stage (X2c): the checkpoint PDA's creation (System CPI) when it is system-owned, as in the frozen
++/// handler.
++fn create_checkpoint_account_if_needed_v1<'info, R: PoolCpiRuntimeV1>(
++    program_id: &Pubkey,
++    accounts: &[AccountInfo<'info>],
++    planned: &PlannedPairForestCheckpointAccountsV1,
++    preparation: FreshPdaPreparationV1,
++    runtime: &mut R,
++) -> ProgramResult {
++    if preparation == FreshPdaPreparationV1::CreateOrAllocateSystemOwned {
++        let master = &accounts[FOREST_MASTER_ACCOUNT_INDEX];
++        let checkpoint_state = decode_pool_v1_pair_forest_checkpoint_v1(&planned.checkpoint_image)
++            .map_err(|_| PoolV1ProgramError::StateHistoryMismatch)?;
++        let sequence_bytes = checkpoint_state.checkpoint_sequence.to_le_bytes();
++        let bump_bytes = [checkpoint_state.bump];
++        let seeds: &[&[u8]] = &[
++            POOL_V1_PAIR_FOREST_CHECKPOINT_SEED,
++            master.key.as_ref(),
++            &sequence_bytes,
++            &bump_bytes,
++        ];
++        create_or_allocate_pda(
++            runtime,
++            &accounts[FOREST_CHECKPOINT_PAYER_ACCOUNT_INDEX],
++            &accounts[FOREST_MINT_OR_CHECKPOINT_ACCOUNT_INDEX],
++            &accounts[FOREST_CHECKPOINT_SYSTEM_ACCOUNT_INDEX],
++            POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES,
++            program_id,
++            seeds,
++        )?;
++    }
++    Ok(())
++}
++
+ /// Create one permissionless coherent checkpoint from
+ /// `[master, lane_0, ..., lane_7, checkpoint, payer, system_program]`.
+ /// Lane accounts are read-only. Only the fresh immutable checkpoint and the
+@@ -2152,26 +3174,10 @@
+         &planned.checkpoint,
+         POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES,
+     )?;
+-    if preparation == FreshPdaPreparationV1::CreateOrAllocateSystemOwned {
+-        let checkpoint_state = decode_pool_v1_pair_forest_checkpoint_v1(&planned.checkpoint_image)
+-            .map_err(|_| PoolV1ProgramError::StateHistoryMismatch)?;
+-        let sequence_bytes = checkpoint_state.checkpoint_sequence.to_le_bytes();
+-        let bump_bytes = [checkpoint_state.bump];
+-        let seeds: &[&[u8]] = &[
+-            POOL_V1_PAIR_FOREST_CHECKPOINT_SEED,
+-            master.key.as_ref(),
+-            &sequence_bytes,
+-            &bump_bytes,
+-        ];
+-        create_or_allocate_pda(
+-            runtime,
+-            payer,
+-            checkpoint,
+-            system_program_account,
+-            POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES,
+-            program_id,
+-            seeds,
+-        )?;
++    // X2c: the creation branch is a stage helper, so the code after it (zeroed check, writes) is emitted once.
++    match create_checkpoint_account_if_needed_v1(program_id, accounts, &planned, preparation, runtime) {
++        Ok(()) => {}
++        Err(err) => return Err(err),
+     }
+     require_program_owned_zeroed(
+         checkpoint,
+@@ -2180,11 +3186,26 @@
          rent,
      )?;
  
@@ -2011,7 +2082,7 @@
  }
  
  /// Authenticate one retained immutable checkpoint account. Historical records
-@@ -2199,8 +3202,14 @@
+@@ -2199,8 +3220,14 @@
      if account.is_signer {
          return Err(ProgramError::InvalidAccountData);
      }
@@ -2028,7 +2099,7 @@
      // B4: the checkpoint stores its canonical bump at byte 7 (as the R1
      // verifier adapter reads it); one `create_program_address` authenticates
      // this existing Pool-owned image (F6). A mismatch keeps the old error.
-@@ -2222,6 +3231,140 @@
+@@ -2222,6 +3249,140 @@
  }
  
  #[cfg(test)]
@@ -2169,7 +2240,7 @@
  mod tests {
      use std::{vec, vec::Vec};
  
-@@ -2240,6 +3383,128 @@
+@@ -2240,6 +3401,128 @@
  
      use super::*;
  
@@ -2298,7 +2369,7 @@
      #[derive(Clone)]
      struct TestAccount {
          key: Pubkey,
-@@ -2889,16 +4154,24 @@
+@@ -2889,16 +4172,24 @@
  
      #[test]
      fn pair_forest_lane_persistence_surface_remains_closed() {
@@ -2332,7 +2403,7 @@
      }
  
      fn fixtures(program_id: Pubkey) -> (TestAccount, [TestAccount; 8], TestAccount, Pubkey) {
-@@ -5907,3 +7180,135 @@
+@@ -5907,3 +7198,135 @@
          assert!(ok == 4 && total > 4 * POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES, "{ok} {total}");
      }
  }

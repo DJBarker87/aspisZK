@@ -108,4 +108,30 @@ in `aspis_statement` (`ok_or`, a `u8` shift amount, `iter_mut().enumerate()` loo
 the std iterator instances that list `map`/`all`/`any`/`sum` because reached code uses them. All are addressed in
 the tree state of run c5 (below).
 
-STEP5_ONWARD
+## Step 5: the two library crates
+
+Before patching, `../onchain/rewrites/` was searched for existing patches of the same functions (X1b's verifier-side
+set): it patches `aspis-core/src/field.rs`, `aspis-statement/src/state_only_poseidon.rs` and the two
+`pair_forest_*_terminal.rs` files, none of which this task touches; `../onchain/rewrites2/` did not exist. No
+`aspis_core` function needed a change. Functions patched in `aspis_statement` (for the lead's merge with X1b's set):
+
+| File | Functions |
+|---|---|
+| `poseidon2.rs` | `external_linear_lazy`, `internal_linear_lazy`, `permute_optimized`, `merkle_node_compress_v3`, `hash_fields`; new `permute_optimized_untraced` |
+| `atomic_statement.rs` | `decode_digest_canonical` |
+| `pool_v1/nullifier_marker.rs` | `digest_is_canonical` (private) |
+| `pool_v1/pair_forest_accounts.rs` | `decode_pool_v1_pair_forest_lane_state_v1`, `encode_pool_v1_pair_forest_checkpoint_v1`, `plan_pool_v1_pair_forest_checkpoint_v1` |
+| `pool_v1/incremental_merkle.rs` | `decode_tree_image_unvalidated`, `IncrementalMerkleTreeV1::validate_with_empty_roots`, `::reconstruct_nonfull_root_from_level`, `ValidatedIncrementalMerkleTreeV1::append_one`; new `append_one_core_v1`; X2b's `decode_with_empty_roots` change kept |
+| `pool_v1/pair_tree_profile.rs` | `PoolV1PairLeafWitnessV1::validate` |
+| `spend.rs` | X2b's `note_commitment` change only |
+
+The traced Poseidon2 entry points (`permute_optimized_with_trace`, `hash_fields_with_trace`) are unchanged; they are
+no longer reached from the Pool. Differential tests (frozen bodies kept under `#[cfg(test)]`): `x2c_linear_layers_
+match_frozen`, `x2c_untraced_permutation_and_hashes_match_traced`, `x2c_same_result_as_frozen_body` (digest decoder,
+tree image), `x2c_same_result_as_iter_all`, `x2c_append_and_validate_match_frozen`. The checkpoint planner and
+encoder and the leaf-witness check are covered by the crate's existing tests and by the Pool state comparison
+(checkpoint and deposit handlers).
+
+STEP5_RESULTS
+
+STEP6_ONWARD
