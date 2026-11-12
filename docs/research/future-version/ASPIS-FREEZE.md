@@ -202,8 +202,15 @@ Checks by the other two leads, as reported by them:
   configuration is `r1p-check` alone, so that the three multiplication functions
   (`QM31::mul`, `QM31::square`, `PreparedQm31Multiplier::mul`) are the pin's arithmetic in the
   prover; the settings `fast-kmul`, `fast-square`, `fast-prepared` and the aggregate `aspis` are
-  never on in a client or prover build. It reruns the harness on the frozen commit; that result
-  is not in yet (section 10).
+  never on in a client or prover build. On the frozen commit 3d700effcab the harness gives the same:
+  300 of 300 cases identical to its baseline (180 accepted, 30 entropy rejections, 60 semantic
+  rejections, 30 attempts exhausted; 300 oracle streams compared), re-packed proofs 180 of 180
+  identical, each 55,815 bytes and accepted by the host verifier; built with `r1p-check` alone;
+  the only harness change was the three renamed identifiers (its record:
+  `evidence/pv-prefreeze-20261111/check1/3d700effcabe` on its local branch
+  `codex/pv-prefreeze-20261111`). In its words on scope: a test on 300 fixed cases with a
+  deterministic randomness shim, comparing prover output and oracle streams with the earlier
+  pin; not a proof, and it says nothing about the verifier.
 - Soundness lead: its reviewer read the whole diff of the translatability pass
   (7dffe3e2a93..33e2d8475bc) and found no behaviour change in any changed function.
   It then read the freeze commit 3d700effcab line by line: every changed line is a rename from the
@@ -429,11 +436,8 @@ Decisions that are the owner's:
 
 Conditions and work still open at the freeze:
 
-5. **Privacy lead's harness on the frozen commit.** It ran on the candidate (300 of 300). The
-   rerun on 3d700effcab was started when the commit was sent and had not reported when this note
-   was written. A difference there would void the freeze; the naming commit changes no compiled
-   prover code path (client features unchanged, prover output identical in the lead's seven
-   scenarios), so none is expected, but it is not in hand.
+5. **Privacy lead's harness on the frozen commit.** In: 300 of 300 identical on 3d700effcab
+   (section 4). The condition on the freeze from that side is met.
 6. **Everything in section 3 under "not established".** The freeze fixes what those obligations
    are about; it closes none of them.
 7. **Privacy pin.** The privacy stream sets its Aspis pin and regenerates its extraction from
