@@ -116,6 +116,18 @@ established, each a named obligation:
    The same holds for the three kernels of round 9 (`base_fold`, `merged_level`,
    `extension_lane`).
 
+8. The Pool. Every row of the Pool ledger is OPEN for Aspis. The soundness lead re-recorded the
+   Pool rows at the freeze (its record: `evidence/pin2-replay-20261111/POOL-ROWS-RERECORD-20261112.md`
+   on branch `research` at 9e41488aafb). Four rows that are closed for the two-transaction pin do
+   not carry over, because that ledger keys on the body hash and the translatability pass reshaped
+   the bodies: `validate_master`, the master decoder, the checkpoint decoder and the
+   verified-afterstate decoder of the statement crate. Their closures stand for the
+   two-transaction pin only. That the reshaped bodies behave the same (same accepted set, same
+   error variant) rests on the reviewer's argument and the differential tests, not on a proof.
+   Re-closure of those four rows on the frozen bodies is owed before any Pool-row credit is
+   counted for Aspis. The planner, the terminal handler and `validate_lane_current_page` are
+   body-identical to the pin.
+
 Privacy is a separate contract and is the privacy lead's. Nothing in this note is a privacy
 result. The prover's output is unchanged by items 2 to 7 of section 2 (tested, section 4); the
 privacy pin for Aspis is still to be set by that stream.
@@ -275,7 +287,9 @@ one changed line each, `validate_root_page_bytes`, `validate_new_page_account`,
 `require_program_owned_zeroed` and `account_is_zeroed_program_page`; eight functions of history.rs
 moved down by 12 lines with identical bodies; nothing else outside the test modules. The account
 decoders the Pool links from the statement crate changed as in TRANSLATABILITY-PASS-CORE.md
-section 6.
+section 6. The soundness lead's ledger hashes a body from its opening brace to its closing
+brace; under that convention it reproduced the pinned hashes and recorded the frozen ones
+(research 9e41488aafb), and its list agrees with this one function by function.
 
 Named gaps in the program crate (TRANSLATABILITY-PASS-VERIFIER.md section 6):
 `close_checkpoint` (reachable; writes lamports and data through the SDK's account handles; a hand
