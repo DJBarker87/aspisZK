@@ -28,7 +28,7 @@ write('AspisLib_SourceInputs',frontier('R1FinalSoundness'),'AspisR1.R1FinalSound
 # 2 Recorded: dec, binaryCollision, SourceInputs
 body='abbrev SourceInputs := R1FinalSoundness.SourceInputs\n\n'+decl('RecordedBinaryExperimentBin','dec')+'\n'+decl('RecordedBinaryExperimentBin','binaryCollision')
 write('AspisLib_Recorded',frontier('RecordedBinaryExperimentBin'),'AspisR1.RecordedBinaryExperimentBin',
-      opens('RecordedBinaryExperimentBin',['DecoderInstanceBoundaryBin']),body,['AspisLib_SourceInputs'])
+      opens('RecordedBinaryExperimentBin',['DecoderInstanceBoundaryBin']),body,['AspisLib_SourceInputs','AspisLib_Namespaces'])
 # 3 Tag
 write('AspisLib_Tag',frontier('InitialTagDecision'),'AspisR1.InitialTagDecision',
       opens('InitialTagDecision',['RecordedBinaryExperimentBin'])+['open AspisR1.RecordedBinaryExperimentBin'],
