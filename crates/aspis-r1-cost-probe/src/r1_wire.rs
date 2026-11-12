@@ -48,13 +48,24 @@ pub const fn row_shape(row: u8) -> Option<(u8, usize)> {
     }
 }
 
+#[cfg(not(feature = "future-lean-parse"))]
 fn validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {
-    if cfg!(feature = "future-lean-parse") {
-        return validate_record_fields_lean(row, payload);
+    for (value, bytes) in payload.chunks_exact(32).enumerate() {
+        let x = WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;
+        if x.c1() != QM31::ZERO {
+            return Err(Error::NonCanonical { row, value });
+        }
     }
-    validate_record_fields_pinned(row, payload)
+    Ok(())
+}
+/// Aspis new gate (replaces the pinned `validate_record_fields` when `future-lean-parse` is on); equality with the pinned function is owed.
+#[cfg(feature = "future-lean-parse")]
+fn validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {
+    validate_record_fields_lean(row, payload)
 }
 
+/// Test oracle only: a copy of the pinned body of `validate_record_fields`.
+#[cfg(test)]
 fn validate_record_fields_pinned(row: u8, payload: &[u8]) -> Result<(), Error> {
     for (value, bytes) in payload.chunks_exact(32).enumerate() {
         let x = WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;
@@ -225,6 +236,40 @@ impl<'a> ValidatedRecord<'a> {
         &self.framed[5..]
     }
 
+    #[cfg(not(feature = "future-validated-decode"))]
+    /// Decode checked base-field limbs from a semantic record. The
+    /// validation token proves the 16-byte high half is zero and the
+    /// low QM31 encoding canonical, while this method still checks the
+    /// requested range and record class.
+    pub(crate) fn decode_k<const N: usize>(
+        &self,
+        offset_values: usize,
+    ) -> Result<[QM31; N], Error> {
+        if self.row < 14 {
+            return Err(Error::InvalidRow);
+        }
+        let byte_offset = offset_values
+            .checked_mul(32)
+            .ok_or(Error::Length { row: self.row })?;
+        let byte_len = N.checked_mul(32).ok_or(Error::Length { row: self.row })?;
+        let end = byte_offset
+            .checked_add(byte_len)
+            .ok_or(Error::Length { row: self.row })?;
+        let bytes = self
+            .payload()
+            .get(byte_offset..end)
+            .ok_or(Error::Length { row: self.row })?;
+        let mut out = [QM31::ZERO; N];
+        for (value, part) in bytes.chunks_exact(32).enumerate() {
+            out[value] = QM31::from_le_bytes(&part[..16]).ok_or(Error::NonCanonical {
+                row: self.row,
+                value: offset_values + value,
+            })?;
+        }
+        Ok(out)
+    }
+    /// Aspis new gate (replaces the pinned `decode_k` when `future-validated-decode` is on); equality with the pinned function is owed.
+    #[cfg(feature = "future-validated-decode")]
     /// Decode checked base-field limbs from a semantic record. The
     /// validation token proves the 16-byte high half is zero and the
     /// low QM31 encoding canonical, while this method still checks the
@@ -251,16 +296,8 @@ impl<'a> ValidatedRecord<'a> {
         // FUTURE-VERSION EXPERIMENT E3: the token was issued by `Prefix::parse`
         // over these same immutable bytes, which already checked every limb
         // canonical and the high half zero; load the four limbs directly.
-        #[cfg(feature = "future-validated-decode")]
         {
             out = validated_values::<N>(bytes);
-        }
-        #[cfg(not(feature = "future-validated-decode"))]
-        for (value, part) in bytes.chunks_exact(32).enumerate() {
-            out[value] = QM31::from_le_bytes(&part[..16]).ok_or(Error::NonCanonical {
-                row: self.row,
-                value: offset_values + value,
-            })?;
         }
         Ok(out)
     }

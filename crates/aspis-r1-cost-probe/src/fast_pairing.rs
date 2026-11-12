@@ -180,18 +180,22 @@ impl EbyKDot {
         Self { c0: canonical::Dot::new(), c1: canonical::Dot::new(), count: 0 }
     }
 
+    #[cfg(not(feature = "future-lean-dot"))]
     #[inline(always)]
     pub fn push(&mut self, value: E, scalar: QM31) -> Result<(), ()> {
-        if cfg!(feature = "future-lean-dot") {
-            self.push_lean(value, scalar);
-            return Ok(());
-        }
         if self.count >= MAX_TERMS { return Err(()); }
         let [value_c0,value_c1] = canonical::Q::from_wide(value);
         let scalar = checked_q(scalar)?;
         self.c0.push(value_c0, scalar);
         self.c1.push(value_c1, scalar);
         self.count += 1;
+        Ok(())
+    }
+    /// Aspis new gate (replaces the pinned `EbyKDot::push` when `future-lean-dot` is on); equality with the pinned function is owed.
+    #[cfg(feature = "future-lean-dot")]
+    #[inline(always)]
+    pub fn push(&mut self, value: E, scalar: QM31) -> Result<(), ()> {
+        self.push_lean(value, scalar);
         Ok(())
     }
 

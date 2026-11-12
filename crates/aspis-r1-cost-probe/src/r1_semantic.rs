@@ -79,11 +79,17 @@ fn mark(obs: crate::verifier::Observer, i: u8) {
     let _=(obs,i);
 }
 
+#[cfg(not(feature = "future-lazy-boundary"))]
+fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+    boundary
+}
+/// Aspis new gate (replaces the pinned `semantic_boundary` when `future-lazy-boundary` is on); equality with the pinned function is owed.
+#[cfg(feature = "future-lazy-boundary")]
 fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {
     // FUTURE-VERSION EXPERIMENT E8 (default off): the same sum
     // `p[0] + (p[0] + ... + p[27])` with one reduction per limb. The 29
     // canonical limbs sum below 2^36.
-    #[cfg(feature = "future-lazy-boundary")]
     {
         use aspis_core::field::{CM31, M31};
         let first = polynomial[0];
@@ -96,11 +102,6 @@ fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {
         }
         let [a, b, c, d] = sums.map(M31::reduce_u64);
         return QM31 { c0: CM31 { a, b }, c1: CM31 { a: c, b: d } };
-    }
-    #[cfg(not(feature = "future-lazy-boundary"))]
-    {
-        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
-    boundary
     }
 }
 
@@ -137,6 +138,16 @@ mod future_boundary_tests {
     }
 }
 
+#[cfg(not(feature = "future-lazy-horner"))]
+fn semantic_value(polynomial: &[QM31; 28], alpha: &[QM31; 10], round: usize) -> QM31 {
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+    value
+}
+/// Aspis new gate (replaces the pinned `semantic_value` when `future-lazy-horner` is on); equality with the pinned function is owed.
+#[cfg(feature = "future-lazy-horner")]
 fn semantic_value(polynomial: &[QM31; 28], alpha: &[QM31; 10], round: usize) -> QM31 {
         // FUTURE-VERSION EXPERIMENT G2: `mul_add` is `mul` then `add` unless
         // `aspis-core/future-lazy-horner` is on, when it reduces once.

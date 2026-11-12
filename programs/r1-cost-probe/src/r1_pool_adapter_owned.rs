@@ -413,6 +413,39 @@ fn stage1_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8]) -> 
     Ok(checkpoint)
 }
 
+#[cfg(not(feature = "future-one-tx"))]
+#[inline(never)]
+fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], current_slot: Result<u64, ProgramError>) -> ProgramResult {
+    if accounts.len() != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..])
+    {
+        return Err(ProgramError::InvalidInstructionData);
+    }
+    let validated = validate_asq8(program_id, accounts, data, current_slot)?;
+    let proof_data = accounts[0].data()?;
+    let checkpoint_data = accounts[6].data()?;
+    let proof_start = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
+    let proof_end = proof_start.checked_add(validated.proof_length)
+        .ok_or(ProgramError::InvalidAccountData)?;
+    if proof_data.len() != proof_end {
+        return Err(ProgramError::InvalidAccountData);
+    }
+    let public_bytes = encode_pool_v1_pair_forest_terminal_statement_v1(&validated.statement)
+        .map_err(|_| ProgramError::InvalidInstructionData)?;
+    if public_bytes.len() != POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES {
+        return Err(ProgramError::InvalidInstructionData);
+    }
+    verifier::tx2_authenticated(
+        &public_bytes,
+        &proof_data[proof_start..proof_end],
+        &checkpoint_data,
+        super::super::SolanaDigest,
+        super::super::observer(),
+    )
+    .map_err(super::super::error)?;
+    emit_result(&validated.statement)
+}
+/// Aspis new gate (replaces the pinned `stage2_owned` when `future-one-tx` is on); equality with the pinned function is owed.
+#[cfg(feature = "future-one-tx")]
 #[inline(never)]
 fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], current_slot: Result<u64, ProgramError>) -> ProgramResult {
     if accounts.len() != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..])
@@ -435,7 +468,6 @@ fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], cur
     // summed-format proof, which carries the stage D certificate, is verified
     // in this invocation. The candidate prefix is the one the statement was
     // reconstructed from, so no separate prefix comparison is needed.
-    #[cfg(feature = "future-one-tx")]
     {
         let _ = &checkpoint_data;
         validate_pool_v1_pair_forest_terminal_statement_v1(&validated.statement)
@@ -452,36 +484,10 @@ fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], cur
         .map_err(super::super::error)?;
         return emit_result(&validated.statement);
     }
-    #[cfg(not(feature = "future-one-tx"))]
-    {
-    let public_bytes = encode_pool_v1_pair_forest_terminal_statement_v1(&validated.statement)
-        .map_err(|_| ProgramError::InvalidInstructionData)?;
-    if public_bytes.len() != POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES {
-        return Err(ProgramError::InvalidInstructionData);
-    }
-    verifier::tx2_authenticated(
-        &public_bytes,
-        &proof_data[proof_start..proof_end],
-        &checkpoint_data,
-        super::super::SolanaDigest,
-        super::super::observer(),
-    )
-    .map_err(super::super::error)?;
-    emit_result(&validated.statement)
-    }
 }
 
+#[cfg(not(feature = "future-one-tx-lean"))]
 pub(super) fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
-    // FUTURE-VERSION EXPERIMENT (feature `future-one-tx-lean`, default off): the
-    // one-transaction verifier has no stage 1. Rejecting here leaves the stage 1
-    // pipeline unreachable, so it is not linked into the program.
-    #[cfg(feature = "future-one-tx-lean")]
-    {
-        let _ = (program_id, accounts, data);
-        return Err(ProgramError::InvalidInstructionData);
-    }
-    #[cfg(not(feature = "future-one-tx-lean"))]
-    {
     if !(data == &[3, 10] || data == &[3, 11]) || accounts.len() != 3 {
         return Err(ProgramError::InvalidInstructionData);
     }
@@ -495,9 +501,41 @@ pub(super) fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[
     #[cfg(feature="cu-profiling")]
     { msg!("r1:pool-adapter-stage1-checkpoint-written"); solana_program::log::sol_log_compute_units(); }
     Ok(())
+}
+/// Aspis new gate (replaces the pinned `stage1` when `future-one-tx-lean` is on); equality with the pinned function is owed.
+#[cfg(feature = "future-one-tx-lean")]
+pub(super) fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
+    // FUTURE-VERSION EXPERIMENT (feature `future-one-tx-lean`, default off): the
+    // one-transaction verifier has no stage 1. Rejecting here leaves the stage 1
+    // pipeline unreachable, so it is not linked into the program.
+    {
+        let _ = (program_id, accounts, data);
+        return Err(ProgramError::InvalidInstructionData);
     }
 }
 
+#[cfg(not(feature = "future-one-tx"))]
+pub(super) fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
+    if accounts.len() != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..]) {
+        return Err(ProgramError::InvalidInstructionData);
+    }
+    program::set_return_data(&[]);
+    #[cfg(feature="cu-profiling")]
+    { msg!("r1:pool-adapter-stage2-begin"); solana_program::log::sol_log_compute_units(); }
+    let owned = [
+        snapshot(&accounts[0], POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::PROOF_BYTES, POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::PROOF_BYTES),
+        snapshot(&accounts[1], POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES),
+        snapshot(&accounts[2], POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES),
+        snapshot(&accounts[3], POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES),
+        snapshot(&accounts[4], POOL_V1_VERIFIER_REGISTRY_BYTES, POOL_V1_VERIFIER_REGISTRY_V2_BYTES),
+        snapshot(&accounts[5], POOL_V1_VERIFIER_ENTRY_BYTES, POOL_V1_VERIFIER_ENTRY_V2_BYTES),
+        snapshot(&accounts[6], CHECKPOINT_TAIL_BYTES, CHECKPOINT_TAIL_BYTES),
+    ];
+    let current_slot = match Clock::get() { Ok(clock) => Ok(clock.slot), Err(error) => Err(error) };
+    stage2_owned(program_id, &owned, data, current_slot)
+}
+/// Aspis new gate (replaces the pinned `stage2` when `future-one-tx` is on); equality with the pinned function is owed.
+#[cfg(feature = "future-one-tx")]
 pub(super) fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
     if accounts.len() != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..]) {
         return Err(ProgramError::InvalidInstructionData);
@@ -506,10 +544,7 @@ pub(super) fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[
     #[cfg(feature="cu-profiling")]
     { msg!("r1:pool-adapter-stage2-begin"); solana_program::log::sol_log_compute_units(); }
     // FUTURE-VERSION EXPERIMENT: the one-transaction entry takes a summed-format proof buffer.
-    #[cfg(feature = "future-one-tx")]
     let proof_buffer_bytes = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::candidate::fused::summed_format::PROOF_BYTES;
-    #[cfg(not(feature = "future-one-tx"))]
-    let proof_buffer_bytes = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::PROOF_BYTES;
     let owned = [
         snapshot(&accounts[0], proof_buffer_bytes, proof_buffer_bytes),
         snapshot(&accounts[1], POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES),

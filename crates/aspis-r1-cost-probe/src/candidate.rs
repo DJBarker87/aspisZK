@@ -48,14 +48,35 @@ pub fn parse_shape(proof: &[u8]) -> Result<Variant, Error> {
     Ok(Variant::S2)
 }
 
+#[cfg(not(feature = "future-word-scan"))]
 /// The shipped strict scan for every field outside the semantic prefix
 /// (the semantic prefix is checked by `Prefix::parse` after expansion).
 #[inline(never)]
 fn canonical_scan(proof: &[u8]) -> Result<(), Error> {
-    if cfg!(feature = "future-word-scan") {
-        return canonical_scan_words(proof);
+    compact::check_values(&proof[compact::OFF_Y1..compact::OFF_INACTIVE])?;
+    echeck(&proof[compact::OFF_INACTIVE..compact::OFF_INACTIVE + 32], false)?;
+    echeck(&proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT], false)?;
+    echeck(&proof[compact::OFF_ROUND1..compact::OFF_OPENINGS], false)?;
+    for i in 0..22 {
+        let q = opening(proof, i);
+        for s in 0..4 {
+            for l in 0..26 {
+                M31::from_le_bytes(q[s * 120 + l * 4..s * 120 + l * 4 + 4].try_into().unwrap()).ok_or(Error::Parse)?;
+            }
+            K::from_le_bytes(&q[s * 120 + 104..s * 120 + 120]).ok_or(Error::Parse)?;
+            for l in 0..2 {
+                K::from_le_bytes(&q[480 + s * 32 + l * 16..480 + s * 32 + l * 16 + 16]).ok_or(Error::Parse)?;
+            }
+        }
+        echeck(&q[672..800], false)?;
     }
-    canonical_scan_pinned(proof)
+    Ok(())
+}
+/// Aspis new gate (replaces the pinned `canonical_scan` when `future-word-scan` is on); equality with the pinned function is owed.
+#[cfg(feature = "future-word-scan")]
+#[inline(never)]
+fn canonical_scan(proof: &[u8]) -> Result<(), Error> {
+    canonical_scan_words(proof)
 }
 
 /// FUTURE-VERSION EXPERIMENT G3. Every check of the pinned scan is "this
@@ -91,6 +112,8 @@ fn canonical_scan_words(proof: &[u8]) -> Result<(), Error> {
     if ok { Ok(()) } else { Err(Error::Parse) }
 }
 
+/// Test oracle only: a copy of the pinned body of `canonical_scan`.
+#[cfg(test)]
 #[inline(never)]
 fn canonical_scan_pinned(proof: &[u8]) -> Result<(), Error> {
     compact::check_values(&proof[compact::OFF_Y1..compact::OFF_INACTIVE])?;
@@ -210,6 +233,44 @@ fn batch_merkle_values<H: Digest32>(proof: &[u8], queries: [u32; 22], roots: [[u
     Ok(())
 }
 
+#[cfg(not(feature = "future-merkle-single-pass"))]
+#[inline(always)]
+fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], batch: usize, tree: usize, idx: &mut [u32; multiproof::MAX_BATCH], val: &mut [[u8; 32]; multiproof::MAX_BATCH], hash: H) -> Result<(), Error> {
+    let (lo, hi) = if batch == 0 { (0, SPLIT) } else { (SPLIT, 22) };
+    let n = hi - lo;
+    let s = 3 * batch + tree;
+    let keys = sort_batch_keys(batch_keys(&queries, lo, n, tree), n);
+    let mut d = 0;
+    let mut key_position = 0;
+    while key_position < n {
+        let key = batch_key_at(&keys, key_position);
+        key_position += 1;
+        let index = (key >> 8) as u32;
+        let q = opening(proof, lo + (key & 0xff) as usize);
+        let leaf = batch_leaf(hash, tree, q);
+        if d > 0 && same_batch_index(idx, d - 1, index) {
+            if !same_batch_leaf(val, d - 1, leaf) {
+                return Err(Error::Merkle);
+            }
+            continue;
+        }
+        idx[d] = index;
+        val[d] = leaf;
+        d += 1;
+    }
+    let count = multiproof::node_count(Arity::Two, &idx[..d]).ok_or(Error::Merkle)?;
+    let nodes = slot(proof, s);
+    // Padding is whole 32-byte words: scan it 8 bytes at a time.
+    if count > SLOT_NODES[s] || nodes[32 * count..].chunks_exact(8).any(|w| u64::from_le_bytes(w.try_into().unwrap()) != 0) {
+        return Err(Error::Parse);
+    }
+    if !multiproof::verify_in_place(hash, Arity::Two, &root, idx, val, d, &nodes[..32 * count]) {
+        return Err(Error::Merkle);
+    }
+    Ok(())
+}
+/// Aspis new gate (replaces the pinned `batch_tree` when `future-merkle-single-pass` is on); equality with the pinned function is owed.
+#[cfg(feature = "future-merkle-single-pass")]
 #[inline(always)]
 fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], batch: usize, tree: usize, idx: &mut [u32; multiproof::MAX_BATCH], val: &mut [[u8; 32]; multiproof::MAX_BATCH], hash: H) -> Result<(), Error> {
     let (lo, hi) = if batch == 0 { (0, SPLIT) } else { (SPLIT, 22) };
@@ -236,13 +297,8 @@ fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], bat
     }
     let nodes = slot(proof, s);
     debug_assert_eq!(nodes.len(), 32 * SLOT_NODES[s]);
-    #[cfg(feature = "future-merkle-single-pass")]
     {
         merkle_tail_single_pass(hash, &root, idx, val, d, nodes)
-    }
-    #[cfg(not(feature = "future-merkle-single-pass"))]
-    {
-        merkle_tail_two_pass(hash, &root, idx, val, d, nodes)
     }
 }
 
