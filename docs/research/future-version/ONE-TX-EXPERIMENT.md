@@ -1219,3 +1219,61 @@ The Pool's helper is being changed once more before the freeze, from the SDK cal
 equality (the soundness lead's request: std slice equality is already a modelled item in the
 proof's library; the SDK call would be a new one). The Pool worker measured the two forms within
 4 CU of each other; the figures above are to be re-measured on the final Pool ELF.
+
+## Round 11: the candidate (all translatability changes) with the final Pool (measured)
+
+Candidate: commit 33e2d8475bc (verifier, adapter, statement and core crates after the
+translatability pass of TRANSLATABILITY-PASS-VERIFIER.md, -STATEMENT.md and -CORE.md). Host tree
+`src-cand1`, verifier ELF `308acf44cfc60222ed7874f2f1710266cf5e618f91466618439896f1a974fcc0`
+(969,328 bytes), Pool ELF built from the same tree
+`0553a8bd5ef5c5ff93023b1923f96f9651a23f5aa4e50855baebe29109799cec` (340,320 bytes).
+
+Gate of the candidate against the tree before the pass (`src-base2`, ELF `7540abe6c5f0…`), host
+gate `cand1` (`GATE_cand1.done`, steps in `tp1/gate2-cand1.steps`): status OK. Unit tests of the
+verifier crate 56 pass; client configuration 15 pass; program crate tests identical to the base
+tree test by test (89 tests; under the deployed features 25 fail in both trees, R1's
+two-transaction tests, which the one-transaction configuration rejects at stage 1; under R1's
+features none fails); integration tests pass; the two recorded payments replay and the redirect
+attempts are rejected as before; mutant verdicts identical on 156,704 corrupted proofs, with the
+observer (file sha256 `e3659a53d3b4e308711668d82715cd981e8d3bdc7ba859c9ff3bdaa1e3c9e2b9` in both
+trees) and without it (verdict file sha256
+`a050df4712fb841d90841914f8d528fa435da5956e2ba92da29651e078c81981`, all mark counts 0); prover
+output identical in the six worst-case scenarios. Cost against the base on the recorded payments:
+387 and 386 compute units more.
+
+Combined run, candidate verifier with the final Pool
+(`evidence/future-version-20261111/combined/cmb2.json`, host attempt `CMB-2`, the base verifier
+beside it). Whole transaction, compute units:
+
+| Scenario | Base verifier | Candidate, no marker pre-funding | Candidate, one-lamport marker |
+|---|---:|---:|---:|
+| Withdrawal at rollover, seed 60 (897 parent digests): the heaviest measured | 1,262,025 (marker) | 1,258,313 | 1,262,410 |
+| Withdrawal at rollover, seed 1 | 1,251,139 (marker) | 1,247,425 | 1,251,522 |
+| Withdrawal, nearly full page (254) | 1,253,245 (marker) | 1,249,528 | 1,253,625 |
+| Withdrawal, young page (3) | 1,242,885 (marker) | 1,239,175 | 1,243,272 |
+| Withdrawal at genesis | 1,246,505 (marker) | 1,242,797 | 1,246,894 |
+| Transfer at rollover, seed 1 | 1,243,564 (marker) | 1,239,849 | 1,243,946 |
+| Transfer, young page (3) | 1,237,601 (marker) | 1,233,894 | 1,237,991 |
+
+Every run settles; the final state hashes of the two verifiers are equal run by run; with the
+limit set one unit below the measured use each transaction fails and changes nothing but the fee.
+The translatability pass costs 380 to 390 compute units per payment (the itemised list is in the
+three pass notes).
+
+Worst case with the allowance of WORST-CASE-COMPUTE.md (10,697, taken as an upper allowance as in
+round 10): 1,273,107, which leaves 126,893 under the limit of 1,400,000. An ordinary payment on a
+young page: withdrawal 1,239,175 to 1,243,272, transfer 1,233,894 to 1,237,991.
+
+Checks by the two other leads on the same commit (their evidence is theirs; recorded here as
+reported):
+
+- Privacy lead: prover harness on 33e2d8475bc against its PIN2 baseline, 300 of 300 cases
+  identical (180 accepted, 30 entropy rejections, 60 semantic rejections, 30 attempts exhausted),
+  re-packed proofs 180 of 180 identical; translator run under the client configuration, no
+  regression and no safety rejection. Open on its side: the resolved client feature set, per-function
+  byte identity of the restorations, and an independent read of operator and effect order. It
+  reruns the harness on the frozen commit.
+- Soundness lead: its reviewer read the diff 7dffe3e2a93..33e2d8475bc and found no behaviour
+  change in any changed function. Five notes for the freeze record, carried into ASPIS-FREEZE.md.
+
+Status: measurements and tests on recorded and constructed payments. Nothing here is proved.
