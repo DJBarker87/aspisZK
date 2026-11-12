@@ -320,6 +320,62 @@ closure modules outside it are the 38 kind (d) and 9 kind (c) modules (1,126 lin
 `AspisFailureBoundModel` is skipped (`AspisFailureBoundJoined` not compiled). **The five checks were not run**:
 they need the `AspisFailureBoundModel` object.
 
+### Revision 4 (research 0399fd132ef): current state
+
+Scripts of record: `trim_imports.py` revision 4 (`--omit`; carrier and omitted imports replaced by their carrier-free
+frontier, mapped carriers by their bases) and `drop_decls.py` (also removes `#print axioms` lines that name a
+dropped declaration). All 18 files and their sha256: `aspis-lib-r4.sha256` (host `W/x3/aspis-lib4`). X3 scripts:
+`host/fv_x3_pipeline4.sh` (sha256 c8be58c871f53772aa76664fe67a6bc9ab914756dfd6c41128b4b913a7cbd955) and
+`host/fv_x3_plan4.py` (9b7b821450cdfa4393499fe660d1a6f38c136cfda3a42141e66d3948353ba066).
+
+- Trim (`trim-record-r4.tsv`): the 26 kind (c) modules that import a carrier or an omitted module. Compared with my
+  earlier frontier variant (bases expanded to their imports), the import sets differ only by `import Aeneas`
+  (which the record keeps from the carriers' imports; my reader dropped non-closure names) and, in the four
+  `OraclePort*` modules, by the expansion of the now-omitted `R19BudgetOriginalReads` / `OraclePortSamplerPrefixDraft`.
+  No other difference.
+- Chain (`chain-trim-record-r4.tsv`, `chain-import-diff-r4.txt`): `trim_imports.py` was run on all 77 chain modules
+  from a source directory holding copies of the chain files and of the L187 sources of the 38 carriers and 16
+  omitted modules (the script reads frontiers from its one source directory). One module changed:
+  `AspisOneTxDecision`, `import OraclePortFrozenOrderDecision` replaced by `import OraclePortFrozenOrderSlot` and
+  `import OraclePortShortCircuitDecision`. The diff check (every changed line is an import line) passed.
+- Drops (`drop-decls-r4.tsv`, sha256 eecc1f09a11e951bc45a23858c47d82d7d04e8ff7fc70f552b652f2674f44441;
+  `drop-record-r4.tsv`, 24 declarations and 23 command lines). Added by X3 to the record's 16 rows, each after a
+  compile failure, each in a module with no constant in `uses/top_closure.tsv.gz` or (for `OraclePortStoredProjectionC4`)
+  a declaration not in it (the module's needed constants are `project` and `project_eval`):
+  `OracleDecisionFeasibilityBudget.queries` (uses the omitted `R19BudgetOriginalReads`), `.original_reads` (uses
+  `queries`), `OracleDecisionFeasibilityBridge.single_path_budget` (uses `original_reads`),
+  `OracleDecisionPrereqStarts.{not_initial_of_head, leaf_not_initial, node_not_initial}` (use the omitted
+  `BinInitialQueryAccounting.CanonicalInitial`), `OraclePortStoredProjectionC4.{recorded_view, frame_eq}` (use the
+  record's dropped `original_view`).
+- Gate (`gate-r4.tsv`): carried set = import closure of the 77 chain modules over the trimmed graph: 1,407 modules
+  (77 chain, 6 bases, 87 CompPoly, 1,237 kind (c); 185,500 lines outside the chain). No carried module is a carrier
+  or an omitted module and none reaches one: 0 violations.
+- LEAN_PATH: own objects, then `W/x3/l187-carried4`, then L187 `base_ref` (packages only: Mathlib, Aeneas, CompPoly,
+  Batteries, Aesop, Qq, ProofWidgets, Plausible, ImportGraph, LeanSearchClient). `l187-carried4` holds hardlinks
+  (`cp -l`, inside `W/x3`, no symlink; 0 symlinks found) of the L187 objects of the 1,116 carried kind (c) modules
+  that are unchanged and not recompiled. The L187 `objs` directory is not on the path, so no carrier or omitted
+  module can be found.
+- Compile (Lean 4.32.0, attempts `X3-C-map4-old` and `-map4b` to `-map4e`, resumed by source key; largest wall
+  4:54.84, largest peak RSS 6,163,432 kB, no memory events; `trimmed-l187-compile-r4.tsv`): of 204 modules,
+  **78 compile, 1 fails, 125 skipped**, every skip behind the one failure.
+
+**Blocker: `R16DecisionCheckpoint`.** First error `unknown namespace R15WriterModel` at its `open` line (18), then
+`Unknown identifier E` (19), `Unknown identifier Prefix` (33): the module uses `R15WriterModel.E` (`abbrev E :=
+AspisWideTower.WideExact`) and `R15WriterModel.Prefix`, declarations of the omitted module `R15WriterModel`. None of
+its declarations is needed. It is carried because `R16DecisionQueryModel` (opens it), `OraclePortCheckpoint` (two
+qualified uses) and `OraclePortStoredProbabilityC7` import it, and they are imported by needed modules; none of
+these three has a needed constant either. The failing step is the `open` command, which neither script can
+remove, so dropping declarations cannot clear it. The decision belongs to the lead: for example, adding
+`R16DecisionCheckpoint` (and then whatever of `R16DecisionQueryModel` / `OraclePortCheckpoint` fails) to
+`OMIT_MODULES.txt`, or keeping `R15WriterModel` out of the omit list. The chain (39 modules) and
+`AspisFailureBoundModel` are skipped behind it, so **step 5 (chain compile, five checks, chain commit) is not
+reached and no chain source was committed**.
+
+Predicted next failures, not yet compiled (skipped behind the blocker): `OraclePortFrozen2Reached.frame_read`,
+`OraclePortReachedRunC6.frame_read`, `OraclePortFrozen2Roots.targets`, `OraclePortReachedRootsC6.targets` (use
+`OraclePortStoredProjectionC4.frame_eq`) and `OraclePortStoredReductionC7.{annotated_fixed, annotated_selected}`
+(use `recorded_view`); none of the six is in `top_closure.tsv.gz`.
+
 ### Pass 2 under the new toolchain (partial)
 
 Pass 2 was run on the set of the mapped version (6032f9ef5bd): CompPoly (87), the 1,116 kind (c) modules whose
