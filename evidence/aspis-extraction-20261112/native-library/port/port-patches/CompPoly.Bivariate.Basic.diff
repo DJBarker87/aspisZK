@@ -1,0 +1,22 @@
+--- carried-src/CompPoly/Bivariate/Basic.lean
++++ ported-src/CompPoly/Bivariate/Basic.lean
+@@ -286,7 +286,8 @@
+ theorem coeff_monomialY [Semiring R] [BEq R] [LawfulBEq R] [Nontrivial R] [DecidableEq R]
+     (m : ℕ) (c : CPolynomial R) (i j : ℕ) :
+     coeff (CPolynomial.monomial m c) i j = if j = m then CPolynomial.coeff c i else 0 := by
+-  rw [coeff_eq_coeff_coeff, CPolynomial.coeff_monomial]
++  refine (coeff_eq_coeff_coeff (CPolynomial.monomial m c : CBivariate R) i j).trans ?_
++  rw [CPolynomial.coeff_monomial]
+   by_cases hj : j = m
+   · rw [if_pos hj, if_pos hj]
+   · rw [if_neg hj, if_neg hj, CPolynomial.coeff_zero]
+@@ -371,7 +372,8 @@
+   constructor
+   · intro h i j hij
+     have hj : j ∈ f.supportY := by
+-      rw [CBivariate.supportY, CPolynomial.mem_support_iff]
++      rw [CBivariate.supportY]
++      refine CPolynomial.mem_support_iff.2 ?_
+       intro heq
+       apply hij
+       show (CPolynomial.coeff f j).coeff i = 0

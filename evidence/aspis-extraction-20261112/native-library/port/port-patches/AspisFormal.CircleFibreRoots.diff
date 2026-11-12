@@ -1,0 +1,19 @@
+--- carried-src/AspisFormal/CircleFibreRoots.lean
++++ ported-src/AspisFormal/CircleFibreRoots.lean
+@@ -4,6 +4,7 @@
+ import Mathlib.Tactic.LinearCombination
+ import Mathlib.Tactic.NormNum
+ import Mathlib.Tactic.NormNum.Prime
++import Mathlib.NumberTheory.LucasLehmer
+ import Mathlib.Tactic.Ring
+ import Lean.Elab.Tactic.Omega
+ 
+@@ -75,7 +76,7 @@
+ abbrev P : ℕ := 2 ^ 31 - 1
+ 
+ /-- `P` is the Mersenne prime M31, so `ZMod P` is a field. -/
+-instance : Fact (Nat.Prime P) := ⟨by norm_num⟩
++instance : Fact (Nat.Prime P) := ⟨LucasLehmer.lucas_lehmer_sufficiency 31 (by norm_num) (by norm_num)⟩
+ 
+ /-- `2 ≠ 0` in `𝔽ₚ` (`P` is an odd prime). -/
+ lemma two_ne_zero_P : (2 : ZMod P) ≠ 0 := by

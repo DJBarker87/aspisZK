@@ -1,0 +1,16 @@
+--- carried-src/AspisV8R15/ExactTowerFinite.lean
++++ ported-src/AspisV8R15/ExactTowerFinite.lean
+@@ -19,11 +19,8 @@
+     (QuadraticAlgebra.equivProd qm31R 0).symm
+ 
+ theorem cm31Exact_card : Fintype.card CM31Exact = P ^ 2 := by
+-  calc
+-    Fintype.card CM31Exact = Fintype.card (M31Exact × M31Exact) :=
+-      Fintype.card_congr (QuadraticAlgebra.equivProd (-1) 0)
+-    _ = P * P := by rw [Fintype.card_prod, ZMod.card]
+-    _ = P ^ 2 := by rw [pow_two]
++  rw [Fintype.card_eq_nat_card, Nat.card_congr (QuadraticAlgebra.equivProd (-1) 0), Nat.card_prod,
++    Nat.card_zmod, pow_two]
+ 
+ theorem qm31Exact_card : Fintype.card QM31Exact = P ^ 4 := by
+   calc

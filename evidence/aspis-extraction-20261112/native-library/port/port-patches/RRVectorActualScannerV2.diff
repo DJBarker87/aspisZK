@@ -1,0 +1,19 @@
+--- carried-src/RRVectorActualScannerV2.lean
++++ ported-src/RRVectorActualScannerV2.lean
+@@ -65,14 +65,12 @@
+     exact hpoly (by simpa [RRActualBivariateTaylorBridge.fixedParentCoeffSlice] using hz)
+   have hidx : v < (rowsUpTo gs a M L).length := by rw [hlen]; omega
+   have hget : (rowsUpTo gs a M L)[v]'hidx = row gs a M v := by
+-    unfold rowsUpTo
+-    rw [List.getElem_ofFn]
++    simp only [rowsUpTo, List.getElem_ofFn]
+   have hscan := firstNonzeroFullRows_at (rowsUpTo gs a M L) v hidx (by rw [hget]; exact hhit) (by
+     intro k hk
+     have hk' : k < v := hk
+     have hgetk : (rowsUpTo gs a M L)[k]'(by rw [hlen]; omega) = row gs a M k := by
+-      unfold rowsUpTo
+-      rw [List.getElem_ofFn]
++      simp only [rowsUpTo, List.getElem_ofFn]
+     rw [hgetk]
+     exact hprev k hk')
+   refine ⟨v, hv, ?_, hne, hzeroPrev⟩

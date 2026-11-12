@@ -1,0 +1,26 @@
+--- carried-src/R0P/SemRounds.lean
++++ ported-src/R0P/SemRounds.lean
+@@ -590,13 +590,13 @@
+     rcases Fin.eq_zero_or_eq_succ i with hzero | ⟨j, rfl⟩
+     · subst i
+       left
+-      simpa [zcRound, zcPrefix] using hi
++      exact hi
+     · right
+       rw [zcRound_succ, zcPrefix_succ] at hi
+       exact ⟨j, hi⟩
+   · rintro (⟨hf, hzero⟩ | ⟨i, hi⟩)
+     · refine ⟨0, ?_⟩
+-      simpa [zcRound, zcPrefix] using And.intro hf hzero
++      exact And.intro hf hzero
+     · refine ⟨i.succ, ?_⟩
+       rw [zcRound_succ, zcPrefix_succ]
+       exact hi
+@@ -741,6 +741,7 @@
+               Finset.univ.filter (fun x : K => zcRound (n + 1) f 0 pref x) = ∅ := by
+             ext x
+             simp [zcRound, hf]
++            all_goals exact fun h => h
+           simp [hfilter]
+         · obtain ⟨b, hb⟩ : ∃ b : Fin (n + 1) → Bool, f b ≠ 0 := by
+             by_contra h

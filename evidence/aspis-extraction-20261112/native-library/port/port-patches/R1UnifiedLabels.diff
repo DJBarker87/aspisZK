@@ -1,0 +1,13 @@
+--- carried-src/R1UnifiedLabels.lean
++++ ported-src/R1UnifiedLabels.lean
+@@ -29,7 +29,9 @@
+ def row (b : Byte) : Nat := b.val - 160
+ 
+ theorem row_label (n : Nat) (hn : n < 33) : row (label n) = n := by
+-  simp [row, label_val n hn]
++  show (label n).val - 160 = n
++  have := label_val n hn
++  omega
+ 
+ #print axioms label_val
+ #print axioms label_zero

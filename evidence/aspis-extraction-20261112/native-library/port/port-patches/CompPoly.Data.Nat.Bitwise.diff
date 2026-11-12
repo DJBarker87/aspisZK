@@ -1,0 +1,18 @@
+--- carried-src/CompPoly/Data/Nat/Bitwise.lean
++++ ported-src/CompPoly/Data/Nat/Bitwise.lean
+@@ -738,13 +738,13 @@
+       cases (Nat.mul_eq_zero.mp h_sum) with
+       | inl h_two => contradiction -- The case 2 = 0 is impossible.
+       | inr h_and => -- h_and : n &&& m ^^^ m = 0
+-        simp only [Nat.xor_eq_zero_iff] at h_and
++        replace h_and := (fun a b (h : a ^^^ b = 0) => (by simpa [Nat.xor_assoc] using congrArg (· ^^^ b) h : a = b)) _ _ h_and
+         conv_lhs => enter [1]; rw [←h_and] -- h_and : n &&& m = m
+         rw [Nat.and_xor_distrib_right] -- ⊢ n &&& m ^^^ n &&& m &&& m = 0
+         rw [Nat.and_assoc, Nat.and_self, Nat.xor_self]
+     -- ⊢ (n ^^^ m) &&& m = 0
+     rw [Nat.and_xor_distrib_right, Nat.and_self] at h_and_zero --h_and_zero : n &&& m ^^^ m = 0
+-    rw [Nat.xor_eq_zero_iff] at h_and_zero
++    replace h_and_zero := (fun a b (h : a ^^^ b = 0) => (by simpa [Nat.xor_assoc] using congrArg (· ^^^ b) h : a = b)) _ _ h_and_zero
+     exact h_and_zero
+   · intro h
+     rw [Nat.sub_eq_of_eq_add (a:=n) (c:=n^^^m) (b:=m)]

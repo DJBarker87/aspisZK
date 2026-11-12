@@ -1,0 +1,20 @@
+--- carried-src/R0C/V3/BSOk.lean
++++ ported-src/R0C/V3/BSOk.lean
+@@ -332,7 +332,7 @@
+         have hiw : i ∉ waiting pend' := fun h => hdisj i h i (List.mem_cons_self ..) rfl
+         by_cases hil : i = l
+         · subst hil
+-          rw [if_pos rfl]
++          simp only [if_pos (rfl : some i = some i)]
+           have hnw : ¬ waits i pend' = true := fun h => hiw ((waits_iff i pend').mp h)
+           rw [if_neg hnw, if_pos (hc' i (Or.inr (Or.inl rfl))).1]
+           simp only [stepAsk]
+@@ -349,7 +349,7 @@
+           · apply order_tail i a rest _ ?_ ho'.2
+             intro e he hei
+             exact hni (hei ▸ List.mem_map_of_mem he)
+-        · rw [if_neg (fun h => hil (Option.some.inj h))]
++        · simp only [if_neg (fun h : some i = some l => hil (Option.some.inj h))]
+           have hlev : l ∉ i :: (evs H (k (H i))).map Prod.snd := by
+             intro hm
+             rcases List.mem_cons.mp hm with hm | hm

@@ -1,0 +1,11 @@
+--- carried-src/R1D18PointWeights.lean
++++ ported-src/R1D18PointWeights.lean
+@@ -139,7 +139,7 @@
+       have hbit1' : rowNat j.val / 2 ^ (1 + 2 * (d18Tau d).val) % 2 =
+           ((j.val / 4 ^ d.val) % 4 / 2) % 2 := by
+         simpa [Nat.add_comm] using hbit1
+-      rw [hbit0', hbit1']
++      simp only [hbit0', hbit1']
+       have hp1 : (⟨9 - (1 + 2 * (d18Tau d).val), by
+           have := (d18Tau d).isLt; omega⟩ : Fin 10) =
+           ⟨8 - 2 * (d18Tau d).val, by have := (d18Tau d).isLt; omega⟩ := by

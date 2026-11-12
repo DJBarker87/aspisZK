@@ -1,0 +1,18 @@
+--- carried-src/CompPoly/LinearAlgebra/Dense/KernelInPlaceCorrectness.lean
++++ ported-src/CompPoly/LinearAlgebra/Dense/KernelInPlaceCorrectness.lean
+@@ -166,6 +166,7 @@
+ theorem findPivotRowData_eq [Zero F] [BEq F] (M : DenseMatrix F) (startRow col : Nat) :
+     findPivotRowData M.rows M.cols startRow col M.data = findPivotRow M startRow col := by
+   simp only [findPivotRowData, findPivotRow, get, index]
++  rfl
+ 
+ /-- The in-place elimination loop tracks the copying one entry-for-entry. -/
+ private theorem forIn_eliminate_eq [Field F] (cols pivotRow pivotCol : Nat) :
+@@ -270,6 +271,7 @@
+     homogeneousWitnessInPlace M = homogeneousWitness M := by
+   simp only [homogeneousWitnessInPlace, homogeneousWitness,
+     homogeneousKernelBasisInPlace, homogeneousKernelBasis, rrefInPlace_eq, rref_cols]
++  rfl
+ 
+ end DenseMatrix
+ 

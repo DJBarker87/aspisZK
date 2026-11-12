@@ -1,0 +1,26 @@
+--- carried-src/AllAddressCollisionTrace.lean
++++ ported-src/AllAddressCollisionTrace.lean
+@@ -31,18 +31,20 @@
+         have hsplit : ((insert i (rest.map Prod.fst).toFinset).filter fun a => t a = none) =
+             insert i (((rest.map Prod.fst).toFinset).filter fun a => put t i v a = none) := by
+           ext a
+-          simp only [Finset.mem_filter, Finset.mem_insert, put]
++          simp only [Finset.mem_filter, Finset.mem_insert]
++          simp only [put]
+           by_cases hai : a = i
+           · subst hai; simp [hi]
+           · simp [hai]
+         rw [hsplit, Finset.card_insert_of_notMem]
+         · ring
+-        · simp [put]
++        · rw [Finset.mem_filter]; simp [put]
+       · rw [if_neg hi]
+         have hsplit : ((insert i (rest.map Prod.fst).toFinset).filter fun a => t a = none) =
+             ((rest.map Prod.fst).toFinset).filter fun a => put t i v a = none := by
+           ext a
+-          simp only [Finset.mem_filter, Finset.mem_insert, put]
++          simp only [Finset.mem_filter, Finset.mem_insert]
++          simp only [put]
+           by_cases hai : a = i
+           · subst hai; simp [hi]
+           · simp [hai]

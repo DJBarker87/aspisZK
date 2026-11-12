@@ -1,0 +1,13 @@
+--- carried-src/CompPoly/Univariate/Raw/Proofs.lean
++++ ported-src/CompPoly/Univariate/Raw/Proofs.lean
+@@ -693,9 +693,8 @@
+   congr! 1
+   · convert smul_zero_trim p using 1
+     · convert zero_add_trim _ using 1
+-      · exact congr_arg _ (by exact mulPowX_zero (smul 0 p))
++      · exact congr_arg _ (mulPowX_zero (smul 0 p)).symm
+       · exact ‹LawfulBEq R›
+-    · rfl
+   · rw [ smul_one_eq_self ]
+     rfl
+ 

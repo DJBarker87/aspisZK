@@ -1,0 +1,19 @@
+--- carried-src/CompPoly/Univariate/NTT/Domain.lean
++++ ported-src/CompPoly/Univariate/NTT/Domain.lean
+@@ -115,12 +115,14 @@
+ 
+ @[simp] theorem size_loadNaturalArray (D : Domain R) (a : Array R) :
+     (loadNaturalArray D a).size = D.n := by
+-  simp [loadNaturalArray]
++  unfold loadNaturalArray
++  exact Array.size_ofFn
+ 
+ @[simp] theorem getElem_loadNaturalArray (D : Domain R) (a : Array R) (i : Nat)
+     (hi : i < (loadNaturalArray D a).size) :
+     (loadNaturalArray D a)[i] = a.getD i 0 := by
+-  simp [loadNaturalArray]
++  unfold loadNaturalArray
++  exact Array.getElem_ofFn _
+ 
+ /-- Load an array in natural order and pad it to a domain-sized vector. -/
+ @[inline] def loadNaturalVector (D : Domain R) (a : Array R) : Vector R D.n :=

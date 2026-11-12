@@ -1,0 +1,11 @@
+--- carried-src/R1PrefixedStateCodec.lean
++++ ported-src/R1PrefixedStateCodec.lean
+@@ -20,7 +20,7 @@
+   apply List.ext_getElem
+   · simp [bytes, hlen]
+   · intro i hi hi'
+-    change (List.ofFn (stateOfBytes b))[i] = b[i]
++    simp only [bytes]
+     rw [List.getElem_ofFn]
+     change b[i]?.getD 0 = b[i]
+     rw [List.getElem?_eq_getElem hi']

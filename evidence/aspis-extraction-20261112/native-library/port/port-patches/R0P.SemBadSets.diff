@@ -1,0 +1,22 @@
+--- carried-src/R0P/SemBadSets.lean
++++ ported-src/R0P/SemBadSets.lean
+@@ -958,7 +958,7 @@
+   change strat i.succ (strategyPrefix (Fin.cons x α) i.succ) =
+     strat i.succ (Fin.cons x (strategyPrefix α i))
+   rw [strategyPrefix_cons_succ]
+-  rfl
++  all_goals rfl
+ 
+ #print axioms strategyPolys_tail
+ 
+@@ -1164,8 +1164,8 @@
+           (fun i => strat i (fun j => α (Fin.castLE i.isLt.le j))) α ∧
+         bsum 10 G ≠ 0) := by
+     ext α
+-    simp only [Finset.mem_filter, Finset.mem_univ, true_and,
+-      badAlphaStrategy, strategyAccept]
++    simp only [Finset.mem_filter, Finset.mem_univ, true_and]
++    simp only [badAlphaStrategy, strategyAccept]
+     unfold strategyPolys strategyPrefix
+     rfl
+   rw [← congrArg Finset.card hfilters]

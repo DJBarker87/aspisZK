@@ -1,0 +1,20 @@
+--- carried-src/FiniteFieldNormalizedRootFactor.lean
++++ ported-src/FiniteFieldNormalizedRootFactor.lean
+@@ -50,7 +50,7 @@
+ theorem frobenius_splits : (X^(Fintype.card K)-X : K[X]).Splits := by
+   rw [splits_iff_card_roots,FiniteField.roots_X_pow_card_sub_X,
+     ←Finset.card_def,Finset.card_univ,
+-    FiniteField.X_pow_card_sub_X_natDegree_eq K Fintype.one_lt_card]
++    FiniteField.X_pow_card_sub_X_natDegree_eq Fintype.one_lt_card]
+ 
+ theorem rootFactor_separable (p : K[X]) (q : Nat) (hq : q=Fintype.card K)
+     (hp : p.Monic) (hdeg : (0 : WithBot Nat)<degree p) : (rootFactor p q).Separable := by
+@@ -63,7 +63,7 @@
+   subst q
+   have hd := rootFactor_dvd_frobenius p (Fintype.card K) hp hdeg
+   exact frobenius_splits.of_dvd
+-    (FiniteField.X_pow_card_sub_X_ne_zero K Fintype.one_lt_card) hd
++    (FiniteField.X_pow_card_sub_X_ne_zero Fintype.one_lt_card) hd
+ 
+ /-- An exact complete-root certificate exists for the normalized factor.
+ This is availability, not an executable root enumeration algorithm. -/

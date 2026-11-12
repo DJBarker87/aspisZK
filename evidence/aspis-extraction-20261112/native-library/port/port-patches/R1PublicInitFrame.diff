@@ -1,0 +1,13 @@
+--- carried-src/R1PublicInitFrame.lean
++++ ported-src/R1PublicInitFrame.lean
+@@ -54,7 +54,9 @@
+ 
+ theorem row0_bytes {M Cv : Type} {L : Nat} (p : Params M Cv L) (hD : 5 ≤ p.D) (s : State) :
+     (row0 p hD s).toBytes = bytes s ++ [0, 160] ++ [0, 0, 0, 0, 0] := by
+-  rw [row0, absorbA, Addr.toBytes_ofBytes]
++  rw [row0]
++  unfold absorbA
++  rw [Addr.toBytes_ofBytes]
+   rfl
+ 
+ theorem row0_prefix {M Cv : Type} {L : Nat} (p : Params M Cv L) (hD : 5 ≤ p.D) (s : State) :
