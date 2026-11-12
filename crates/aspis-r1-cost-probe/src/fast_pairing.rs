@@ -180,7 +180,6 @@ impl EbyKDot {
         Self { c0: canonical::Dot::new(), c1: canonical::Dot::new(), count: 0 }
     }
 
-    #[cfg(not(feature = "future-lean-dot"))]
     #[inline(always)]
     pub fn push(&mut self, value: E, scalar: QM31) -> Result<(), ()> {
         if self.count >= MAX_TERMS { return Err(()); }
@@ -189,13 +188,6 @@ impl EbyKDot {
         self.c0.push(value_c0, scalar);
         self.c1.push(value_c1, scalar);
         self.count += 1;
-        Ok(())
-    }
-    /// Aspis new gate (replaces the pinned `EbyKDot::push` when `future-lean-dot` is on); equality with the pinned function is owed.
-    #[cfg(feature = "future-lean-dot")]
-    #[inline(always)]
-    pub fn push(&mut self, value: E, scalar: QM31) -> Result<(), ()> {
-        self.push_lean(value, scalar);
         Ok(())
     }
 
@@ -283,7 +275,6 @@ impl KbyKDot {
         Self { dot: canonical::Dot::new(), count: 0 }
     }
 
-    #[cfg(not(feature = "future-lean-dot"))]
     #[inline(always)]
     pub fn push(&mut self, left: QM31, right: QM31) -> Result<(), ()> {
         if self.count >= MAX_TERMS { return Err(()); }
@@ -291,13 +282,6 @@ impl KbyKDot {
         let right = checked_q(right)?;
         self.dot.push(left, right);
         self.count += 1;
-        Ok(())
-    }
-
-    #[cfg(feature = "future-lean-dot")]
-    #[inline(always)]
-    pub fn push(&mut self, left: QM31, right: QM31) -> Result<(), ()> {
-        self.push_lean(left, right);
         Ok(())
     }
 
@@ -332,7 +316,7 @@ pub fn k_mul_sixteen(left: QM31, right: QM31) -> Result<QM31, ()> {
 }
 
 #[cfg(test)]
-mod future_lean_dot_tests {
+mod lean_dot_tests {
     use super::*;
     use aspis_core::field::{M31, P};
 
@@ -369,19 +353,15 @@ mod future_lean_dot_tests {
                 let value = E::new(k(core::array::from_fn(|_| limb(mode + 1))), k(core::array::from_fn(|_| limb(mode + 2))));
                 lean_e.push_lean(value, scalar);
                 lean_k.push_lean(other, scalar);
-                if !cfg!(feature = "future-lean-dot") {
-                    checked_e.push(value, scalar).unwrap();
-                    checked_k.push(other, scalar).unwrap();
-                }
+                checked_e.push(value, scalar).unwrap();
+                checked_k.push(other, scalar).unwrap();
                 expected_e = expected_e.add(value.mul_qm31(scalar));
                 expected_k = expected_k.add(other.mul(scalar));
             }
             assert_eq!(lean_e.finish(), expected_e, "case {case}");
             assert_eq!(lean_k.finish(), expected_k, "case {case}");
-            if !cfg!(feature = "future-lean-dot") {
-                assert_eq!(checked_e.finish(), expected_e, "case {case}");
-                assert_eq!(checked_k.finish(), expected_k, "case {case}");
-            }
+            assert_eq!(checked_e.finish(), expected_e, "case {case}");
+            assert_eq!(checked_k.finish(), expected_k, "case {case}");
         }
     }
 }

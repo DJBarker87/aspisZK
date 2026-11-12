@@ -119,13 +119,13 @@ fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pub
  let mut store=DurableStateOnlyMaskNonceStore::open(dir.join("mask-nonce-ledger"))?;
  let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;
  let (attempt_index,proof_account)=accounts.selected(result.attempts)?;
- // FUTURE-VERSION EXPERIMENT ("one_tx": true): publish the summed format. The pinned proof is
+ // Aspis ("one_tx": true): publish the Aspis proof format. The pinned proof is
  // re-packed from public data alone (one multiproof per tree, then the 384-byte certificate) and
  // checked with the one-transaction verifier's own function before anything is uploaded. The
  // stage1 instruction stays in the plan so the retained-mapping checks are unchanged; this route
  // never sends it and never creates the statement account.
  let one_tx=q.get("one_tx").and_then(Value::as_bool).unwrap_or(false);
- let body:Vec<u8>=if one_tx{use aspis_r1_cost_probe::verifier::candidate::fused;let h=aspis_core::digest::LegacyHashFn(HOST_HASH);let packed=fused::to_summed_format(statement.semantic_public(),&result.proof,h).map_err(err)?;fused::verify_summed_format(statement.semantic_public(),&packed,h,None).map_err(err)?;ensure!(packed.len()==fused::summed_format::PROOF_BYTES,"summed proof length");packed}else{result.proof.to_vec()};
+ let body:Vec<u8>=if one_tx{use aspis_r1_cost_probe::verifier::candidate::one_tx;let h=aspis_core::digest::LegacyHashFn(HOST_HASH);let packed=one_tx::pack(statement.semantic_public(),&result.proof,h).map_err(err)?;one_tx::verify(statement.semantic_public(),&packed,h,None).map_err(err)?;ensure!(packed.len()==one_tx::format::PROOF_BYTES,"summed proof length");packed}else{result.proof.to_vec()};
  let mut proof=encode_pool_v1_pair_verified_afterstate_v1(&compiled.public_statement.candidate_afterstate).map_err(err)?.to_vec();proof.extend_from_slice(&body);
  fs::write(dir.join("proof.bin"),&proof)?;fs::write(dir.join("statement.bin"),public)?;
  let request=PoolV1PairForestTerminalRequestV1{verifier_profile:PROFILE,verifier_release:RELEASE,pool_program:pool.to_bytes(),public:payment};
@@ -137,5 +137,5 @@ fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pub
  let stage1_accounts=accounts.publication(result.attempts,&mut a,pk(q,"public_account"),pk(q,"verifier_checkpoint"))?;
  if withdrawal{a.extend([ro(pk(q,"mint")),rw(vault),rw(pk(q,"destination")),ro(authority),ro(token)]);}
  a.push(ro(pk(q,"verifier_checkpoint")));
- Ok(json!({"client_route":"selected64-proof-account-v1","one_tx":one_tx,"off_nodes":aspis_r1_cost_probe::verifier::candidate::fused::summed_format::OFF_NODES,"off_certificate":aspis_r1_cost_probe::verifier::candidate::fused::summed_format::OFF_CERTIFICATE,"proof_account":proof_account.to_string(),"attempt_index":attempt_index,"prove_wall_seconds":started.elapsed().as_secs_f64(),"attempts":result.attempts,"p_r1":true,"mask_audit":format!("{:?}",result.audit),"proof_bytes":proof.len(),"proof_upload_count":proof.len().div_ceil(3763),"statement_upload_count":1,"marker":marker.to_string(),"output_lane":lanes[output_lane as usize].to_string(),"page":page.to_string(),"needs_zero_page":lane.tree.next_leaf_index==0,"settle":ix(pool,a,data),"stage1":ix(pk(q,"verifier"),stage1_accounts.as_array().unwrap().clone(),[3,10])}))
+ Ok(json!({"client_route":"selected64-proof-account-v1","one_tx":one_tx,"off_nodes":aspis_r1_cost_probe::verifier::candidate::one_tx::format::OFF_NODES,"off_certificate":aspis_r1_cost_probe::verifier::candidate::one_tx::format::OFF_CERTIFICATE,"proof_account":proof_account.to_string(),"attempt_index":attempt_index,"prove_wall_seconds":started.elapsed().as_secs_f64(),"attempts":result.attempts,"p_r1":true,"mask_audit":format!("{:?}",result.audit),"proof_bytes":proof.len(),"proof_upload_count":proof.len().div_ceil(3763),"statement_upload_count":1,"marker":marker.to_string(),"output_lane":lanes[output_lane as usize].to_string(),"page":page.to_string(),"needs_zero_page":lane.tree.next_leaf_index==0,"settle":ix(pool,a,data),"stage1":ix(pk(q,"verifier"),stage1_accounts.as_array().unwrap().clone(),[3,10])}))
 }

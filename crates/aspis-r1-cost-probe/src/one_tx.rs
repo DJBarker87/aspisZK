@@ -1,11 +1,11 @@
-//! FUTURE-VERSION EXPERIMENT (branch `future-version`). UNPROVED, NOT ADOPTED,
-//! not part of the pinned R1 verifier and not reachable from its entrypoints.
-//! Design note and pre-registered criteria:
-//! `docs/research/future-version/ONE-TX-EXPERIMENT.md`.
+//! Aspis one-transaction verifier. UNPROVED: no security claim is established
+//! for it. Not reachable from the two-transaction (R1) verifier's entrypoints.
+//! Design notes and the freeze record:
+//! `docs/research/future-version/ONE-TX-EXPERIMENT.md`, `ASPIS-FREEZE.md`.
 //!
 //! Two single-invocation verifiers over the unchanged 57,607-byte proof:
 //!
-//! - `verify` (stage A): the pinned checks of `tx1` followed by `tx2`, with
+//! - `verify_unbatched` (stage A): the pinned checks of `tx1` followed by `tx2`, with
 //!   the state kept in memory instead of a checkpoint. Same acceptance
 //!   predicate as the pinned pair on a proof whose checkpoint is the one
 //!   `tx1` wrote.
@@ -64,7 +64,7 @@ const P64: u64 = 0x7fff_ffff;
 
 /// Stage A. Pinned mathematics, one invocation, no checkpoint.
 #[inline(never)]
-pub fn verify<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, obs: Observer) -> Result<(), Error> {
+pub fn verify_unbatched<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, obs: Observer) -> Result<(), Error> {
     parse_shape(proof)?;
     canonical_scan(proof)?;
     mark(obs, Phase::Parsed);
@@ -110,7 +110,7 @@ pub fn verify_batched<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, ob
         return Err(Error::Query);
     }
     let mut pending = BatchedWeights::new(&a.weights)?;
-    if cfg!(feature = "future-tight-weights") {
+    if cfg!(feature = "tight-weights") {
         accumulate_weights_tight(&p, &mut a, &geometry, &mut pending)?;
     } else {
         accumulate_weights(&p, &mut a, &geometry, &mut pending);
@@ -171,13 +171,13 @@ fn coefficients(rho: K, geometry: &QueryGeometry) -> Result<Coefficients, Error>
         let r = power.mul_m31(QUARTER);
         circle[i] = [r, r.mul_m31(iy), r.mul_m31(ix), r.mul_m31(ix.mul(iy))];
         let rz = r.mul_m31(lz);
-        #[cfg(feature = "future-fold-shared")]
+        #[cfg(feature = "fold-shared")]
         {
             // G6 uses only the first and fourth entries.
             let _ = (lx, ly);
             line[i] = [r, K::ZERO, K::ZERO, rz, K::ZERO, K::ZERO];
         }
-        #[cfg(not(feature = "future-fold-shared"))]
+        #[cfg(not(feature = "fold-shared"))]
         {
             line[i] = [r, r.mul_m31(lx), r.mul_m31(ly), rz, rz.mul_m31(lx), rz.mul_m31(ly).neg()];
         }
@@ -313,7 +313,7 @@ fn second_fold(openings: &[u8], queries: &[u32; 22], c: &Coefficients, geometry:
         let d1 = v[0].sub(v[1]);
         let d2 = v[3].sub(v[2]);
         let l = &c.line[i];
-        #[cfg(feature = "future-fold-shared")]
+        #[cfg(feature = "fold-shared")]
         {
             let [_, _, lx, ly, _] = *geometry.for_query(i);
             let p1 = d1.mul_m31(lx);
@@ -323,7 +323,7 @@ fn second_fold(openings: &[u8], queries: &[u32; 22], c: &Coefficients, geometry:
             push_e(&mut second[2], u.sub(w), l[3])?;
             push_e(&mut second[3], p1.sub(p2), l[3])?;
         }
-        #[cfg(not(feature = "future-fold-shared"))]
+        #[cfg(not(feature = "fold-shared"))]
         {
             let _ = geometry;
             push_e(&mut second[0], u.add(w), l[0])?;
@@ -353,12 +353,12 @@ fn fold_sums(openings: &[u8], queries: &[u32; 22], rho: K, alpha: &[E; 2], g: &[
     let c = coefficients(rho, geometry)?;
     hook.note(Phase::QueryPart(0, 0));
     let mut first = [EbyKDot::new(), EbyKDot::new(), EbyKDot::new(), EbyKDot::new()];
-    #[cfg(feature = "future-tight-base")]
+    #[cfg(feature = "tight-base")]
     {
         let h = base_lanes_tight(openings, &c.circle)?;
         first_fold_base(&mut first, g, &h)?;
     }
-    #[cfg(not(feature = "future-tight-base"))]
+    #[cfg(not(feature = "tight-base"))]
     {
         let mut h = [[K::ZERO; 4]; 26];
         for lane in 0..26 {
@@ -367,9 +367,6 @@ fn fold_sums(openings: &[u8], queries: &[u32; 22], rho: K, alpha: &[E; 2], g: &[
         first_fold_base(&mut first, g, &h)?;
     }
     hook.note(Phase::QueryPart(0, 1));
-    #[cfg(feature = "future-tight-ext")]
-    let extension = extension_lanes_tight(openings, &c.circle)?;
-    #[cfg(not(feature = "future-tight-ext"))]
     let extension = [extension_lane(openings, &c.circle, 0)?, extension_lane(openings, &c.circle, 1)?, extension_lane(openings, &c.circle, 2)?];
     first_fold_extension(&mut first, g, &extension)?;
     let lhs1 = cubic(alpha[0], finish_e4(&first));
@@ -591,7 +588,7 @@ const ROW_ROUND: u8 = 34;
 /// one six-round sumcheck over the final message (design and status in the
 /// note; UNPROVED PROTOCOL ADDITION).
 #[inline(never)]
-pub fn verify_summed<H: Digest32>(public: Public<'_>, proof: &[u8], certificate: &[u8], hash: H, obs: Observer) -> Result<(), Error> {
+pub fn verify_with_certificate<H: Digest32>(public: Public<'_>, proof: &[u8], certificate: &[u8], hash: H, obs: Observer) -> Result<(), Error> {
     if certificate.len() != CERTIFICATE_BYTES {
         return Err(Error::Parse);
     }
@@ -616,7 +613,7 @@ pub fn verify_summed<H: Digest32>(public: Public<'_>, proof: &[u8], certificate:
     let mut claim = finish_relation_round(v.round0, p.alpha[0], p.claim, 0)?;
     claim = finish_relation_round(v.round1, p.alpha[1], claim, 1)?;
     mark(obs, Phase::QueryPart(5, 0));
-    summed_final_checks(&p, v.final_message, claim, sums.rhs2, &geometry, certificate, hash, Hook::of(obs))?;
+    final_sumcheck_checks(&p, v.final_message, claim, sums.rhs2, &geometry, certificate, hash, Hook::of(obs))?;
     mark(obs, Phase::Final);
     Ok(())
 }
@@ -624,7 +621,7 @@ pub fn verify_summed<H: Digest32>(public: Public<'_>, proof: &[u8], certificate:
 /// The two claims `sum_j f_j W_j = claim` and `sum_j f_j w_j = rhs2`, checked
 /// through the certificate.
 #[inline(never)]
-fn summed_final_checks<H: Digest32>(p: &Prepared, final_message: &[u8], claim: E, rhs2: E, geometry: &QueryGeometry, certificate: &[u8], hash: H, hook: Hook) -> Result<(), Error> {
+fn final_sumcheck_checks<H: Digest32>(p: &Prepared, final_message: &[u8], claim: E, rhs2: E, geometry: &QueryGeometry, certificate: &[u8], hash: H, hook: Hook) -> Result<(), Error> {
     // The final sumcheck continues the opening transcript after rho; it does not start a new one.
     let mut t = Transcript::resume(hash, p.state);
     let lambda = t.scalar_k(ROW_CLAIMS, &claims_bytes(claim, rhs2));
@@ -637,9 +634,9 @@ fn summed_final_checks<H: Digest32>(p: &Prepared, final_message: &[u8], claim: E
     let weights = Weights::new(p.variant, &p.semantic_alpha, &p.z)?;
     let w_at = weights.mle_at(&p.alpha[..2], p.kappa, &eq, &digits)?;
     hook.note(Phase::QueryPart(5, 4));
-    #[cfg(feature = "future-d-pair-expansion")]
+    #[cfg(feature = "final-pair-expansion")]
     let q_at = query_weight_mle_pairs(p, geometry, &r)?;
-    #[cfg(not(feature = "future-d-pair-expansion"))]
+    #[cfg(not(feature = "final-pair-expansion"))]
     let q_at = query_weight_mle(p, geometry, &r)?;
     hook.note(Phase::QueryPart(5, 5));
     let combined = w_at.add(E::from_qm31(q_at.mul(lambda)));
@@ -768,7 +765,7 @@ fn query_weight_mle_pairs(p: &Prepared, geometry: &QueryGeometry, r: &[K; 6]) ->
 /// `(claim, rhs2, f, W, w)`. Host and test use only.
 #[cfg(any(test, feature = "prover"))]
 #[allow(clippy::type_complexity)]
-fn stage_d_vectors<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H) -> Result<(Box<Prepared>, E, E, Vec<E>, Vec<E>, Vec<K>), Error> {
+fn final_sumcheck_vectors<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H) -> Result<(Box<Prepared>, E, E, Vec<E>, Vec<E>, Vec<K>), Error> {
     parse_shape(proof)?;
     canonical_scan(proof)?;
     let mut g = [E::ZERO; 29];
@@ -795,7 +792,7 @@ fn stage_d_vectors<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H) -> Re
 /// Honest sumcheck prover for `sum_j f_j u_j` with `u = W + lambda w`, on the
 /// transcript the verifier uses, given the claims the verifier will bind.
 #[cfg(any(test, feature = "prover"))]
-fn stage_d_rounds<H: Digest32>(p: &Prepared, claim: E, rhs2: E, mut f: Vec<E>, relation: &[E], query: &[K], hash: H) -> Vec<u8> {
+fn final_sumcheck_rounds<H: Digest32>(p: &Prepared, claim: E, rhs2: E, mut f: Vec<E>, relation: &[E], query: &[K], hash: H) -> Vec<u8> {
     // The final sumcheck continues the opening transcript after rho; it does not start a new one.
     let mut t = Transcript::resume(hash, p.state);
     let lambda = t.scalar_k(ROW_CLAIMS, &claims_bytes(claim, rhs2));
@@ -824,15 +821,15 @@ fn stage_d_rounds<H: Digest32>(p: &Prepared, claim: E, rhs2: E, mut f: Vec<E>, r
 /// proof data only (no witness).
 #[cfg(any(test, feature = "prover"))]
 pub fn final_message_certificate<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H) -> Result<Vec<u8>, Error> {
-    let (p, claim, rhs2, f, relation, query) = stage_d_vectors(public, proof, hash)?;
-    Ok(stage_d_rounds(&p, claim, rhs2, f, &relation, &query, hash))
+    let (p, claim, rhs2, f, relation, query) = final_sumcheck_vectors(public, proof, hash)?;
+    Ok(final_sumcheck_rounds(&p, claim, rhs2, f, &relation, &query, hash))
 }
 
-/// FUTURE-VERSION EXPERIMENT: the summed proof format. The pinned compact
+/// The Aspis proof format. The two-transaction verifier's compact
 /// layout up to the end of the 22 openings (same offsets), then one multiproof
-/// per tree over all 22 queries in a fixed zero-padded slot, then the stage D
-/// certificate. Design, slot bounds and status: the experiment note.
-pub mod summed_format {
+/// per tree over all 22 queries in a fixed zero-padded slot, then the final-sumcheck
+/// certificate. Design, slot bounds and status: ONE-TX-EXPERIMENT.md.
+pub mod format {
     use crate::compact;
     /// "ASPIS", two reserved zero bytes, proof format number 2 (the one-transaction
     /// format whose final sumcheck continues the opening transcript). The devnet
@@ -858,12 +855,12 @@ pub mod summed_format {
     const _: () = assert!(PROOF_BYTES == 55_815);
 }
 
-/// Shape of a summed-format proof: fixed length, magic, variant S2, zero
+/// Shape of an Aspis-format proof: fixed length, magic, variant S2, zero
 /// header tail.
 #[inline(never)]
-pub fn parse_shape_summed(proof: &[u8]) -> Result<(), Error> {
-    if proof.len() != summed_format::PROOF_BYTES
-        || &proof[..8] != summed_format::MAGIC
+pub fn parse_packed_shape(proof: &[u8]) -> Result<(), Error> {
+    if proof.len() != format::PROOF_BYTES
+        || &proof[..8] != format::MAGIC
         || proof[8] != Variant::S2.tag()
         || proof[9..16].iter().any(|&x| x != 0)
     {
@@ -911,7 +908,7 @@ fn merged_tree<H: Digest32>(proof: &[u8], keys: &[u64; 22], root: &[u8; 32], tre
         val[d] = leaf;
         d += 1;
     }
-    let nodes = &proof[summed_format::slot_offset(tree)..summed_format::slot_offset(tree + 1)];
+    let nodes = &proof[format::slot_offset(tree)..format::slot_offset(tree + 1)];
     merkle_verdict(multiproof::verify_counting_merged(hash, root, &mut idx, &mut val, d, nodes), nodes)
 }
 
@@ -926,16 +923,16 @@ fn merged_merkle<H: Digest32>(proof: &[u8], p: &Prepared, folded_root: &[u8; 32]
     merged_tree(proof, &keys, folded_root, 2, hash)
 }
 
-/// The future verifier over the summed format: one invocation, stage C,
-/// stage D with the certificate carried in the proof, one multiproof per tree.
-/// UNPROVED (see `SOUNDNESS-ROWS.md`).
+/// The one-transaction verifier: one invocation, the batched first-fold check,
+/// the final sumcheck with its certificate carried in the proof, one multiproof per tree.
+/// UNPROVED (see `SOUNDNESS-ROWS.md` and `ASPIS-FREEZE.md`).
 #[inline(never)]
-fn verify_summed_format_hooked<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, hook: Hook) -> Result<(), Error> {
-    parse_shape_summed(proof)?;
+fn verify_hooked<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, hook: Hook) -> Result<(), Error> {
+    parse_packed_shape(proof)?;
     canonical_scan(proof)?;
     hook.note(Phase::Parsed);
     let mut g = [E::ZERO; 29];
-    let p = prepare_summed(public, proof, hash, hook, &mut g)?;
+    let p = prepare_packed(public, proof, hash, hook, &mut g)?;
     hook.note(Phase::Prepare);
     let geometry = QueryGeometry::for_range(&p.queries, 0, QUERIES)?;
     let openings = &proof[compact::OFF_OPENINGS..compact::OFF_NODES];
@@ -947,7 +944,7 @@ fn verify_summed_format_hooked<H: Digest32>(public: Public<'_>, proof: &[u8], ha
     let mut claim = finish_relation_round(v.round0, p.alpha[0], p.claim, 0)?;
     claim = finish_relation_round(v.round1, p.alpha[1], claim, 1)?;
     hook.note(Phase::QueryPart(5, 0));
-    summed_final_checks(&p, v.final_message, claim, sums.rhs2, &geometry, &proof[summed_format::OFF_CERTIFICATE..], hash, hook)?;
+    final_sumcheck_checks(&p, v.final_message, claim, sums.rhs2, &geometry, &proof[format::OFF_CERTIFICATE..], hash, hook)?;
     hook.note(Phase::Final);
     // Merkle authentication LAST: every transcript row (0 to 39) is derived before any Merkle
     // digest is computed, which is the order the formal model has (all rows, then the terminal
@@ -963,20 +960,20 @@ fn verify_summed_format_hooked<H: Digest32>(public: Public<'_>, proof: &[u8], ha
 /// The entry with an observer, as before (tests, tools, profiling builds). Without `phase-observer` the
 /// observer is ignored.
 #[inline(always)]
-pub fn verify_summed_format<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, obs: Observer) -> Result<(), Error> {
-    verify_summed_format_hooked(public, proof, hash, Hook::of(obs))
+pub fn verify<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, obs: Observer) -> Result<(), Error> {
+    verify_hooked(public, proof, hash, Hook::of(obs))
 }
 
 /// The on-chain entry of the Aspis one-transaction verifier: no observer parameter.
 #[inline(always)]
-pub fn verify_summed_format_unobserved<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H) -> Result<(), Error> {
-    verify_summed_format_hooked(public, proof, hash, Hook::NONE)
+pub fn verify_unobserved<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H) -> Result<(), Error> {
+    verify_hooked(public, proof, hash, Hook::NONE)
 }
 
 /// `candidate::prepare` for the one-transaction path (new gate): the same steps in the same order, with the
 /// semantic layer entered through `verify_unobserved` unless a profiling build asks for the observer.
 #[inline(never)]
-fn prepare_summed<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, hook: Hook, g: &mut [E; 29]) -> Result<Box<Prepared>, Error> {
+fn prepare_packed<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, hook: Hook, g: &mut [E; 29]) -> Result<Box<Prepared>, Error> {
     let mut logical = aspis_core::r0::heap::filled(compact::LOGICAL_SEMANTIC + compact::LOGICAL_Y1, 0u8).map_err(|_| Error::Allocation)?;
     let (semantic, y1) = logical.split_at_mut(compact::LOGICAL_SEMANTIC);
     compact::expand_semantic(&proof[compact::OFF_SEMANTIC..compact::OFF_Y1], semantic)?;
@@ -1022,19 +1019,19 @@ fn distinct_sorted(queries: &[u32], folded: bool) -> Vec<u32> {
     out
 }
 
-/// Re-pack a pinned compact proof into the summed format. A function of the
+/// Re-pack a two-transaction compact proof into the Aspis format. A function of the
 /// proof and the public statement only: each merged multiproof's nodes are
 /// among the two batches' supplied nodes (a sibling the merged traversal needs
 /// is unoccupied by every query, so the batch holding its occupied sibling
-/// supplied it), and the certificate is the honest stage D certificate. This
-/// is also the prover's publish step for the summed format.
+/// supplied it), and the certificate is the honest final-sumcheck certificate. This
+/// is also the prover's publish step for the Aspis format.
 #[cfg(any(test, feature = "prover"))]
-pub fn to_summed_format<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H) -> Result<Vec<u8>, Error> {
-    let (p, claim, rhs2, f, relation, query) = stage_d_vectors(public, proof, hash)?;
-    let certificate = stage_d_rounds(&p, claim, rhs2, f, &relation, &query, hash);
-    let mut out = Vec::with_capacity(summed_format::PROOF_BYTES);
+pub fn pack<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H) -> Result<Vec<u8>, Error> {
+    let (p, claim, rhs2, f, relation, query) = final_sumcheck_vectors(public, proof, hash)?;
+    let certificate = final_sumcheck_rounds(&p, claim, rhs2, f, &relation, &query, hash);
+    let mut out = Vec::with_capacity(format::PROOF_BYTES);
     out.extend_from_slice(&proof[..compact::OFF_NODES]);
-    out[..8].copy_from_slice(summed_format::MAGIC);
+    out[..8].copy_from_slice(format::MAGIC);
     for tree in 0..3 {
         let mut known: Vec<((u32, u32), [u8; 32])> = Vec::new();
         for batch in 0..2 {
@@ -1049,17 +1046,17 @@ pub fn to_summed_format<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H) 
             }
         }
         let merged = supplied_positions(&distinct_sorted(&p.queries, tree == 2));
-        if merged.len() > summed_format::SLOT_NODES[tree] {
+        if merged.len() > format::SLOT_NODES[tree] {
             return Err(Error::Merkle);
         }
         for position in &merged {
             let node = known.iter().find(|(at, _)| at == position).ok_or(Error::Merkle)?;
             out.extend_from_slice(&node.1);
         }
-        out.resize(summed_format::slot_offset(tree + 1), 0);
+        out.resize(format::slot_offset(tree + 1), 0);
     }
     out.extend_from_slice(&certificate);
-    if out.len() != summed_format::PROOF_BYTES {
+    if out.len() != format::PROOF_BYTES {
         return Err(Error::Parse);
     }
     Ok(out)
@@ -1386,7 +1383,7 @@ mod tests {
             let statement = decode(public);
             let checkpoint = tx1(statement.semantic_public(), public, proof, SPLIT, Sha, None).unwrap_or_else(|e| panic!("{name} tx1 {e:?}"));
             tx2(public, proof, &checkpoint, Sha, None).unwrap_or_else(|e| panic!("{name} tx2 {e:?}"));
-            verify(statement.semantic_public(), proof, Sha, None).unwrap_or_else(|e| panic!("{name} fused {e:?}"));
+            verify_unbatched(statement.semantic_public(), proof, Sha, None).unwrap_or_else(|e| panic!("{name} fused {e:?}"));
             verify_batched(statement.semantic_public(), proof, Sha, None).unwrap_or_else(|e| panic!("{name} batched {e:?}"));
         }
     }
@@ -1427,7 +1424,7 @@ mod tests {
             bad[at] ^= 1;
             let pinned = tx1(statement.semantic_public(), public, &bad, SPLIT, Sha, None).and_then(|c| tx2(public, &bad, &c, Sha, None));
             assert!(pinned.is_err(), "pinned accepted a mutation at {at}");
-            assert!(verify(statement.semantic_public(), &bad, Sha, None).is_err(), "fused accepted a mutation at {at}");
+            assert!(verify_unbatched(statement.semantic_public(), &bad, Sha, None).is_err(), "fused accepted a mutation at {at}");
             assert!(verify_batched(statement.semantic_public(), &bad, Sha, None).is_err(), "batched accepted a mutation at {at}");
         }
     }
@@ -1551,7 +1548,7 @@ mod tests {
 
     /// E3: on every validated semantic row of every fixture, the decoder
     /// returns what the checked QM31 decoder returns on the same bytes. With
-    /// `future-validated-decode` off this compares the pinned decoder with
+    /// `validated-decode` off this compares the pinned decoder with
     /// itself; with it on, the direct limb load with the pinned decoder.
     #[test]
     fn validated_decode_equals_the_checked_decoder_on_every_semantic_row() {
@@ -1723,11 +1720,11 @@ mod tests {
     }
 
     #[test]
-    fn stage_d_extensions_equal_the_direct_sums_over_the_explicit_vectors() {
+    fn final_sumcheck_extensions_equal_the_direct_sums_over_the_explicit_vectors() {
         let mut state = 0x1357_9bdf_0246_8aceu64;
         for (name, proof, public) in FIXTURES {
             let statement = decode(public);
-            let (p, claim, rhs2, f, relation, query) = stage_d_vectors(statement.semantic_public(), proof, Sha).unwrap();
+            let (p, claim, rhs2, f, relation, query) = final_sumcheck_vectors(statement.semantic_public(), proof, Sha).unwrap();
             let weights = Weights::new(p.variant, &p.semantic_alpha, &p.z).unwrap();
             let final_message = &proof[compact::OFF_FINAL..compact::OFF_OPENINGS];
             // The explicit vectors reproduce the two pinned inner products.
@@ -1767,29 +1764,29 @@ mod tests {
     }
 
     #[test]
-    fn stage_d_accepts_the_six_fixtures_and_rejects_every_certificate_byte_change() {
+    fn final_sumcheck_accepts_the_six_fixtures_and_rejects_every_certificate_byte_change() {
         for (index, (name, proof, public)) in FIXTURES.into_iter().enumerate() {
             let statement = decode(public);
             let certificate = final_message_certificate(statement.semantic_public(), proof, Sha).unwrap();
             assert_eq!(certificate.len(), CERTIFICATE_BYTES);
-            verify_summed(statement.semantic_public(), proof, &certificate, Sha, None).unwrap_or_else(|e| panic!("{name} summed {e:?}"));
+            verify_with_certificate(statement.semantic_public(), proof, &certificate, Sha, None).unwrap_or_else(|e| panic!("{name} summed {e:?}"));
             // Another proof's certificate, and wrong lengths.
             let (_, other_proof, other_public) = FIXTURES[(index + 1) % 6];
             let other = final_message_certificate(decode(other_public).semantic_public(), other_proof, Sha).unwrap();
-            assert!(verify_summed(statement.semantic_public(), proof, &other, Sha, None).is_err());
-            assert!(verify_summed(statement.semantic_public(), proof, &certificate[..CERTIFICATE_BYTES - 1], Sha, None).is_err());
-            assert!(verify_summed(statement.semantic_public(), proof, &[], Sha, None).is_err());
+            assert!(verify_with_certificate(statement.semantic_public(), proof, &other, Sha, None).is_err());
+            assert!(verify_with_certificate(statement.semantic_public(), proof, &certificate[..CERTIFICATE_BYTES - 1], Sha, None).is_err());
+            assert!(verify_with_certificate(statement.semantic_public(), proof, &[], Sha, None).is_err());
             if index == 0 {
                 // The final checks alone, so that all 384 positions are cheap to try.
-                let (p, claim, rhs2, _, _, _) = stage_d_vectors(statement.semantic_public(), proof, Sha).unwrap();
+                let (p, claim, rhs2, _, _, _) = final_sumcheck_vectors(statement.semantic_public(), proof, Sha).unwrap();
                 let geometry = QueryGeometry::for_range(&p.queries, 0, 22).unwrap();
                 let final_message = &proof[compact::OFF_FINAL..compact::OFF_OPENINGS];
-                summed_final_checks(&p, final_message, claim, rhs2, &geometry, &certificate, Sha, Hook::NONE).unwrap();
+                final_sumcheck_checks(&p, final_message, claim, rhs2, &geometry, &certificate, Sha, Hook::NONE).unwrap();
                 for at in 0..CERTIFICATE_BYTES {
                     for bit in [1u8, 0x80] {
                         let mut bad = certificate.clone();
                         bad[at] ^= bit;
-                        assert!(summed_final_checks(&p, final_message, claim, rhs2, &geometry, &bad, Sha, Hook::NONE).is_err(), "byte {at} bit {bit}");
+                        assert!(final_sumcheck_checks(&p, final_message, claim, rhs2, &geometry, &bad, Sha, Hook::NONE).is_err(), "byte {at} bit {bit}");
                     }
                 }
             }
@@ -1798,7 +1795,7 @@ mod tests {
                 for at in mutation_offsets() {
                     let mut bad = proof.to_vec();
                     bad[at] ^= 1;
-                    assert!(verify_summed(statement.semantic_public(), &bad, &certificate, Sha, None).is_err(), "mutation at {at}");
+                    assert!(verify_with_certificate(statement.semantic_public(), &bad, &certificate, Sha, None).is_err(), "mutation at {at}");
                 }
             }
         }
@@ -1808,31 +1805,31 @@ mod tests {
     /// claim is rejected, whichever of the two claims is false and whether
     /// the false claim or the true sum is what it binds in the transcript.
     #[test]
-    fn stage_d_rejects_honest_rounds_for_a_false_relation_or_query_claim() {
+    fn final_sumcheck_rejects_honest_rounds_for_a_false_relation_or_query_claim() {
         let (_, proof, public) = FIXTURES[4];
         let statement = decode(public);
-        let (p, claim, rhs2, f, relation, query) = stage_d_vectors(statement.semantic_public(), proof, Sha).unwrap();
+        let (p, claim, rhs2, f, relation, query) = final_sumcheck_vectors(statement.semantic_public(), proof, Sha).unwrap();
         let geometry = QueryGeometry::for_range(&p.queries, 0, 22).unwrap();
         let final_message = &proof[compact::OFF_FINAL..compact::OFF_OPENINGS];
         let one = E::from_qm31(K::ONE);
         for (false_claim, false_rhs2) in [(claim.add(one), rhs2), (claim, rhs2.add(one)), (claim.add(one), rhs2.sub(one))] {
             // Rounds computed for the true vectors on the transcript of the false claims.
-            let adaptive = stage_d_rounds(&p, false_claim, false_rhs2, f.clone(), &relation, &query, Sha);
-            assert!(summed_final_checks(&p, final_message, false_claim, false_rhs2, &geometry, &adaptive, Sha, Hook::NONE).is_err());
+            let adaptive = final_sumcheck_rounds(&p, false_claim, false_rhs2, f.clone(), &relation, &query, Sha);
+            assert!(final_sumcheck_checks(&p, final_message, false_claim, false_rhs2, &geometry, &adaptive, Sha, Hook::NONE).is_err());
             // Rounds computed for the true claims, presented against the false ones.
-            let honest = stage_d_rounds(&p, claim, rhs2, f.clone(), &relation, &query, Sha);
-            assert!(summed_final_checks(&p, final_message, false_claim, false_rhs2, &geometry, &honest, Sha, Hook::NONE).is_err());
+            let honest = final_sumcheck_rounds(&p, claim, rhs2, f.clone(), &relation, &query, Sha);
+            assert!(final_sumcheck_checks(&p, final_message, false_claim, false_rhs2, &geometry, &honest, Sha, Hook::NONE).is_err());
         }
         // A false weight vector with a true-looking claim: the rounds are honest for
         // a perturbed relation vector whose sum the prover claims.
         let mut wrong = relation.clone();
         wrong[17] = wrong[17].add(one);
         let wrong_claim = (0..64).fold(E::ZERO, |a, j| a.add(f[j].mul(wrong[j])));
-        let rounds = stage_d_rounds(&p, wrong_claim, rhs2, f.clone(), &wrong, &query, Sha);
-        assert!(summed_final_checks(&p, final_message, wrong_claim, rhs2, &geometry, &rounds, Sha, Hook::NONE).is_err());
+        let rounds = final_sumcheck_rounds(&p, wrong_claim, rhs2, f.clone(), &wrong, &query, Sha);
+        assert!(final_sumcheck_checks(&p, final_message, wrong_claim, rhs2, &geometry, &rounds, Sha, Hook::NONE).is_err());
         // Control: the true claims with honest rounds are accepted.
-        let honest = stage_d_rounds(&p, claim, rhs2, f, &relation, &query, Sha);
-        summed_final_checks(&p, final_message, claim, rhs2, &geometry, &honest, Sha, Hook::NONE).unwrap();
+        let honest = final_sumcheck_rounds(&p, claim, rhs2, f, &relation, &query, Sha);
+        final_sumcheck_checks(&p, final_message, claim, rhs2, &geometry, &honest, Sha, Hook::NONE).unwrap();
     }
 
     /// G3: the word-wise scan and the pinned scan agree on the fixtures and
@@ -1865,23 +1862,23 @@ mod tests {
         assert!(rejected > 100);
     }
 
-    fn summed(index: usize) -> (Vec<u8>, &'static [u8]) {
+    fn packed_fixture(index: usize) -> (Vec<u8>, &'static [u8]) {
         let (_, proof, public) = FIXTURES[index];
-        (to_summed_format(decode(public).semantic_public(), proof, Sha).unwrap(), public)
+        (pack(decode(public).semantic_public(), proof, Sha).unwrap(), public)
     }
 
     #[test]
-    fn summed_format_accepts_the_six_repacked_fixtures_and_the_two_formats_reject_each_other() {
+    fn packed_format_accepts_the_six_repacked_fixtures_and_the_two_formats_reject_each_other() {
         for index in 0..6 {
             let (name, proof, public) = FIXTURES[index];
-            let (packed, _) = summed(index);
-            assert_eq!(packed.len(), summed_format::PROOF_BYTES);
+            let (packed, _) = packed_fixture(index);
+            assert_eq!(packed.len(), format::PROOF_BYTES);
             let statement = decode(public);
-            verify_summed_format(statement.semantic_public(), &packed, Sha, None).unwrap_or_else(|e| panic!("{name} summed format {e:?}"));
+            verify(statement.semantic_public(), &packed, Sha, None).unwrap_or_else(|e| panic!("{name} summed format {e:?}"));
             // The pinned proof is not a summed-format proof, and the reverse.
-            assert_eq!(verify_summed_format(statement.semantic_public(), proof, Sha, None), Err(Error::Parse));
+            assert_eq!(verify(statement.semantic_public(), proof, Sha, None), Err(Error::Parse));
             assert!(tx1(statement.semantic_public(), public, &packed, SPLIT, Sha, None).is_err());
-            assert!(verify(statement.semantic_public(), &packed, Sha, None).is_err());
+            assert!(verify_unbatched(statement.semantic_public(), &packed, Sha, None).is_err());
             // Everything before the multiproofs is the pinned proof apart from the magic.
             assert_eq!(&packed[8..compact::OFF_NODES], &proof[8..compact::OFF_NODES]);
             // Node counts: the pinned count function on the merged sets, within the slots.
@@ -1890,42 +1887,42 @@ mod tests {
                 let merged = distinct_sorted(&p.queries, folded);
                 let count = multiproof::node_count_merged(&merged).unwrap();
                 assert_eq!(count, supplied_positions(&merged).len());
-                assert!(count <= summed_format::SLOT_NODES[tree]);
-                let slot = &packed[summed_format::slot_offset(tree)..summed_format::slot_offset(tree + 1)];
+                assert!(count <= format::SLOT_NODES[tree]);
+                let slot = &packed[format::slot_offset(tree)..format::slot_offset(tree + 1)];
                 assert!(slot[32 * count..].iter().all(|&b| b == 0), "{name} tree {tree} padding");
             }
         }
     }
 
     #[test]
-    fn summed_format_rejects_a_change_in_every_region() {
-        let (packed, public) = summed(2);
+    fn packed_format_rejects_a_change_in_every_region() {
+        let (packed, public) = packed_fixture(2);
         let statement = decode(public);
         let (p, _) = prepared(FIXTURES[2].1, public);
         let mut offsets = mutation_offsets().into_iter().filter(|&at| at < compact::OFF_NODES).collect::<Vec<_>>();
         offsets.extend([0usize, 7, 8, 9, 15]);
         for (tree, folded) in [(0usize, false), (1, false), (2, true)] {
             let count = multiproof::node_count_merged(&distinct_sorted(&p.queries, folded)).unwrap();
-            let start = summed_format::slot_offset(tree);
+            let start = format::slot_offset(tree);
             offsets.extend([start, start + 32 * (count / 2) + 3, start + 32 * count - 1]);
             // Padding: first, middle and last padding byte of the slot.
-            let end = summed_format::slot_offset(tree + 1);
+            let end = format::slot_offset(tree + 1);
             assert!(start + 32 * count < end, "fixture leaves padding in tree {tree}");
             offsets.extend([start + 32 * count, (start + 32 * count + end) / 2, end - 1]);
         }
-        for at in (summed_format::OFF_CERTIFICATE..summed_format::PROOF_BYTES).step_by(13) {
+        for at in (format::OFF_CERTIFICATE..format::PROOF_BYTES).step_by(13) {
             offsets.push(at);
         }
-        offsets.push(summed_format::PROOF_BYTES - 1);
+        offsets.push(format::PROOF_BYTES - 1);
         for at in offsets {
             let mut bad = packed.clone();
             bad[at] ^= 1;
-            assert!(verify_summed_format(statement.semantic_public(), &bad, Sha, None).is_err(), "accepted a change at {at}");
+            assert!(verify(statement.semantic_public(), &bad, Sha, None).is_err(), "accepted a change at {at}");
         }
-        assert!(verify_summed_format(statement.semantic_public(), &packed[..packed.len() - 1], Sha, None).is_err());
+        assert!(verify(statement.semantic_public(), &packed[..packed.len() - 1], Sha, None).is_err());
         let mut longer = packed.clone();
         longer.push(0);
-        assert!(verify_summed_format(statement.semantic_public(), &longer, Sha, None).is_err());
+        assert!(verify(statement.semantic_public(), &longer, Sha, None).is_err());
     }
 
     #[test]
@@ -1933,11 +1930,11 @@ mod tests {
         // 22 leaves spread as widely as possible in the 2^18-leaf tree.
         let mut wide: Vec<u32> = (0..22u32).map(|j| j.reverse_bits() >> (32 - multiproof::LEAF_BITS)).collect();
         wide.sort_unstable();
-        assert_eq!(multiproof::node_count_merged(&wide), Some(summed_format::SLOT_NODES[0]));
+        assert_eq!(multiproof::node_count_merged(&wide), Some(format::SLOT_NODES[0]));
         // 22 folded leaves spread as widely as possible below 2^16.
         let mut folded: Vec<u32> = (0..22u32).map(|j| j.reverse_bits() >> 16).collect();
         folded.sort_unstable();
-        assert_eq!(multiproof::node_count_merged(&folded), Some(summed_format::SLOT_NODES[2]));
+        assert_eq!(multiproof::node_count_merged(&folded), Some(format::SLOT_NODES[2]));
         // Random sets never exceed the bounds; the count agrees with the 16-capacity function on small sets.
         let mut state = 0x9e3779b97f4a7c15u64;
         for case in 0..2_000 {
@@ -1946,13 +1943,13 @@ mod tests {
             set.sort_unstable();
             set.dedup();
             let count = multiproof::node_count_merged(&set).unwrap();
-            assert!(count <= summed_format::SLOT_NODES[0]);
+            assert!(count <= format::SLOT_NODES[0]);
             if set.len() <= multiproof::MAX_BATCH {
                 assert_eq!(Some(count), multiproof::node_count(Arity::Two, &set));
             }
             let mut low: Vec<u32> = set.iter().map(|u| u / 4).collect();
             low.dedup();
-            assert!(multiproof::node_count_merged(&low).unwrap() <= summed_format::SLOT_NODES[2]);
+            assert!(multiproof::node_count_merged(&low).unwrap() <= format::SLOT_NODES[2]);
         }
     }
 }

@@ -50,14 +50,12 @@ pub struct Prepared {
     pub variant:Variant,pub roots:[[u8;32];2],pub gamma:E,pub kappa:E,pub alpha:[E;2],pub rho:K,
     pub queries:[u32;22],pub semantic_alpha:[K;10],pub z:[SecureCirclePoint;2],pub claim:E,pub state:[u8;32],
 }
-#[cfg(not(feature="future-claim-rows"))]
 fn prepared_claim_sum(k:[E;7],parts:[E;7])->E {
         let mut claim=E::ZERO;
         for i in 0..7 {crate::trace::value(14,i,parts[i]);claim=claim.add(k[i].mul(parts[i]));}
         crate::trace::value(14,7,claim);
         claim
 }
-#[cfg(not(feature="future-claim-rows"))]
 fn prepared_claim_dot<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],g:&[E;29],point:usize)->Result<E,Error> {
     let mut dot=crate::fast_pairing::EbyKDot::new();
     for l in 0..29 {
@@ -66,7 +64,6 @@ fn prepared_claim_dot<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],
     }
     Ok(dot.finish())
 }
-#[cfg(not(feature="future-claim-rows"))]
 fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error> {
         let k=powers::<7>(kappa);
         let mut parts=[E::ZERO;7];parts[0]=inactive;
@@ -74,26 +71,6 @@ fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inac
             parts[point+1]=prepared_claim_dot(sem,y1,g,point)?;
         }
         Ok(prepared_claim_sum(k,parts))
-}
-/// Aspis new gate (replaces the pinned `prepared_claim` when `future-claim-rows` is on); equality with the pinned function is owed.
-#[cfg(feature="future-claim-rows")]
-fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error> {
-        let k=powers::<7>(kappa);
-        let mut parts=[E::ZERO;7];parts[0]=inactive;
-        // FUTURE-VERSION EXPERIMENT G5: the same 174 products, with each
-        // point's 29 scalars copied to one row first.
-        for point in 0..6 {
-            let row:[K;29]=match point {0..=2=>sem.claims[point],3=>sem.extra,4=>sem.before_z1,_=>core::array::from_fn(|l|field(y1,l).c0())};
-            let mut dot=crate::fast_pairing::EbyKDot::new();
-            for (power,scalar) in g.iter().zip(row.iter()) {
-                dot.push(*power,*scalar).map_err(|_|Error::Parse)?;
-            }
-            parts[point+1]=dot.finish();
-        }
-        let mut claim=E::ZERO;
-        for i in 0..7 {crate::trace::value(14,i,parts[i]);claim=claim.add(k[i].mul(parts[i]));}
-        crate::trace::value(14,7,claim);
-        Ok(claim)
 }
 
 /// The second folding challenge: with two folds, row 30 over the folded root followed by the second round

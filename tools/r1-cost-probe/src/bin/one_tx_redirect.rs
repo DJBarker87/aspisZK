@@ -148,7 +148,7 @@ fn main() -> Result<()> {
         _ => return Err(anyhow!("recorded statement is not a withdrawal")),
     };
     let destination = Address::new_from_array(destination_bytes);
-    let packed = aspis_r1_cost_probe::verifier::candidate::fused::to_summed_format(statement.semantic_public(), &proof.account.data[prefix..], Sha).map_err(|e| anyhow!("re-pack: {e:?}"))?;
+    let packed = aspis_r1_cost_probe::verifier::candidate::one_tx::pack(statement.semantic_public(), &proof.account.data[prefix..], Sha).map_err(|e| anyhow!("re-pack: {e:?}"))?;
     let mut buffer = proof.account.data[..prefix].to_vec();
     buffer.extend_from_slice(&packed);
 

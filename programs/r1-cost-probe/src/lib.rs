@@ -129,41 +129,41 @@ pub fn process_r1_cost_probe_instruction(program_id:&Pubkey,accounts:&[AccountIn
         if checkpoint.len()!=bytes.len(){return Err(ProgramError::InvalidAccountData);}
         checkpoint.copy_from_slice(&bytes);
     } else if data[0]==14 {
-        // FUTURE-VERSION EXPERIMENT: the summed format (certificate and merged
+        // Aspis proof format (certificate and merged
         // multiproofs inside the proof account).
         let statement=decode_pool_v1_pair_forest_terminal_statement_v1(&public).map_err(|_|ProgramError::InvalidAccountData)?;
-        verifier::candidate::fused::verify_summed_format(statement.semantic_public(),&proof,SolanaDigest,observer()).map_err(error)?;
+        verifier::candidate::one_tx::verify(statement.semantic_public(),&proof,SolanaDigest,observer()).map_err(error)?;
     } else if data[0]==13 {
         // FUTURE-VERSION EXPERIMENT, stage D: one invocation with the final-message
         // sumcheck. The certificate is read from the first bytes of the third account.
         let statement=decode_pool_v1_pair_forest_terminal_statement_v1(&public).map_err(|_|ProgramError::InvalidAccountData)?;
-        let bytes=verifier::candidate::fused::CERTIFICATE_BYTES;
+        let bytes=verifier::candidate::one_tx::CERTIFICATE_BYTES;
         if checkpoint.len()<bytes {return Err(ProgramError::InvalidAccountData);}
-        verifier::candidate::fused::verify_summed(statement.semantic_public(),&proof,&checkpoint[..bytes],SolanaDigest,observer()).map_err(error)?;
+        verifier::candidate::one_tx::verify_with_certificate(statement.semantic_public(),&proof,&checkpoint[..bytes],SolanaDigest,observer()).map_err(error)?;
     } else if data[0]==11 {
         // FUTURE-VERSION EXPERIMENT: unit-cost probe only, verifies nothing.
-        let value=verifier::candidate::fused::unit_cost_probe(&proof,observer()).map_err(error)?;
+        let value=verifier::candidate::one_tx::unit_cost_probe(&proof,observer()).map_err(error)?;
         let mut bytes=[0u8;16];value.write_le_bytes(&mut bytes);solana_program::program::set_return_data(&bytes);
     } else if data[0]==12 {
         // FUTURE-VERSION EXPERIMENT: relation-phase profile (profiling builds only).
         #[cfg(feature="detail-phases")]
         {
             let statement=decode_pool_v1_pair_forest_terminal_statement_v1(&public).map_err(|_|ProgramError::InvalidAccountData)?;
-            verifier::candidate::fused::relation_probe(statement.semantic_public(),&proof,SolanaDigest,observer()).map_err(error)?;
+            verifier::candidate::one_tx::relation_probe(statement.semantic_public(),&proof,SolanaDigest,observer()).map_err(error)?;
         }
         #[cfg(not(feature="detail-phases"))]
         return Err(ProgramError::InvalidInstructionData);
     } else if data[0]==10 {
         // FUTURE-VERSION EXPERIMENT: cost probe only, verifies nothing.
-        let value=verifier::candidate::fused::input_evaluation_probe(&proof,observer()).map_err(error)?;
+        let value=verifier::candidate::one_tx::input_evaluation_probe(&proof,observer()).map_err(error)?;
         let mut bytes=[0u8;16];value.write_le_bytes(&mut bytes);solana_program::program::set_return_data(&bytes);
     } else if data[0]==8||data[0]==9 {
         // FUTURE-VERSION EXPERIMENT (measurement build only; the Pool release
         // surface rejects these tags): one invocation, no checkpoint. Tag 8 is
         // the pinned mathematics, tag 9 the batched first fold.
         let statement=decode_pool_v1_pair_forest_terminal_statement_v1(&public).map_err(|_|ProgramError::InvalidAccountData)?;
-        if data[0]==8 {verifier::candidate::fused::verify(statement.semantic_public(),&proof,SolanaDigest,observer()).map_err(error)?;}
-        else {verifier::candidate::fused::verify_batched(statement.semantic_public(),&proof,SolanaDigest,observer()).map_err(error)?;}
+        if data[0]==8 {verifier::candidate::one_tx::verify_unbatched(statement.semantic_public(),&proof,SolanaDigest,observer()).map_err(error)?;}
+        else {verifier::candidate::one_tx::verify_batched(statement.semantic_public(),&proof,SolanaDigest,observer()).map_err(error)?;}
     } else {
         verifier::tx2(&public,&proof,&checkpoint,SolanaDigest,observer()).map_err(error)?;
         checkpoint[10]=2;let end=checkpoint.len()-32;let sum=hashv(&[b"UNPROVED:R1:checkpoint",&checkpoint[..end]]).to_bytes();checkpoint[end..].copy_from_slice(&sum);

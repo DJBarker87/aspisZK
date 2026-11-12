@@ -462,7 +462,7 @@ impl PreparedQm31Multiplier {
         // already hold the multiplicand's four coordinates; rebuild it and use
         // the sixteen-product `QM31::mul`. The prepared representation and its
         // dot kernels are unchanged.
-        #[cfg(feature = "future-fast-prepared")]
+        #[cfg(feature = "fast-prepared")]
         {
             return QM31 {
                 c0: CM31 { a: self.components[0][0], b: self.components[0][1] },
@@ -470,7 +470,7 @@ impl PreparedQm31Multiplier {
             }
             .mul(rhs);
         }
-        #[cfg(not(feature = "future-fast-prepared"))]
+        #[cfg(not(feature = "fast-prepared"))]
         {
         let multiply = |left: [M31; 3], right: CM31| {
             let m0 = left[0].mul(right.a);
@@ -955,7 +955,7 @@ impl QM31 {
         // crate's private canonical `Q::mul`. Precondition: all eight limbs are
         // canonical (`< P`); then every intermediate is nonnegative and below
         // 2^64. Same field product as the Karatsuba form below.
-        #[cfg(feature = "future-fast-kmul")]
+        #[cfg(feature = "fast-kmul")]
         {
             const PP: u64 = (P as u64) * (P as u64);
             let p = P as u64;
@@ -975,7 +975,7 @@ impl QM31 {
                 },
             };
         }
-        #[cfg(not(feature = "future-fast-kmul"))]
+        #[cfg(not(feature = "fast-kmul"))]
         {
         let m0 = self.c0.mul(rhs.c0);
         let m1 = self.c1.mul(rhs.c1);
@@ -988,14 +988,14 @@ impl QM31 {
     }
 
     /// FUTURE-VERSION EXPERIMENT G2: `self * rhs + addend`. With
-    /// `future-lazy-horner` the addend's limbs are added to the unreduced
+    /// `lazy-horner` the addend's limbs are added to the unreduced
     /// sixteen-product limbs before the single reduction (canonical limbs
     /// assumed; each sum stays below 2^64: the largest product limb is at most
     /// `2^64 - 2^34 + 16` and an addend limb is below `2^31`). Otherwise it is
     /// `mul` followed by `add`. Same field value either way.
     #[inline(always)]
     pub fn mul_add(self, rhs: QM31, addend: QM31) -> QM31 {
-        #[cfg(feature = "future-lazy-horner")]
+        #[cfg(feature = "lazy-horner")]
         {
             const PP: u64 = (P as u64) * (P as u64);
             let p = P as u64;
@@ -1015,7 +1015,7 @@ impl QM31 {
                 },
             };
         }
-        #[cfg(not(feature = "future-lazy-horner"))]
+        #[cfg(not(feature = "lazy-horner"))]
         {
             self.mul(rhs).add(addend)
         }
@@ -1032,7 +1032,7 @@ impl QM31 {
         // specialised to equal operands (ten products, one reduction per
         // limb). Canonical limbs assumed, as in the fast `mul`; every
         // intermediate is nonnegative and below 2^64.
-        #[cfg(feature = "future-fast-square")]
+        #[cfg(feature = "fast-square")]
         {
             const PP: u64 = (P as u64) * (P as u64);
             let p = P as u64;
@@ -1051,7 +1051,7 @@ impl QM31 {
                 },
             };
         }
-        #[cfg(not(feature = "future-fast-square"))]
+        #[cfg(not(feature = "fast-square"))]
         {
         let c0_square = self.c0.square();
         let c1_square = self.c1.square();
@@ -3371,7 +3371,7 @@ fn r0_sub_fallback(a: u32, b: u32) -> M31 {
 }
 
 #[cfg(test)]
-mod future_fast_kmul_tests {
+mod fast_kmul_tests {
     use super::*;
 
     /// The nested Karatsuba product, written out independently of `QM31::mul`.
@@ -3382,7 +3382,7 @@ mod future_fast_kmul_tests {
         QM31 { c0: m0.add(mul_by_r(m1)), c1: m2.sub(m0).sub(m1) }
     }
 
-    /// With `future-fast-kmul` on this compares the sixteen-product form with
+    /// With `fast-kmul` on this compares the sixteen-product form with
     /// the Karatsuba form; with it off it is a tautology kept so the same
     /// test name runs in both configurations.
     #[test]

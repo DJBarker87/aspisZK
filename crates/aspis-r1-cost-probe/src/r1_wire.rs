@@ -48,7 +48,6 @@ pub const fn row_shape(row: u8) -> Option<(u8, usize)> {
     }
 }
 
-#[cfg(not(feature = "future-lean-parse"))]
 fn validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {
     for (value, bytes) in payload.chunks_exact(32).enumerate() {
         let x = WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;
@@ -57,11 +56,6 @@ fn validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {
         }
     }
     Ok(())
-}
-/// Aspis new gate (replaces the pinned `validate_record_fields` when `future-lean-parse` is on); equality with the pinned function is owed.
-#[cfg(feature = "future-lean-parse")]
-fn validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {
-    validate_record_fields_lean(row, payload)
 }
 
 /// Test oracle only: a copy of the pinned body of `validate_record_fields`.
@@ -93,7 +87,7 @@ fn validate_record_fields_lean(row: u8, payload: &[u8]) -> Result<(), Error> {
 }
 
 #[cfg(test)]
-mod future_lean_parse_tests {
+mod lean_parse_tests {
     use super::*;
     use alloc::vec;
     use aspis_core::field::P;
@@ -236,7 +230,7 @@ impl<'a> ValidatedRecord<'a> {
         &self.framed[5..]
     }
 
-    #[cfg(not(feature = "future-validated-decode"))]
+    #[cfg(not(feature = "validated-decode"))]
     /// Decode checked base-field limbs from a semantic record. The
     /// validation token proves the 16-byte high half is zero and the
     /// low QM31 encoding canonical, while this method still checks the
@@ -268,8 +262,8 @@ impl<'a> ValidatedRecord<'a> {
         }
         Ok(out)
     }
-    /// Aspis new gate (replaces the pinned `decode_k` when `future-validated-decode` is on); equality with the pinned function is owed.
-    #[cfg(feature = "future-validated-decode")]
+    /// Aspis new gate (replaces the pinned `decode_k` when `validated-decode` is on); equality with the pinned function is owed.
+    #[cfg(feature = "validated-decode")]
     /// Decode checked base-field limbs from a semantic record. The
     /// validation token proves the 16-byte high half is zero and the
     /// low QM31 encoding canonical, while this method still checks the

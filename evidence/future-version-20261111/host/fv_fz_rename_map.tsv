@@ -1,0 +1,67 @@
+old	new	kind	note
+aspis_r1_cost_probe::verifier::candidate::fused::verify	aspis_r1_cost_probe::verifier::candidate::one_tx::verify_unbatched	fn	name taken by the deployed entry (verify_summed_format -> verify); this is the per-query stage A probe (tag 8)
+aspis_r1_cost_probe::verifier::candidate::fused::verify_summed_format	aspis_r1_cost_probe::verifier::candidate::one_tx::verify	fn	deployed one-transaction verifier
+aspis_r1_cost_probe::verifier::candidate::fused::verify_summed_format_hooked	aspis_r1_cost_probe::verifier::candidate::one_tx::verify_hooked	fn	
+aspis_r1_cost_probe::verifier::candidate::fused::verify_summed_format_unobserved	aspis_r1_cost_probe::verifier::candidate::one_tx::verify_unobserved	fn	
+aspis_r1_cost_probe::verifier::candidate::fused::to_summed_format	aspis_r1_cost_probe::verifier::candidate::one_tx::pack	fn	re-pack a compact proof into the one-transaction format
+aspis_r1_cost_probe::verifier::candidate::fused::prepare_summed	aspis_r1_cost_probe::verifier::candidate::one_tx::prepare_packed	fn	`prepare` is taken: candidate::prepare is glob-imported and called by verify_unbatched
+aspis_r1_cost_probe::verifier::candidate::fused::parse_shape_summed	aspis_r1_cost_probe::verifier::candidate::one_tx::parse_packed_shape	fn	
+aspis_r1_cost_probe::verifier::candidate::fused::verify_summed	aspis_r1_cost_probe::verifier::candidate::one_tx::verify_with_certificate	fn	measurement entry (tag 13): certificate read from the third account
+aspis_r1_cost_probe::verifier::candidate::fused::summed_final_checks	aspis_r1_cost_probe::verifier::candidate::one_tx::final_sumcheck_checks	fn	last seven transcript rows
+aspis_r1_cost_probe::verifier::candidate::fused::stage_d_vectors	aspis_r1_cost_probe::verifier::candidate::one_tx::final_sumcheck_vectors	fn	test/tool helper
+aspis_r1_cost_probe::verifier::candidate::fused::stage_d_rounds	aspis_r1_cost_probe::verifier::candidate::one_tx::final_sumcheck_rounds	fn	test/tool helper
+aspis_r1_cost_probe::verifier::candidate::fused::summed_format	aspis_r1_cost_probe::verifier::candidate::one_tx::format	mod	wire layout of the one-transaction format
+aspis_r1_cost_probe::verifier::candidate::fused::tests::summed	aspis_r1_cost_probe::verifier::candidate::one_tx::tests::packed_fixture	fn (test)	`packed` is a local variable name in the same tests
+aspis_r1_cost_probe::verifier::candidate::fused::tests::stage_d_extensions_equal_the_direct_sums_over_the_explicit_vectors	aspis_r1_cost_probe::verifier::candidate::one_tx::tests::final_sumcheck_extensions_equal_the_direct_sums_over_the_explicit_vectors	test	
+aspis_r1_cost_probe::verifier::candidate::fused::tests::stage_d_accepts_the_six_fixtures_and_rejects_every_certificate_byte_change	aspis_r1_cost_probe::verifier::candidate::one_tx::tests::final_sumcheck_accepts_the_six_fixtures_and_rejects_every_certificate_byte_change	test	
+aspis_r1_cost_probe::verifier::candidate::fused::tests::stage_d_rejects_honest_rounds_for_a_false_relation_or_query_claim	aspis_r1_cost_probe::verifier::candidate::one_tx::tests::final_sumcheck_rejects_honest_rounds_for_a_false_relation_or_query_claim	test	
+aspis_r1_cost_probe::verifier::candidate::fused::tests::summed_format_accepts_the_six_repacked_fixtures_and_the_two_formats_reject_each_other	aspis_r1_cost_probe::verifier::candidate::one_tx::tests::packed_format_accepts_the_six_repacked_fixtures_and_the_two_formats_reject_each_other	test	
+aspis_r1_cost_probe::verifier::candidate::fused::tests::summed_format_rejects_a_change_in_every_region	aspis_r1_cost_probe::verifier::candidate::one_tx::tests::packed_format_rejects_a_change_in_every_region	test	
+aspis_r1_cost_probe::verifier::candidate::fused	aspis_r1_cost_probe::verifier::candidate::one_tx	mod	file crates/aspis-r1-cost-probe/src/fused.rs -> one_tx.rs (git mv); #[path] in candidate.rs
+aspis_r1_cost_probe::r1_semantic::future_boundary_tests	aspis_r1_cost_probe::r1_semantic::lazy_boundary_tests	mod (test)	
+aspis_r1_cost_probe::r1_wire::future_lean_parse_tests	aspis_r1_cost_probe::r1_wire::lean_parse_tests	mod (test)	
+aspis_r1_cost_probe::fast_pairing::future_lean_dot_tests	aspis_r1_cost_probe::fast_pairing::lean_dot_tests	mod (test)	
+aspis_core::field::future_fast_kmul_tests	aspis_core::field::fast_kmul_tests	mod (test)	
+feature aspis-r1-cost-probe-program/future-fast-kmul	feature aspis-r1-cost-probe-program/fast-kmul	feature	
+feature aspis-r1-cost-probe-program/future-fast-prepared	feature aspis-r1-cost-probe-program/fast-prepared	feature	
+feature aspis-r1-cost-probe-program/future-fast-square	feature aspis-r1-cost-probe-program/fast-square	feature	
+feature aspis-r1-cost-probe-program/future-validated-decode	feature aspis-r1-cost-probe-program/validated-decode	feature	
+feature aspis-r1-cost-probe-program/future-merkle-single-pass	feature aspis-r1-cost-probe-program/merkle-single-pass	feature	
+feature aspis-r1-cost-probe-program/future-tight-base	feature aspis-r1-cost-probe-program/tight-base	feature	
+feature aspis-r1-cost-probe-program/future-tight-weights	feature aspis-r1-cost-probe-program/tight-weights	feature	
+feature aspis-r1-cost-probe-program/future-lazy-boundary	feature aspis-r1-cost-probe-program/lazy-boundary	feature	
+feature aspis-r1-cost-probe-program/future-merkle-in-place	feature aspis-r1-cost-probe-program/merkle-in-place	feature	
+feature aspis-r1-cost-probe-program/future-lazy-horner	feature aspis-r1-cost-probe-program/lazy-horner	feature	
+feature aspis-r1-cost-probe-program/future-fold-shared	feature aspis-r1-cost-probe-program/fold-shared	feature	
+feature aspis-r1-cost-probe-program/future-d-pair-expansion	feature aspis-r1-cost-probe-program/final-pair-expansion	feature	
+feature aspis-r1-cost-probe-program/future-one-tx	feature aspis-r1-cost-probe-program/one-tx	feature	merged with future-one-tx-lean
+feature aspis-r1-cost-probe-program/future-one-tx-lean	feature aspis-r1-cost-probe-program/one-tx	feature	the non-lean variant (stage 1 entry kept) is compiled by no configuration in use; its cfg sites now read one-tx
+feature aspis-r1-cost-probe-program/future-d-inactive-tensor	(deleted)	feature	
+feature aspis-r1-cost-probe-program/future-dot-scale	(deleted)	feature	
+feature aspis-r1-cost-probe-program/future-claim-rows	(deleted)	feature	
+feature aspis-r1-cost-probe-program/future-tight-ext	(deleted)	feature	
+feature aspis-r1-cost-probe-program/future-lean-parse	(deleted)	feature	
+feature aspis-r1-cost-probe-program/future-word-scan	(deleted)	feature	
+feature aspis-r1-cost-probe-program/future-lean-dot	(deleted)	feature	
+feature aspis-r1-cost-probe/future-validated-decode	feature aspis-r1-cost-probe/validated-decode	feature	
+feature aspis-r1-cost-probe/future-merkle-single-pass	feature aspis-r1-cost-probe/merkle-single-pass	feature	
+feature aspis-r1-cost-probe/future-tight-base	feature aspis-r1-cost-probe/tight-base	feature	
+feature aspis-r1-cost-probe/future-tight-weights	feature aspis-r1-cost-probe/tight-weights	feature	
+feature aspis-r1-cost-probe/future-lazy-boundary	feature aspis-r1-cost-probe/lazy-boundary	feature	
+feature aspis-r1-cost-probe/future-merkle-in-place	feature aspis-r1-cost-probe/merkle-in-place	feature	
+feature aspis-r1-cost-probe/future-lazy-horner	feature aspis-r1-cost-probe/lazy-horner	feature	
+feature aspis-r1-cost-probe/future-fold-shared	feature aspis-r1-cost-probe/fold-shared	feature	
+feature aspis-r1-cost-probe/future-d-pair-expansion	feature aspis-r1-cost-probe/final-pair-expansion	feature	
+feature aspis-r1-cost-probe/future-d-inactive-tensor	(deleted)	feature	no cfg site
+feature aspis-r1-cost-probe/future-dot-scale	(deleted)	feature	no cfg site
+feature aspis-r1-cost-probe/future-claim-rows	(deleted)	feature	claim-rows had 4 cfg sites (verifier.rs), removed as in T4
+feature aspis-r1-cost-probe/future-tight-ext	(deleted)	feature	cfg sites removed (T4)
+feature aspis-r1-cost-probe/future-lean-parse	(deleted)	feature	cfg sites removed (T4)
+feature aspis-r1-cost-probe/future-word-scan	(deleted)	feature	cfg sites removed (T4)
+feature aspis-r1-cost-probe/future-lean-dot	(deleted)	feature	cfg sites removed (T4)
+feature aspis-core/future-fast-kmul	feature aspis-core/fast-kmul	feature	
+feature aspis-core/future-fast-prepared	feature aspis-core/fast-prepared	feature	
+feature aspis-core/future-fast-square	feature aspis-core/fast-square	feature	
+feature aspis-core/future-lazy-horner	feature aspis-core/lazy-horner	feature	
+(new)	feature aspis-r1-cost-probe-program/aspis	feature	aggregate: the deployed program feature list
+(new)	feature aspis-r1-cost-probe/aspis	feature	aggregate: the native tools/tests list

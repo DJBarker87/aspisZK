@@ -386,7 +386,7 @@ impl Weights {
         }
         Ok(())
     }
-    /// D1 (feature future-d-inactive-tensor): the inactive row through its tensor form.
+    /// The inactive row through its tensor form.
     fn inactive_tensor(ap0:&[E;4],ap1:&[E;4],groups:&[K;12])->Result<E,Error> {
         let mut m=[K::ZERO;16];
         for g in 0..12 { for bit in 0..16 { if S2_INACTIVE_MASKS[g]&(1<<bit)!=0 {m[bit]=m[bit].add(groups[g]);} } }

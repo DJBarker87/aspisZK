@@ -47,7 +47,7 @@ use aspis_pool::{
     pool_v1_pair_forest_terminal_bump_hints_v1, pool_v1_root_page_address, POOL_V1_PAIR_EMPTY_ROOTS,
 };
 use aspis_prover::{r0_fixture::statement_public, v7_pair_forest_fixture::prepare_v7_pair_forest_transfer_fixture_v1, HOST_HASH};
-use aspis_r1_cost_probe::{multiproof, prover, transport::Variant, verifier::candidate::fused};
+use aspis_r1_cost_probe::{multiproof, prover, transport::Variant, verifier::candidate::one_tx};
 use aspis_statement::pool_v1::root_history::{append_root_history_page_bytes_v1, initialize_root_history_page_bytes_v1, root_history_location};
 use aspis_statement::{
     encode_digest_canonical,
@@ -329,9 +329,9 @@ fn main() -> Result<()> {
         let t0 = Instant::now();
         let (pinned, _) = prover::prove_masked_fixture(statement_public(&statement), &compiled, Variant::S2, HOST_HASH, &[spec.seed; 32]).map_err(|e| anyhow!("prove: {e:?}"))?;
         let prove_seconds = t0.elapsed().as_secs_f64();
-        let packed = fused::to_summed_format(statement.semantic_public(), &pinned, Sha).map_err(|e| anyhow!("re-pack: {e:?}"))?;
+        let packed = one_tx::pack(statement.semantic_public(), &pinned, Sha).map_err(|e| anyhow!("re-pack: {e:?}"))?;
         let _ = aspis_r1_cost_probe::trace::take();
-        fused::verify_summed_format(statement.semantic_public(), &packed, Sha, None).map_err(|e| anyhow!("host verify: {e:?}"))?;
+        one_tx::verify(statement.semantic_public(), &packed, Sha, None).map_err(|e| anyhow!("host verify: {e:?}"))?;
         let trace = aspis_r1_cost_probe::trace::take();
         let mut queries = [u32::MAX; 22];
         for (tag, i, bytes) in &trace {
@@ -348,7 +348,7 @@ fn main() -> Result<()> {
         f.sort_unstable();
         f.dedup();
         let nodes = [multiproof::node_count_merged(&c).unwrap(), multiproof::node_count_merged(&c).unwrap(), multiproof::node_count_merged(&f).unwrap()];
-        let slot_nonzero: Vec<usize> = (0..3).map(|t| packed[fused::summed_format::slot_offset(t)..fused::summed_format::slot_offset(t + 1)].chunks(32).filter(|b| b.iter().any(|x| *x != 0)).count()).collect();
+        let slot_nonzero: Vec<usize> = (0..3).map(|t| packed[one_tx::format::slot_offset(t)..one_tx::format::slot_offset(t + 1)].chunks(32).filter(|b| b.iter().any(|x| *x != 0)).count()).collect();
         ensure!(slot_nonzero == nodes.to_vec(), "node count {nodes:?} differs from nonzero slot blocks {slot_nonzero:?}");
         let total_nodes: usize = nodes.iter().sum();
         let parents = total_nodes + 22 + 22 + f.len() - 3;

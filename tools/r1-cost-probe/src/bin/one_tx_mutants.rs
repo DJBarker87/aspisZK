@@ -25,7 +25,7 @@
 //!
 //! usage: one_tx_mutants <transactions.json> <out.txt> [stride] [threads]
 use anyhow::{anyhow, ensure, Context, Result};
-use aspis_r1_cost_probe::verifier::{candidate::fused, Phase};
+use aspis_r1_cost_probe::verifier::{candidate::one_tx, Phase};
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::{cell::Cell, env, fs, path::Path};
@@ -115,7 +115,7 @@ impl Mutant {
     }
     fn apply(self, base: &[u8]) -> Vec<u8> {
         let mut m = base.to_vec();
-        let nodes = fused::summed_format::OFF_NODES;
+        let nodes = one_tx::format::OFF_NODES;
         match self {
             Mutant::None => {}
             Mutant::Bit(i) => m[i] ^= 1 << (i % 8),
@@ -137,7 +137,7 @@ impl Mutant {
 }
 
 fn mutants(len: usize, stride: usize) -> Vec<Mutant> {
-    let nodes = fused::summed_format::OFF_NODES;
+    let nodes = one_tx::format::OFF_NODES;
     let blocks = (len - nodes) / 32;
     let mut out = vec![Mutant::None];
     out.extend((0..len).step_by(stride).map(Mutant::Bit));
@@ -169,8 +169,8 @@ fn main() -> Result<()> {
         let proof = recorded(&find(format!("{operation}-stage2"))?, &upload, |n| n > 50_000)?;
         let public = recorded(&find(format!("{operation}-stage1"))?, &upload, |n| n == 1880)?;
         let statement = aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1(&public).map_err(|e| anyhow!("statement: {e:?}"))?;
-        let packed = fused::to_summed_format(statement.semantic_public(), &proof[prefix..], Sha).map_err(|e| anyhow!("re-pack: {e:?}"))?;
-        ensure!(packed.len() == fused::summed_format::PROOF_BYTES, "packed length");
+        let packed = one_tx::pack(statement.semantic_public(), &proof[prefix..], Sha).map_err(|e| anyhow!("re-pack: {e:?}"))?;
+        ensure!(packed.len() == one_tx::format::PROOF_BYTES, "packed length");
         let list = mutants(packed.len(), stride);
         let chunk = list.len().div_ceil(threads);
         let lines: Vec<Vec<String>> = std::thread::scope(|scope| {
@@ -183,7 +183,7 @@ fn main() -> Result<()> {
                             .map(|m| {
                                 let bytes = m.apply(packed);
                                 MARKS.with(|c| c.set(0));
-                                let verdict = fused::verify_summed_format(statement.semantic_public(), &bytes, Sha, Some(observe));
+                                let verdict = one_tx::verify(statement.semantic_public(), &bytes, Sha, Some(observe));
                                 let marks = MARKS.with(|c| c.get());
                                 match verdict {
                                     Ok(()) => format!("{operation} {} Ok {marks}", m.name()),

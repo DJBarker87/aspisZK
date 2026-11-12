@@ -117,13 +117,13 @@ fn mark(obs: crate::verifier::Observer, i: u8) {
     let _=(obs,i);
 }
 
-#[cfg(not(feature = "future-lazy-boundary"))]
+#[cfg(not(feature = "lazy-boundary"))]
 fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {
         let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
     boundary
 }
-/// Aspis new gate (replaces the pinned `semantic_boundary` when `future-lazy-boundary` is on); equality with the pinned function is owed.
-#[cfg(feature = "future-lazy-boundary")]
+/// Aspis new gate (replaces the pinned `semantic_boundary` when `lazy-boundary` is on); equality with the pinned function is owed.
+#[cfg(feature = "lazy-boundary")]
 fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {
     // FUTURE-VERSION EXPERIMENT E8 (default off): the same sum
     // `p[0] + (p[0] + ... + p[27])` with one reduction per limb. The 29
@@ -147,11 +147,11 @@ fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {
 }
 
 #[cfg(test)]
-mod future_boundary_tests {
+mod lazy_boundary_tests {
     use super::*;
     use aspis_core::field::{CM31, M31, P};
 
-    /// E8: with `future-lazy-boundary` on, the lazy sum against the pinned
+    /// E8: with `lazy-boundary` on, the lazy sum against the pinned
     /// fold; with it off, the pinned fold against itself.
     #[test]
     fn boundary_sum_equals_the_pinned_fold() {
@@ -179,7 +179,7 @@ mod future_boundary_tests {
     }
 }
 
-#[cfg(not(feature = "future-lazy-horner"))]
+#[cfg(not(feature = "lazy-horner"))]
 fn semantic_value(polynomial: &[QM31; 28], alpha: &[QM31; 10], round: usize) -> QM31 {
         let value = polynomial
             .iter()
@@ -187,11 +187,11 @@ fn semantic_value(polynomial: &[QM31; 28], alpha: &[QM31; 10], round: usize) -> 
             .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
     value
 }
-/// Aspis new gate (replaces the pinned `semantic_value` when `future-lazy-horner` is on); equality with the pinned function is owed.
-#[cfg(feature = "future-lazy-horner")]
+/// Aspis new gate (replaces the pinned `semantic_value` when `lazy-horner` is on); equality with the pinned function is owed.
+#[cfg(feature = "lazy-horner")]
 fn semantic_value(polynomial: &[QM31; 28], alpha: &[QM31; 10], round: usize) -> QM31 {
         // FUTURE-VERSION EXPERIMENT G2: `mul_add` is `mul` then `add` unless
-        // `aspis-core/future-lazy-horner` is on, when it reduces once.
+        // `aspis-core/lazy-horner` is on, when it reduces once.
         let mut value = QM31::ZERO;
         let mut i = 28;
         while i > 0 {

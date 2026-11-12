@@ -1,0 +1,42 @@
+### diff W/one_tx_mutants.rs W/fz/one_tx_mutants.rs (the copy the gate builds in src-fz1)
+28c28
+< use aspis_r1_cost_probe::verifier::{candidate::fused, Phase};
+---
+> use aspis_r1_cost_probe::verifier::{candidate::one_tx, Phase};
+118c118
+<         let nodes = fused::summed_format::OFF_NODES;
+---
+>         let nodes = one_tx::format::OFF_NODES;
+140c140
+<     let nodes = fused::summed_format::OFF_NODES;
+---
+>     let nodes = one_tx::format::OFF_NODES;
+172,173c172,173
+<         let packed = fused::to_summed_format(statement.semantic_public(), &proof[prefix..], Sha).map_err(|e| anyhow!("re-pack: {e:?}"))?;
+<         ensure!(packed.len() == fused::summed_format::PROOF_BYTES, "packed length");
+---
+>         let packed = one_tx::pack(statement.semantic_public(), &proof[prefix..], Sha).map_err(|e| anyhow!("re-pack: {e:?}"))?;
+>         ensure!(packed.len() == one_tx::format::PROOF_BYTES, "packed length");
+186c186
+<                                 let verdict = fused::verify_summed_format(statement.semantic_public(), &bytes, Sha, Some(observe));
+---
+>                                 let verdict = one_tx::verify(statement.semantic_public(), &bytes, Sha, Some(observe));
+### diff W/one_tx_worst.rs W/fz/one_tx_worst.rs (the copy the gate builds in src-fz1)
+38c38
+< use aspis_r1_cost_probe::{multiproof, prover, transport::Variant, verifier::candidate::fused};
+---
+> use aspis_r1_cost_probe::{multiproof, prover, transport::Variant, verifier::candidate::one_tx};
+313c313
+<         let packed = fused::to_summed_format(statement.semantic_public(), &pinned, Sha).map_err(|e| anyhow!("re-pack: {e:?}"))?;
+---
+>         let packed = one_tx::pack(statement.semantic_public(), &pinned, Sha).map_err(|e| anyhow!("re-pack: {e:?}"))?;
+315c315
+<         fused::verify_summed_format(statement.semantic_public(), &packed, Sha, None).map_err(|e| anyhow!("host verify: {e:?}"))?;
+---
+>         one_tx::verify(statement.semantic_public(), &packed, Sha, None).map_err(|e| anyhow!("host verify: {e:?}"))?;
+332c332
+<         let slot_nonzero: Vec<usize> = (0..3).map(|t| packed[fused::summed_format::slot_offset(t)..fused::summed_format::slot_offset(t + 1)].chunks(32).filter(|b| b.iter().any(|x| *x != 0)).count()).collect();
+---
+>         let slot_nonzero: Vec<usize> = (0..3).map(|t| packed[one_tx::format::slot_offset(t)..one_tx::format::slot_offset(t + 1)].chunks(32).filter(|b| b.iter().any(|x| *x != 0)).count()).collect();
+### cmp W/fz/one_tx_mutants.rs src-fz1/tools/r1-cost-probe/src/bin/one_tx_mutants.rs
+identical

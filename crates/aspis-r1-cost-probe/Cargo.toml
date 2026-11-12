@@ -13,36 +13,44 @@ default = ["private-leaf-salts"]
 # The observer (a function pointer) is carried by the one-transaction functions only with this feature.
 phase-observer = []
 detail-phases = ["phase-observer"]
-# FUTURE-VERSION EXPERIMENT E3 (default off): decode already-validated semantic
-# records without repeating the canonical check.
-future-validated-decode = []
-# E4a: one Merkle traversal per tree (count while verifying).
-future-merkle-single-pass = []
-# E5, E6, E7: tighter stage C kernels (this branch's own code).
-future-tight-base = []
-future-tight-ext = []
-future-tight-weights = []
-# E8: semantic boundary sum with one reduction per limb.
-future-lazy-boundary = []
-# Round 3: D1 (inactive row of the stage D weight extension through its tensor
-# form), D2 (query weight extension expanded in pairs), E4b (Merkle parents
-# written straight into the next level's buffer).
-future-d-inactive-tensor = []
-future-d-pair-expansion = []
-future-merkle-in-place = ["future-merkle-single-pass"]
-# Round 3, third set: G1 lean record validation, G3 word-wise canonical scan,
-# G4 stage D scale factors through the dot, G5 claim dots over copied rows,
-# G6 second fold with shared edge products. (G2 is aspis-core/future-lazy-horner.)
-future-lean-parse = []
-future-word-scan = []
-future-dot-scale = []
-future-claim-rows = []
-future-fold-shared = []
-# Round 4, H1: lean dot accumulators (no per-push scalar check or term counter).
-future-lean-dot = []
-# G2 seen from this crate: selects the Aspis `semantic_value` and turns on the single-reduction
-# multiply-add of aspis-core. Builds of this crate must name THIS feature, not `aspis-core/future-lazy-horner`.
-future-lazy-horner = ["aspis-core/future-lazy-horner"]
+# Native builds of this crate with the deployed Aspis settings (tools and tests):
+# `--features aspis`, or `prover aspis` with the prover.
+aspis = [
+    "optimized-terminal",
+    "program-build",
+    "validated-decode",
+    "merkle-single-pass",
+    "tight-base",
+    "tight-weights",
+    "lazy-boundary",
+    "final-pair-expansion",
+    "merkle-in-place",
+    "fold-shared",
+    "aspis-core/fast-kmul",
+    "aspis-core/fast-prepared",
+    "aspis-core/fast-square",
+    "lazy-horner",
+]
+# Semantic records already checked canonical are decoded without checking again.
+validated-decode = []
+# One Merkle traversal per tree, counting nodes while verifying.
+merkle-single-pass = []
+# Base-lane kernel of the batched first fold reading limbs once.
+tight-base = []
+# Query weight accumulation through the same limb-wise kernel.
+tight-weights = []
+# Semantic boundary sum with one reduction per limb.
+lazy-boundary = []
+# Query weight extension of the final sumcheck expanded in pairs.
+final-pair-expansion = []
+# Merkle parents written straight into the next level's buffer.
+merkle-in-place = ["merkle-single-pass"]
+# Second fold with the edge products shared between the two sums.
+fold-shared = []
+# Selects the Aspis `semantic_value` and turns on the single-reduction
+# multiply-add of aspis-core. Builds of this crate name this feature, not
+# `aspis-core/lazy-horner` alone.
+lazy-horner = ["aspis-core/lazy-horner"]
 # Existing exact terminal kernels from the selected V7/R117 bundle.
 # This changes arithmetic evaluation only; the isolated R1 protocol is unproved.
 optimized-terminal = [
@@ -80,7 +88,7 @@ aspis-z4b-probe = { path = "../../docs/research/v8-r0-zk-20261009/z4", optional 
 getrandom = { workspace = true, optional = true }
 
 [dev-dependencies]
-# Real SHA-256 for the future-version fused-verifier tests on saved proofs.
+# Real SHA-256 for the one-transaction verifier tests on saved proofs.
 sha2 = { workspace = true }
 
 # Historical S1 tool: reads saved eight-way fixtures with the eight-way

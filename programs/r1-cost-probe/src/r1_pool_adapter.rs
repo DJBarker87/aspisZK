@@ -808,7 +808,7 @@ fn authenticate_asq8_accounts(
     })
 }
 
-#[cfg(not(feature = "future-one-tx"))]
+#[cfg(not(feature = "one-tx"))]
 #[inline(never)]
 fn scan_proof_buffer(bytes: &[u8]) -> Result<ScannedAsqaProof, ProgramError> {
     let proof_length = verifier::PROOF_BYTES;
@@ -838,12 +838,12 @@ fn scan_proof_buffer(bytes: &[u8]) -> Result<ScannedAsqaProof, ProgramError> {
         proof_length,
     })
 }
-/// Aspis new gate (replaces the pinned `scan_proof_buffer` when `future-one-tx` is on); equality with the pinned function is owed.
-#[cfg(feature = "future-one-tx")]
+/// Aspis new gate (replaces the pinned `scan_proof_buffer` when `one-tx` is on); equality with the pinned function is owed.
+#[cfg(feature = "one-tx")]
 #[inline(never)]
 fn scan_proof_buffer(bytes: &[u8]) -> Result<ScannedAsqaProof, ProgramError> {
-    // FUTURE-VERSION EXPERIMENT: the one-transaction entry reads the summed format.
-    let proof_length = verifier::candidate::fused::summed_format::PROOF_BYTES;
+    // Aspis: the one-transaction entry reads the Aspis proof format.
+    let proof_length = verifier::candidate::one_tx::format::PROOF_BYTES;
     let expected_body = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
         .checked_add(proof_length)
         .ok_or(ProgramError::InvalidAccountData)?;

@@ -295,7 +295,7 @@ pub fn verify_counting_direct<H: Digest32>(
     Counted::Done { root_ok: n == 1 && idx[0] == 0 && cur[0] == *root, used: at }
 }
 
-/// FUTURE-VERSION EXPERIMENT (summed format): largest index set of one merged
+/// Aspis proof format: largest index set of one merged
 /// multiproof, all 22 queries of a tree.
 pub const MAX_MERGED: usize = 22;
 

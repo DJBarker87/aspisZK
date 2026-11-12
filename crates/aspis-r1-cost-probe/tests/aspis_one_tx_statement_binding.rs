@@ -18,7 +18,7 @@
 
 use aspis_core::field::M31;
 use aspis_core::Digest32;
-use aspis_r1_cost_probe::verifier::candidate::fused::{to_summed_format, verify_summed_format};
+use aspis_r1_cost_probe::verifier::candidate::one_tx::{pack, verify};
 use aspis_statement::pool_v1::{
     decode_pool_v1_pair_forest_terminal_statement_v1, PoolV1PairForestTerminalStatementV1 as Statement,
 };
@@ -85,8 +85,8 @@ const NOT_IN_TRANSCRIPT: &[Change] = &[
 ];
 
 fn packed(name: &str, proof: &[u8], statement: &Statement) -> Vec<u8> {
-    let packed = to_summed_format(statement.semantic_public(), proof, Sha).unwrap_or_else(|e| panic!("{name}: re-pack {e:?}"));
-    verify_summed_format(statement.semantic_public(), &packed, Sha, None).unwrap_or_else(|e| panic!("{name}: own statement {e:?}"));
+    let packed = pack(statement.semantic_public(), proof, Sha).unwrap_or_else(|e| panic!("{name}: re-pack {e:?}"));
+    verify(statement.semantic_public(), &packed, Sha, None).unwrap_or_else(|e| panic!("{name}: own statement {e:?}"));
     packed
 }
 
@@ -103,7 +103,7 @@ fn a_proof_is_rejected_against_a_statement_changed_in_any_transcript_field() {
             }
             assert!(other != statement, "{name}: {field} change did not change the statement");
             assert!(
-                verify_summed_format(other.semantic_public(), &packed, Sha, None).is_err(),
+                verify(other.semantic_public(), &packed, Sha, None).is_err(),
                 "{name}: the proof was ACCEPTED against a statement with a different {field}"
             );
             checked += 1;
@@ -133,7 +133,7 @@ fn the_two_source_fields_outside_the_transcript_bytes_behave_as_recorded() {
                 statement.semantic_public().public_bytes().unwrap(),
                 "{name}: {field} now reaches the transcript; move it to the bound list"
             );
-            let verdict = verify_summed_format(other.semantic_public(), &packed, Sha, None);
+            let verdict = verify(other.semantic_public(), &packed, Sha, None);
             match *field {
                 "source sequence number" => assert!(verdict.is_err(), "{name}: {field} is no longer guarded"),
                 "source current root" => assert!(verdict.is_ok(), "{name}: {field} is now rejected; update this record"),

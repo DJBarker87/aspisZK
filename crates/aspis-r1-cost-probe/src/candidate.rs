@@ -48,7 +48,6 @@ pub fn parse_shape(proof: &[u8]) -> Result<Variant, Error> {
     Ok(Variant::S2)
 }
 
-#[cfg(not(feature = "future-word-scan"))]
 /// The shipped strict scan for every field outside the semantic prefix
 /// (the semantic prefix is checked by `Prefix::parse` after expansion).
 #[inline(never)]
@@ -63,7 +62,6 @@ fn canonical_scan(proof: &[u8]) -> Result<(), Error> {
     Ok(())
 }
 /// The 26 base-field limbs of slot `s` of one opening.
-#[cfg(not(feature = "future-word-scan"))]
 #[inline(always)]
 fn scan_slot_base(q: &[u8], s: usize) -> Result<(), Error> {
     for l in 0..26 {
@@ -72,7 +70,6 @@ fn scan_slot_base(q: &[u8], s: usize) -> Result<(), Error> {
     Ok(())
 }
 /// Slot `s` of one opening: the 26 base-field limbs, the C1 tail value, the two C2 values.
-#[cfg(not(feature = "future-word-scan"))]
 #[inline(always)]
 fn scan_slot(q: &[u8], s: usize) -> Result<(), Error> {
     scan_slot_base(q, s)?;
@@ -82,7 +79,6 @@ fn scan_slot(q: &[u8], s: usize) -> Result<(), Error> {
     Ok(())
 }
 /// One opening: its four slots in order, then the folded values.
-#[cfg(not(feature = "future-word-scan"))]
 #[inline(always)]
 fn scan_opening(q: &[u8]) -> Result<(), Error> {
     scan_slot(q, 0)?;
@@ -90,12 +86,6 @@ fn scan_opening(q: &[u8]) -> Result<(), Error> {
     scan_slot(q, 2)?;
     scan_slot(q, 3)?;
     echeck(&q[672..800], false)
-}
-/// Aspis new gate (replaces the pinned `canonical_scan` when `future-word-scan` is on); equality with the pinned function is owed.
-#[cfg(feature = "future-word-scan")]
-#[inline(never)]
-fn canonical_scan(proof: &[u8]) -> Result<(), Error> {
-    canonical_scan_words(proof)
 }
 
 /// FUTURE-VERSION EXPERIMENT G3. Every check of the pinned scan is "this
@@ -254,7 +244,7 @@ fn batch_merkle_values<H: Digest32>(proof: &[u8], queries: [u32; 22], roots: [[u
     Ok(())
 }
 
-#[cfg(not(feature = "future-merkle-single-pass"))]
+#[cfg(not(feature = "merkle-single-pass"))]
 #[inline(always)]
 fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], batch: usize, tree: usize, idx: &mut [u32; multiproof::MAX_BATCH], val: &mut [[u8; 32]; multiproof::MAX_BATCH], hash: H) -> Result<(), Error> {
     let (lo, hi) = if batch == 0 { (0, SPLIT) } else { (SPLIT, 22) };
@@ -290,8 +280,8 @@ fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], bat
     }
     Ok(())
 }
-/// Aspis new gate (replaces the pinned `batch_tree` when `future-merkle-single-pass` is on); equality with the pinned function is owed.
-#[cfg(feature = "future-merkle-single-pass")]
+/// Aspis new gate (replaces the pinned `batch_tree` when `merkle-single-pass` is on); equality with the pinned function is owed.
+#[cfg(feature = "merkle-single-pass")]
 #[inline(always)]
 fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], batch: usize, tree: usize, idx: &mut [u32; multiproof::MAX_BATCH], val: &mut [[u8; 32]; multiproof::MAX_BATCH], hash: H) -> Result<(), Error> {
     let (lo, hi) = if batch == 0 { (0, SPLIT) } else { (SPLIT, 22) };
@@ -346,7 +336,7 @@ fn merkle_tail_two_pass<H: Digest32>(hash: H, root: &[u8; 32], idx: &mut [u32; m
 #[allow(dead_code)]
 #[inline(always)]
 fn merkle_tail_single_pass<H: Digest32>(hash: H, root: &[u8; 32], idx: &mut [u32; multiproof::MAX_BATCH], val: &mut [[u8; 32]; multiproof::MAX_BATCH], d: usize, nodes: &[u8]) -> Result<(), Error> {
-    let counted = if cfg!(feature = "future-merkle-in-place") {
+    let counted = if cfg!(feature = "merkle-in-place") {
         multiproof::verify_counting_direct(hash, root, idx, val, d, nodes)
     } else {
         multiproof::verify_counting(hash, root, idx, val, d, nodes)
@@ -507,7 +497,7 @@ pub fn tx2<H: Digest32>(public_bytes: &[u8], proof: &[u8], checkpoint: &[u8], ha
     tx2_common(public_bytes, proof, checkpoint, hash, obs)
 }
 
-#[cfg(all(test, not(feature = "future-word-scan")))]
+#[cfg(test)]
 mod canonical_scan_tests {
     use super::*;
     /// The reshaped scan against the pinned nested-loop form (`canonical_scan_pinned`): on an all-zero buffer,
@@ -529,7 +519,7 @@ mod canonical_scan_tests {
     }
 }
 
-// FUTURE-VERSION EXPERIMENT (branch `future-version`): single-invocation
-// verifiers. Unproved, not adopted, not reachable from the pinned entrypoints.
-#[path = "fused.rs"]
-pub mod fused;
+// Aspis one-transaction verifier (module `one_tx`): single-invocation
+// verifiers. Unproved. Not reachable from the two-transaction entrypoints.
+#[path = "one_tx.rs"]
+pub mod one_tx;

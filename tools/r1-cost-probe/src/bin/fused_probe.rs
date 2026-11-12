@@ -87,7 +87,7 @@ fn main()->Result<()> {
         #[derive(Clone,Copy)] struct Sha2;
         impl aspis_core::Digest32 for Sha2 { fn digest(&self,parts:&[&[u8]])->[u8;32]{let mut d=Sha256::new();for p in parts {d.update(p);}d.finalize().into()} }
         let statement=aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1(&public).map_err(|e|anyhow!("statement: {e:?}"))?;
-        let packed=aspis_r1_cost_probe::verifier::candidate::fused::to_summed_format(statement.semantic_public(),&proof,Sha2).map_err(|e|anyhow!("re-pack: {e:?}"))?;
+        let packed=aspis_r1_cost_probe::verifier::candidate::one_tx::pack(statement.semantic_public(),&proof,Sha2).map_err(|e|anyhow!("re-pack: {e:?}"))?;
         let diagnostic=send_with(&packed,vec![14],zero.clone(),true)?;
         if diagnostic.error.is_none() {
             let acceptance=send_with(&packed,vec![14],zero.clone(),false)?;
@@ -110,7 +110,7 @@ fn main()->Result<()> {
         #[derive(Clone,Copy)] struct Sha;
         impl aspis_core::Digest32 for Sha { fn digest(&self,parts:&[&[u8]])->[u8;32]{let mut d=Sha256::new();for p in parts {d.update(p);}d.finalize().into()} }
         let statement=aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1(&public).map_err(|e|anyhow!("statement: {e:?}"))?;
-        let certificate=aspis_r1_cost_probe::verifier::candidate::fused::final_message_certificate(statement.semantic_public(),&proof,Sha).map_err(|e|anyhow!("certificate: {e:?}"))?;
+        let certificate=aspis_r1_cost_probe::verifier::candidate::one_tx::final_message_certificate(statement.semantic_public(),&proof,Sha).map_err(|e|anyhow!("certificate: {e:?}"))?;
         // Kept beside the record so the trace driver can replay the same run.
         fs::write(out.with_extension("cert"),&certificate)?;
         let mut account=zero.clone();account[..certificate.len()].copy_from_slice(&certificate);

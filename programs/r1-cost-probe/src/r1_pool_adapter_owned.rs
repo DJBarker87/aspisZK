@@ -486,7 +486,7 @@ fn stage1_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8]) -> 
     Ok(checkpoint)
 }
 
-#[cfg(not(feature = "future-one-tx"))]
+#[cfg(not(feature = "one-tx"))]
 #[inline(never)]
 fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], current_slot: Result<u64, ProgramError>) -> ProgramResult {
     if accounts.len() != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..])
@@ -517,8 +517,8 @@ fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], cur
     .map_err(super::super::error)?;
     emit_result(&validated.statement)
 }
-/// Aspis new gate (replaces the pinned `stage2_owned` when `future-one-tx` is on); equality with the pinned function is owed.
-#[cfg(feature = "future-one-tx")]
+/// Aspis new gate (replaces the pinned `stage2_owned` when `one-tx` is on); equality with the pinned function is owed.
+#[cfg(feature = "one-tx")]
 #[inline(never)]
 fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], current_slot: Result<u64, ProgramError>) -> ProgramResult {
     if accounts.len() != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..])
@@ -534,22 +534,22 @@ fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], cur
     if proof_data.len() != proof_end {
         return Err(ProgramError::InvalidAccountData);
     }
-    // FUTURE-VERSION EXPERIMENT (default off): one transaction. No checkpoint is
+    // Aspis (build setting `one-tx`): one transaction. No checkpoint is
     // resumed and the seventh account is not read. The statement reconstructed
     // from the request and the authenticated accounts is validated here
     // (stage 1 does this on the two-transaction path), and the whole
-    // summed-format proof, which carries the stage D certificate, is verified
+    // Aspis-format proof, which carries the final-sumcheck certificate, is verified
     // in this invocation. The candidate prefix is the one the statement was
     // reconstructed from, so no separate prefix comparison is needed.
     {
         let _ = &checkpoint_data;
         validate_pool_v1_pair_forest_terminal_statement_v1(&validated.statement)
             .map_err(|_| ProgramError::InvalidAccountData)?;
-        if validated.proof_length != verifier::candidate::fused::summed_format::PROOF_BYTES {
+        if validated.proof_length != verifier::candidate::one_tx::format::PROOF_BYTES {
             return Err(ProgramError::InvalidAccountData);
         }
         #[cfg(feature = "cu-profiling")]
-        verifier::candidate::fused::verify_summed_format(
+        verifier::candidate::one_tx::verify(
             validated.statement.semantic_public(),
             &proof_data[proof_start..proof_end],
             super::super::SolanaDigest,
@@ -557,7 +557,7 @@ fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], cur
         )
         .map_err(super::super::error)?;
         #[cfg(not(feature = "cu-profiling"))]
-        verifier::candidate::fused::verify_summed_format_unobserved(
+        verifier::candidate::one_tx::verify_unobserved(
             validated.statement.semantic_public(),
             &proof_data[proof_start..proof_end],
             super::super::SolanaDigest,
@@ -567,7 +567,7 @@ fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], cur
     }
 }
 
-#[cfg(not(feature = "future-one-tx-lean"))]
+#[cfg(not(feature = "one-tx"))]
 pub(super) fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
     if !(data == &[3, 10] || data == &[3, 11]) || accounts.len() != 3 {
         return Err(ProgramError::InvalidInstructionData);
@@ -583,10 +583,10 @@ pub(super) fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[
     { msg!("r1:pool-adapter-stage1-checkpoint-written"); solana_program::log::sol_log_compute_units(); }
     Ok(())
 }
-/// Aspis new gate (replaces the pinned `stage1` when `future-one-tx-lean` is on); equality with the pinned function is owed.
-#[cfg(feature = "future-one-tx-lean")]
+/// Aspis new gate (replaces the pinned `stage1` when `one-tx` is on); equality with the pinned function is owed.
+#[cfg(feature = "one-tx")]
 pub(super) fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
-    // FUTURE-VERSION EXPERIMENT (feature `future-one-tx-lean`, default off): the
+    // FUTURE-VERSION EXPERIMENT (feature `one-tx`, default off): the
     // one-transaction verifier has no stage 1. Rejecting here leaves the stage 1
     // pipeline unreachable, so it is not linked into the program.
     {
@@ -595,7 +595,7 @@ pub(super) fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[
     }
 }
 
-#[cfg(not(feature = "future-one-tx"))]
+#[cfg(not(feature = "one-tx"))]
 pub(super) fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
     if accounts.len() != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..]) {
         return Err(ProgramError::InvalidInstructionData);
@@ -615,8 +615,8 @@ pub(super) fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[
     let current_slot = match Clock::get() { Ok(clock) => Ok(clock.slot), Err(error) => Err(error) };
     stage2_owned(program_id, &owned, data, current_slot)
 }
-/// Aspis new gate (replaces the pinned `stage2` when `future-one-tx` is on); equality with the pinned function is owed.
-#[cfg(feature = "future-one-tx")]
+/// Aspis new gate (replaces the pinned `stage2` when `one-tx` is on); equality with the pinned function is owed.
+#[cfg(feature = "one-tx")]
 pub(super) fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
     if accounts.len() != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..]) {
         return Err(ProgramError::InvalidInstructionData);
@@ -624,8 +624,8 @@ pub(super) fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[
     program::set_return_data(&[]);
     #[cfg(feature="cu-profiling")]
     { msg!("r1:pool-adapter-stage2-begin"); solana_program::log::sol_log_compute_units(); }
-    // FUTURE-VERSION EXPERIMENT: the one-transaction entry takes a summed-format proof buffer.
-    let proof_buffer_bytes = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::candidate::fused::summed_format::PROOF_BYTES;
+    // Aspis: the one-transaction entry takes an Aspis-format proof buffer.
+    let proof_buffer_bytes = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::candidate::one_tx::format::PROOF_BYTES;
     let owned = [
         snapshot(&accounts[0], proof_buffer_bytes, proof_buffer_bytes),
         snapshot(&accounts[1], POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES),

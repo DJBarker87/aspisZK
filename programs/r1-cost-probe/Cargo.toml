@@ -12,33 +12,55 @@ custom-heap = []
 custom-panic = []
 # Internal phase/CU diagnostics are opt-in; release verification has no observer.
 cu-profiling = ["aspis-r1-cost-probe/phase-observer"]
-# Future-version experiment: finer phase markers inside the semantic layer.
+# Finer phase markers inside the semantic layer (profiling builds only).
 detail-phases = ["aspis-r1-cost-probe/detail-phases"]
-# Future-version experiment: the sixteen-product QM31 multiplication everywhere.
-future-fast-kmul = ["aspis-core/future-fast-kmul"]
-future-fast-prepared = ["aspis-core/future-fast-prepared"]
-future-fast-square = ["aspis-core/future-fast-square"]
-future-validated-decode = ["aspis-r1-cost-probe/future-validated-decode"]
-future-merkle-single-pass = ["aspis-r1-cost-probe/future-merkle-single-pass"]
-future-tight-base = ["aspis-r1-cost-probe/future-tight-base"]
-future-tight-ext = ["aspis-r1-cost-probe/future-tight-ext"]
-future-tight-weights = ["aspis-r1-cost-probe/future-tight-weights"]
-future-lazy-boundary = ["aspis-r1-cost-probe/future-lazy-boundary"]
-future-d-inactive-tensor = ["aspis-r1-cost-probe/future-d-inactive-tensor"]
-future-d-pair-expansion = ["aspis-r1-cost-probe/future-d-pair-expansion"]
-future-merkle-in-place = ["aspis-r1-cost-probe/future-merkle-in-place"]
-future-lean-parse = ["aspis-r1-cost-probe/future-lean-parse"]
-future-lazy-horner = ["aspis-core/future-lazy-horner", "aspis-r1-cost-probe/future-lazy-horner"]
-future-word-scan = ["aspis-r1-cost-probe/future-word-scan"]
-future-dot-scale = ["aspis-r1-cost-probe/future-dot-scale"]
-future-claim-rows = ["aspis-r1-cost-probe/future-claim-rows"]
-future-fold-shared = ["aspis-r1-cost-probe/future-fold-shared"]
-future-lean-dot = ["aspis-r1-cost-probe/future-lean-dot"]
+# The deployed Aspis program: exactly the settings below, with the Pool adapter
+# and private leaf salts. Build with `--features aspis`.
+aspis = [
+    "pool-adapter",
+    "one-tx",
+    "private-leaf-salts",
+    "fast-kmul",
+    "fast-prepared",
+    "fast-square",
+    "validated-decode",
+    "merkle-single-pass",
+    "tight-base",
+    "tight-weights",
+    "lazy-boundary",
+    "final-pair-expansion",
+    "merkle-in-place",
+    "lazy-horner",
+    "fold-shared",
+]
+# QM31 multiplication as sixteen limb products with one reduction per limb.
+fast-kmul = ["aspis-core/fast-kmul"]
+# The prepared QM31 multiplier through the sixteen-product kernel.
+fast-prepared = ["aspis-core/fast-prepared"]
+# QM31 squaring with delayed reduction.
+fast-square = ["aspis-core/fast-square"]
+# Semantic records already checked canonical are decoded without checking again.
+validated-decode = ["aspis-r1-cost-probe/validated-decode"]
+# One Merkle traversal per tree, counting nodes while verifying.
+merkle-single-pass = ["aspis-r1-cost-probe/merkle-single-pass"]
+# Base-lane kernel of the batched first fold reading limbs once.
+tight-base = ["aspis-r1-cost-probe/tight-base"]
+# Query weight accumulation through the same limb-wise kernel.
+tight-weights = ["aspis-r1-cost-probe/tight-weights"]
+# Semantic boundary sum with one reduction per limb.
+lazy-boundary = ["aspis-r1-cost-probe/lazy-boundary"]
+# Query weight extension of the final sumcheck expanded in pairs.
+final-pair-expansion = ["aspis-r1-cost-probe/final-pair-expansion"]
+# Merkle parents written straight into the next level's buffer.
+merkle-in-place = ["aspis-r1-cost-probe/merkle-in-place"]
+# Multiply-add with one reduction per limb, and the semantic value through it.
+lazy-horner = ["aspis-core/lazy-horner", "aspis-r1-cost-probe/lazy-horner"]
+# Second fold with the edge products shared between the two sums.
+fold-shared = ["aspis-r1-cost-probe/fold-shared"]
 # One transaction through the Pool adapter: the settlement entry verifies the
-# whole proof (stage D path) instead of resuming a checkpoint.
-future-one-tx = ["pool-adapter"]
-# One-transaction adapter without the stage 1 entry (smaller ELF; same stage 2 path).
-future-one-tx-lean = ["future-one-tx"]
+# whole proof instead of resuming a checkpoint, and the two-transaction
+# stage 1 entry is not compiled.
+one-tx = ["pool-adapter"]
 no-entrypoint = []
 pool-adapter = []
 # Kept for the pinned build command lines; the adopted compact binary-multiproof

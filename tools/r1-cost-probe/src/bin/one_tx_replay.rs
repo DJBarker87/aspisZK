@@ -182,7 +182,7 @@ fn main() -> Result<()> {
     let prefix = aspis_statement::pool_v1::POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
     let statement = aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1(&public.account.data).map_err(|e| anyhow!("statement: {e:?}"))?;
     // The recorded proof re-packed into the summed format, behind the recorded candidate prefix.
-    let packed = aspis_r1_cost_probe::verifier::candidate::fused::to_summed_format(statement.semantic_public(), &proof.account.data[prefix..], Sha).map_err(|e| anyhow!("re-pack: {e:?}"))?;
+    let packed = aspis_r1_cost_probe::verifier::candidate::one_tx::pack(statement.semantic_public(), &proof.account.data[prefix..], Sha).map_err(|e| anyhow!("re-pack: {e:?}"))?;
     let mut buffer = proof.account.data[..prefix].to_vec();
     buffer.extend_from_slice(&packed);
 
