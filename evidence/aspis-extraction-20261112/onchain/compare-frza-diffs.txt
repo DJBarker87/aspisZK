@@ -1,0 +1,2351 @@
+====================================================================================================
+1. scope v  core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a mut [T]> for core::slice::iter::ChunksExactMut<'a, T>}   (called functions or constants differ; tokens only in frza: -; only in X1: all core.iter.traits.iterator.Iterator.all.default core.iter.traits.iterator.Iterator.step_by.trait_default step_by)
+   --- frza
+   +++ X1
+   @@ -7,2 +7,5 @@
+     core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice.next
+   + step_by := core.iter.traits.iterator.Iterator.step_by.trait_default
+   + (core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice
+   + T)
+     zip := fun {U : Type} {Clause0_Item : Type} {Clause0_IntoIter : Type}
+   @@ -21,2 +24,7 @@
+     T) opsfunctionFnMutPPairPMutSlicePInst
+   + all := fun {F : Type} (opsfunctionFnMutPTupleMut0SliceBoolInst :
+   + core.ops.function.FnMut F (Slice T) Bool) =>
+   + core.iter.traits.iterator.Iterator.all.default
+   + (core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice
+   + T) opsfunctionFnMutPTupleMut0SliceBoolInst
+     any := fun {F : Type} (opsfunctionFnMutPTupleMut0SliceBoolInst :
+====================================================================================================
+2. scope v  aspis_r1_cost_probe::compact::OFF_SEMANTIC   (constant: an initializer call on one side, its evaluated value on the other; tokens only in frza: aspis_r1_cost_probe.compact.HEADER; only in X1: 16 usize)
+   --- frza
+   +++ X1
+   @@ -1 +1 @@
+   -def compact.OFF_SEMANTIC : Std.Usize := compact.HEADER
+   +def aspis_r1_cost_probe.compact.OFF_SEMANTIC : Std.Usize := 16#usize
+====================================================================================================
+3. scope v  aspis_r1_cost_probe::verifier::candidate::batch_leaf   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: i; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def verifier.candidate.batch_leaf
+   +def aspis_r1_cost_probe.verifier.candidate.batch_leaf
+     {H : Type _} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
+   @@ -17,5 +17,4 @@
+     { «end» := 480#usize }
+   - let i ← aspis_core.r0.merkle.C1_TAG
+     aspis_core.state_only_private_merkle.private_leaf_hash_with_digest
+   - aspis_coredigestDigest32Inst hash i s1 salt
+   + aspis_coredigestDigest32Inst hash aspis_core.r0.merkle.C1_TAG s1 salt
+     | 1 =>
+   @@ -30,5 +29,4 @@
+     Std.U8) q { start := 480#usize, «end» := 608#usize }
+   - let i ← aspis_core.r0.merkle.C2_TAG
+     aspis_core.state_only_private_merkle.private_leaf_hash_with_digest
+   - aspis_coredigestDigest32Inst hash i s1 salt
+   + aspis_coredigestDigest32Inst hash aspis_core.r0.merkle.C2_TAG s1 salt
+     | _ =>
+====================================================================================================
+4. scope v  aspis_r1_cost_probe::fast_domain::line_node   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: m1; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,7 +1,6 @@
+   -def fast_domain.line_node
+   +def aspis_r1_cost_probe.fast_domain.line_node
+     (u : aspis_core.r0.domain.FibreIndex) : Result aspis_core.field.M31 := do
+   - let p ← fast_domain.fibre_point u
+   + let p ← aspis_r1_cost_probe.fast_domain.fibre_point u
+     let square ← aspis_core.field.M31.mul p.x p.x
+     let m ← aspis_core.field.M31.double square
+   - let m1 ← aspis_core.field.M31.ONE
+   - aspis_core.field.M31.sub m m1
+   + aspis_core.field.M31.sub m aspis_core.field.M31.ONE
+====================================================================================================
+5. scope v  aspis_r1_cost_probe::verifier::candidate::one_tx::coefficients (loop body)  (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: q; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,4 +1,5 @@
+   -def verifier.candidate.one_tx.coefficients_loop.body
+   - (q : aspis_core.field.QM31) (rho : aspis_core.field.QM31)
+   - (geometry : verifier.QueryGeometry) (iter : core.ops.range.Range Std.Usize)
+   +def aspis_r1_cost_probe.verifier.candidate.one_tx.coefficients_loop.body
+   + (rho : aspis_core.field.QM31)
+   + (geometry : aspis_r1_cost_probe.verifier.QueryGeometry)
+   + (iter : core.ops.range.Range Std.Usize)
+     (line : alloc.vec.Vec (Array aspis_core.field.QM31 6#usize))
+   @@ -19,3 +20,3 @@
+     | some i =>
+   - let a ← verifier.QueryGeometry.for_query geometry i
+   + let a ← aspis_r1_cost_probe.verifier.QueryGeometry.for_query geometry i
+     let ix ← Array.index_usize a 0#usize
+   @@ -25,7 +26,8 @@
+     let lz ← Array.index_usize a 4#usize
+   - let r ← aspis_core.field.QM31.mul_m31 power weights.QUARTER
+   - let q1 ← aspis_core.field.QM31.mul_m31 r iy
+   - let q2 ← aspis_core.field.QM31.mul_m31 r ix
+   + let r ←
+   + aspis_core.field.QM31.mul_m31 power aspis_r1_cost_probe.weights.QUARTER
+   + let q ← aspis_core.field.QM31.mul_m31 r iy
+   + let q1 ← aspis_core.field.QM31.mul_m31 r ix
+     let m ← aspis_core.field.M31.mul ix iy
+   - let q3 ← aspis_core.field.QM31.mul_m31 r m
+   + let q2 ← aspis_core.field.QM31.mul_m31 r m
+     let (_, index_mut_back) ←
+   @@ -42,4 +44,9 @@
+     let powers1 := index_mut_back2 power
+   - let line1 := index_mut_back1 (Array.make 6#usize [ r, q, q, rz, q, q ])
+   - let circle1 := index_mut_back (Array.make 4#usize [ r, q1, q2, q3 ])
+   + let line1 :=
+   + index_mut_back1
+   + (Array.make 6#usize [
+   + r, aspis_core.field.QM31.ZERO, aspis_core.field.QM31.ZERO, rz,
+   + aspis_core.field.QM31.ZERO, aspis_core.field.QM31.ZERO
+   + ])
+   + let circle1 := index_mut_back (Array.make 4#usize [ r, q, q1, q2 ])
+     ok (cont (iter1, line1, circle1, powers1, power1))
+====================================================================================================
+6. scope v  aspis_r1_cost_probe::verifier::candidate::one_tx::coefficients   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: power q; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,14 +1,16 @@
+   -def verifier.candidate.one_tx.coefficients
+   - (rho : aspis_core.field.QM31) (geometry : verifier.QueryGeometry) :
+   - Result (core.result.Result verifier.candidate.one_tx.Coefficients
+   - verifier.Error)
+   +def aspis_r1_cost_probe.verifier.candidate.one_tx.coefficients
+   + (rho : aspis_core.field.QM31)
+   + (geometry : aspis_r1_cost_probe.verifier.QueryGeometry) :
+   + Result (core.result.Result
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.Coefficients
+   + aspis_r1_cost_probe.verifier.Error)
+     := do
+   - let q ← aspis_core.field.QM31.ZERO
+   - let a := Array.repeat 6#usize q
+   + let a := Array.repeat 6#usize aspis_core.field.QM31.ZERO
+     let r ←
+     aspis_core.r0.heap.filled (Array.Insts.CoreMarkerCopy 6#usize
+   - aspis_core.field.QM31.Insts.CoreMarkerCopy) compact.QUERIES a
+   + aspis_core.field.QM31.Insts.CoreMarkerCopy)
+   + aspis_r1_cost_probe.compact.QUERIES a
+     let r1 ←
+     core.result.Result.map_err
+   - verifier.candidate.one_tx.coefficients.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.coefficients.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+     r ()
+   @@ -17,9 +19,10 @@
+     | core.ops.control_flow.ControlFlow.Continue val =>
+   - let a1 := Array.repeat 4#usize q
+   + let a1 := Array.repeat 4#usize aspis_core.field.QM31.ZERO
+     let r2 ←
+     aspis_core.r0.heap.filled (Array.Insts.CoreMarkerCopy 4#usize
+   - aspis_core.field.QM31.Insts.CoreMarkerCopy) compact.QUERIES a1
+   + aspis_core.field.QM31.Insts.CoreMarkerCopy)
+   + aspis_r1_cost_probe.compact.QUERIES a1
+     let r3 ←
+     core.result.Result.map_err
+   - verifier.candidate.one_tx.coefficients.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.coefficients.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+     r2 ()
+   @@ -30,6 +33,6 @@
+     aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy
+   - compact.QUERIES q
+   + aspis_r1_cost_probe.compact.QUERIES aspis_core.field.QM31.ZERO
+     let r5 ←
+     core.result.Result.map_err
+   - verifier.candidate.one_tx.coefficients.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.coefficients.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError
+     r4 ()
+   @@ -38,7 +41,6 @@
+     | core.ops.control_flow.ControlFlow.Continue val2 =>
+   - let power ← aspis_core.field.QM31.ONE
+     let (line, circle, powers) ←
+   - verifier.candidate.one_tx.coefficients_loop q
+   - { start := 0#usize, «end» := compact.QUERIES } rho geometry val
+   - val1 val2 power
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.coefficients_loop
+   + { start := 0#usize, «end» := aspis_r1_cost_probe.compact.QUERIES
+   + } rho geometry val val1 val2 aspis_core.field.QM31.ONE
+     ok (core.result.Result.Ok { circle, line, rho := powers })
+   @@ -46,11 +48,11 @@
+     core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - verifier.candidate.one_tx.Coefficients (core.convert.FromSame
+   - verifier.Error) residual
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.Coefficients
+   + (core.convert.FromSame aspis_r1_cost_probe.verifier.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+     core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - verifier.candidate.one_tx.Coefficients (core.convert.FromSame
+   - verifier.Error) residual
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.Coefficients
+   + (core.convert.FromSame aspis_r1_cost_probe.verifier.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+     core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - verifier.candidate.one_tx.Coefficients (core.convert.FromSame
+   - verifier.Error) residual
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.Coefficients
+   + (core.convert.FromSame aspis_r1_cost_probe.verifier.Error) residual
+====================================================================================================
+7. scope v  aspis_r1_cost_probe::verifier::candidate::one_tx::base_lanes_tight   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: q; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def verifier.candidate.one_tx.base_lanes_tight
+   +def aspis_r1_cost_probe.verifier.candidate.one_tx.base_lanes_tight
+     (openings : Slice Std.U8)
+   @@ -4,3 +4,3 @@
+     Result (core.result.Result (alloc.vec.Vec (Array aspis_core.field.QM31
+   - 4#usize)) verifier.Error)
+   + 4#usize)) aspis_r1_cost_probe.verifier.Error)
+     := do
+   @@ -10,3 +10,3 @@
+     core.result.Result.map_err
+   - verifier.candidate.one_tx.base_lanes_tight.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.base_lanes_tight.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+     r ()
+   @@ -23,3 +23,4 @@
+     let (r3, array1) ←
+   - verifier.candidate.one_tx.base_accumulate array openings circle
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.base_accumulate array
+   + openings circle
+     let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+   @@ -27,4 +28,3 @@
+     | core.ops.control_flow.ControlFlow.Continue _ =>
+   - let q ← aspis_core.field.QM31.ZERO
+   - let a := Array.repeat 4#usize q
+   + let a := Array.repeat 4#usize aspis_core.field.QM31.ZERO
+     let r4 ←
+   @@ -34,3 +34,3 @@
+     core.result.Result.map_err
+   - verifier.candidate.one_tx.base_lanes_tight.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.base_lanes_tight.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+     r4 ()
+   @@ -42,3 +42,3 @@
+     let out ←
+   - verifier.candidate.one_tx.base_lanes_tight_loop0
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.base_lanes_tight_loop0
+     { start := 0#usize, «end» := 26#usize } val2 val1
+   @@ -48,3 +48,3 @@
+     (alloc.vec.Vec (Array aspis_core.field.QM31 4#usize))
+   - (core.convert.FromSame verifier.Error) residual
+   + (core.convert.FromSame aspis_r1_cost_probe.verifier.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -52,5 +52,5 @@
+     (alloc.vec.Vec (Array aspis_core.field.QM31 4#usize))
+   - (core.convert.FromSame verifier.Error) residual
+   + (core.convert.FromSame aspis_r1_cost_probe.verifier.Error) residual
+     | core.result.Result.Err _ =>
+   - ok (core.result.Result.Err verifier.Error.Allocation)
+   + ok (core.result.Result.Err aspis_r1_cost_probe.verifier.Error.Allocation)
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -58,2 +58,2 @@
+     (alloc.vec.Vec (Array aspis_core.field.QM31 4#usize))
+   - (core.convert.FromSame verifier.Error) residual
+   + (core.convert.FromSame aspis_r1_cost_probe.verifier.Error) residual
+====================================================================================================
+8. scope v  aspis_r1_cost_probe::weights::powers   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: p we; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def weights.powers
+   +def aspis_r1_cost_probe.weights.powers
+     (N : Std.Usize) (x : aspis_core.field.wide_exact.WideExact) :
+   @@ -4,5 +4,4 @@
+     := do
+   - let we ← aspis_core.field.wide_exact.WideExact.ZERO
+   - let out := Array.repeat N we
+   - let p ← aspis_core.field.wide_exact.WideExact.ONE
+   - weights.powers_loop x out p 0#usize
+   + let out := Array.repeat N aspis_core.field.wide_exact.WideExact.ZERO
+   + aspis_r1_cost_probe.weights.powers_loop x out
+   + aspis_core.field.wide_exact.WideExact.ONE 0#usize
+====================================================================================================
+9. scope v  aspis_r1_cost_probe::weights::kappa_sum   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: sum; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def weights.kappa_sum
+   +def aspis_r1_cost_probe.weights.kappa_sum
+     (kappa : aspis_core.field.wide_exact.WideExact)
+   @@ -5,4 +5,5 @@
+     := do
+   - let k ← weights.powers 7#usize kappa
+   - let sum ← aspis_core.field.wide_exact.WideExact.ZERO
+   - weights.kappa_sum_loop { start := 0#usize, «end» := 7#usize } parts k sum
+   + let k ← aspis_r1_cost_probe.weights.powers 7#usize kappa
+   + aspis_r1_cost_probe.weights.kappa_sum_loop
+   + { start := 0#usize, «end» := 7#usize } parts k
+   + aspis_core.field.wide_exact.WideExact.ZERO
+====================================================================================================
+10. scope v  aspis_r1_cost_probe::weights::inactive_groups   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: q; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def weights.inactive_groups
+   +def aspis_r1_cost_probe.weights.inactive_groups
+     (eq : Array aspis_core.field.QM31 64#usize) :
+   @@ -4,5 +4,4 @@
+     := do
+   - let q ← aspis_core.field.QM31.ZERO
+   - let groups := Array.repeat 12#usize q
+   - weights.inactive_groups_loop { start := 0#usize, «end» := 64#usize } eq
+   - groups
+   + let groups := Array.repeat 12#usize aspis_core.field.QM31.ZERO
+   + aspis_r1_cost_probe.weights.inactive_groups_loop
+   + { start := 0#usize, «end» := 64#usize } eq groups
+====================================================================================================
+11. scope v  aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::inactive_tensor   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: q total; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def weights.Weights.inactive_tensor
+   +def aspis_r1_cost_probe.weights.Weights.inactive_tensor
+     (ap0 : Array aspis_core.field.wide_exact.WideExact 4#usize)
+   @@ -5,11 +5,10 @@
+     Result (core.result.Result aspis_core.field.wide_exact.WideExact
+   - verifier.Error)
+   + aspis_r1_cost_probe.verifier.Error)
+     := do
+   - let q ← aspis_core.field.QM31.ZERO
+   - let m := Array.repeat 16#usize q
+   + let m := Array.repeat 16#usize aspis_core.field.QM31.ZERO
+     let m1 ←
+   - weights.Weights.inactive_tensor_loop0
+   + aspis_r1_cost_probe.weights.Weights.inactive_tensor_loop0
+     { start := 0#usize, «end» := 12#usize } groups m
+   - let total ← aspis_core.field.wide_exact.WideExact.ZERO
+   - weights.Weights.inactive_tensor_loop1
+   - { start := 0#usize, «end» := 4#usize } ap0 ap1 m1 total
+   + aspis_r1_cost_probe.weights.Weights.inactive_tensor_loop1
+   + { start := 0#usize, «end» := 4#usize } ap0 ap1 m1
+   + aspis_core.field.wide_exact.WideExact.ZERO
+====================================================================================================
+12. scope v  aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::row_product   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: let product; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,8 +1,9 @@
+   -def weights.Weights.row_product
+   - (self : weights.Weights) (k : Std.Usize)
+   +def aspis_r1_cost_probe.weights.Weights.row_product
+   + (self : aspis_r1_cost_probe.weights.Weights) (k : Std.Usize)
+     (digits : Array (Array aspis_core.field.QM31 4#usize) 3#usize) :
+   - Result (core.result.Result aspis_core.field.QM31 verifier.Error)
+   + Result (core.result.Result aspis_core.field.QM31
+   + aspis_r1_cost_probe.verifier.Error)
+     := do
+   - let product ← aspis_core.field.QM31.ONE
+   - weights.Weights.row_product_loop { start := 0#usize, «end» := 3#usize }
+   - self k digits product
+   + aspis_r1_cost_probe.weights.Weights.row_product_loop
+   + { start := 0#usize, «end» := 3#usize } self k digits
+   + aspis_core.field.QM31.ONE
+====================================================================================================
+13. scope v  aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::scalar_factor   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: we1; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def weights.Weights.scalar_factor
+   +def aspis_r1_cost_probe.weights.Weights.scalar_factor
+     (f : Array aspis_core.field.QM31 4#usize)
+   @@ -5,8 +5,9 @@
+     := do
+   - let we ← aspis_core.field.wide_exact.WideExact.ZERO
+   - let we1 ←
+   + let we ←
+     core.iter.traits.iterator.Iterator.fold.default
+     (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+   - weights.Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact
+   - { start := 0#usize, «end» := 4#usize } we (p, f)
+   - aspis_core.field.wide_exact.WideExact.mul_m31 we1 weights.QUARTER
+   + aspis_r1_cost_probe.weights.Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact
+   + { start := 0#usize, «end» := 4#usize }
+   + aspis_core.field.wide_exact.WideExact.ZERO (p, f)
+   + aspis_core.field.wide_exact.WideExact.mul_m31 we
+   + aspis_r1_cost_probe.weights.QUARTER
+====================================================================================================
+14. scope v  aspis_r1_cost_probe::weights::factored_s2_libra_weights   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: we; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def weights.factored_s2_libra_weights
+   +def aspis_r1_cost_probe.weights.factored_s2_libra_weights
+     (ap0 : Array aspis_core.field.wide_exact.WideExact 4#usize)
+   @@ -6,5 +6,5 @@
+     := do
+   - let we ← aspis_core.field.wide_exact.WideExact.ZERO
+   - let weights := Array.repeat 4#usize we
+   - weights.factored_s2_libra_weights_loop
+   + let weights :=
+   + Array.repeat 4#usize aspis_core.field.wide_exact.WideExact.ZERO
+   + aspis_r1_cost_probe.weights.factored_s2_libra_weights_loop
+     { start := 0#usize, «end» := 2#usize } ap0 ap1 extra weights
+====================================================================================================
+15. scope v  aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::mle_at   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: we3; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,3 +1,3 @@
+   -def weights.Weights.mle_at
+   - (self : weights.Weights)
+   +def aspis_r1_cost_probe.weights.Weights.mle_at
+   + (self : aspis_r1_cost_probe.weights.Weights)
+     (alpha : Slice aspis_core.field.wide_exact.WideExact)
+   @@ -7,3 +7,3 @@
+     Result (core.result.Result aspis_core.field.wide_exact.WideExact
+   - verifier.Error)
+   + aspis_r1_cost_probe.verifier.Error)
+     := do
+   @@ -11,6 +11,6 @@
+     core.cmp.PartialEq.ne.trait_default
+   - transport.Variant.Insts.CoreCmpPartialEqVariant self.variant
+   - transport.Variant.S2
+   + aspis_r1_cost_probe.transport.Variant.Insts.CoreCmpPartialEqVariant
+   + self.variant aspis_r1_cost_probe.transport.Variant.S2
+     if b
+   - then ok (core.result.Result.Err verifier.Error.Parse)
+   + then ok (core.result.Result.Err aspis_r1_cost_probe.verifier.Error.Parse)
+     else
+   @@ -18,12 +18,13 @@
+     if i != 2#usize
+   - then ok (core.result.Result.Err verifier.Error.Parse)
+   + then ok (core.result.Result.Err aspis_r1_cost_probe.verifier.Error.Parse)
+     else
+     let we ← Slice.index_usize alpha 0#usize
+   - let ap0 ← weights.powers 4#usize we
+   + let ap0 ← aspis_r1_cost_probe.weights.powers 4#usize we
+     let we1 ← Slice.index_usize alpha 1#usize
+   - let ap1 ← weights.powers 4#usize we1
+   - let we2 ← aspis_core.field.wide_exact.WideExact.ZERO
+   - let parts := Array.repeat 7#usize we2
+   + let ap1 ← aspis_r1_cost_probe.weights.powers 4#usize we1
+   + let parts :=
+   + Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO
+     let (r, parts1) ←
+   - weights.Weights.product_rows self ap0 ap1 digits parts
+   + aspis_r1_cost_probe.weights.Weights.product_rows self ap0 ap1 digits
+   + parts
+     let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+   @@ -31,4 +32,5 @@
+     | core.ops.control_flow.ControlFlow.Continue _ =>
+   - let groups ← weights.inactive_groups eq
+   - let r1 ← weights.Weights.inactive_tensor ap0 ap1 groups
+   + let groups ← aspis_r1_cost_probe.weights.inactive_groups eq
+   + let r1 ←
+   + aspis_r1_cost_probe.weights.Weights.inactive_tensor ap0 ap1 groups
+     let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+   @@ -37,4 +39,6 @@
+     let (_, index_mut_back) ← Array.index_mut_usize parts1 0#usize
+   - let libra ← weights.factored_s2_libra_weights ap0 ap1 self.extra
+   - let r2 ← weights.libra_at libra eq
+   + let libra ←
+   + aspis_r1_cost_probe.weights.factored_s2_libra_weights ap0 ap1
+   + self.extra
+   + let r2 ← aspis_r1_cost_probe.weights.libra_at libra eq
+     let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+   @@ -44,4 +48,4 @@
+     let parts3 ← Array.update parts2 4#usize val1
+   - let we3 ← weights.kappa_sum kappa parts3
+   - ok (core.result.Result.Ok we3)
+   + let we2 ← aspis_r1_cost_probe.weights.kappa_sum kappa parts3
+   + ok (core.result.Result.Ok we2)
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -49,3 +53,3 @@
+     aspis_core.field.wide_exact.WideExact (core.convert.FromSame
+   - verifier.Error) residual
+   + aspis_r1_cost_probe.verifier.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -53,3 +57,3 @@
+     aspis_core.field.wide_exact.WideExact (core.convert.FromSame
+   - verifier.Error) residual
+   + aspis_r1_cost_probe.verifier.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -57,2 +61,2 @@
+     aspis_core.field.wide_exact.WideExact (core.convert.FromSame
+   - verifier.Error) residual
+   + aspis_r1_cost_probe.verifier.Error) residual
+====================================================================================================
+16. scope v  aspis_r1_cost_probe::weights::double   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: q2; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def weights.double
+   +def aspis_r1_cost_probe.weights.double
+     (x : aspis_core.field.QM31) : Result aspis_core.field.QM31 := do
+   @@ -4,3 +4,2 @@
+     let q1 ← aspis_core.field.QM31.add q q
+   - let q2 ← aspis_core.field.QM31.ONE
+   - aspis_core.field.QM31.sub q1 q2
+   + aspis_core.field.QM31.sub q1 aspis_core.field.QM31.ONE
+====================================================================================================
+17. scope v  aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::new   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: q2; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,5 +1,7 @@
+   -def weights.Weights.new
+   - (variant : transport.Variant) (alpha : Array aspis_core.field.QM31 10#usize)
+   +def aspis_r1_cost_probe.weights.Weights.new
+   + (variant : aspis_r1_cost_probe.transport.Variant)
+   + (alpha : Array aspis_core.field.QM31 10#usize)
+     (z : Array aspis_core.circle.SecureCirclePoint 2#usize) :
+   - Result (core.result.Result weights.Weights verifier.Error)
+   + Result (core.result.Result aspis_r1_cost_probe.weights.Weights
+   + aspis_r1_cost_probe.verifier.Error)
+     := do
+   @@ -8,4 +10,3 @@
+     let q1 ← Array.index_usize alpha 9#usize
+   - let q2 ← aspis_core.field.QM31.ZERO
+   - let a := Array.repeat 4#usize q2
+   + let a := Array.repeat 4#usize aspis_core.field.QM31.ZERO
+     let a1 := Array.repeat 5#usize a
+   @@ -13,9 +14,9 @@
+     let factors1 ←
+   - weights.Weights.new_loop0 { start := 0#usize, «end» := 3#usize } points
+   - factors
+   + aspis_r1_cost_probe.weights.Weights.new_loop0
+   + { start := 0#usize, «end» := 3#usize } points factors
+     let factors2 ←
+   - weights.Weights.new_loop1 { start := 0#usize, «end» := 2#usize } z
+   - factors1
+   + aspis_r1_cost_probe.weights.Weights.new_loop1
+   + { start := 0#usize, «end» := 2#usize } z factors1
+     let w ←
+   - weights.Weights.box_from_parts variant factors2 points
+   + aspis_r1_cost_probe.weights.Weights.box_from_parts variant factors2 points
+     (Array.make 2#usize [ q, q1 ])
+====================================================================================================
+18. scope v  aspis_r1_cost_probe::verifier::candidate::one_tx::query_weight_mle_pairs (loop body)  (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: power2; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,3 +1,3 @@
+   -def verifier.candidate.one_tx.query_weight_mle_pairs_loop0_loop0.body
+   - (m : aspis_core.field.M31)
+   +def
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.query_weight_mle_pairs_loop0_loop0.body
+     (pairs : Array (Array (Array Std.U64 4#usize) 3#usize) 3#usize)
+   @@ -13,7 +13,7 @@
+     | some q =>
+   - let a0 ← aspis_core.field.M31.sub node m
+   - let m1 ← aspis_core.field.M31.mul node node
+   - let m2 ← aspis_core.field.M31.double m1
+   - let node1 ← aspis_core.field.M31.sub m2 m
+   - let a1 ← aspis_core.field.M31.sub node1 m
+   + let a0 ← aspis_core.field.M31.sub node aspis_core.field.M31.ONE
+   + let m ← aspis_core.field.M31.mul node node
+   + let m1 ← aspis_core.field.M31.double m
+   + let node1 ← aspis_core.field.M31.sub m1 aspis_core.field.M31.ONE
+   + let a1 ← aspis_core.field.M31.sub node1 aspis_core.field.M31.ONE
+     let node2 ←
+   @@ -22,5 +22,5 @@
+     do
+   - let m3 ← aspis_core.field.M31.mul node1 node1
+   - let m4 ← aspis_core.field.M31.double m3
+   - aspis_core.field.M31.sub m4 m
+   + let m2 ← aspis_core.field.M31.mul node1 node1
+   + let m3 ← aspis_core.field.M31.double m2
+   + aspis_core.field.M31.sub m3 aspis_core.field.M31.ONE
+     else ok node1
+   @@ -28,4 +28,4 @@
+     let x1 ← lift (core.convert.num.FromU64U32.from a1)
+   - let m3 ← aspis_core.field.M31.mul a0 a1
+   - let x01 ← lift (core.convert.num.FromU64U32.from m3)
+   + let m2 ← aspis_core.field.M31.mul a0 a1
+   + let x01 ← lift (core.convert.num.FromU64U32.from m2)
+     let a ← Array.index_usize pairs q
+   @@ -68,3 +68,4 @@
+     let factor ←
+   - verifier.candidate.one_tx.k_of (Array.make 4#usize [ i8, i16, i24, i32 ])
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.k_of
+   + (Array.make 4#usize [ i8, i16, i24, i32 ])
+     if q = 0#usize
+====================================================================================================
+19. scope v  aspis_r1_cost_probe::verifier::candidate::one_tx::query_weight_mle_pairs   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: power; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,5 +1,7 @@
+   -def verifier.candidate.one_tx.query_weight_mle_pairs
+   - (p : verifier.Prepared) (geometry : verifier.QueryGeometry)
+   +def aspis_r1_cost_probe.verifier.candidate.one_tx.query_weight_mle_pairs
+   + (p : aspis_r1_cost_probe.verifier.Prepared)
+   + (geometry : aspis_r1_cost_probe.verifier.QueryGeometry)
+     (r : Array aspis_core.field.QM31 6#usize) :
+   - Result (core.result.Result aspis_core.field.QM31 verifier.Error)
+   + Result (core.result.Result aspis_core.field.QM31
+   + aspis_r1_cost_probe.verifier.Error)
+     := do
+   @@ -7,7 +9,7 @@
+     core.array.from_fn 3#usize
+   - verifier.candidate.one_tx.query_weight_mle_pairs.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeArrayArrayU6443
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.query_weight_mle_pairs.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeArrayArrayU6443
+     ((), r)
+   - let dot ← fast_pairing.KbyKDot.new
+   - let power ← aspis_core.field.QM31.ONE
+   - verifier.candidate.one_tx.query_weight_mle_pairs_loop0 power
+   - { start := 0#usize, «end» := compact.QUERIES } p geometry pairs dot power
+   + let dot ← aspis_r1_cost_probe.fast_pairing.KbyKDot.new
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.query_weight_mle_pairs_loop0
+   + { start := 0#usize, «end» := aspis_r1_cost_probe.compact.QUERIES } p
+   + geometry pairs dot aspis_core.field.QM31.ONE
+====================================================================================================
+20. scope v  aspis_r1_cost_probe::verifier::candidate::one_tx::equality_tables::{impl core::ops::function::FnMut<(usize,), [aspis_core::field::QM31; 4usize]> for aspis_r1_cost_probe::verifier::candidate::one_tx::equality_tables::{closure}<'_0>}::call_mut   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: q5; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,7 +1,8 @@
+   +>}::call_mut"]
+    def
+   - verifier.candidate.one_tx.equality_tables.closure.Insts.CoreOpsFunctionFnMutTupleUsizeArrayQM314.call_mut
+   - (c : verifier.candidate.one_tx.equality_tables.closure)
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.equality_tables.closure.Insts.CoreOpsFunctionFnMutTupleUsizeArrayQM314.call_mut
+   + (c : aspis_r1_cost_probe.verifier.candidate.one_tx.equality_tables.closure)
+     (tupled_args : Std.Usize) :
+     Result ((Array aspis_core.field.QM31 4#usize) ×
+   - verifier.candidate.one_tx.equality_tables.closure)
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.equality_tables.closure)
+     := do
+   @@ -12,8 +13,7 @@
+     let ab ← aspis_core.field.QM31.mul a b
+   - let q ← aspis_core.field.QM31.ONE
+   - let q1 ← aspis_core.field.QM31.sub q a
+   - let q2 ← aspis_core.field.QM31.sub q1 b
+   - let q3 ← aspis_core.field.QM31.add q2 ab
+   - let q4 ← aspis_core.field.QM31.sub a ab
+   - let q5 ← aspis_core.field.QM31.sub b ab
+   - ok (Array.make 4#usize [ q3, q4, q5, ab ], c)
+   + let q ← aspis_core.field.QM31.sub aspis_core.field.QM31.ONE a
+   + let q1 ← aspis_core.field.QM31.sub q b
+   + let q2 ← aspis_core.field.QM31.add q1 ab
+   + let q3 ← aspis_core.field.QM31.sub a ab
+   + let q4 ← aspis_core.field.QM31.sub b ab
+   + ok (Array.make 4#usize [ q2, q3, q4, ab ], c)
+====================================================================================================
+21. scope v  aspis_r1_cost_probe::verifier::candidate::one_tx::equality_tables   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: q q1; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def verifier.candidate.one_tx.equality_tables
+   +def aspis_r1_cost_probe.verifier.candidate.one_tx.equality_tables
+     (r : Array aspis_core.field.QM31 6#usize) :
+   @@ -5,8 +5,6 @@
+     := do
+   - let q ← aspis_core.field.QM31.ZERO
+   - let eq := Array.repeat 64#usize q
+   - let q1 ← aspis_core.field.QM31.ONE
+   - let a ← Array.update eq 0#usize q1
+   + let eq := Array.repeat 64#usize aspis_core.field.QM31.ZERO
+   + let a ← Array.update eq 0#usize aspis_core.field.QM31.ONE
+     let eq1 ←
+   - verifier.candidate.one_tx.equality_tables_loop0
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.equality_tables_loop0
+     { start := 0#usize, «end» := 6#usize } r a 1#usize
+   @@ -14,3 +12,3 @@
+     core.array.from_fn 3#usize
+   - verifier.candidate.one_tx.equality_tables.closure.Insts.CoreOpsFunctionFnMutTupleUsizeArrayQM314
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.equality_tables.closure.Insts.CoreOpsFunctionFnMutTupleUsizeArrayQM314
+     r
+====================================================================================================
+22. scope v  aspis_r1_cost_probe::verifier::candidate::one_tx::final_rounds   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: q; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,12 +1,13 @@
+   -def verifier.candidate.one_tx.final_rounds
+   +def aspis_r1_cost_probe.verifier.candidate.one_tx.final_rounds
+     {H : Type _} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
+   - (t : transcript.Transcript H) (certificate : Slice Std.U8)
+   - (start : aspis_core.field.wide_exact.WideExact) :
+   + (t : aspis_r1_cost_probe.transcript.Transcript H)
+   + (certificate : Slice Std.U8) (start : aspis_core.field.wide_exact.WideExact)
+   + :
+     Result ((core.result.Result (aspis_core.field.wide_exact.WideExact × (Array
+   - aspis_core.field.QM31 6#usize)) verifier.Error) × (transcript.Transcript
+   - H))
+   + aspis_core.field.QM31 6#usize)) aspis_r1_cost_probe.verifier.Error) ×
+   + (aspis_r1_cost_probe.transcript.Transcript H))
+     := do
+   - let q ← aspis_core.field.QM31.ZERO
+   - let r := Array.repeat 6#usize q
+   - verifier.candidate.one_tx.final_rounds_loop aspis_coredigestDigest32Inst
+   - { start := 0#usize, «end» := 6#usize } t certificate start r
+   + let r := Array.repeat 6#usize aspis_core.field.QM31.ZERO
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.final_rounds_loop
+   + aspis_coredigestDigest32Inst { start := 0#usize, «end» := 6#usize } t
+   + certificate start r
+====================================================================================================
+23. scope v  aspis_r1_cost_probe::verifier::polynomial   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: we; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def verifier.polynomial
+   +def aspis_r1_cost_probe.verifier.polynomial
+     (bytes : Slice Std.U8) (x : aspis_core.field.wide_exact.WideExact) :
+   @@ -9,6 +9,5 @@
+     core.iter.range.StepUsize) { start := 0#usize, «end» := 7#usize }
+   - let we ← aspis_core.field.wide_exact.WideExact.ZERO
+     core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.fold
+     (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+   - verifier.polynomial.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact
+   - r we (x, bytes)
+   + aspis_r1_cost_probe.verifier.polynomial.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact
+   + r aspis_core.field.wide_exact.WideExact.ZERO (x, bytes)
+====================================================================================================
+24. scope v  aspis_r1_cost_probe::verifier::batch_suffix_inverses   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: m; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def verifier.batch_suffix_inverses
+   +def aspis_r1_cost_probe.verifier.batch_suffix_inverses
+     (flat : Slice aspis_core.field.M31) (prefixes : Slice aspis_core.field.M31)
+   @@ -9,8 +9,7 @@
+     let i1 := Slice.len flat
+   - let m ← aspis_core.field.M31.ZERO
+     let flat_inverse1 ←
+     alloc.vec.Vec.resize aspis_core.field.M31.Insts.CoreCloneClone flat_inverse
+   - i1 m
+   + i1 aspis_core.field.M31.ZERO
+     let i2 := Slice.len flat
+   - verifier.batch_suffix_inverses_loop flat prefixes suffix_inverse
+   - flat_inverse1 i2
+   + aspis_r1_cost_probe.verifier.batch_suffix_inverses_loop flat prefixes
+   + suffix_inverse flat_inverse1 i2
+====================================================================================================
+25. scope v  aspis_r1_cost_probe::verifier::batch_prefix_products   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: product; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def verifier.batch_prefix_products
+   +def aspis_r1_cost_probe.verifier.batch_prefix_products
+     (flat : Slice aspis_core.field.M31) :
+   @@ -6,3 +6,3 @@
+     let prefixes := alloc.vec.Vec.with_capacity aspis_core.field.M31 i
+   - let product ← aspis_core.field.M31.ONE
+   - verifier.batch_prefix_products_loop flat prefixes product 0#usize
+   + aspis_r1_cost_probe.verifier.batch_prefix_products_loop flat prefixes
+   + aspis_core.field.M31.ONE 0#usize
+====================================================================================================
+26. scope v  aspis_r1_cost_probe::verifier::second_alpha   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: we; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,7 +1,9 @@
+   -def verifier.second_alpha
+   +def aspis_r1_cost_probe.verifier.second_alpha
+     {H : Type _} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
+   - (t : transcript.Transcript H) (v : verifier.View) :
+   - Result (aspis_core.field.wide_exact.WideExact × (transcript.Transcript H))
+   + (t : aspis_r1_cost_probe.transcript.Transcript H)
+   + (v : aspis_r1_cost_probe.verifier.View) :
+   + Result (aspis_core.field.wide_exact.WideExact ×
+   + (aspis_r1_cost_probe.transcript.Transcript H))
+     := do
+   - let i ← transport.Variant.folds v.variant
+   + let i ← aspis_r1_cost_probe.transport.Variant.folds v.variant
+     if i = 2#usize
+   @@ -16,4 +18,4 @@
+     let s1 := alloc.vec.Vec.deref bytes2
+   - transcript.Transcript.scalar aspis_coredigestDigest32Inst t 30#u8 s1 false
+   - else let we ← aspis_core.field.wide_exact.WideExact.ZERO
+   - ok (we, t)
+   + aspis_r1_cost_probe.transcript.Transcript.scalar
+   + aspis_coredigestDigest32Inst t 30#u8 s1 false
+   + else ok (aspis_core.field.wide_exact.WideExact.ZERO, t)
+====================================================================================================
+27. scope v  aspis_r1_cost_probe::verifier::prepared_claim_sum   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: claim1; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def verifier.prepared_claim_sum
+   +def aspis_r1_cost_probe.verifier.prepared_claim_sum
+     (k : Array aspis_core.field.wide_exact.WideExact 7#usize)
+   @@ -5,7 +5,7 @@
+     := do
+   - let claim ← aspis_core.field.wide_exact.WideExact.ZERO
+   - let claim1 ←
+   - verifier.prepared_claim_sum_loop { start := 0#usize, «end» := 7#usize } k
+   - parts claim
+   - trace.value 14#u16 7#usize claim1
+   - ok claim1
+   + let claim ←
+   + aspis_r1_cost_probe.verifier.prepared_claim_sum_loop
+   + { start := 0#usize, «end» := 7#usize } k parts
+   + aspis_core.field.wide_exact.WideExact.ZERO
+   + aspis_r1_cost_probe.trace.value 14#u16 7#usize claim
+   + ok claim
+====================================================================================================
+28. scope v  aspis_r1_cost_probe::verifier::prepared_claim   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: we; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,4 +1,4 @@
+   -def verifier.prepared_claim
+   +def aspis_r1_cost_probe.verifier.prepared_claim
+     {H : Type _} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
+   - (sem : r1_semantic.Verified H) (y1 : Slice Std.U8)
+   + (sem : aspis_r1_cost_probe.r1_semantic.Verified H) (y1 : Slice Std.U8)
+     (inactive : aspis_core.field.wide_exact.WideExact)
+   @@ -7,9 +7,8 @@
+     Result (core.result.Result aspis_core.field.wide_exact.WideExact
+   - verifier.Error)
+   + aspis_r1_cost_probe.verifier.Error)
+     := do
+   - let k ← weights.powers 7#usize kappa
+   - let we ← aspis_core.field.wide_exact.WideExact.ZERO
+   - let parts := Array.repeat 7#usize we
+   + let k ← aspis_r1_cost_probe.weights.powers 7#usize kappa
+   + let parts := Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO
+     let a ← Array.update parts 0#usize inactive
+   - verifier.prepared_claim_loop aspis_coredigestDigest32Inst
+   + aspis_r1_cost_probe.verifier.prepared_claim_loop aspis_coredigestDigest32Inst
+     { start := 0#usize, «end» := 6#usize } sem y1 g k a
+====================================================================================================
+29. scope v  aspis_r1_cost_probe::r1_wire::begin   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: q; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,8 +1,10 @@
+   -def r1_wire.begin
+   +def aspis_r1_cost_probe.r1_wire.begin
+     {H : Type _} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
+   - («prefix» : r1_wire.Prefix) (transcript : r1_wire.SemanticTranscript H) :
+   + («prefix» : aspis_r1_cost_probe.r1_wire.Prefix)
+   + (transcript : aspis_r1_cost_probe.r1_wire.SemanticTranscript H) :
+     Result ((core.result.Result aspis_core.state_only_prefix.r0.Challenges
+   - r1_wire.Error) × (r1_wire.SemanticTranscript H))
+   + aspis_r1_cost_probe.r1_wire.Error) ×
+   + (aspis_r1_cost_probe.r1_wire.SemanticTranscript H))
+     := do
+   - let r ← r1_wire.Prefix.validated_record «prefix» 0#u8
+   + let r ← aspis_r1_cost_probe.r1_wire.Prefix.validated_record «prefix» 0#u8
+     let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+   @@ -11,3 +13,3 @@
+     let (r1, transcript1) ←
+   - r1_wire.SemanticTranscript.semantic_validated
+   + aspis_r1_cost_probe.r1_wire.SemanticTranscript.semantic_validated
+     aspis_coredigestDigest32Inst transcript vr
+   @@ -16,3 +18,4 @@
+     | core.ops.control_flow.ControlFlow.Continue val =>
+   - let r2 ← r1_wire.Prefix.validated_record «prefix» 1#u8
+   + let r2 ←
+   + aspis_r1_cost_probe.r1_wire.Prefix.validated_record «prefix» 1#u8
+     let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+   @@ -21,3 +24,3 @@
+     let (r3, transcript2) ←
+   - r1_wire.SemanticTranscript.semantic_validated
+   + aspis_r1_cost_probe.r1_wire.SemanticTranscript.semantic_validated
+     aspis_coredigestDigest32Inst transcript1 vr1
+   @@ -26,3 +29,4 @@
+     | core.ops.control_flow.ControlFlow.Continue val1 =>
+   - let r4 ← r1_wire.Prefix.validated_record «prefix» 2#u8
+   + let r4 ←
+   + aspis_r1_cost_probe.r1_wire.Prefix.validated_record «prefix» 2#u8
+     let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r4
+   @@ -31,3 +35,3 @@
+     let (r5, transcript3) ←
+   - r1_wire.SemanticTranscript.semantic_validated
+   + aspis_r1_cost_probe.r1_wire.SemanticTranscript.semantic_validated
+     aspis_coredigestDigest32Inst transcript2 vr2
+   @@ -36,5 +40,6 @@
+     | core.ops.control_flow.ControlFlow.Continue val2 =>
+   - let q ← aspis_core.field.QM31.ZERO
+   - let zc := Array.repeat 10#usize q
+   - let r6 ← r1_wire.Prefix.validated_record «prefix» 3#u8
+   + let zc := Array.repeat 10#usize aspis_core.field.QM31.ZERO
+   + let r6 ←
+   + aspis_r1_cost_probe.r1_wire.Prefix.validated_record «prefix»
+   + 3#u8
+     let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r6
+   @@ -43,3 +48,3 @@
+     let (r7, transcript4) ←
+   - r1_wire.SemanticTranscript.semantic_validated
+   + aspis_r1_cost_probe.r1_wire.SemanticTranscript.semantic_validated
+     aspis_coredigestDigest32Inst transcript3 vr3
+   @@ -49,3 +54,5 @@
+     let (_, index_mut_back) ← Array.index_mut_usize zc 0#usize
+   - let r8 ← r1_wire.Prefix.validated_record «prefix» 4#u8
+   + let r8 ←
+   + aspis_r1_cost_probe.r1_wire.Prefix.validated_record
+   + «prefix» 4#u8
+     let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r8
+   @@ -54,3 +61,3 @@
+     let (r9, transcript5) ←
+   - r1_wire.SemanticTranscript.semantic_validated
+   + aspis_r1_cost_probe.r1_wire.SemanticTranscript.semantic_validated
+     aspis_coredigestDigest32Inst transcript4 vr4
+   @@ -63,3 +70,4 @@
+     let r10 ←
+   - r1_wire.Prefix.validated_record «prefix» 5#u8
+   + aspis_r1_cost_probe.r1_wire.Prefix.validated_record
+   + «prefix» 5#u8
+     let cf10 ←
+   @@ -69,3 +77,3 @@
+     let (r11, transcript6) ←
+   - r1_wire.SemanticTranscript.semantic_validated
+   + aspis_r1_cost_probe.r1_wire.SemanticTranscript.semantic_validated
+     aspis_coredigestDigest32Inst transcript5 vr5
+   @@ -79,3 +87,4 @@
+     let r12 ←
+   - r1_wire.Prefix.validated_record «prefix» 6#u8
+   + aspis_r1_cost_probe.r1_wire.Prefix.validated_record
+   + «prefix» 6#u8
+     let cf12 ←
+   @@ -85,3 +94,3 @@
+     let (r13, transcript7) ←
+   - r1_wire.SemanticTranscript.semantic_validated
+   + aspis_r1_cost_probe.r1_wire.SemanticTranscript.semantic_validated
+     aspis_coredigestDigest32Inst transcript6 vr6
+   @@ -96,3 +105,4 @@
+     let r14 ←
+   - r1_wire.Prefix.validated_record «prefix» 7#u8
+   + aspis_r1_cost_probe.r1_wire.Prefix.validated_record
+   + «prefix» 7#u8
+     let cf14 ←
+   @@ -103,3 +113,3 @@
+     let (r15, transcript8) ←
+   - r1_wire.SemanticTranscript.semantic_validated
+   + aspis_r1_cost_probe.r1_wire.SemanticTranscript.semantic_validated
+     aspis_coredigestDigest32Inst transcript7
+   @@ -116,4 +126,4 @@
+     let r16 ←
+   - r1_wire.Prefix.validated_record «prefix»
+   - 8#u8
+   + aspis_r1_cost_probe.r1_wire.Prefix.validated_record
+   + «prefix» 8#u8
+     let cf16 ←
+   @@ -125,3 +135,3 @@
+     let (r17, transcript9) ←
+   - r1_wire.SemanticTranscript.semantic_validated
+   + aspis_r1_cost_probe.r1_wire.SemanticTranscript.semantic_validated
+     aspis_coredigestDigest32Inst
+   @@ -139,3 +149,3 @@
+     let r18 ←
+   - r1_wire.Prefix.validated_record
+   + aspis_r1_cost_probe.r1_wire.Prefix.validated_record
+     «prefix» 9#u8
+   @@ -149,3 +159,3 @@
+     let (r19, transcript10) ←
+   - r1_wire.SemanticTranscript.semantic_validated
+   + aspis_r1_cost_probe.r1_wire.SemanticTranscript.semantic_validated
+     aspis_coredigestDigest32Inst
+   @@ -163,3 +173,3 @@
+     let r20 ←
+   - r1_wire.Prefix.validated_record
+   + aspis_r1_cost_probe.r1_wire.Prefix.validated_record
+     «prefix» 10#u8
+   @@ -173,3 +183,3 @@
+     let (r21, transcript11) ←
+   - r1_wire.SemanticTranscript.semantic_validated
+   + aspis_r1_cost_probe.r1_wire.SemanticTranscript.semantic_validated
+     aspis_coredigestDigest32Inst
+   @@ -188,3 +198,3 @@
+     let r22 ←
+   - r1_wire.Prefix.validated_record
+   + aspis_r1_cost_probe.r1_wire.Prefix.validated_record
+     «prefix» 11#u8
+   @@ -198,3 +208,3 @@
+     let (r23, transcript12) ←
+   - r1_wire.SemanticTranscript.semantic_validated
+   + aspis_r1_cost_probe.r1_wire.SemanticTranscript.semantic_validated
+     aspis_coredigestDigest32Inst
+   @@ -214,3 +224,3 @@
+     let r24 ←
+   - r1_wire.Prefix.validated_record
+   + aspis_r1_cost_probe.r1_wire.Prefix.validated_record
+     «prefix» 12#u8
+   @@ -224,3 +234,3 @@
+     let (r25, transcript13) ←
+   - r1_wire.SemanticTranscript.semantic_validated
+   + aspis_r1_cost_probe.r1_wire.SemanticTranscript.semantic_validated
+     aspis_coredigestDigest32Inst
+   @@ -241,3 +251,3 @@
+     let r26 ←
+   - r1_wire.Prefix.validated_record
+   + aspis_r1_cost_probe.r1_wire.Prefix.validated_record
+     «prefix» 13#u8
+   @@ -252,3 +262,3 @@
+     ←
+   - r1_wire.SemanticTranscript.semantic_validated
+   + aspis_r1_cost_probe.r1_wire.SemanticTranscript.semantic_validated
+     aspis_coredigestDigest32Inst
+   @@ -263,3 +273,3 @@
+     let r28 ←
+   - r1_wire.Prefix.validated_record
+   + aspis_r1_cost_probe.r1_wire.Prefix.validated_record
+     «prefix» 14#u8
+   @@ -274,3 +284,3 @@
+     transcript15) ←
+   - r1_wire.SemanticTranscript.semantic_validated
+   + aspis_r1_cost_probe.r1_wire.SemanticTranscript.semantic_validated
+     aspis_coredigestDigest32Inst
+   @@ -306,3 +316,3 @@
+     (core.convert.FromSame
+   - r1_wire.Error)
+   + aspis_r1_cost_probe.r1_wire.Error)
+     residual
+   @@ -317,3 +327,3 @@
+     (core.convert.FromSame
+   - r1_wire.Error)
+   + aspis_r1_cost_probe.r1_wire.Error)
+     residual
+   @@ -328,3 +338,3 @@
+     (core.convert.FromSame
+   - r1_wire.Error)
+   + aspis_r1_cost_probe.r1_wire.Error)
+     residual
+   @@ -339,3 +349,3 @@
+     (core.convert.FromSame
+   - r1_wire.Error)
+   + aspis_r1_cost_probe.r1_wire.Error)
+     residual
+   @@ -349,3 +359,3 @@
+     (core.convert.FromSame
+   - r1_wire.Error)
+   + aspis_r1_cost_probe.r1_wire.Error)
+     residual
+   @@ -359,3 +369,4 @@
+     (core.convert.FromSame
+   - r1_wire.Error) residual
+   + aspis_r1_cost_probe.r1_wire.Error)
+   + residual
+     ok (r25, transcript12)
+   @@ -368,3 +379,4 @@
+     (core.convert.FromSame
+   - r1_wire.Error) residual
+   + aspis_r1_cost_probe.r1_wire.Error)
+   + residual
+     ok (r24, transcript12)
+   @@ -377,3 +389,4 @@
+     (core.convert.FromSame
+   - r1_wire.Error) residual
+   + aspis_r1_cost_probe.r1_wire.Error)
+   + residual
+     ok (r23, transcript11)
+   @@ -386,3 +399,4 @@
+     (core.convert.FromSame
+   - r1_wire.Error) residual
+   + aspis_r1_cost_probe.r1_wire.Error)
+   + residual
+     ok (r22, transcript11)
+   @@ -395,3 +409,4 @@
+     (core.convert.FromSame
+   - r1_wire.Error) residual
+   + aspis_r1_cost_probe.r1_wire.Error)
+   + residual
+     ok (r21, transcript10)
+   @@ -404,3 +419,4 @@
+     (core.convert.FromSame
+   - r1_wire.Error) residual
+   + aspis_r1_cost_probe.r1_wire.Error)
+   + residual
+     ok (r20, transcript10)
+   @@ -412,3 +428,4 @@
+     (core.convert.FromSame
+   - r1_wire.Error) residual
+   + aspis_r1_cost_probe.r1_wire.Error)
+   + residual
+     ok (r19, transcript9)
+   @@ -419,3 +436,4 @@
+     aspis_core.state_only_prefix.r0.Challenges
+   - (core.convert.FromSame r1_wire.Error)
+   + (core.convert.FromSame
+   + aspis_r1_cost_probe.r1_wire.Error)
+     residual
+   @@ -427,3 +445,4 @@
+     aspis_core.state_only_prefix.r0.Challenges
+   - (core.convert.FromSame r1_wire.Error)
+   + (core.convert.FromSame
+   + aspis_r1_cost_probe.r1_wire.Error)
+     residual
+   @@ -435,3 +454,4 @@
+     aspis_core.state_only_prefix.r0.Challenges
+   - (core.convert.FromSame r1_wire.Error)
+   + (core.convert.FromSame
+   + aspis_r1_cost_probe.r1_wire.Error)
+     residual
+   @@ -443,4 +463,4 @@
+     aspis_core.state_only_prefix.r0.Challenges
+   - (core.convert.FromSame r1_wire.Error)
+   - residual
+   + (core.convert.FromSame
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+     ok (r15, transcript7)
+   @@ -451,4 +471,4 @@
+     aspis_core.state_only_prefix.r0.Challenges
+   - (core.convert.FromSame r1_wire.Error)
+   - residual
+   + (core.convert.FromSame
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+     ok (r14, transcript7)
+   @@ -458,3 +478,4 @@
+     aspis_core.state_only_prefix.r0.Challenges
+   - (core.convert.FromSame r1_wire.Error) residual
+   + (core.convert.FromSame
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+     ok (r13, transcript6)
+   @@ -464,3 +485,4 @@
+     aspis_core.state_only_prefix.r0.Challenges
+   - (core.convert.FromSame r1_wire.Error) residual
+   + (core.convert.FromSame
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+     ok (r12, transcript6)
+   @@ -470,3 +492,4 @@
+     aspis_core.state_only_prefix.r0.Challenges
+   - (core.convert.FromSame r1_wire.Error) residual
+   + (core.convert.FromSame
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+     ok (r11, transcript5)
+   @@ -476,3 +499,4 @@
+     aspis_core.state_only_prefix.r0.Challenges
+   - (core.convert.FromSame r1_wire.Error) residual
+   + (core.convert.FromSame
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+     ok (r10, transcript5)
+   @@ -482,3 +506,4 @@
+     aspis_core.state_only_prefix.r0.Challenges
+   - (core.convert.FromSame r1_wire.Error) residual
+   + (core.convert.FromSame
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+     ok (r9, transcript4)
+   @@ -488,3 +513,4 @@
+     aspis_core.state_only_prefix.r0.Challenges
+   - (core.convert.FromSame r1_wire.Error) residual
+   + (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error)
+   + residual
+     ok (r8, transcript4)
+   @@ -494,3 +520,4 @@
+     aspis_core.state_only_prefix.r0.Challenges
+   - (core.convert.FromSame r1_wire.Error) residual
+   + (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error)
+   + residual
+     ok (r7, transcript3)
+   @@ -500,3 +527,4 @@
+     aspis_core.state_only_prefix.r0.Challenges
+   - (core.convert.FromSame r1_wire.Error) residual
+   + (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error)
+   + residual
+     ok (r6, transcript3)
+   @@ -506,3 +534,4 @@
+     aspis_core.state_only_prefix.r0.Challenges
+   - (core.convert.FromSame r1_wire.Error) residual
+   + (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error)
+   + residual
+     ok (r5, transcript2)
+   @@ -512,3 +541,3 @@
+     aspis_core.state_only_prefix.r0.Challenges (core.convert.FromSame
+   - r1_wire.Error) residual
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+     ok (r4, transcript2)
+   @@ -518,3 +547,3 @@
+     aspis_core.state_only_prefix.r0.Challenges (core.convert.FromSame
+   - r1_wire.Error) residual
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+     ok (r3, transcript1)
+   @@ -524,3 +553,3 @@
+     aspis_core.state_only_prefix.r0.Challenges (core.convert.FromSame
+   - r1_wire.Error) residual
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+     ok (r2, transcript1)
+   @@ -530,3 +559,3 @@
+     aspis_core.state_only_prefix.r0.Challenges (core.convert.FromSame
+   - r1_wire.Error) residual
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+     ok (r1, transcript)
+====================================================================================================
+30. scope v  aspis_r1_cost_probe::r1_wire::validated_values   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: q; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def r1_wire.validated_values
+   +def aspis_r1_cost_probe.r1_wire.validated_values
+     (N : Std.Usize) (bytes : Slice Std.U8) :
+   @@ -4,4 +4,3 @@
+     := do
+   - let q ← aspis_core.field.QM31.ZERO
+   - let out := Array.repeat N q
+   - r1_wire.validated_values_loop bytes out 0#usize
+   + let out := Array.repeat N aspis_core.field.QM31.ZERO
+   + aspis_r1_cost_probe.r1_wire.validated_values_loop bytes out 0#usize
+====================================================================================================
+31. scope v  aspis_r1_cost_probe::r1_wire::{aspis_r1_cost_probe::r1_wire::ValidatedRecord<'a>}::decode_k   (called functions or constants differ; tokens only in frza: _ aspis_core.field.QM31.ZERO; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,11 +1,14 @@
+   -def r1_wire.ValidatedRecord.decode_k
+   - (N : Std.Usize) (self : r1_wire.ValidatedRecord) (offset_values : Std.Usize)
+   - :
+   - Result (core.result.Result (Array aspis_core.field.QM31 N) r1_wire.Error)
+   +def aspis_r1_cost_probe.r1_wire.ValidatedRecord.decode_k
+   + (N : Std.Usize) (self : aspis_r1_cost_probe.r1_wire.ValidatedRecord)
+   + (offset_values : Std.Usize) :
+   + Result (core.result.Result (Array aspis_core.field.QM31 N)
+   + aspis_r1_cost_probe.r1_wire.Error)
+     := do
+     if self.row < 14#u8
+   - then ok (core.result.Result.Err r1_wire.Error.InvalidRow)
+   + then ok (core.result.Result.Err aspis_r1_cost_probe.r1_wire.Error.InvalidRow)
+     else
+     let o ← lift (Usize.checked_mul offset_values 32#usize)
+   - let r ← lift (core.option.Option.ok_or o (r1_wire.Error.Length self.row))
+   + let r ←
+   + lift (core.option.Option.ok_or o
+   + (aspis_r1_cost_probe.r1_wire.Error.Length self.row))
+     let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+   @@ -15,3 +18,4 @@
+     let r1 ←
+   - lift (core.option.Option.ok_or o1 (r1_wire.Error.Length self.row))
+   + lift (core.option.Option.ok_or o1
+   + (aspis_r1_cost_probe.r1_wire.Error.Length self.row))
+     let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+   @@ -21,3 +25,4 @@
+     let r2 ←
+   - lift (core.option.Option.ok_or o2 (r1_wire.Error.Length self.row))
+   + lift (core.option.Option.ok_or o2
+   + (aspis_r1_cost_probe.r1_wire.Error.Length self.row))
+     let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+   @@ -25,3 +30,3 @@
+     | core.ops.control_flow.ControlFlow.Continue val2 =>
+   - let s ← r1_wire.ValidatedRecord.payload self
+   + let s ← aspis_r1_cost_probe.r1_wire.ValidatedRecord.payload self
+     let o3 ←
+   @@ -30,3 +35,4 @@
+     let r3 ←
+   - lift (core.option.Option.ok_or o3 (r1_wire.Error.Length self.row))
+   + lift (core.option.Option.ok_or o3
+   + (aspis_r1_cost_probe.r1_wire.Error.Length self.row))
+     let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+   @@ -34,4 +40,3 @@
+     | core.ops.control_flow.ControlFlow.Continue val3 =>
+   - let _ ← aspis_core.field.QM31.ZERO
+   - let out ← r1_wire.validated_values N val3
+   + let out ← aspis_r1_cost_probe.r1_wire.validated_values N val3
+     ok (core.result.Result.Ok out)
+   @@ -40,3 +45,3 @@
+     (Array aspis_core.field.QM31 N) (core.convert.FromSame
+   - r1_wire.Error) residual
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -44,10 +49,10 @@
+     (Array aspis_core.field.QM31 N) (core.convert.FromSame
+   - r1_wire.Error) residual
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+     core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - (Array aspis_core.field.QM31 N) (core.convert.FromSame r1_wire.Error)
+   - residual
+   + (Array aspis_core.field.QM31 N) (core.convert.FromSame
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+     core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - (Array aspis_core.field.QM31 N) (core.convert.FromSame r1_wire.Error)
+   - residual
+   + (Array aspis_core.field.QM31 N) (core.convert.FromSame
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+====================================================================================================
+32. scope v  aspis_r1_cost_probe::r1_semantic::semantic_value   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: let value; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def r1_semantic.semantic_value
+   +def aspis_r1_cost_probe.r1_semantic.semantic_value
+     (polynomial : Array aspis_core.field.QM31 28#usize)
+   @@ -5,3 +5,3 @@
+     := do
+   - let value ← aspis_core.field.QM31.ZERO
+   - r1_semantic.semantic_value_loop polynomial alpha round value 28#usize
+   + aspis_r1_cost_probe.r1_semantic.semantic_value_loop polynomial alpha round
+   + aspis_core.field.QM31.ZERO 28#usize
+====================================================================================================
+33. scope v  aspis_r1_cost_probe::r1_semantic::semantic_rounds   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: q; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,9 +1,12 @@
+   -def r1_semantic.semantic_rounds
+   +def aspis_r1_cost_probe.r1_semantic.semantic_rounds
+     {H : Type _} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
+   - («prefix» : r1_wire.Prefix) (transcript : r1_wire.SemanticTranscript H) :
+   + («prefix» : aspis_r1_cost_probe.r1_wire.Prefix)
+   + (transcript : aspis_r1_cost_probe.r1_wire.SemanticTranscript H) :
+     Result (core.result.Result (aspis_core.field.QM31 × (Array
+   - aspis_core.field.QM31 10#usize) × (r1_wire.SemanticTranscript H))
+   - r1_wire.Error)
+   + aspis_core.field.QM31 10#usize) ×
+   + (aspis_r1_cost_probe.r1_wire.SemanticTranscript H))
+   + aspis_r1_cost_probe.r1_wire.Error)
+     := do
+   - let r ← r1_wire.Prefix.validated_record «prefix» 14#u8
+   + let r ←
+   + aspis_r1_cost_probe.r1_wire.Prefix.validated_record «prefix» 14#u8
+     let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+   @@ -11,3 +14,4 @@
+     | core.ops.control_flow.ControlFlow.Continue vr =>
+   - let r1 ← r1_wire.ValidatedRecord.decode_k 1#usize vr 0#usize
+   + let r1 ←
+   + aspis_r1_cost_probe.r1_wire.ValidatedRecord.decode_k 1#usize vr 0#usize
+     let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+   @@ -16,7 +20,7 @@
+     let running ← Array.index_usize val 0#usize
+   - let q ← aspis_core.field.QM31.ZERO
+   - let alpha := Array.repeat 10#usize q
+   + let alpha := Array.repeat 10#usize aspis_core.field.QM31.ZERO
+     let r2 ←
+   - r1_semantic.semantic_round aspis_coredigestDigest32Inst «prefix»
+   - transcript alpha running 0#usize
+   + aspis_r1_cost_probe.r1_semantic.semantic_round
+   + aspis_coredigestDigest32Inst «prefix» transcript alpha running
+   + 0#usize
+     let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+   @@ -26,4 +30,5 @@
+     let r3 ←
+   - r1_semantic.semantic_round aspis_coredigestDigest32Inst «prefix»
+   - transcript1 alpha1 running1 1#usize
+   + aspis_r1_cost_probe.r1_semantic.semantic_round
+   + aspis_coredigestDigest32Inst «prefix» transcript1 alpha1 running1
+   + 1#usize
+     let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+   @@ -33,4 +38,5 @@
+     let r4 ←
+   - r1_semantic.semantic_round aspis_coredigestDigest32Inst «prefix»
+   - transcript2 alpha2 running2 2#usize
+   + aspis_r1_cost_probe.r1_semantic.semantic_round
+   + aspis_coredigestDigest32Inst «prefix» transcript2 alpha2
+   + running2 2#usize
+     let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r4
+   @@ -40,4 +46,5 @@
+     let r5 ←
+   - r1_semantic.semantic_round aspis_coredigestDigest32Inst
+   - «prefix» transcript3 alpha3 running3 3#usize
+   + aspis_r1_cost_probe.r1_semantic.semantic_round
+   + aspis_coredigestDigest32Inst «prefix» transcript3 alpha3
+   + running3 3#usize
+     let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r5
+   @@ -47,4 +54,5 @@
+     let r6 ←
+   - r1_semantic.semantic_round aspis_coredigestDigest32Inst
+   - «prefix» transcript4 alpha4 running4 4#usize
+   + aspis_r1_cost_probe.r1_semantic.semantic_round
+   + aspis_coredigestDigest32Inst «prefix» transcript4 alpha4
+   + running4 4#usize
+     let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r6
+   @@ -54,4 +62,5 @@
+     let r7 ←
+   - r1_semantic.semantic_round aspis_coredigestDigest32Inst
+   - «prefix» transcript5 alpha5 running5 5#usize
+   + aspis_r1_cost_probe.r1_semantic.semantic_round
+   + aspis_coredigestDigest32Inst «prefix» transcript5 alpha5
+   + running5 5#usize
+     let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r7
+   @@ -61,4 +70,5 @@
+     let r8 ←
+   - r1_semantic.semantic_round aspis_coredigestDigest32Inst
+   - «prefix» transcript6 alpha6 running6 6#usize
+   + aspis_r1_cost_probe.r1_semantic.semantic_round
+   + aspis_coredigestDigest32Inst «prefix» transcript6
+   + alpha6 running6 6#usize
+     let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r8
+   @@ -68,4 +78,5 @@
+     let r9 ←
+   - r1_semantic.semantic_round aspis_coredigestDigest32Inst
+   - «prefix» transcript7 alpha7 running7 7#usize
+   + aspis_r1_cost_probe.r1_semantic.semantic_round
+   + aspis_coredigestDigest32Inst «prefix» transcript7
+   + alpha7 running7 7#usize
+     let cf9 ← core.result.Result.Insts.CoreOpsTry.branch r9
+   @@ -75,4 +86,5 @@
+     let r10 ←
+   - r1_semantic.semantic_round aspis_coredigestDigest32Inst
+   - «prefix» transcript8 alpha8 running8 8#usize
+   + aspis_r1_cost_probe.r1_semantic.semantic_round
+   + aspis_coredigestDigest32Inst «prefix» transcript8
+   + alpha8 running8 8#usize
+     let cf10 ←
+   @@ -83,3 +95,3 @@
+     let r11 ←
+   - r1_semantic.semantic_round
+   + aspis_r1_cost_probe.r1_semantic.semantic_round
+     aspis_coredigestDigest32Inst «prefix» transcript9
+   @@ -95,4 +107,5 @@
+     aspis_core.field.QM31 10#usize) ×
+   - (r1_wire.SemanticTranscript H))
+   - (core.convert.FromSame r1_wire.Error) residual
+   + (aspis_r1_cost_probe.r1_wire.SemanticTranscript H))
+   + (core.convert.FromSame
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -101,4 +114,5 @@
+     aspis_core.field.QM31 10#usize) ×
+   - (r1_wire.SemanticTranscript H))
+   - (core.convert.FromSame r1_wire.Error) residual
+   + (aspis_r1_cost_probe.r1_wire.SemanticTranscript H))
+   + (core.convert.FromSame
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -106,4 +120,6 @@
+     (aspis_core.field.QM31 × (Array aspis_core.field.QM31
+   - 10#usize) × (r1_wire.SemanticTranscript H))
+   - (core.convert.FromSame r1_wire.Error) residual
+   + 10#usize) ×
+   + (aspis_r1_cost_probe.r1_wire.SemanticTranscript H))
+   + (core.convert.FromSame
+   + aspis_r1_cost_probe.r1_wire.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -111,4 +127,6 @@
+     (aspis_core.field.QM31 × (Array aspis_core.field.QM31
+   - 10#usize) × (r1_wire.SemanticTranscript H))
+   - (core.convert.FromSame r1_wire.Error) residual
+   + 10#usize) ×
+   + (aspis_r1_cost_probe.r1_wire.SemanticTranscript H))
+   + (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error)
+   + residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -116,4 +134,6 @@
+     (aspis_core.field.QM31 × (Array aspis_core.field.QM31
+   - 10#usize) × (r1_wire.SemanticTranscript H))
+   - (core.convert.FromSame r1_wire.Error) residual
+   + 10#usize) ×
+   + (aspis_r1_cost_probe.r1_wire.SemanticTranscript H))
+   + (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error)
+   + residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -121,4 +141,5 @@
+     (aspis_core.field.QM31 × (Array aspis_core.field.QM31
+   - 10#usize) × (r1_wire.SemanticTranscript H))
+   - (core.convert.FromSame r1_wire.Error) residual
+   + 10#usize) × (aspis_r1_cost_probe.r1_wire.SemanticTranscript
+   + H)) (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error)
+   + residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -126,4 +147,5 @@
+     (aspis_core.field.QM31 × (Array aspis_core.field.QM31
+   - 10#usize) × (r1_wire.SemanticTranscript H))
+   - (core.convert.FromSame r1_wire.Error) residual
+   + 10#usize) × (aspis_r1_cost_probe.r1_wire.SemanticTranscript
+   + H)) (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error)
+   + residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -131,13 +153,4 @@
+     (aspis_core.field.QM31 × (Array aspis_core.field.QM31 10#usize)
+   - × (r1_wire.SemanticTranscript H)) (core.convert.FromSame
+   - r1_wire.Error) residual
+   - | core.ops.control_flow.ControlFlow.Break residual =>
+   - core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - (aspis_core.field.QM31 × (Array aspis_core.field.QM31 10#usize) ×
+   - (r1_wire.SemanticTranscript H)) (core.convert.FromSame
+   - r1_wire.Error) residual
+   - | core.ops.control_flow.ControlFlow.Break residual =>
+   - core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - (aspis_core.field.QM31 × (Array aspis_core.field.QM31 10#usize) ×
+   - (r1_wire.SemanticTranscript H)) (core.convert.FromSame r1_wire.Error)
+   + × (aspis_r1_cost_probe.r1_wire.SemanticTranscript H))
+   + (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error)
+     residual
+   @@ -146,4 +159,4 @@
+     (aspis_core.field.QM31 × (Array aspis_core.field.QM31 10#usize) ×
+   - (r1_wire.SemanticTranscript H)) (core.convert.FromSame r1_wire.Error)
+   - residual
+   + (aspis_r1_cost_probe.r1_wire.SemanticTranscript H))
+   + (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -151,3 +164,13 @@
+     (aspis_core.field.QM31 × (Array aspis_core.field.QM31 10#usize) ×
+   - (r1_wire.SemanticTranscript H)) (core.convert.FromSame r1_wire.Error)
+   - residual
+   + (aspis_r1_cost_probe.r1_wire.SemanticTranscript H))
+   + (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error) residual
+   + | core.ops.control_flow.ControlFlow.Break residual =>
+   + core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   + (aspis_core.field.QM31 × (Array aspis_core.field.QM31 10#usize) ×
+   + (aspis_r1_cost_probe.r1_wire.SemanticTranscript H))
+   + (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error) residual
+   + | core.ops.control_flow.ControlFlow.Break residual =>
+   + core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   + (aspis_core.field.QM31 × (Array aspis_core.field.QM31 10#usize) ×
+   + (aspis_r1_cost_probe.r1_wire.SemanticTranscript H))
+   + (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error) residual
+====================================================================================================
+34. scope v  aspis_r1_cost_probe::r1_semantic::claims   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: q; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,7 +1,8 @@
+   -def r1_semantic.claims
+   - («prefix» : r1_wire.Prefix) :
+   +def aspis_r1_cost_probe.r1_semantic.claims
+   + («prefix» : aspis_r1_cost_probe.r1_wire.Prefix) :
+     Result (core.result.Result (Array (Array aspis_core.field.QM31 29#usize)
+   - 3#usize) r1_wire.Error)
+   + 3#usize) aspis_r1_cost_probe.r1_wire.Error)
+     := do
+   - let r ← r1_wire.Prefix.validated_record «prefix» 25#u8
+   + let r ←
+   + aspis_r1_cost_probe.r1_wire.Prefix.validated_record «prefix» 25#u8
+     let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+   @@ -9,4 +10,3 @@
+     | core.ops.control_flow.ControlFlow.Continue vr =>
+   - let q ← aspis_core.field.QM31.ZERO
+   - let a := Array.repeat 29#usize q
+   + let a := Array.repeat 29#usize aspis_core.field.QM31.ZERO
+     let r1 ←
+   @@ -16,3 +16,3 @@
+     core.result.Result.map_err
+   - r1_semantic.claims.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+   + aspis_r1_cost_probe.r1_semantic.claims.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+     r1 ()
+   @@ -26,3 +26,3 @@
+     core.result.Result.map_err
+   - r1_semantic.claims.closure_1.Insts.CoreOpsFunctionFnOnceTupleBoxSliceArrayQM3129Error
+   + aspis_r1_cost_probe.r1_semantic.claims.closure_1.Insts.CoreOpsFunctionFnOnceTupleBoxSliceArrayQM3129Error
+     r3 ()
+   @@ -31,3 +31,5 @@
+     | core.ops.control_flow.ControlFlow.Continue val1 =>
+   - let r5 ← r1_wire.ValidatedRecord.decode_k 29#usize vr 0#usize
+   + let r5 ←
+   + aspis_r1_cost_probe.r1_wire.ValidatedRecord.decode_k 29#usize vr
+   + 0#usize
+     let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r5
+   @@ -36,3 +38,5 @@
+     let (_, index_mut_back) ← Array.index_mut_usize val1 0#usize
+   - let r6 ← r1_wire.ValidatedRecord.decode_k 29#usize vr 29#usize
+   + let r6 ←
+   + aspis_r1_cost_probe.r1_wire.ValidatedRecord.decode_k 29#usize vr
+   + 29#usize
+     let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+   @@ -42,3 +46,5 @@
+     let (_, index_mut_back1) ← Array.index_mut_usize out 1#usize
+   - let r7 ← r1_wire.ValidatedRecord.decode_k 29#usize vr 58#usize
+   + let r7 ←
+   + aspis_r1_cost_probe.r1_wire.ValidatedRecord.decode_k 29#usize vr
+   + 58#usize
+     let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r7
+   @@ -52,3 +58,4 @@
+     (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+   - (core.convert.FromSame r1_wire.Error) residual
+   + (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error)
+   + residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -56,3 +63,4 @@
+     (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+   - (core.convert.FromSame r1_wire.Error) residual
+   + (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error)
+   + residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -60,3 +68,3 @@
+     (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+   - (core.convert.FromSame r1_wire.Error) residual
+   + (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -64,3 +72,3 @@
+     (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+   - (core.convert.FromSame r1_wire.Error) residual
+   + (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -68,3 +76,3 @@
+     (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+   - (core.convert.FromSame r1_wire.Error) residual
+   + (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+   @@ -72,2 +80,2 @@
+     (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+   - (core.convert.FromSame r1_wire.Error) residual
+   + (core.convert.FromSame aspis_r1_cost_probe.r1_wire.Error) residual
+====================================================================================================
+35. scope v  aspis_r1_cost_probe::verifier::candidate::one_tx::verify_hooked   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: we2; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def verifier.candidate.one_tx.verify_hooked
+   +def aspis_r1_cost_probe.verifier.candidate.one_tx.verify_hooked
+     {H : Type _} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
+   @@ -4,6 +4,8 @@
+     aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+   - (proof : Slice Std.U8) (hash : H) (hook : verifier.candidate.one_tx.Hook) :
+   - Result (core.result.Result Unit verifier.Error)
+   + (proof : Slice Std.U8) (hash : H)
+   + (hook : aspis_r1_cost_probe.verifier.candidate.one_tx.Hook) :
+   + Result (core.result.Result Unit aspis_r1_cost_probe.verifier.Error)
+     := do
+   - let r ← verifier.candidate.one_tx.parse_packed_shape proof
+   + let r ←
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.parse_packed_shape proof
+     let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+   @@ -11,3 +13,3 @@
+     | core.ops.control_flow.ControlFlow.Continue _ =>
+   - let r1 ← verifier.candidate.canonical_scan proof
+   + let r1 ← aspis_r1_cost_probe.verifier.candidate.canonical_scan proof
+     let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+   @@ -15,8 +17,8 @@
+     | core.ops.control_flow.ControlFlow.Continue _ =>
+   - verifier.candidate.one_tx.Hook.note hook verifier.Phase.Parsed
+   - let we ← aspis_core.field.wide_exact.WideExact.ZERO
+   - let g := Array.repeat 29#usize we
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.Hook.note hook
+   + aspis_r1_cost_probe.verifier.Phase.Parsed
+   + let g := Array.repeat 29#usize aspis_core.field.wide_exact.WideExact.ZERO
+     let (r2, g1) ←
+   - verifier.candidate.one_tx.prepare_packed aspis_coredigestDigest32Inst
+   - «public» proof hash hook g
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.prepare_packed
+   + aspis_coredigestDigest32Inst «public» proof hash hook g
+     let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+   @@ -24,5 +26,7 @@
+     | core.ops.control_flow.ControlFlow.Continue val =>
+   - verifier.candidate.one_tx.Hook.note hook verifier.Phase.Prepare
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.Hook.note hook
+   + aspis_r1_cost_probe.verifier.Phase.Prepare
+     let r3 ←
+   - verifier.QueryGeometry.for_range val.queries 0#usize compact.QUERIES
+   + aspis_r1_cost_probe.verifier.QueryGeometry.for_range val.queries
+   + 0#usize aspis_r1_cost_probe.compact.QUERIES
+     let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+   @@ -30,4 +34,4 @@
+     | core.ops.control_flow.ControlFlow.Continue val1 =>
+   - let i ← compact.OFF_OPENINGS
+   - let i1 ← compact.OFF_NODES
+   + let i ← aspis_r1_cost_probe.compact.OFF_OPENINGS
+   + let i1 ← aspis_r1_cost_probe.compact.OFF_NODES
+     let openings ←
+   @@ -37,4 +41,4 @@
+     let r4 ←
+   - verifier.candidate.one_tx.fold_sums openings val.queries
+   - val.rho val.alpha g1 val1 hook
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.fold_sums openings
+   + val.queries val.rho val.alpha g1 val1 hook
+     let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r4
+   @@ -47,5 +51,9 @@
+     if b
+   - then ok (core.result.Result.Err verifier.Error.Query)
+   + then
+   + ok (core.result.Result.Err
+   + aspis_r1_cost_probe.verifier.Error.Query)
+     else
+   - let r5 ← verifier.candidate.one_tx.relation_view proof
+   + let r5 ←
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.relation_view
+   + proof
+     let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r5
+   @@ -53,5 +61,6 @@
+     | core.ops.control_flow.ControlFlow.Continue v =>
+   - let we1 ← Array.index_usize val.alpha 0#usize
+   + let we ← Array.index_usize val.alpha 0#usize
+     let r6 ←
+   - verifier.finish_relation_round v.round0 we1 val.claim 0#usize
+   + aspis_r1_cost_probe.verifier.finish_relation_round
+   + v.round0 we val.claim 0#usize
+     let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r6
+   @@ -59,5 +68,6 @@
+     | core.ops.control_flow.ControlFlow.Continue val3 =>
+   - let we2 ← Array.index_usize val.alpha 1#usize
+   + let we1 ← Array.index_usize val.alpha 1#usize
+     let r7 ←
+   - verifier.finish_relation_round v.round1 we2 val3 1#usize
+   + aspis_r1_cost_probe.verifier.finish_relation_round
+   + v.round1 we1 val3 1#usize
+     let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r7
+   @@ -65,5 +75,7 @@
+     | core.ops.control_flow.ControlFlow.Continue val4 =>
+   - verifier.candidate.one_tx.Hook.note hook
+   - (verifier.Phase.QueryPart 5#usize 0#u8)
+   - let i2 ← verifier.candidate.one_tx.format.OFF_CERTIFICATE
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.Hook.note
+   + hook (aspis_r1_cost_probe.verifier.Phase.QueryPart
+   + 5#usize 0#u8)
+   + let i2 ←
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.format.OFF_CERTIFICATE
+     let s ←
+   @@ -73,3 +85,3 @@
+     let r8 ←
+   - verifier.candidate.one_tx.final_sumcheck_checks
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.final_sumcheck_checks
+     aspis_coredigestDigest32Inst val v.final_message val4
+   @@ -79,6 +91,6 @@
+     | core.ops.control_flow.ControlFlow.Continue _ =>
+   - verifier.candidate.one_tx.Hook.note hook
+   - verifier.Phase.Final
+   - let i3 ← compact.OFF_FOLDED_ROOT
+   - let i4 ← compact.OFF_ROUND1
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.Hook.note
+   + hook aspis_r1_cost_probe.verifier.Phase.Final
+   + let i3 ← aspis_r1_cost_probe.compact.OFF_FOLDED_ROOT
+   + let i4 ← aspis_r1_cost_probe.compact.OFF_ROUND1
+     let s1 ←
+   @@ -94,3 +106,3 @@
+     let r10 ←
+   - verifier.candidate.one_tx.merged_merkle
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.merged_merkle
+     aspis_coredigestDigest32Inst proof val folded_root
+   @@ -101,4 +113,5 @@
+     | core.ops.control_flow.ControlFlow.Continue _ =>
+   - verifier.candidate.one_tx.Hook.note hook
+   - (verifier.Phase.Merkle 0#usize)
+   + aspis_r1_cost_probe.verifier.candidate.one_tx.Hook.note
+   + hook (aspis_r1_cost_probe.verifier.Phase.Merkle
+   + 0#usize)
+     ok (core.result.Result.Ok ())
+   @@ -106,29 +119,38 @@
+     core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - Unit (core.convert.FromSame verifier.Error) residual
+   + Unit (core.convert.FromSame
+   + aspis_r1_cost_probe.verifier.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+     core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - Unit (core.convert.FromSame verifier.Error) residual
+   + Unit (core.convert.FromSame
+   + aspis_r1_cost_probe.verifier.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+     core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - Unit (core.convert.FromSame verifier.Error) residual
+   + Unit (core.convert.FromSame
+   + aspis_r1_cost_probe.verifier.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+     core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - Unit (core.convert.FromSame verifier.Error) residual
+   + Unit (core.convert.FromSame
+   + aspis_r1_cost_probe.verifier.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+     core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - Unit (core.convert.FromSame verifier.Error) residual
+   + Unit (core.convert.FromSame
+   + aspis_r1_cost_probe.verifier.Error) residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+     core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - Unit (core.convert.FromSame verifier.Error) residual
+   + Unit (core.convert.FromSame aspis_r1_cost_probe.verifier.Error)
+   + residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+     core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - Unit (core.convert.FromSame verifier.Error) residual
+   + Unit (core.convert.FromSame aspis_r1_cost_probe.verifier.Error)
+   + residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+     core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - Unit (core.convert.FromSame verifier.Error) residual
+   + Unit (core.convert.FromSame aspis_r1_cost_probe.verifier.Error)
+   + residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+     core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - Unit (core.convert.FromSame verifier.Error) residual
+   + Unit (core.convert.FromSame aspis_r1_cost_probe.verifier.Error)
+   + residual
+     | core.ops.control_flow.ControlFlow.Break residual =>
+     core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - Unit (core.convert.FromSame verifier.Error) residual
+   + Unit (core.convert.FromSame aspis_r1_cost_probe.verifier.Error) residual
+====================================================================================================
+36. scope p  aspis_r1_cost_probe_program::r1_pool_adapter::owned::authenticate_invariant_release_registry   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: i4; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -390,7 +390,6 @@
+     else
+   - let i4 ←
+   - aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION
+     if
+     val5.statement_version
+   - != i4
+   + !=
+   + aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION
+     then
+   @@ -736,7 +735,6 @@
+     else
+   - let i4 ←
+   - aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION
+     if
+     val4.statement_version
+   - != i4
+   + !=
+   + aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION
+     then
+====================================================================================================
+37. scope p  aspis_r1_cost_probe_program::r1_pool_adapter::lane_frontier   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: m; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -5,4 +5,3 @@
+     := do
+   - let m ← aspis_core.field.M31.ZERO
+   - let a := Array.repeat 8#usize m
+   + let a := Array.repeat 8#usize aspis_core.field.M31.ZERO
+     let frontier := Array.repeat 20#usize a
+====================================================================================================
+38. scope p  aspis_r1_cost_probe_program::r1_pool_adapter::decode_lane_from_pool_release   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: a3 a4 i17 i18 i19 i20; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -18,5 +18,5 @@
+     { «end» := 4#usize }
+   - let a ←
+   + let b ←
+   + Slice.Insts.CoreCmpPartialEqArray.ne core.cmp.PartialEqU8 s
+     aspis_statement.pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_LANE_MAGIC
+   - let b ← Slice.Insts.CoreCmpPartialEqArray.ne core.cmp.PartialEqU8 s a
+     if b
+   @@ -27,30 +27,30 @@
+     let i2 ← Slice.index_usize bytes 4#usize
+   - let i3 ←
+   + if i2 !=
+     aspis_statement.pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_LANE_VERSION
+   - if i2 != i3
+   - then
+   - ok (core.result.Result.Err
+   - solana_program_error.ProgramError.InvalidAccountData)
+   - else
+   - let i4 ← Slice.index_usize bytes 5#usize
+   - let i5 ← lift (core.convert.num.FromUsizeU8.from i4)
+   + then
+   + ok (core.result.Result.Err
+   + solana_program_error.ProgramError.InvalidAccountData)
+   + else
+   + let i3 ← Slice.index_usize bytes 5#usize
+   + let i4 ← lift (core.convert.num.FromUsizeU8.from i3)
+   + if i4 >=
+   + aspis_statement.pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_LANE_COUNT
+   + then
+   + ok (core.result.Result.Err
+   + solana_program_error.ProgramError.InvalidAccountData)
+   + else
+   + let i5 ← Slice.index_usize bytes 6#usize
+     let i6 ←
+   - aspis_statement.pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_LANE_COUNT
+   - if i5 >= i6
+   - then
+   - ok (core.result.Result.Err
+   - solana_program_error.ProgramError.InvalidAccountData)
+   - else
+   - let i7 ← Slice.index_usize bytes 6#usize
+   - let i8 ← lift (UScalar.cast .U8 i6)
+   + lift (UScalar.cast .U8
+   + aspis_statement.pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_LANE_COUNT)
+   + if i5 != i6
+   + then
+   + ok (core.result.Result.Err
+   + solana_program_error.ProgramError.InvalidAccountData)
+   + else
+   + let i7 ← Slice.index_usize bytes 7#usize
+   + let i8 ←
+   + lift (UScalar.cast .U8
+   + aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_DEPTH)
+     if i7 != i8
+   - then
+   - ok (core.result.Result.Err
+   - solana_program_error.ProgramError.InvalidAccountData)
+   - else
+   - let i9 ← Slice.index_usize bytes 7#usize
+   - let i10 ←
+   - aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_DEPTH
+   - let i11 ← lift (UScalar.cast .U8 i10)
+   - if i9 != i11
+     then
+   @@ -63,6 +63,6 @@
+     { start := 8#usize, «end» := 40#usize }
+   - let a1 ←
+   + let a ←
+     aspis_statement.pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING
+     let b1 ←
+   - Slice.Insts.CoreCmpPartialEqArray.ne core.cmp.PartialEqU8 s1 a1
+   + Slice.Insts.CoreCmpPartialEqArray.ne core.cmp.PartialEqU8 s1 a
+     if b1
+   @@ -72,9 +72,11 @@
+     else
+   - let i12 ←
+   + let s2 ←
+   + core.slice.index.Slice.index
+   + (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes
+   + {
+   + start := 73#usize,
+   + «end» :=
+     aspis_statement.pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES
+   - let s2 ←
+   - core.slice.index.Slice.index
+   - (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes
+   - { start := 73#usize, «end» := i12 }
+   - let i13 ← core.slice.Slice.iter s2
+   + }
+   + let i9 ← core.slice.Slice.iter s2
+     let (b2, _) ←
+   @@ -82,3 +84,3 @@
+     r1_pool_adapter.decode_lane_from_pool_release.closure.Insts.CoreOpsFunctionFnMutTupleShared0U8Bool
+   - i13 ()
+   + i9 ()
+     if b2
+   @@ -102,6 +104,6 @@
+     | core.ops.control_flow.ControlFlow.Continue val =>
+   - let a2 := Array.repeat 32#usize 0#u8
+   + let a1 := Array.repeat 32#usize 0#u8
+     let b3 ←
+     core.array.equality.PartialEqArray.eq
+   - core.cmp.PartialEqU8 val a2
+   + core.cmp.PartialEqU8 val a1
+     if b3
+   @@ -114,3 +116,7 @@
+     (core.slice.index.SliceIndexRangeFromUsizeSlice
+   - Std.U8) bytes { start := i12 }
+   + Std.U8) bytes
+   + {
+   + start :=
+   + aspis_statement.pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES
+   + }
+     let s4 ←
+   @@ -119,7 +125,6 @@
+     tree { «end» := 4#usize }
+   - let a3 ←
+   - aspis_statement.pool_v1.incremental_merkle.POOL_V1_TREE_STATE_MAGIC
+     let b4 ←
+     Slice.Insts.CoreCmpPartialEqArray.ne
+   - core.cmp.PartialEqU8 s4 a3
+   + core.cmp.PartialEqU8 s4
+   + aspis_statement.pool_v1.incremental_merkle.POOL_V1_TREE_STATE_MAGIC
+     if b4
+   @@ -129,29 +134,28 @@
+     else
+   - let i14 ← Slice.index_usize tree 4#usize
+   - let i15 ←
+   + let i10 ← Slice.index_usize tree 4#usize
+   + if i10 !=
+     aspis_statement.pool_v1.incremental_merkle.POOL_V1_TREE_STATE_VERSION
+   - if i14 != i15
+   - then
+   - ok (core.result.Result.Err
+   - solana_program_error.ProgramError.InvalidAccountData)
+   - else
+   - let i16 ← Slice.index_usize tree 5#usize
+   - let i17 ← lift (UScalar.cast .U8 i10)
+   - if i16 != i17
+   - then
+   - ok (core.result.Result.Err
+   - solana_program_error.ProgramError.InvalidAccountData)
+   - else
+   - let i18 ← Slice.index_usize tree 6#usize
+   - let i19 ←
+   + then
+   + ok (core.result.Result.Err
+   + solana_program_error.ProgramError.InvalidAccountData)
+   + else
+   + let i11 ← Slice.index_usize tree 5#usize
+   + let i12 ←
+   + lift (UScalar.cast .U8
+   + aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_DEPTH)
+   + if i11 != i12
+   + then
+   + ok (core.result.Result.Err
+   + solana_program_error.ProgramError.InvalidAccountData)
+   + else
+   + let i13 ← Slice.index_usize tree 6#usize
+   + if i13 !=
+     aspis_statement.pool_v1.format.POOL_V1_TREE_HASH_VERSION
+   - if i18 != i19
+   - then
+   - ok (core.result.Result.Err
+   - solana_program_error.ProgramError.InvalidAccountData)
+   - else
+   - let i20 ← Slice.index_usize tree 7#usize
+   - let i21 ←
+   + then
+   + ok (core.result.Result.Err
+   + solana_program_error.ProgramError.InvalidAccountData)
+   + else
+   + let i14 ← Slice.index_usize tree 7#usize
+   + if i14 !=
+     aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION
+   - if i20 != i21
+     then
+   @@ -179,5 +183,5 @@
+     lift (core.num.U64.from_le_bytes val1)
+   - let i22 ←
+   + let i15 ←
+     aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_CAPACITY
+   - if next_leaf_index > i22
+   + if next_leaf_index > i15
+     then
+   @@ -234,6 +238,6 @@
+     then
+   - let a4 ←
+   + let a2 ←
+     Array.index_usize
+     r1_pool_adapter.v7_pair_empty_roots.V7_PAIR_EMPTY_ROOTS
+   - i10
+   + aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_DEPTH
+     let b5 ←
+   @@ -241,3 +245,3 @@
+     aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+   - val3 a4
+   + val3 a2
+     if b5
+   @@ -247,3 +251,3 @@
+     else
+   - let i23 ←
+   + let i16 ←
+     Slice.index_usize bytes
+   @@ -252,5 +256,5 @@
+     {
+   - bump := i23,
+   + bump := i16,
+     master := val,
+   - lane_id := i4,
+   + lane_id := i3,
+     tree :=
+   @@ -263,3 +267,3 @@
+     else
+   - let i23 ←
+   + let i16 ←
+     Slice.index_usize bytes 72#usize
+   @@ -267,5 +271,5 @@
+     {
+   - bump := i23,
+   + bump := i16,
+     master := val,
+   - lane_id := i4,
+   + lane_id := i3,
+     tree :=
+====================================================================================================
+39. scope p  aspis_r1_cost_probe_program::r1_pool_adapter::owned::authenticate_asq8_accounts   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: -; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -86,5 +86,4 @@
+     else
+   - let i1 ←
+   + if val1.initialized_lane_mask !=
+     aspis_statement.pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_ALL_LANES_MASK
+   - if val1.initialized_lane_mask != i1
+     then
+====================================================================================================
+40. scope p  aspis_r1_cost_probe_program::r1_pool_adapter::emit_result   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: a1; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -63,6 +63,5 @@
+     { «end» := 4#usize }
+   - let a1 ←
+   + let b ←
+   + Slice.Insts.CoreCmpPartialEqArray.ne core.cmp.PartialEqU8 s1
+     aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC
+   - let b ←
+   - Slice.Insts.CoreCmpPartialEqArray.ne core.cmp.PartialEqU8 s1 a1
+     if b
+====================================================================================================
+41. scope p  aspis_r1_cost_probe_program::r1_pool_adapter::owned::stage2_owned   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: a; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -16,7 +16,7 @@
+     Std.U8) data { «end» := 4#usize }
+   - let a ←
+   - aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC
+     let s ←
+     core.array.Array.index (core.ops.index.IndexSlice
+   - (core.slice.index.SliceIndexRangeFullSlice Std.U8)) a ()
+   + (core.slice.index.SliceIndexRangeFullSlice Std.U8))
+   + aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC
+   + ()
+     let b ←
+====================================================================================================
+42. scope p  aspis_r1_cost_probe_program::r1_pool_adapter::owned::stage2   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: a i4 i5 i6 i7 i8; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -14,7 +14,7 @@
+     Std.U8) data { «end» := 4#usize }
+   - let a ←
+   - aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC
+     let s ←
+     core.array.Array.index (core.ops.index.IndexSlice
+   - (core.slice.index.SliceIndexRangeFullSlice Std.U8)) a ()
+   + (core.slice.index.SliceIndexRangeFullSlice Std.U8))
+   + aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC
+   + ()
+     let b ←
+   @@ -40,25 +40,25 @@
+     let ai1 ← Slice.index_usize accounts 1#usize
+   + let oa1 ←
+   + r1_pool_adapter.owned.snapshot ai1
+   + aspis_statement.pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES
+   + aspis_statement.pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES
+   + let ai2 ← Slice.index_usize accounts 2#usize
+   + let oa2 ←
+   + r1_pool_adapter.owned.snapshot ai2
+   + aspis_statement.pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES
+   + aspis_statement.pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES
+   + let ai3 ← Slice.index_usize accounts 3#usize
+     let i3 ←
+   - aspis_statement.pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES
+   - let oa1 ← r1_pool_adapter.owned.snapshot ai1 i3 i3
+   - let ai2 ← Slice.index_usize accounts 2#usize
+   - let i4 ←
+   - aspis_statement.pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES
+   - let oa2 ← r1_pool_adapter.owned.snapshot ai2 i4 i4
+   - let ai3 ← Slice.index_usize accounts 3#usize
+   - let i5 ←
+     aspis_statement.pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES
+   - let oa3 ← r1_pool_adapter.owned.snapshot ai3 i5 i5
+   + let oa3 ← r1_pool_adapter.owned.snapshot ai3 i3 i3
+     let ai4 ← Slice.index_usize accounts 4#usize
+   - let i6 ←
+   + let oa4 ←
+   + r1_pool_adapter.owned.snapshot ai4
+     aspis_statement.pool_v1.verifier_registry.POOL_V1_VERIFIER_REGISTRY_BYTES
+   - let i7 ←
+     aspis_statement.pool_v1.verifier_registry.POOL_V1_VERIFIER_REGISTRY_V2_BYTES
+   - let oa4 ← r1_pool_adapter.owned.snapshot ai4 i6 i7
+     let ai5 ← Slice.index_usize accounts 5#usize
+   - let i8 ←
+   + let oa5 ←
+   + r1_pool_adapter.owned.snapshot ai5
+     aspis_statement.pool_v1.verifier_registry.POOL_V1_VERIFIER_ENTRY_BYTES
+   - let i9 ←
+     aspis_statement.pool_v1.verifier_registry.POOL_V1_VERIFIER_ENTRY_V2_BYTES
+   - let oa5 ← r1_pool_adapter.owned.snapshot ai5 i8 i9
+     let ai6 ← Slice.index_usize accounts 6#usize
+====================================================================================================
+43. scope s  aspis_statement::array_from_fn_copy (loop body)  (called functions or constants differ; tokens only in frza: array_from_fn_copy_loop array_from_fn_copy_loop.body; only in X1: aspis_statement.array_from_fn_copy_loop aspis_statement.array_from_fn_copy_)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def array_from_fn_copy_loop.body
+   +def aspis_statement.array_from_fn_copy_loop.body
+     {T : Type _} {T2 : Type _} {N : Std.Usize}
+====================================================================================================
+44. scope s  aspis_statement::array_from_fn_copy   (called functions or constants differ; tokens only in frza: array_from_fn_copy_loop; only in X1: aspis_statement.array_from_fn_copy_loop)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,2 @@
+   -def array_from_fn_copy
+   +def aspis_statement.array_from_fn_copy
+     {T : Type _} {T2 : Type _} (N : Std.Usize) (coremarkerCopyInst :
+   @@ -7,2 +7,3 @@
+     let out := Array.repeat N init
+   - array_from_fn_copy_loop coreopsfunctionFnMutT2TupleUsizeTInst f out 0#usize
+   + aspis_statement.array_from_fn_copy_loop coreopsfunctionFnMutT2TupleUsizeTInst
+   + f out 0#usize
+====================================================================================================
+45. scope s  aspis_statement::pool_v1::pair_forest_copy_terminal::COPY_TAG_TERMS   (called functions or constants differ; tokens only in frza: Result aspis_statement.pool_v1.pair_forest_copy_terminal.build_copy_tag_terms; only in X1: 0 1 10 11 1124073472 1124073473)
+   --- frza
+   +++ X1
+   @@ -1,3 +1,101 @@
+   -def pool_v1.pair_forest_copy_terminal.COPY_TAG_TERMS
+   - : Result ((Array Std.U8 272#usize) × (Array Std.U32 272#usize)) :=
+   - pool_v1.pair_forest_copy_terminal.build_copy_tag_terms
+   +def aspis_statement.pool_v1.pair_forest_copy_terminal.COPY_TAG_TERMS
+   + : ((Array Std.U8 272#usize) × (Array Std.U32 272#usize)) :=
+   + (Array.make 272#usize [
+   + 63#u8, 4#u8, 57#u8, 63#u8, 57#u8, 58#u8, 59#u8, 60#u8, 61#u8, 62#u8,
+   + 63#u8, 63#u8, 57#u8, 58#u8, 59#u8, 60#u8, 61#u8, 62#u8, 63#u8, 57#u8,
+   + 58#u8, 59#u8, 60#u8, 61#u8, 62#u8, 1#u8, 2#u8, 25#u8, 27#u8, 28#u8, 30#u8,
+   + 31#u8, 0#u8, 32#u8, 29#u8, 33#u8, 34#u8, 35#u8, 36#u8, 37#u8, 38#u8,
+   + 39#u8, 40#u8, 41#u8, 42#u8, 43#u8, 44#u8, 45#u8, 46#u8, 47#u8, 48#u8,
+   + 49#u8, 50#u8, 51#u8, 52#u8, 3#u8, 4#u8, 5#u8, 6#u8, 7#u8, 8#u8, 9#u8,
+   + 10#u8, 11#u8, 12#u8, 13#u8, 14#u8, 15#u8, 16#u8, 17#u8, 18#u8, 19#u8,
+   + 20#u8, 21#u8, 22#u8, 23#u8, 24#u8, 54#u8, 55#u8, 0#u8, 2#u8, 3#u8, 28#u8,
+   + 31#u8, 57#u8, 58#u8, 59#u8, 60#u8, 61#u8, 62#u8, 57#u8, 58#u8, 59#u8,
+   + 60#u8, 61#u8, 62#u8, 57#u8, 58#u8, 59#u8, 60#u8, 61#u8, 62#u8, 57#u8,
+   + 58#u8, 59#u8, 60#u8, 61#u8, 62#u8, 32#u8, 33#u8, 34#u8, 35#u8, 36#u8,
+   + 37#u8, 38#u8, 39#u8, 40#u8, 41#u8, 42#u8, 43#u8, 44#u8, 45#u8, 46#u8,
+   + 47#u8, 48#u8, 49#u8, 50#u8, 51#u8, 52#u8, 2#u8, 57#u8, 58#u8, 59#u8,
+   + 60#u8, 61#u8, 62#u8, 2#u8, 3#u8, 26#u8, 28#u8, 29#u8, 31#u8, 32#u8, 63#u8,
+   + 33#u8, 34#u8, 35#u8, 36#u8, 37#u8, 38#u8, 39#u8, 40#u8, 41#u8, 42#u8,
+   + 43#u8, 44#u8, 45#u8, 46#u8, 47#u8, 48#u8, 49#u8, 50#u8, 51#u8, 52#u8,
+   + 53#u8, 4#u8, 5#u8, 6#u8, 7#u8, 8#u8, 9#u8, 10#u8, 11#u8, 12#u8, 13#u8,
+   + 14#u8, 15#u8, 16#u8, 17#u8, 18#u8, 19#u8, 20#u8, 21#u8, 22#u8, 23#u8,
+   + 24#u8, 54#u8, 55#u8, 56#u8, 57#u8, 58#u8, 59#u8, 60#u8, 61#u8, 62#u8,
+   + 63#u8, 63#u8, 57#u8, 58#u8, 59#u8, 60#u8, 61#u8, 62#u8, 63#u8, 63#u8,
+   + 63#u8, 57#u8, 58#u8, 59#u8, 60#u8, 61#u8, 62#u8, 63#u8, 1#u8, 25#u8,
+   + 26#u8, 33#u8, 34#u8, 35#u8, 36#u8, 37#u8, 38#u8, 39#u8, 40#u8, 41#u8,
+   + 42#u8, 43#u8, 44#u8, 45#u8, 46#u8, 47#u8, 48#u8, 49#u8, 50#u8, 51#u8,
+   + 52#u8, 53#u8, 4#u8, 5#u8, 6#u8, 7#u8, 8#u8, 9#u8, 10#u8, 11#u8, 12#u8,
+   + 13#u8, 14#u8, 15#u8, 16#u8, 17#u8, 18#u8, 19#u8, 20#u8, 21#u8, 22#u8,
+   + 23#u8, 24#u8, 54#u8, 55#u8, 56#u8, 57#u8, 58#u8, 59#u8, 60#u8, 61#u8,
+   + 62#u8, 63#u8, 63#u8, 63#u8, 26#u8, 33#u8
+   + ],
+   + Array.make 272#usize [
+   + 1124073486#u32, 1124073490#u32, 1124073491#u32, 1124073487#u32,
+   + 1124073537#u32, 1124073549#u32, 1124073561#u32, 1124073573#u32,
+   + 1124073585#u32, 1124073597#u32, 1124073488#u32, 1124073489#u32,
+   + 1124073540#u32, 1124073552#u32, 1124073564#u32, 1124073576#u32,
+   + 1124073588#u32, 1124073600#u32, 1124073495#u32, 1124073543#u32,
+   + 1124073555#u32, 1124073567#u32, 1124073579#u32, 1124073591#u32,
+   + 1124073603#u32, 1124073472#u32, 1124073473#u32, 1124073474#u32,
+   + 1124073475#u32, 1124073476#u32, 1124073477#u32, 1124073478#u32,
+   + 1124073479#u32, 1124073492#u32, 1124073493#u32, 1124073496#u32,
+   + 1124073498#u32, 1124073500#u32, 1124073502#u32, 1124073504#u32,
+   + 1124073506#u32, 1124073508#u32, 1124073510#u32, 1124073512#u32,
+   + 1124073514#u32, 1124073516#u32, 1124073518#u32, 1124073520#u32,
+   + 1124073522#u32, 1124073524#u32, 1124073526#u32, 1124073528#u32,
+   + 1124073530#u32, 1124073532#u32, 1124073534#u32, 1124073536#u32,
+   + 1124073539#u32, 1124073542#u32, 1124073545#u32, 1124073548#u32,
+   + 1124073551#u32, 1124073554#u32, 1124073557#u32, 1124073560#u32,
+   + 1124073563#u32, 1124073566#u32, 1124073569#u32, 1124073572#u32,
+   + 1124073575#u32, 1124073578#u32, 1124073581#u32, 1124073584#u32,
+   + 1124073587#u32, 1124073590#u32, 1124073593#u32, 1124073596#u32,
+   + 1124073599#u32, 1124073602#u32, 1124073605#u32, 1124073480#u32,
+   + 1124073481#u32, 1124073482#u32, 1124073484#u32, 1124073485#u32,
+   + 1124073546#u32, 1124073558#u32, 1124073570#u32, 1124073582#u32,
+   + 1124073594#u32, 1124073606#u32, 1124073538#u32, 1124073550#u32,
+   + 1124073562#u32, 1124073574#u32, 1124073586#u32, 1124073598#u32,
+   + 1124073541#u32, 1124073553#u32, 1124073565#u32, 1124073577#u32,
+   + 1124073589#u32, 1124073601#u32, 1124073544#u32, 1124073556#u32,
+   + 1124073568#u32, 1124073580#u32, 1124073592#u32, 1124073604#u32,
+   + 1124073494#u32, 1124073497#u32, 1124073499#u32, 1124073501#u32,
+   + 1124073503#u32, 1124073505#u32, 1124073507#u32, 1124073509#u32,
+   + 1124073511#u32, 1124073513#u32, 1124073515#u32, 1124073517#u32,
+   + 1124073519#u32, 1124073521#u32, 1124073523#u32, 1124073525#u32,
+   + 1124073527#u32, 1124073529#u32, 1124073531#u32, 1124073533#u32,
+   + 1124073535#u32, 1124073483#u32, 1124073547#u32, 1124073559#u32,
+   + 1124073571#u32, 1124073583#u32, 1124073595#u32, 1124073607#u32,
+   + 1124073472#u32, 1124073473#u32, 1124073474#u32, 1124073475#u32,
+   + 1124073476#u32, 1124073477#u32, 1124073478#u32, 1124073483#u32,
+   + 1124073495#u32, 1124073497#u32, 1124073499#u32, 1124073501#u32,
+   + 1124073503#u32, 1124073505#u32, 1124073507#u32, 1124073509#u32,
+   + 1124073511#u32, 1124073513#u32, 1124073515#u32, 1124073517#u32,
+   + 1124073519#u32, 1124073521#u32, 1124073523#u32, 1124073525#u32,
+   + 1124073527#u32, 1124073529#u32, 1124073531#u32, 1124073533#u32,
+   + 1124073535#u32, 1124073538#u32, 1124073541#u32, 1124073544#u32,
+   + 1124073547#u32, 1124073550#u32, 1124073553#u32, 1124073556#u32,
+   + 1124073559#u32, 1124073562#u32, 1124073565#u32, 1124073568#u32,
+   + 1124073571#u32, 1124073574#u32, 1124073577#u32, 1124073580#u32,
+   + 1124073583#u32, 1124073586#u32, 1124073589#u32, 1124073592#u32,
+   + 1124073595#u32, 1124073598#u32, 1124073601#u32, 1124073604#u32,
+   + 1124073607#u32, 1124073536#u32, 1124073548#u32, 1124073560#u32,
+   + 1124073572#u32, 1124073584#u32, 1124073596#u32, 1124073484#u32,
+   + 1124073485#u32, 1124073539#u32, 1124073551#u32, 1124073563#u32,
+   + 1124073575#u32, 1124073587#u32, 1124073599#u32, 1124073486#u32,
+   + 1124073488#u32, 1124073490#u32, 1124073542#u32, 1124073554#u32,
+   + 1124073566#u32, 1124073578#u32, 1124073590#u32, 1124073602#u32,
+   + 1124073492#u32, 1124073479#u32, 1124073480#u32, 1124073481#u32,
+   + 1124073493#u32, 1124073496#u32, 1124073498#u32, 1124073500#u32,
+   + 1124073502#u32, 1124073504#u32, 1124073506#u32, 1124073508#u32,
+   + 1124073510#u32, 1124073512#u32, 1124073514#u32, 1124073516#u32,
+   + 1124073518#u32, 1124073520#u32, 1124073522#u32, 1124073524#u32,
+   + 1124073526#u32, 1124073528#u32, 1124073530#u32, 1124073532#u32,
+   + 1124073534#u32, 1124073537#u32, 1124073540#u32, 1124073543#u32,
+   + 1124073546#u32, 1124073549#u32, 1124073552#u32, 1124073555#u32,
+   + 1124073558#u32, 1124073561#u32, 1124073564#u32, 1124073567#u32,
+   + 1124073570#u32, 1124073573#u32, 1124073576#u32, 1124073579#u32,
+   + 1124073582#u32, 1124073585#u32, 1124073588#u32, 1124073591#u32,
+   + 1124073594#u32, 1124073597#u32, 1124073600#u32, 1124073603#u32,
+   + 1124073606#u32, 1124073545#u32, 1124073557#u32, 1124073569#u32,
+   + 1124073581#u32, 1124073593#u32, 1124073605#u32, 1124073487#u32,
+   + 1124073489#u32, 1124073491#u32, 1124073482#u32, 1124073494#u32
+   + ])
+====================================================================================================
+46. scope s  aspis_statement::pool_v1::pair_tree_profile::POOL_V1_PAIR_TREE_DEPTH   (constant: an initializer call on one side, its evaluated value on the other; tokens only in frza: aspis_statement.pool_v1.format.POOL_V1_TREE_DEPTH; only in X1: 20 usize)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,3 @@
+   -def pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_DEPTH : Std.Usize :=
+   - pool_v1.format.POOL_V1_TREE_DEPTH
+   +def aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_DEPTH
+   + : Std.Usize :=
+   + 20#usize
+====================================================================================================
+47. scope d  aspis_statement::pool_v1::format::decode_pool_identity_v1   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: i2; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,9 +1,11 @@
+   -def pool_v1.format.decode_pool_identity_v1
+   +def aspis_statement.pool_v1.format.decode_pool_identity_v1
+     (bytes : Slice Std.U8) :
+   - Result (core.result.Result pool_v1.format.PoolIdentityV1
+   - pool_v1.format.PoolV1FormatError)
+   + Result (core.result.Result aspis_statement.pool_v1.format.PoolIdentityV1
+   + aspis_statement.pool_v1.format.PoolV1FormatError)
+     := do
+     let i := Slice.len bytes
+   - if i != pool_v1.format.POOL_V1_IDENTITY_BYTES
+   - then ok (core.result.Result.Err pool_v1.format.PoolV1FormatError.WrongLength)
+   + if i != aspis_statement.pool_v1.format.POOL_V1_IDENTITY_BYTES
+   + then
+   + ok (core.result.Result.Err
+   + aspis_statement.pool_v1.format.PoolV1FormatError.WrongLength)
+     else
+   @@ -15,12 +17,13 @@
+     Slice.Insts.CoreCmpPartialEqArray.ne core.cmp.PartialEqU8 s
+   - pool_v1.format.POOL_V1_IDENTITY_MAGIC
+   + aspis_statement.pool_v1.format.POOL_V1_IDENTITY_MAGIC
+     if b
+     then
+   - ok (core.result.Result.Err pool_v1.format.PoolV1FormatError.WrongMagic)
+   + ok (core.result.Result.Err
+   + aspis_statement.pool_v1.format.PoolV1FormatError.WrongMagic)
+     else
+     let i1 ← Slice.index_usize bytes 4#usize
+   - if i1 != pool_v1.format.POOL_V1_IDENTITY_VERSION
+   + if i1 != aspis_statement.pool_v1.format.POOL_V1_IDENTITY_VERSION
+     then
+     ok (core.result.Result.Err
+   - pool_v1.format.PoolV1FormatError.WrongVersion)
+   + aspis_statement.pool_v1.format.PoolV1FormatError.WrongVersion)
+     else
+   @@ -36,3 +39,3 @@
+     ok (core.result.Result.Err
+   - pool_v1.format.PoolV1FormatError.NonZeroReserved)
+   + aspis_statement.pool_v1.format.PoolV1FormatError.NonZeroReserved)
+     else
+   @@ -48,3 +51,3 @@
+     ok (core.result.Result.Err
+   - pool_v1.format.PoolV1FormatError.NonZeroReserved)
+   + aspis_statement.pool_v1.format.PoolV1FormatError.NonZeroReserved)
+     else
+   @@ -60,7 +63,6 @@
+     let raw_asset_id ← lift (core.num.U32.from_le_bytes a2)
+   - let i2 ← aspis_core.field.P
+   - if raw_asset_id >= i2
+   + if raw_asset_id >= aspis_core.field.P
+     then
+     ok (core.result.Result.Err
+   - pool_v1.format.PoolV1FormatError.NonCanonicalAssetId)
+   + aspis_statement.pool_v1.format.PoolV1FormatError.NonCanonicalAssetId)
+     else
+====================================================================================================
+48. scope d  aspis_statement::pool_v1::pair_tree_profile::POOL_V1_PAIR_TREE_DEPTH   (constant: an initializer call on one side, its evaluated value on the other; tokens only in frza: aspis_statement.pool_v1.format.POOL_V1_TREE_DEPTH; only in X1: 20 usize)
+   --- frza
+   +++ X1
+   @@ -1,2 +1,3 @@
+   -def pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_DEPTH : Std.Usize :=
+   - pool_v1.format.POOL_V1_TREE_DEPTH
+   +def aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_DEPTH
+   + : Std.Usize :=
+   + 20#usize
+====================================================================================================
+49. scope d  aspis_statement::pool_v1::pair_terminal::decode_afterstate_frontier_v1   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: m; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,10 +1,10 @@
+   -def pool_v1.pair_terminal.decode_afterstate_frontier_v1
+   +def aspis_statement.pool_v1.pair_terminal.decode_afterstate_frontier_v1
+     (bytes : Slice Std.U8) :
+     Result (core.result.Result (Array (Array aspis_core.field.M31 8#usize)
+   - 20#usize) pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+   + 20#usize)
+   + aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+     := do
+   - let m ← aspis_core.field.M31.ZERO
+   - let a := Array.repeat 8#usize m
+   + let a := Array.repeat 8#usize aspis_core.field.M31.ZERO
+     let frontier := Array.repeat 20#usize a
+   - pool_v1.pair_terminal.decode_afterstate_frontier_v1_loop bytes frontier
+   - 0#usize
+   + aspis_statement.pool_v1.pair_terminal.decode_afterstate_frontier_v1_loop
+   + bytes frontier 0#usize
+====================================================================================================
+50. scope d  aspis_statement::pool_v1::pair_tree_profile::decode_live_snapshot_frontier_v1   (local bindings only (names or number of intermediate lets; the same called functions and constants); tokens only in frza: m; only in X1: -)
+   --- frza
+   +++ X1
+   @@ -1,10 +1,10 @@
+   -def pool_v1.pair_tree_profile.decode_live_snapshot_frontier_v1
+   +def aspis_statement.pool_v1.pair_tree_profile.decode_live_snapshot_frontier_v1
+     (bytes : Slice Std.U8) :
+     Result (core.result.Result (Array (Array aspis_core.field.M31 8#usize)
+   - 20#usize) pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)
+   + 20#usize)
+   + aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)
+     := do
+   - let m ← aspis_core.field.M31.ZERO
+   - let a := Array.repeat 8#usize m
+   + let a := Array.repeat 8#usize aspis_core.field.M31.ZERO
+     let frontier := Array.repeat 20#usize a
+   - pool_v1.pair_tree_profile.decode_live_snapshot_frontier_v1_loop bytes
+   - frontier 0#usize
+   + aspis_statement.pool_v1.pair_tree_profile.decode_live_snapshot_frontier_v1_loop
+   + bytes frontier 0#usize
+====================================================================================================
+51. scope c  aspis_core::r0::heap::filled   (called functions or constants differ; tokens only in frza: alloc.alloc.Global; only in X1: AspisTPNewLib.alloc.alloc.Global)
+   --- frza
+   +++ X1
+   @@ -1,5 +1,5 @@
+   -def r0.heap.filled
+   +def aspis_core.r0.heap.filled
+     {T : Type _} (coremarkerCopyInst : core.marker.Copy T) (n : Std.Usize)
+     (value : T) :
+   - Result (core.result.Result (alloc.vec.Vec T) r0.Error)
+   + Result (core.result.Result (alloc.vec.Vec T) aspis_core.r0.Error)
+     := do
+   @@ -9,3 +9,3 @@
+     core.result.Result.map_err
+   - (r0.heap.filled.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError
+   + (aspis_core.r0.heap.filled.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError
+     coremarkerCopyInst) r ()
+   @@ -18,2 +18,2 @@
+     core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+   - (alloc.vec.Vec T) (core.convert.FromSame r0.Error) residual
+   + (alloc.vec.Vec T) (core.convert.FromSame aspis_core.r0.Error) residual
