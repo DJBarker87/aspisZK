@@ -3,7 +3,9 @@
 recursively, by that carrier's own imports. Prints the resulting non-carrier import list."""
 import sys,os,re
 src,dfile=sys.argv[1],sys.argv[2]; mods=sys.argv[3:]
-d=set(l.split('\t')[0].strip() for l in open(dfile) if l.strip() and not l.startswith('d_module'))
+omit=set()
+if mods and mods[0]=='--omit': omit=set(l.strip() for l in open(mods[1]) if l.strip()); mods=mods[2:]
+d=set(l.split('\t')[0].strip() for l in open(dfile) if l.strip() and not l.startswith('d_module'))|omit
 def imports(m):
     p=os.path.join(src,m.replace('.','/')+'.lean')
     if not os.path.exists(p): return []

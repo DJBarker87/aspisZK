@@ -34,6 +34,10 @@ for m,names in drops.items():
             else: b-=1
         removed=b'\n'.join(lines[b:e])
         for i in range(b,e): keep[i]=False
+        short=n.split('.')[-1]
+        for i,l in enumerate(text):
+            if keep[i] and l.startswith('#') and re.search(r'\b'+re.escape(short)+r'\b',l):
+                keep[i]=False; rec.write(f"{m}\t{n}\tcommand line {i+1}\t{hashlib.sha256(lines[i]).hexdigest()}\n"); print(f"{m}: dropped command line {i+1}: {l.strip()[:60]}")
         rec.write(f"{m}\t{n}\t{b+1}-{e}\t{hashlib.sha256(removed).hexdigest()}\n"); print(f"{m}: dropped {n} lines {b+1}-{e}")
     q=os.path.join(out,m.replace('.','/')+'.lean'); os.makedirs(os.path.dirname(q),exist_ok=True)
     open(q,'wb').write(b'\n'.join(l for l,k in zip(lines,keep) if k))

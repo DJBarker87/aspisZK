@@ -1,7 +1,7 @@
 import re,sys,subprocess
 L=sys.argv[1]; D=sys.argv[2]
 def frontier(m):
-    return subprocess.check_output(['python3','-I','frontier.py',L,D,m],text=True).split('\t')[1].split()
+    return subprocess.check_output(['python3','-I','frontier.py',L,D,'--omit','OMIT_MODULES.txt',m],text=True).split('\t')[1].split()
 def decl(m,name,kinds='def|abbrev|structure|theorem'):
     lines=open(f'{L}/{m}.lean').read().split('\n')
     s=next(i for i,l in enumerate(lines) if re.match(rf'^({kinds}) {re.escape(name)}\b',l))
