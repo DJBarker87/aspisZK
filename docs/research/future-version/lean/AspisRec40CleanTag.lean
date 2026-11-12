@@ -29,7 +29,7 @@ attribute [local irreducible] AspisOneTx.dV_aspis
 /-- The guard's first conjunct, for an arbitrary erased prefix (kept abstract so
 that no projection of a concrete transcript is ever reduced). -/
 theorem guard_tag (X : RawCutTranscriptRun.ErasedPrefix)
-    (h : AspisR1.AspisLib.OraclePortAdmission.Guard (AspisOneTx.take33 X)) : X.statement.tag = 2 := h.1
+    (h : OraclePortAdmission.Guard (AspisOneTx.take33 X)) : X.statement.tag = 2 := h.1
 
 /-- The tag from any admitted decision (`admitS core`). Only the statement's tag
 is read (the guard's first conjunct, on the first 33 rounds); nothing about rows
@@ -41,7 +41,7 @@ theorem tag_of_admitS (D : LiteralByteProtocol.Decoder) (core : OraclePortExperi
   rw [AspisRec40.CleanA.original_accepts] at ha
   unfold OracleDecisionFeasibilityCore.onBytes at ha
   have hg := guard_tag _ (AspisOneTx.accepted_guardS core H _ _ ha).1
-  rw [AspisRows40.Protocol.transcript_eq, AspisR1.AspisLib.InitialTagDecision.erased_transcript_tag] at hg
+  rw [AspisRows40.Protocol.transcript_eq, InitialTagDecision.erased_transcript_tag] at hg
   exact hg
 
 theorem accepted_tag (D : LiteralByteProtocol.Decoder) (s : Bytes)

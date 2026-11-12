@@ -172,7 +172,7 @@ def arithmeticS (p : Parsed) (q : Fin 22 → Fin 262144) (tr : ErasedPrefix) : B
 
 /-- The Aspis terminal decision (copy of `OraclePortFrozenOrder.dV_frozen`). -/
 def dV_aspis : OraclePortStoredExperimentC4.Decision := fun stored tr _ =>
-  if AspisR1.AspisLib.OraclePortAdmission.Guard (take33 tr) ∧ tr.rounds.length = 40 then
+  if OraclePortAdmission.Guard (take33 tr) ∧ tr.rounds.length = 40 then
     match parseReachedS stored tr, queries (take33 tr) with
     | some p, some q =>
         bind (verifyMergedAll p q) fun ok => .done (ok && arithmeticS p q tr)
@@ -182,7 +182,7 @@ def dV_aspis : OraclePortStoredExperimentC4.Decision := fun stored tr _ =>
 /-- Copy of `OraclePortFrozenOrder.accepted` / `accepted_details`. -/
 theorem accepted_detailsS (stored : Bytes) (tr : ErasedPrefix) (m : ErasedMessage)
     (H : Bytes → State) (ha : (eval H (dV_aspis stored tr m)).2 = true) :
-    AspisR1.AspisLib.OraclePortAdmission.Guard (take33 tr) ∧ tr.rounds.length = 40 ∧ ∃ p q i,
+    OraclePortAdmission.Guard (take33 tr) ∧ tr.rounds.length = 40 ∧ ∃ p q i,
       parseReachedS stored tr = some p ∧ queries (take33 tr) = some q ∧
       (eval H (verifyMergedAll p q)).2 = true ∧
       input p q (take33 tr) = some i ∧ verifyS (typedRows p q tr) i = true := by

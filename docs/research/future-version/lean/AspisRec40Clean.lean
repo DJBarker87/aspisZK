@@ -43,7 +43,7 @@ theorem accepted_facts (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
     (hchecks : ∀ s, AspisRec40.CleanStatement.CheckedAcceptance40 D (AspisOneTx.dV_aspis s)
       (AspisRec40.ChargePrefix.prover P) (Q+1111))
     (H : Bytes → State)
-    (hc : ¬ AspisR1.AspisLib.RecordedBinaryExperimentBin.binaryCollision (Q+1111)
+    (hc : ¬ RecordedBinaryExperimentBin.binaryCollision (Q+1111)
       (eval H (AspisRec40.HitMass.projected D AspisOneTx.dV_aspis P)))
     (ha : (eval H (AspisRec40.HitMass.projected D AspisOneTx.dV_aspis P)).2.2 = true) :
     ∃ checks : AspisAcceptance.AspisChecks AspisOneTx.decodePairS
@@ -58,7 +58,7 @@ theorem accepted_facts (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
   let s := (eval H P).2.stored
   let d := AspisOneTx.dV_aspis s
   have same := AspisRec40.CleanA.projected_eq_recorded D AspisOneTx.dV_aspis P H
-  have hcf : ¬ AspisR1.AspisLib.RecordedBinaryExperimentBin.binaryCollision (Q+1111)
+  have hcf : ¬ RecordedBinaryExperimentBin.binaryCollision (Q+1111)
       (eval H (AspisRec40.Decision.recorded D d (AspisRec40.ChargePrefix.prover P))) := by
     rw [← same]; exact hc
   have haf : (eval H (AspisRec40.Decision.original D d (AspisRec40.ChargePrefix.prover P))).2.2 = true := by
@@ -92,7 +92,7 @@ theorem clean40 (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
       (AspisRec40.HitMass.projected D AspisOneTx.dV_aspis P)
       (AspisRec40.CleanStatement.bad40 D P Q) := by
   intro H run ha hn
-  have hc : ¬ AspisR1.AspisLib.RecordedBinaryExperimentBin.binaryCollision (Q+1111)
+  have hc : ¬ RecordedBinaryExperimentBin.binaryCollision (Q+1111)
       (eval H (AspisRec40.HitMass.projected D AspisOneTx.dV_aspis P)) := fun h => hn (Or.inl h)
   have hh : ¬ AspisRec40.HitMass.prefixHit (AspisCharge40.classifier40 AspisOneTx.decodePairS) D P
       (eval H (AspisRec40.HitMass.projected D AspisOneTx.dV_aspis P)) := fun h => hn (Or.inr h)
@@ -162,7 +162,7 @@ theorem hit_in_prefix_of (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat
       AspisRec40.CleanStatement.FinalDecodes D H (eval H (AspisRec40.ChargePrefix.charged D P)))
     (H : Bytes → State)
     (ha : (eval H (AspisRec40.HitMass.projected D AspisOneTx.dV_aspis P)).2.2 = true)
-    (hc : ¬ AspisR1.AspisLib.RecordedBinaryExperimentBin.binaryCollision (Q+1111)
+    (hc : ¬ RecordedBinaryExperimentBin.binaryCollision (Q+1111)
       (eval H (AspisRec40.HitMass.projected D AspisOneTx.dV_aspis P)))
     (hit : GenericNoHit.hitFrom (AspisAcceptance.bad AspisOneTx.decodePairS)
       (eval H (AspisRec40.HitMass.projected D AspisOneTx.dV_aspis P)).2.1.1 []

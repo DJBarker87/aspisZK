@@ -233,13 +233,13 @@ theorem accepted_checks_canon40 (D : LiteralByteProtocol.Decoder) (P : Prover) (
 /-- R1's `OraclePortStoredChecksC4.CheckedAcceptance` for the 40-row experiment. -/
 def CheckedAcceptanceC4_40 (D : LiteralByteProtocol.Decoder) (d : Decision) (P : Prover) (Q : Nat) : Prop :=
   ∀ H : Bytes → State,
-    ¬ AspisR1.AspisLib.RecordedBinaryExperimentBin.binaryCollision Q (view (eval H (AspisRec40.HitMass.annotated D d P))) →
+    ¬ RecordedBinaryExperimentBin.binaryCollision Q (view (eval H (AspisRec40.HitMass.annotated D d P))) →
     (eval H (AspisRec40.HitMass.original D d P)).2.2 = true →
     Nonempty (AspisChecks decodePairS (output40 D d P H).statement (rows40 D d P H))
 
 theorem original_clean40 (D : LiteralByteProtocol.Decoder) (d : Decision) (P : Prover)
     (H : Bytes → State) (Q : Nat)
-    (clean : ¬ AspisR1.AspisLib.RecordedBinaryExperimentBin.binaryCollision Q
+    (clean : ¬ RecordedBinaryExperimentBin.binaryCollision Q
       (view (eval H (AspisRec40.HitMass.annotated D d P)))) :
     ¬ hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv
       BinRawByteCollisionTargets.pred Q) emptyTable (eval H (AspisRec40.HitMass.original D d P)).1 := by
@@ -268,7 +268,7 @@ theorem fibre_checks40 (D : LiteralByteProtocol.Decoder) (s : Bytes) (P : Prover
     (fun H => by rw [OraclePortStoredReductionC7.fixStored_eval]; exact hq H) H
   have orig := original_fixed40 D dV_aspis s P H
   have ann := annotated_fixed40 D dV_aspis s P H
-  have hc' : ¬ AspisR1.AspisLib.RecordedBinaryExperimentBin.binaryCollision (Q+1111)
+  have hc' : ¬ RecordedBinaryExperimentBin.binaryCollision (Q+1111)
       (view (eval H (AspisRec40.HitMass.annotated D dV_aspis
         (canon (OraclePortStoredReductionC7.fixStored s P))))) := by
     rw [ann]; exact hc

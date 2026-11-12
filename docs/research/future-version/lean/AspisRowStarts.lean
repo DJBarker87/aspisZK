@@ -1,6 +1,7 @@
 import AspisRowCharge
 import AspisWeightedFirstRead
-import BinHonestStartFrames
+import AspisHonestBudgetBase
+import AspisLib_Recorded
 
 /-! Per-step accounting, piece (c), verifier part: the weighted count of the
 decoder starts that R1's 33 honest sampler rows contribute, for every
@@ -10,11 +11,7 @@ Kind of result: a deterministic counting theorem about R1's sampler programs
 (the same level as R1's `BinHonestQueryBudget.verifier_starts`, which it
 refines). Row n contributes at most `classCap n`; row 26 additionally reads
 the opening reseed frame, charged `capMax` (conservative: its decoded row is
-not determined here).
-
-The sampler-row theorems about R1's 33-row decoder (`sampler_weight`,
-`row_weight`, `rows_weight`, `verifier_weight`) are in `AspisRowStarts33`,
-in this namespace. -/
+not determined here). -/
 set_option autoImplicit false
 noncomputable section
 namespace AspisPerStep.RowStarts
@@ -23,8 +20,8 @@ open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 open AspisV8R19.AdaptiveFirstReadLaw
 open AspisR1 AspisR1.TranscriptView
-open RawCutProverCompiler DecodedFirstReadUnionBound
-open BinHonestStartFrames
+open RecordedBinaryExperimentBin RawCutProverCompiler DecodedFirstReadUnionBound
+open BinHonestStartFrames AspisHonestBudgetBase
 open CanonicalAddressEmbedding
 open AspisPerStep.RowCharge AspisPerStep.WeightedFirstRead
 attribute [local instance] Classical.propDecidable

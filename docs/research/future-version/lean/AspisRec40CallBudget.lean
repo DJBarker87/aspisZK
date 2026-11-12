@@ -122,7 +122,7 @@ theorem firstReads_eq (D : LiteralByteProtocol.Decoder)
 theorem first_reads (D : LiteralByteProtocol.Decoder)
     (dO : OracleDecisionFeasibilityCore.Decision) (B : Nat) (hB : Budget dO B)
     (P : RawCutProverCompiler.Prover) (Q : Nat)
-    (hq : AspisR1.AspisLib.DecoderQueryAccounting.AdversaryQueries P Q) (H : Bytes → State) :
+    (hq : DecoderQueryAccounting.AdversaryQueries P Q) (H : Bytes → State) :
     firstReads emptyTable (eval H (AspisRec40.Decision.recorded D dO P)).1 ≤ Q + (136 + B) := by
   rw [AspisRec40.Decision.recorded, firstReads_eq]
   rw [RawCutProverCompiler.experiment_eval]

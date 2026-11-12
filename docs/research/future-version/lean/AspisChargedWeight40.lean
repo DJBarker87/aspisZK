@@ -17,7 +17,7 @@ open FS FS2 FS2.Duplex R0C.V3 AspisV8PairedCommitment
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 open AspisV8R19.AdaptiveFirstReadLaw
-open AspisR1 AspisR1.AspisLib.RecordedBinaryExperimentBin DecodedFirstReadUnionBound
+open AspisR1 RecordedBinaryExperimentBin DecodedFirstReadUnionBound
 open AspisPerStep.WeightedFirstRead AspisPerStep.RowStarts
 open AspisCharge40 AspisRowStarts40
 open OraclePortStoredExperimentC4 OraclePortStoredAdmissionC4
@@ -34,7 +34,7 @@ theorem charged_weight40 (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat
   rw [RawCutProverCompiler.experiment_eval, decoderFirstWeight_append]
   have hp := decoderFirstWeight_le_count_mul AspisRows40.FinalStarts.decFinal charge40 capMax
     charge40_le_capMax emptyTable (eval H (AspisRec40.ChargePrefix.prover P)).1
-  have hc := AspisR1.AspisLib.DecoderQueryAccounting.starts_le_queries AspisRows40.FinalStarts.decFinal
+  have hc := DecoderQueryAccounting.starts_le_queries AspisRows40.FinalStarts.decFinal
     emptyTable (eval H (AspisRec40.ChargePrefix.prover P)).1
   have hlen : (eval H (AspisRec40.ChargePrefix.prover P)).1.length ≤ Q := by
     rw [AspisRec40.ChargePrefix.prover_eval]; exact hq H

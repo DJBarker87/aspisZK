@@ -64,14 +64,14 @@ abbrev rounds40 (D : LiteralByteProtocol.Decoder) (H : Bytes → State) (run : R
 of the Aspis classifier. -/
 def bad40 (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
     (run : RawCutProverCompiler.RunView) : Prop :=
-  AspisR1.AspisLib.RecordedBinaryExperimentBin.binaryCollision (Q+1111) run ∨
+  RecordedBinaryExperimentBin.binaryCollision (Q+1111) run ∨
     AspisRec40.HitMass.prefixHit (classifier40 AspisOneTx.decodePairS) D P run
 
 /-- Open hypothesis 1 (acceptance to checks at experiment level). -/
 def AcceptedChecks40 (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat) : Prop :=
   ∀ H : Bytes → State,
     (eval H (expE D P)).2.2 = true →
-    ¬ AspisR1.AspisLib.RecordedBinaryExperimentBin.binaryCollision (Q+1111) (eval H (expE D P)) →
+    ¬ RecordedBinaryExperimentBin.binaryCollision (Q+1111) (eval H (expE D P)) →
     Nonempty (AspisAcceptance.AspisChecks AspisOneTx.decodePairS (eval H (expE D P)).2.1.1
       (rounds40 D H (eval H (expE D P))))
 
@@ -79,7 +79,7 @@ def AcceptedChecks40 (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat) : 
 def WordAlignment40 (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat) : Prop :=
   ∀ H : Bytes → State,
     (eval H (expE D P)).2.2 = true →
-    ¬ AspisR1.AspisLib.RecordedBinaryExperimentBin.binaryCollision (Q+1111) (eval H (expE D P)) →
+    ¬ RecordedBinaryExperimentBin.binaryCollision (Q+1111) (eval H (expE D P)) →
     RawCutTranscriptRun.proof (RawCutWordsFromRunExecutableBin.wordsFromRun (eval H (expE D P)))
       (eval H (expE D P)).2.1.2 = (eval H (expE D P)).2.1.2
 
@@ -87,7 +87,7 @@ def WordAlignment40 (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat) : P
 def HitInPrefix40 (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat) : Prop :=
   ∀ H : Bytes → State,
     (eval H (expE D P)).2.2 = true →
-    ¬ AspisR1.AspisLib.RecordedBinaryExperimentBin.binaryCollision (Q+1111) (eval H (expE D P)) →
+    ¬ RecordedBinaryExperimentBin.binaryCollision (Q+1111) (eval H (expE D P)) →
     GenericNoHit.hitFrom (AspisAcceptance.bad AspisOneTx.decodePairS) (eval H (expE D P)).2.1.1 []
       (rounds40 D H (eval H (expE D P))) →
     AspisRec40.HitMass.prefixHit (classifier40 AspisOneTx.decodePairS) D P (eval H (expE D P))
@@ -134,7 +134,7 @@ theorem clean40_at (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
   unfold rounds40 at h1 h3
   generalize eval H (expE D P) = run at h1 h2 h3 ⊢
   intro ha hn
-  have hc : ¬ AspisR1.AspisLib.RecordedBinaryExperimentBin.binaryCollision (Q+1111) run :=
+  have hc : ¬ RecordedBinaryExperimentBin.binaryCollision (Q+1111) run :=
     fun h => hn (Or.inl h)
   have hh : ¬ AspisRec40.HitMass.prefixHit (classifier40 AspisOneTx.decodePairS) D P run :=
     fun h => hn (Or.inr h)
@@ -164,7 +164,7 @@ theorem failure_bound40 (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
   calc
     lazyMean (exp D P) emptyTable (fun run => indicator (bad40 D P Q run)) ≤
         lazyMean (exp D P) emptyTable (fun run =>
-          indicator (AspisR1.AspisLib.RecordedBinaryExperimentBin.binaryCollision (Q+1111) run) +
+          indicator (RecordedBinaryExperimentBin.binaryCollision (Q+1111) run) +
           indicator (AspisRec40.HitMass.prefixHit (classifier40 AspisOneTx.decodePairS) D P run)) :=
       AllAddressFiatShamir.lazyMean_mono_of_eval _ _ _ (fun _ => indicator_or_le _ _)
     _ = _ := lazyMean_add _ _ _ _

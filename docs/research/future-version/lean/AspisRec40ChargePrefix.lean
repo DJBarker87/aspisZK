@@ -74,7 +74,7 @@ theorem starts (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
   unfold base
   rw [RawCutProverCompiler.experiment_eval,
     DecodedFirstReadUnionBound.decoderFirstReads_append]
-  have hp := AspisR1.AspisLib.DecoderQueryAccounting.starts_le_queries AspisRows40.FinalStarts.decFinal
+  have hp := DecoderQueryAccounting.starts_le_queries AspisRows40.FinalStarts.decFinal
     emptyTable (eval H (prover P)).1
   have hlen : (eval H (prover P)).1.length ≤ Q := by rw [prover_eval]; exact hq H
   exact Nat.add_le_add (hp.trans hlen) (AspisRows40.FinalStarts.verifier_starts D

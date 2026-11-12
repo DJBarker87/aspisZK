@@ -29,7 +29,7 @@ open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 open AspisV8R19.AdaptiveFirstReadLaw
 open AspisR1
-open AspisR1.AspisLib.RecordedBinaryExperimentBin RawCutProverCompiler DecodedFirstReadUnionBound
+open RecordedBinaryExperimentBin RawCutProverCompiler DecodedFirstReadUnionBound
 open BinHonestStartFrames AspisHonestBudgetBase
 open CanonicalAddressEmbedding
 open AspisPerStep.WeightedFirstRead
@@ -87,7 +87,7 @@ theorem finalRow_short (a : Bytes) (h : a.length < 34) : finalRow a = none := by
 theorem dec_none_of_finalRow (a : Bytes) (T : Table Bytes State) (n : Nat)
     (h : finalRow a = some n) : dec a T = none := by
   obtain ⟨s, label, data, hp, hrow, hlo, _⟩ := finalRow_sound a n h
-  unfold AspisR1.AspisLib.RecordedBinaryExperimentBin.dec RawAdaptiveLiteralDecoder.decode
+  unfold RecordedBinaryExperimentBin.dec RawAdaptiveLiteralDecoder.decode
   cases hs : RawFullPublicSelection.select a T with
   | none => rfl
   | some pub =>

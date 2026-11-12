@@ -1,0 +1,29 @@
+module	base_module_needed	name	how_reached
+AspisRows40Starts	AspisLib_Recorded	AspisR1.RecordedBinaryExperimentBin.{SourceInputs,dec,binaryCollision}	AspisRows40Starts -> AspisLib_Recorded
+AspisRows40Starts	AspisHonestBudgetBase	AspisHonestBudgetBase.raw	AspisRows40Starts -> AspisHonestBudgetBase
+AspisRows40FinalStarts	AspisHonestBudgetBase	AspisHonestBudgetBase.raw	AspisRows40FinalStarts -> AspisRows40Starts -> AspisHonestBudgetBase
+AspisRec40ChargePrefix	AspisLib_QueryAccounting	AspisR1.DecoderQueryAccounting.{starts_le_queries,AdversaryQueries}	AspisRec40ChargePrefix -> AspisLib_QueryAccounting
+AspisRec40CallBudget	AspisLib_QueryAccounting	AspisR1.DecoderQueryAccounting.{starts_le_queries,AdversaryQueries}	AspisRec40CallBudget -> AspisLib_QueryAccounting
+AspisCharge40	AspisLib_Recorded	AspisR1.RecordedBinaryExperimentBin.{SourceInputs,dec,binaryCollision}	AspisCharge40 -> AspisRows40FinalStarts -> AspisRows40Starts -> AspisLib_Recorded
+AspisOneTxDecision	AspisLib_Guard	AspisR1.OraclePortAdmission.Guard	AspisOneTxDecision -> AspisLib_Guard
+AspisOneTxDecision	AspisLib_SourceInputs	AspisR1.R1FinalSoundness.SourceInputs (+ projections)	AspisOneTxDecision -> AspisLib_Guard -> AspisLib_Recorded -> AspisLib_SourceInputs
+AspisOneTxDecision	AspisLib_Recorded	AspisR1.RecordedBinaryExperimentBin.{SourceInputs,dec,binaryCollision}	AspisOneTxDecision -> AspisLib_Guard -> AspisLib_Recorded
+AspisRec40CleanStatement	AspisLib_Recorded	AspisR1.RecordedBinaryExperimentBin.{SourceInputs,dec,binaryCollision}	AspisRec40CleanStatement -> AspisOneTxDecision -> AspisLib_Guard -> AspisLib_Recorded
+AspisOneTxChecks	AspisLib_Guard	AspisR1.OraclePortAdmission.Guard	AspisOneTxChecks -> AspisOneTxDecision -> AspisLib_Guard
+AspisOneTxChecks	AspisLib_SourceInputs	AspisR1.R1FinalSoundness.SourceInputs (+ projections)	AspisOneTxChecks -> AspisOneTxDecision -> AspisLib_Guard -> AspisLib_Recorded -> AspisLib_SourceInputs
+AspisOneTxChecks	AspisLib_Recorded	AspisR1.RecordedBinaryExperimentBin.{SourceInputs,dec,binaryCollision}	AspisOneTxChecks -> AspisOneTxDecision -> AspisLib_Guard -> AspisLib_Recorded
+AspisRec40CleanTag	AspisLib_Tag	AspisR1.InitialTagDecision.erased_transcript_tag	AspisRec40CleanTag -> AspisLib_Tag
+AspisRec40CleanTag	AspisLib_Guard	AspisR1.OraclePortAdmission.Guard	AspisRec40CleanTag -> AspisOneTxChecks -> AspisOneTxDecision -> AspisLib_Guard
+AspisRec40CleanTag	AspisLib_Recorded	AspisR1.RecordedBinaryExperimentBin.{SourceInputs,dec,binaryCollision}	AspisRec40CleanTag -> AspisLib_Tag -> AspisLib_Recorded
+AspisRec40CleanRun	AspisLib_Recorded	AspisR1.RecordedBinaryExperimentBin.{SourceInputs,dec,binaryCollision}	AspisRec40CleanRun -> AspisRec40CleanStatement -> AspisOneTxDecision -> AspisLib_Guard -> AspisLib_Recorded
+AspisRec40Clean	AspisLib_Recorded	AspisR1.RecordedBinaryExperimentBin.{SourceInputs,dec,binaryCollision}	AspisRec40Clean -> AspisRec40CleanTag -> AspisLib_Tag -> AspisLib_Recorded
+AspisOneTxRun	AspisLib_Guard	AspisR1.OraclePortAdmission.Guard	AspisOneTxRun -> AspisOneTxChecks -> AspisOneTxDecision -> AspisLib_Guard
+AspisOneTxRun	AspisLib_SourceInputs	AspisR1.R1FinalSoundness.SourceInputs (+ projections)	AspisOneTxRun -> AspisOneTxChecks -> AspisOneTxDecision -> AspisLib_Guard -> AspisLib_Recorded -> AspisLib_SourceInputs
+AspisOneTxRun	AspisLib_Recorded	AspisR1.RecordedBinaryExperimentBin.{SourceInputs,dec,binaryCollision}	AspisOneTxRun -> AspisOneTxChecks -> AspisOneTxDecision -> AspisLib_Guard -> AspisLib_Recorded
+AspisOneTxCheckedAcceptance	AspisLib_Guard	AspisR1.OraclePortAdmission.Guard	AspisOneTxCheckedAcceptance -> AspisRec40CleanStatement -> AspisOneTxDecision -> AspisLib_Guard
+AspisOneTxCheckedAcceptance	AspisLib_Recorded	AspisR1.RecordedBinaryExperimentBin.{SourceInputs,dec,binaryCollision}	AspisOneTxCheckedAcceptance -> AspisRec40CleanStatement -> AspisOneTxDecision -> AspisLib_Guard -> AspisLib_Recorded
+AspisRowStarts	AspisLib_Recorded	AspisR1.RecordedBinaryExperimentBin.{SourceInputs,dec,binaryCollision}	AspisRowStarts -> AspisLib_Recorded
+AspisRowStarts40	AspisHonestBudgetBase	AspisHonestBudgetBase.raw	AspisRowStarts40 -> AspisRowStarts -> AspisHonestBudgetBase
+AspisChargedWeight40	AspisLib_QueryAccounting	AspisR1.DecoderQueryAccounting.{starts_le_queries,AdversaryQueries}	AspisChargedWeight40 -> AspisRec40ChargePrefix -> AspisLib_QueryAccounting
+AspisFailureBound	AspisLib_Recorded	AspisR1.RecordedBinaryExperimentBin.{SourceInputs,dec,binaryCollision}	AspisFailureBound -> AspisLib_Recorded
+AspisRec40CleanJoin	AspisLib_Recorded	AspisR1.RecordedBinaryExperimentBin.{SourceInputs,dec,binaryCollision}	AspisRec40CleanJoin -> AspisFailureBound -> AspisLib_Recorded

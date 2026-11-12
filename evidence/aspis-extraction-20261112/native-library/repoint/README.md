@@ -1,184 +1,165 @@
 # X5: re-pointing the Aspis model chain to the carrier-free library
 
 Status: target not yet established. This is a refactor record. Nothing in it is a new proof, and no theorem is
-newly established. The re-point is partial. Six of the seven carrier names are re-pointed everywhere in the chain.
-`SourceInputs` is not, for the reason in "What could not be re-pointed" below. Check c is therefore not empty.
+newly established. Round 2 (this text) is a source change only. It was not compiled. The compile and the five
+checks are left to a build-host run, described in "For the host compile" below.
 
-## Inputs
+## Round 2: original names (current state)
 
-- Chain sources: `docs/research/future-version/lean/` on `future-version`. The "before" sources were taken by
-  `git archive` at a48bc69af17adfec8091951f9a608ce755165e33. All 76 module hashes in `compile-before.tsv`
-  equal the replay-c1 manifest hashes (`evidence/future-version-20261111/replay-c1/manifest.tsv`).
-- Carrier-free copies: the soundness lead's base modules (branch `research`, commit 4ce1cc0e0ad, directory
-  `docs/research/100bit-spend-path-20261013/evidence/pin2-replay-20261111/aspis-lib/`). The objects come from
-  `~/aspis-lead-infra/aspis-lib/objs`, read by reference only. Their sha256:
-  - AspisHonestBudgetBase 688bbad7456afc8fbb02bf7336b236cab44d530dbdd37696ca78b0b9106dc4ee
-  - AspisLib_Guard a10f85596f6e0f2820bf7fdbed7f73f3951c86777ba3b88157b424b6c0b13a37
-  - AspisLib_QueryAccounting 8a20ba2d01ade5b933d34adeab94424d6ce963e16284d8adcd53234583cec976
-  - AspisLib_Recorded 9ac75bc9413f0cdb5445e77da4ed49ec628942c04ce758f4a729e064b5293f6f
-  - AspisLib_SourceInputs 33467d8e490519e2a1829a10babe65b63db378b993359dd0f2e98aeb2c16a90f
-  - AspisLib_Tag 7866e76d0c5ee802162e99b8aea1f48147b6afed553c9613dc4cffddfe37a8de
-- L187 objects: `~/aspis-lead-infra/l187-closure/{objs,base}`, read by reference only.
-- Toolchain: Lean 4.32.0 (`~/.elan/toolchains/leanprover--lean4---v4.32.0`), run on the Mac. Every module was
-  compiled with `lean -j1 -M7000 -DElab.async=false`, one process at a time (`tools/compile.sh`).
-- `LEAN_PATH` order: own object directory, L187 `objs`, L187 `base`, then the lead's `aspis-lib/objs` last.
-  The lead's directory also holds a trimmed `BinHonestStartFrames.olean`. With this order that file is never
-  loaded: every L187 module, `BinHonestStartFrames` included, resolves to the unchanged L187 object, and only the
-  six base modules come from the lead's directory. The "before" objects were compiled with the same order,
-  without the lead's directory.
+The soundness lead regenerated the carrier-free base modules (research commit 6032f9ef5bd,
+`docs/research/100bit-spend-path-20261013/evidence/pin2-replay-20261111/aspis-lib/`, revision 2 in its
+`ASPISLIB_RECORD.md`). They now declare the seven names under their original fully qualified names:
+- `AspisR1.R1FinalSoundness.SourceInputs` in `AspisLib_SourceInputs`;
+- `AspisR1.RecordedBinaryExperimentBin.{SourceInputs, dec, binaryCollision}` in `AspisLib_Recorded`;
+- `AspisR1.InitialTagDecision.erased_transcript_tag` in `AspisLib_Tag`;
+- `AspisR1.DecoderQueryAccounting.{starts_le_queries, AdversaryQueries}` in `AspisLib_QueryAccounting`;
+- `AspisR1.OraclePortAdmission.Guard` in `AspisLib_Guard`.
 
-## What changed, per module
+`AspisHonestBudgetBase.raw` keeps its own namespace. So the chain needs no renamed constant, and the
+`SourceInputs` obstruction of round 1 disappears: `OraclePortStoredDecisionDraftC4.input` and the chain's
+`verifyS` now name the same structure.
 
-Name replacements: `AspisR1.RecordedBinaryExperimentBin.{dec, binaryCollision}` became
-`AspisR1.AspisLib.RecordedBinaryExperimentBin.{dec, binaryCollision}`.
-`AspisR1.OraclePortAdmission.Guard` became `AspisR1.AspisLib.OraclePortAdmission.Guard`.
-`AspisR1.InitialTagDecision.erased_transcript_tag` became
-`AspisR1.AspisLib.InitialTagDecision.erased_transcript_tag`.
-`AspisR1.DecoderQueryAccounting.{starts_le_queries, AdversaryQueries}` became
-`AspisR1.AspisLib.DecoderQueryAccounting.{...}`. `AspisR1.BinHonestQueryBudget.raw` became
-`AspisHonestBudgetBase.raw`. Comments that name the original constants were left as they were. The script that
-made the edits, with a count assertion for each, is `tools/repoint.py`.
+Reverted from round 1 (`tools/revert_names.py`, with an occurrence count asserted for each edit):
+- the 27 constant sites, back to the original names;
+- the three `open` lines that opened `AspisR1.AspisLib.RecordedBinaryExperimentBin`, back to
+  `open RecordedBinaryExperimentBin` (in `AspisRows40Starts`, `AspisRowStarts40`, `AspisChargedWeight40`), and
+  the round-1 removal of that open in `AspisRowStarts`;
+- the bridging `show` in `AspisRec40CleanRun.decodes_r1rows`, back to `rw [hdec]`;
+- the round-1 doc note added to `AspisRowStarts`.
 
-| Module | Change |
-|---|---|
-| AspisRows40Starts | `import BinHonestQueryBudget` replaced by `import AspisHonestBudgetBase` and `import AspisLib_Recorded`; the opens of `RecordedBinaryExperimentBin` and `BinHonestQueryBudget` now open the copies; `unfold ...dec` at one site |
-| AspisRows40FinalStarts | open `BinHonestQueryBudget` replaced by open `AspisHonestBudgetBase` (raw) |
-| AspisRowStarts40 | the same two opens re-pointed (raw) |
-| AspisCharge40 | one `dec` site |
-| AspisRec40ChargePrefix | `import AspisLib_QueryAccounting`; one `starts_le_queries` site |
-| AspisChargedWeight40 | open re-pointed; one `starts_le_queries` site |
-| AspisRec40CallBudget | `import AspisLib_QueryAccounting`; one `AdversaryQueries` site |
-| AspisOneTxDecision | `import AspisLib_Guard`; two `Guard` sites (in `dV_aspis` and `accepted_detailsS`); the `SourceInputs` open is unchanged |
-| AspisOneTxChecks | three `Guard` sites; the `SourceInputs` open is unchanged |
-| AspisRec40CleanTag | `import AspisLib_Tag`; one `Guard` site and one `erased_transcript_tag` site |
-| AspisRec40CleanStatement | two `binaryCollision` sites |
-| AspisRec40Clean | four `binaryCollision` sites |
-| AspisOneTxCheckedAcceptance | three `binaryCollision` sites |
-| AspisFailureBound | `import RecordedBinaryExperimentBin` replaced by `import AspisLib_Recorded`; six `binaryCollision` sites |
-| AspisRec40CleanRun | bridging step (below) |
-| AspisRowStarts | split (below); `import BinHonestQueryBudget` replaced by `import BinHonestStartFrames`; the opens of `RecordedBinaryExperimentBin` and `BinHonestQueryBudget` removed (the part kept uses neither) |
-| AspisRowStarts33 (new) | the 33-row part of the old `AspisRowStarts`, text unchanged |
-| AspisChargedWeight | `import AspisRowStarts` replaced by `import AspisRowStarts33` |
+Kept:
+- the import changes, so that no chain module imports a kind (d) module directly;
+- the `raw` change (`open BinHonestQueryBudget` became `open AspisHonestBudgetBase`, and the import changed with
+  it);
+- neither `AspisRows40Starts` nor `AspisRowStarts` imports `BinHonestQueryBudget`;
+- the `AspisRowStarts` / `AspisRowStarts33` split, unchanged from round 1.
 
-Total: 40 edited lines. 39 are in the 14 re-pointed modules (6 import lines, 6 open lines, 27 constant sites)
-and 1 is the import line of `AspisChargedWeight`. The split and the bridging step come on top of these. `AspisChargedHitMass` and `AspisChargedHitMassCheck` were not edited. They
-reach `AspisRowStarts33` through `AspisChargedWeight`.
+`AspisRowStarts` now imports `AspisHonestBudgetBase` (which imports `BinHonestStartFrames`) and
+`AspisLib_Recorded`. The second import is there because the file's original `open RecordedBinaryExperimentBin`
+line needs that namespace, and after the change nothing else in its chain imports provides it.
 
-**Bridging step (one).** In `AspisRec40CleanRun.decodes_r1rows`, `hdec` is the output of
-`Frozen2StartChargeCompletion.decodes`, a kind (c) lemma stated about the original `dec`. `rw [hdec]` no longer
-matches the goal, which is now stated with the copy. The rewrite now reads
-`rw [show AspisR1.AspisLib.RecordedBinaryExperimentBin.dec _ _ = _ from hdec]`. Both are abbreviations of the
-same term, so the `show` holds by unfolding. No statement changed.
+### Differences from the chain before X5
 
-**Split of AspisRowStarts.** The split followed what the compile and the 40-row chain use. `AspisRowStarts40`
-uses `verifierCharge` (in `verifierCharge40_eq`), and `AspisNumeric` uses `verifierCharge_eq`. So `verifierCharge`,
-`verifierCharge_eq` and the private `sum_indicator26` stay in `AspisRowStarts`, together with the caps,
-`capMax`, `classCap` facts, `wt` and its lemmas, `wt_absorb`, `wt_init` and `rowCharge`. The brief had listed
-`verifierCharge` and `verifierCharge_eq` under (ii). Neither uses `dec` or `raw`. `AspisRowStarts33` holds
-`sampler_weight`, `row_weight`, `rows_weight` and `verifier_weight`, with the private helpers `ite_le` and
-`weight_le_zero_of_count` that only they use. It is in the same namespace, and its text is unchanged. It keeps
-`import BinHonestQueryBudget` and the original `dec`, `raw` and `query_tail_zero`. The `#print axioms` lines moved
-with their theorems. Script: `tools/split.py`.
+The baseline is the parent of 9143734d3eb (the lean directory last changed at 5bf1b2216ff). The full table is
+`diff-vs-before.tsv`, made by `tools/diffclass.py`. It has one row per module, with lines removed and added, the
+kind of each changed line, any line outside the allowed kinds, and the sha256 after the change, for all 77
+modules. Every changed line is an import line, a `raw` open line, or a declaration moved to `AspisRowStarts33`.
+No changed line falls outside these three kinds, in any module.
 
-## What could not be re-pointed: SourceInputs
+| Module | Removed / added lines | Kind |
+|---|---|---|
+| AspisRows40Starts | 2 / 3 | import (`BinHonestQueryBudget` replaced by `AspisHonestBudgetBase` and `AspisLib_Recorded`), raw open |
+| AspisRows40FinalStarts | 1 / 1 | raw open |
+| AspisRowStarts40 | 1 / 1 | raw open |
+| AspisRec40ChargePrefix | 0 / 1 | import `AspisLib_QueryAccounting` |
+| AspisRec40CallBudget | 0 / 1 | import `AspisLib_QueryAccounting` |
+| AspisOneTxDecision | 0 / 1 | import `AspisLib_Guard` |
+| AspisRec40CleanTag | 0 / 1 | import `AspisLib_Tag` |
+| AspisFailureBound | 1 / 1 | import (`RecordedBinaryExperimentBin` replaced by `AspisLib_Recorded`) |
+| AspisRowStarts | 117 / 3 | import (`BinHonestQueryBudget` replaced by `AspisHonestBudgetBase` and `AspisLib_Recorded`), raw open, 112 declaration lines plus 3 `#print axioms` lines moved to `AspisRowStarts33` |
+| AspisRowStarts33 (new) | 148 lines | the moved lines, verbatim (checked as one contiguous block of 112 lines), under the original header with `import AspisRowStarts`, `import BinHonestQueryBudget` and a doc note |
+| AspisChargedWeight (33-row side) | 1 / 1 | import (`AspisRowStarts` replaced by `AspisRowStarts33`) |
 
-`AspisLib_SourceInputs` declares `SourceInputs` as a new `structure`. It is not an abbreviation of
-`AspisR1.R1FinalSoundness.SourceInputs`, so the two are different types. `AspisOneTxDecision.arithmeticS` applies
-`verifyS` to the output of `OraclePortStoredDecisionDraftC4.input`. That is a kind (c) definition, and it returns
-`Option RecordedBinaryExperimentBin.SourceInputs`, which is the original structure. With `verifyS` re-pointed,
-the compile failed at lines 171 and 188 ("Application type mismatch ... has type
-RecordedBinaryExperimentBin.SourceInputs but is expected to have type SourceInputs";
-`logs/AspisOneTxDecision.fail1.out`). The fix would need a conversion between the two structures, or a change
-to what `input` returns. Either is more than a bridging step. The `SourceInputs` opens in `AspisOneTxDecision`
-and `AspisOneTxChecks` were therefore left on the original. Every `SourceInputs` use in the chain stays on
-`R1FinalSoundness`/`RecordedBinaryExperimentBin`.
+The other 66 modules are byte-identical to the baseline. The text checks also hold:
+- no chain source contains `AspisLib.`;
+- no chain module imports a kind (d) module (`chain-direct-imports.tsv`);
+- the import closure of `AspisFailureBoundModel` within the chain is the same 73 modules as before
+  (`host-order-model-73.txt`), and contains none of the four 33-row modules.
 
-## Compile
+What moved: `sampler_weight`, `row_weight`, `rows_weight`, `verifier_weight`, and the private `ite_le` and
+`weight_le_zero_of_count`. `verifierCharge`, `verifierCharge_eq` and `sum_indicator26` stay in `AspisRowStarts`,
+because `AspisRowStarts40.verifierCharge40_eq` and `AspisNumeric` use them. Round 1's compile showed this.
 
-`compile-after.tsv` has, per module: status (changed, downstream of a change, or unchanged upstream), whether the
-module is in the model closure, the source sha256, exit, wall time and peak RSS (`/usr/bin/time -l`). All 77
-modules exit 0. That is the 73 of the model closure (18 changed or new, counting the 33-row side, and 23
-downstream) plus `AspisRowStarts33`, `AspisChargedWeight`, `AspisChargedHitMass` and `AspisChargedHitMassCheck`.
-The model closure took 181.6 s summed. The largest peak RSS was 3,691,806,720 B (`AspisRec40FinalWords`). No
-module came near 7 GB or ten minutes.
+### What stands from round 1
 
-The objects come from three passes over the same final sources. Pass 1 stopped at `AspisOneTxDecision`
-(SourceInputs). Pass 2 stopped at `AspisRec40CleanRun` (before the bridging step). Pass 3 ran from
-`AspisRec40CleanRun` to the end. Each row records its pass. The merge script checked that every row's sha256
-equals the committed source, so no object was compiled from a different text. The two failed attempts are in
-`compile-after-failures.tsv`. No output contains `sorry`. There are 21 linter warnings, the same count as before.
+- `compile-before.tsv`: the unchanged 76 modules compiled on the Mac under Lean 4.32.0 against the L187 objects.
+  All exit 0, 207.1 s summed, largest peak RSS 3,692,298,240 B. All hashes equal the replay-c1 manifest.
+- `checks/statements-before.out` (sha256 f474e291bcb458ce09753aacea0fb34a2a4f2eea291bd62a00e44774d9c0c9cf) is the
+  reference for the statement-identity check. It holds both statements with `pp.fullNames`, then with `pp.all`,
+  and the axioms lines.
+- `checks/closure-d-before.txt` and `checks/import-graph-before.tsv.xz`: the loaded import graph before X5.
+- Round 1's after-results are in `round1/`. They come from the renamed-constant version, so the after objects,
+  check outputs and failure logs there describe a source that no longer exists. What carries over from them:
+  - the split boundary, which is unchanged;
+  - the fact that, apart from `SourceInputs`, every replaced definition was `rfl`-equal to its original;
+  - the list of kind (c) -> kind (d) entry edges (`round1/checks/closure-d-after.txt`).
 
-Before: the unchanged 76 modules were compiled into a separate object directory (`compile-before.tsv`). All exit 0,
-207.1 s summed, largest peak RSS 3,692,298,240 B. No copy of the replay-c1 objects was on the Mac.
+## For the host compile
 
-## Checks
+**Why not on the Mac.** A base module and its carrier cannot be in one environment (the soundness lead's test:
+"environment already contains AspisR1.R1FinalSoundness.SourceInputs._sizeOf_1"). Under the L187 objects, the
+earlier-proof modules still import the carriers. The run needs an object set in which the base modules come first,
+then the kind (c) modules with their carrier imports replaced (`trim_imports.py --map`, `IMPORT_MAP.txt`), and
+those trimmed objects shadow the L187 objects on `LEAN_PATH`.
 
-a. **Axioms: pass.** `checks/statements-after.out` shows that `failure_bound40P_model` and
-   `failure_le_per_query_model` each depend on `[propext, Classical.choice, Quot.sound]`.
+**Order.**
+- `host-order-77.txt`: all 77 modules in dependency order.
+- `host-order-model-73.txt`: the 73 in the closure of `AspisFailureBoundModel`.
+- `AspisRowStarts33`, `AspisChargedWeight`, `AspisChargedHitMass` and `AspisChargedHitMassCheck` come last and
+  are a side check.
 
-b. **Statement identity: pass.** `checks/X5Statements.lean` (with `pp.fullNames true` and width 100000, then
-   `pp.all true`) gives byte-identical output from the before and after objects. Both
-   `checks/statements-before.out` and `checks/statements-after.out` have sha256
-   f474e291bcb458ce09753aacea0fb34a2a4f2eea291bd62a00e44774d9c0c9cf. No replaced constant occurs in either
-   statement. The changes are inside definitions the statements name, such as `AspisFailureBound.exp` through
-   `dV_aspis`. A side check, `checks/X5CopiesDefeq.lean`, ran in the after environment, where both versions are
-   loaded. It shows that each replaced definition (`Guard`, `dec`, `binaryCollision`, `AdversaryQueries`, `raw`)
-   equals its original by `rfl`. Exit 0, empty output.
+**Base modules needed.** `needs-base.tsv` gives, for each chain module that uses one of the seven names or `raw`,
+the base module that declares it and the chain import path that reaches it. Every path runs through chain imports
+only, and the direct base imports are:
+- `AspisRows40Starts`: `AspisHonestBudgetBase`, `AspisLib_Recorded`;
+- `AspisRowStarts`: `AspisHonestBudgetBase`, `AspisLib_Recorded`;
+- `AspisRec40ChargePrefix`: `AspisLib_QueryAccounting`;
+- `AspisRec40CallBudget`: `AspisLib_QueryAccounting`;
+- `AspisOneTxDecision`: `AspisLib_Guard`, which imports `AspisLib_Recorded`, which imports `AspisLib_SourceInputs`;
+- `AspisRec40CleanTag`: `AspisLib_Tag`;
+- `AspisFailureBound`: `AspisLib_Recorded`.
 
-c. **No carrier use: fail (41 lines, all from two causes).** `checks/AspisChainUsesD.lean` is
-   `AspisChainUses.lean` with the watch list reduced to the 38 kind (d) modules. Run on the after objects
-   (exit 0, peak RSS 3,612,033,024 B), it writes `checks/uses-d-after.tsv`. The 89 kind (d) uses from before are
-   down to 41:
-   - 40 are `SourceInputs` and its projections. They occur in `AspisOneTxDecision` (`verifyS`,
-     `verifyS_accepted`, `arithmeticS`, `arithmeticS.match_1`, `accepted_detailsS`), `AspisOneTxChecks`
-     (`ofTypedS`, `accepted_checks_aspis`), `AspisOneTxRun` (`accepted_checks40`, `slots_read40`, `targets40`),
-     `AspisOneTxCheckedAcceptance` (`canonical_valid40`) and `AspisRec40CleanTag` (`guard_tag`).
-   - 1 is `RecordedBinaryExperimentBin.dec` in `AspisRec40.CleanRun.decodes_r1rows`. It is inherited from the
-     statement of the kind (c) lemma `Frozen2StartChargeCompletion.decodes`, so no chain edit can remove it.
+`AspisRowStarts33` imports `BinHonestQueryBudget`, which is kind (c) and trimmed on the host.
 
-   Nothing uses `Guard`, `binaryCollision`, `erased_transcript_tag`, `starts_le_queries` or `AdversaryQueries`
-   from a carrier any more, and nothing uses `dec` except the inherited case.
+Two kind (c) lemmas that the chain uses are stated about these names. `OraclePortStoredDecisionDraftC4.input`
+returns `SourceInputs`, and `Frozen2StartChargeCompletion.decodes` is stated about `dec`. They must be compiled
+against the base modules, which happens in the trim.
 
-   Direct imports: `chain-direct-imports-after.tsv` lists every direct import of all 77 modules. None is kind (d).
-   The only direct kind (d) import before was `AspisFailureBound -> RecordedBinaryExperimentBin`, and it is gone.
-   Neither `AspisRowStarts` nor `AspisRows40Starts` imports `BinHonestQueryBudget`. That module is still in the
-   closure through kind (c) modules: `R19BudgetSamplerReads`, `BinInitialQueryAccounting`, and the kind (d)
-   `R1FinalSoundnessBinPerQuery`.
+**Compile.** One module at a time, `lean -j1 -M7000 -DElab.async=false`, each in a capped scope. Record per
+module: source sha256 (it must equal the `sha256_after` column of `diff-vs-before.tsv`), exit, wall and peak RSS.
+`tools/compile.sh` does this, but it is written for the Mac:
+- it uses macOS `/usr/bin/time -l`, which becomes `/usr/bin/time -v` on Linux;
+- its `LEAN` and `L187` paths must be set to the host's;
+- its `LEAN_PATH` order is own objects, L187 `objs`, L187 `base`, then extras. On the host the trimmed
+  kind (c) objects and the base objects must come before L187 `objs`.
 
-d. **Kind (d) modules still in the import closure of AspisFailureBoundModel: all 38.**
-   `checks/ImportGraph.lean` dumps the loaded import graph (7,130 modules after, 7,124 before), and
-   `tools/closure_d.py` analyses it. The kind (d) modules are entered through 11 edges from kind (c) modules:
-   - BinDecoderInitialStarts -> RecordedBinaryExperimentBin
-   - BinHonestStartFrames -> DecoderQueryAccounting
-   - DecoderFiniteStartSupport -> DecoderQueryAccounting
-   - OraclePortCompactDraft -> OraclePortChecks
-   - OraclePortCompletionDraft -> OraclePortAdmission
-   - OraclePortDataChoiceDraft -> OraclePortChecks
-   - OraclePortStoredAdmissionC4 -> OraclePortChecks
-   - R15WriterModel -> R1FinalSoundnessBinPerQueryR18
-   - R16DecisionErasure -> R1FinalSoundnessBinPerQueryR19
-   - R9PoolCheckpointCodec -> R9DeployedBinaryExperiment
-   - RWireInitialTag -> RecordedBinaryExperimentBin
+**Checks and expected outputs.**
+- a. In `checks/X5Statements.lean`, both `#print axioms` lines must read exactly:
+  `'AspisFailureBoundModel.failure_bound40P_model' depends on axioms: [propext, Classical.choice, Quot.sound]`
+  and
+  `'AspisFailureBoundModel.failure_le_per_query_model' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+- b. The output of `checks/X5Statements.lean` must be byte-identical to `checks/statements-before.out` (125 lines,
+  sha256 f474e291bcb458ce09753aacea0fb34a2a4f2eea291bd62a00e44774d9c0c9cf). No constant is renamed in round 2, so
+  no name substitution is needed before comparing.
+- c. Run `checks/AspisChainUsesD.lean` (watch list: the 38 kind (d) modules) on the after objects. It must
+  produce an empty `uses_d_after.tsv`; the `lines` count in its info message must be 0. A useful addition is the
+  six base modules on the watch list with tag `base`. That would show the seven names now resolve to
+  `AspisLib_*`; in round 1's terms, at most the 89 former kind (d) uses, now attributed to base modules. Direct
+  imports: `chain-direct-imports.tsv` already shows, from the source text, that no chain module imports a
+  kind (d) module.
+- d. Run `checks/ImportGraph.lean` and then `tools/closure_d.py <graph> <kind-d list> <chain file list>`. List
+  each kind (d) module still in the closure and its entry edge. After a complete trim the expected list is
+  empty. Before the trim, round 1 found 11 entry edges from kind (c) modules: BinDecoderInitialStarts,
+  BinHonestStartFrames, DecoderFiniteStartSupport, OraclePortCompactDraft, OraclePortCompletionDraft,
+  OraclePortDataChoiceDraft, OraclePortStoredAdmissionC4, R15WriterModel, R16DecisionErasure, R9PoolCheckpointCodec
+  and RWireInitialTag.
+- e. The four 33-row modules compile, and `closure_d.py` prints `in_closure ... False` for each.
 
-   The per-module list (each kind (d) module with the entry edges it is reached from) is in
-   `checks/closure-d-after.txt`. The before list is in `checks/closure-d-before.txt`. The only difference is the
-   removed chain edge `AspisFailureBound -> RecordedBinaryExperimentBin`. The compressed graphs are in
-   `checks/import-graph-{before,after}.tsv.xz`.
+**Reusable scripts.**
+- `tools/order.py`: dependency order of chain modules.
+- `tools/compile.sh`: needs the adaptations above.
+- `tools/closure_d.py`: kind (d) modules in the closure and their entry edges.
+- `tools/diffclass.py`: the text-difference check.
+- `checks/X5Statements.lean`, `checks/AspisChainUsesD.lean`, `checks/ImportGraph.lean`: the Lean checks. Each is
+  run from its own directory and writes its output there.
 
-e. **33-row side: pass.** `AspisRowStarts33`, `AspisChargedWeight`, `AspisChargedHitMass` and
-   `AspisChargedHitMassCheck` compile (exit 0). None of them is in the import closure of `AspisFailureBoundModel`
-   (`in_closure ... False` in `checks/closure-d-after.txt`).
-
-## For the kind (c) trim
-
-Two items need it:
-- `OraclePortStoredDecisionDraftC4.input` (and anything that states facts about it) must produce the carrier-free
-  `SourceInputs`. The alternative is for the carrier-free module to keep the original structure under its
-  original name, so that the chain needs no change.
-- `Frozen2StartChargeCompletion.Decodes`/`decodes` is stated about `RecordedBinaryExperimentBin.dec`.
+The round-1 scripts `tools/repoint.py` and `tools/split.py` are kept as the record of how the text was made.
 
 ## Not done
 
-- `SourceInputs` is not re-pointed, so check c is not empty.
-- Nothing was run on the build host or under the new toolchain.
-- No package-wide replay was run.
+- Round 2 was not compiled. None of the five checks was run on round 2.
+- What is verified for round 2 is text only:
+  - the difference table and the moved block, checked by git and difflib;
+  - the absence of `AspisLib.` names;
+  - the direct imports;
+  - the chain import order.
