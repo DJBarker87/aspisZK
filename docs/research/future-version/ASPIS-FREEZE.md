@@ -259,6 +259,24 @@ cfg that is off, 16 changed, 104 new, none removed. The 16 changed: the two samp
 existing Rust-to-Lean link of an unchanged function be reused; the functions that changed or are
 new carry no such link and are listed in the three pass notes as "reshaped" or "new gate".
 
+The soundness lead re-keyed its on-chain-path table of the two-transaction pin against this
+emission (its record, as reported: `evidence/pin2-replay-20261111/ASPIS-ONCHAIN-REKEY-20261112.md`
+on branch `research` at 2d8d00754ac). Every function under the one-transaction entry and the
+adapter's admitted path has a row here. Of its 453 rows for the two-transaction pin, 279 carry
+over on text identity, 18 are reshaped (new provenance keys owed), 8 are new gates under an old
+name, 15 are opaque or do not elaborate, and 100 are off the one-transaction path. 107 functions
+exist only in Aspis and have no record at that pin: they are the new obligation set, listed there
+by name.
+
+The emission does not cover the Pool program. The Pool's source change against the pin is two
+files. Per function (`evidence/aspis-freeze-20261112/pool/pool-fn-changes.tsv`, tool beside it):
+one new function, `history::page_bytes_are_zero` (history.rs lines 60 to 62); four functions with
+one changed line each, `validate_root_page_bytes`, `validate_new_page_account`,
+`require_program_owned_zeroed` and `account_is_zeroed_program_page`; eight functions of history.rs
+moved down by 12 lines with identical bodies; nothing else outside the test modules. The account
+decoders the Pool links from the statement crate changed as in TRANSLATABILITY-PASS-CORE.md
+section 6.
+
 Named gaps in the program crate (TRANSLATABILITY-PASS-VERIFIER.md section 6):
 `close_checkpoint` (reachable; writes lamports and data through the SDK's account handles; a hand
 model is owed, as for the two-transaction verifier), the three lifecycle functions and
