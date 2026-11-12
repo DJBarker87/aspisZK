@@ -33,7 +33,7 @@
 //!       outside the interval), per operation and iteration.
 use aspis_core::digest::LegacyHashFn;
 use aspis_prover::{r0_fixture, HOST_HASH};
-use aspis_r1_cost_probe::{prover, transport::Variant, verifier::candidate::fused};
+use aspis_r1_cost_probe::{prover, transport::Variant, verifier::candidate::one_tx};
 use sha2::{Digest, Sha256};
 
 fn hex(bytes: &[u8]) -> String {
@@ -45,7 +45,7 @@ fn sha(bytes: &[u8]) -> String {
 }
 
 fn describe(fixture: &r0_fixture::Fixture, proof: &[u8]) -> String {
-    match fused::to_summed_format(fixture.statement.semantic_public(), proof, LegacyHashFn(HOST_HASH)) {
+    match one_tx::pack(fixture.statement.semantic_public(), proof, LegacyHashFn(HOST_HASH)) {
         Ok(packed) => format!(
             "pinned_len={} pinned_sha256={} packed_len={} packed_sha256={}",
             proof.len(),
