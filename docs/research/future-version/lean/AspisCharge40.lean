@@ -221,7 +221,7 @@ theorem decFinal_le_charge40 (decodePair : Codec) (a : Bytes) (T : Table Bytes S
     exact fin_le decodePair n hlo hhi a T own pend g hd
   | none =>
     unfold AspisRows40.FinalStarts.decFinal AspisRows40.Starts.decAspis at hd
-    cases hdec : RecordedBinaryExperimentBin.dec a T with
+    cases hdec : AspisR1.AspisLib.RecordedBinaryExperimentBin.dec a T with
     | none => simp [hdec, hf] at hd
     | some r =>
       rw [hdec] at hd

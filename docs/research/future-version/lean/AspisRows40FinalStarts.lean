@@ -23,7 +23,7 @@ open FS FS2 FS2.Duplex R0C.V3 AspisV8PairedCommitment
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 open AspisR1
-open DecodedFirstReadUnionBound BinHonestQueryBudget
+open DecodedFirstReadUnionBound AspisHonestBudgetBase
 open AspisPerStep.WeightedFirstRead
 
 /-- The concrete Aspis byte decoder. -/

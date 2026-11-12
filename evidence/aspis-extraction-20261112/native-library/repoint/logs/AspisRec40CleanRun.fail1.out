@@ -1,0 +1,76 @@
+AspisRec40CleanRun.lean:176:56: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  RecordedBinaryExperimentBin.dec a (tableBefore emptyTable (eval H (Frozen2StartChargePrefix.charged D P)).1 a)
+in the target expression
+  AspisLib.RecordedBinaryExperimentBin.dec a
+      (tableBefore emptyTable (eval H (Frozen2StartChargePrefix.charged D P)).1 a) ≠
+    none
+
+D : LiteralByteProtocol.Decoder
+P : OraclePortStoredExperimentC4.Prover
+H : Bytes → State
+Q : ℕ
+hQ : firstReads emptyTable (base D P H).1 ≤ Q
+hout :
+  ¬hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv BinRawByteCollisionTargets.pred Q) emptyTable
+      (base D P H).1
+format : RWireCheckedFormat.Format (base D P H).2.1.2
+tag : (base D P H).2.1.1.tag = 2
+n : ℕ
+a : Bytes
+hn : n < 33
+hfirst :
+  firstCell ((pr D).chain H (eval H (ChargePrefix.charged D P)).2.1.1 (eval H (ChargePrefix.charged D P)).2.1.2 n) =
+    some a
+v : View Bytes State ((LiteralTranscript.Public × (ℕ → LiteralTranscript.Message)) × Bool) :=
+  eval H (ChargePrefix.charged D P)
+hs : (base D P H).2.1 = (r1base D P H).2.1
+tail : List (Bytes × State)
+ht : (base D P H).1 = (r1base D P H).1 ++ tail
+hcs : (eval H (ChargePrefix.charged D P)).2.1 = (eval H (Frozen2StartChargePrefix.charged D P)).2.1
+ctail : List (Bytes × State)
+hct : (eval H (ChargePrefix.charged D P)).1 = (eval H (Frozen2StartChargePrefix.charged D P)).1 ++ ctail
+hQR : firstReads emptyTable (r1base D P H).1 ≤ Q
+houtR :
+  ¬hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv BinRawByteCollisionTargets.pred Q) emptyTable
+      (r1base D P H).1
+formatR : RWireCheckedFormat.Format (r1base D P H).2.1.2
+tagR : (r1base D P H).2.1.1.tag = 2
+hd : Frozen2StartChargeCompletion.Decodes D H (eval H (Frozen2StartChargePrefix.charged D P))
+hfirst' :
+  firstCell
+      ((LiteralByteProtocol.protocol D).chain H (eval H (Frozen2StartChargePrefix.charged D P)).2.1.1
+        (eval H (Frozen2StartChargePrefix.charged D P)).2.1.2 n) =
+    some a
+own : BS Bytes State (List State)
+pend : List (Bytes × Option State)
+g :
+  List State →
+    List State →
+      Prefix LiteralTranscript.Public LiteralTranscript.Message LiteralTranscript.Challenge ×
+        LiteralTranscript.Message × LiteralTranscript.Challenge
+hdec :
+  RecordedBinaryExperimentBin.dec a (tableBefore emptyTable (eval H (Frozen2StartChargePrefix.charged D P)).1 a) =
+    some (own, pend, g)
+hfol :
+  bfollow g (traceFrom (eval H (Frozen2StartChargePrefix.charged D P)).1 a) own pend
+      (tableBefore emptyTable (eval H (Frozen2StartChargePrefix.charged D P)).1 a) =
+    some
+      ((LiteralByteProtocol.protocol D).transcript H (eval H (Frozen2StartChargePrefix.charged D P)).2.1.1
+          (eval H (Frozen2StartChargePrefix.charged D P)).2.1.2 n,
+        (LiteralByteProtocol.protocol D).msg (eval H (Frozen2StartChargePrefix.charged D P)).2.1.2 n,
+        (LiteralByteProtocol.protocol D).chal H (eval H (Frozen2StartChargePrefix.charged D P)).2.1.1
+          (eval H (Frozen2StartChargePrefix.charged D P)).2.1.2 n)
+hread : a ∈ List.map Prod.fst (eval H (Frozen2StartChargePrefix.charged D P)).1
+hT : tableBefore emptyTable v.1 a = tableBefore emptyTable (eval H (Frozen2StartChargePrefix.charged D P)).1 a
+hTr : traceFrom v.1 a = traceFrom (eval H (Frozen2StartChargePrefix.charged D P)).1 a ++ ctail
+⊢ AspisLib.RecordedBinaryExperimentBin.dec a
+      (tableBefore emptyTable (eval H (Frozen2StartChargePrefix.charged D P)).1 a) ≠
+    none
+'AspisRec40.CleanRun.base_split' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisRec40.CleanRun.words_base_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisRec40.CleanRun.charged_split' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisRec40.CleanRun.decodes_r1rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisRec40.CleanRun.decodes40' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisRec40.CleanRun.chains_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisRec40.CleanRun.charged_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisRec40.CleanRun.hit_in_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]

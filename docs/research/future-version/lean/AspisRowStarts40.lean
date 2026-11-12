@@ -22,8 +22,8 @@ open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 open AspisV8R19.AdaptiveFirstReadLaw
 open AspisR1 AspisR1.TranscriptView
-open RecordedBinaryExperimentBin RawCutProverCompiler DecodedFirstReadUnionBound
-open BinHonestStartFrames BinHonestQueryBudget
+open AspisR1.AspisLib.RecordedBinaryExperimentBin RawCutProverCompiler DecodedFirstReadUnionBound
+open BinHonestStartFrames AspisHonestBudgetBase
 open CanonicalAddressEmbedding
 open AspisPerStep.WeightedFirstRead AspisPerStep.RowCharge AspisPerStep.RowStarts
 open AspisCharge40 AspisRowDensity.QM31

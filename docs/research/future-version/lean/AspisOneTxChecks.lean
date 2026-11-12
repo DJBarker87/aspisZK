@@ -404,7 +404,7 @@ R1's own `OraclePortAdmission.admit` requires exactly 33 rounds
 (`D0ScheduleAdmission.Schedule`), so it rejects every 40-round prefix; the
 Aspis clean event must use this one. -/
 def admitS (core : OraclePortExperiment.Decision) : OraclePortExperiment.Decision := fun tr m =>
-  if OraclePortAdmission.Guard (take33 tr) ∧ tr.rounds.length = 40 then core tr m else .done false
+  if AspisR1.AspisLib.OraclePortAdmission.Guard (take33 tr) ∧ tr.rounds.length = 40 then core tr m else .done false
 
 theorem admitted_aspis (stored : Bytes) : admitS (dV_aspis stored) = dV_aspis stored := by
   funext tr m
@@ -413,8 +413,8 @@ theorem admitted_aspis (stored : Bytes) : admitS (dV_aspis stored) = dV_aspis st
 
 theorem accepted_guardS (core : OraclePortExperiment.Decision) (H : Bytes → State)
     (tr : ErasedPrefix) (m : ErasedMessage) (ha : (eval H (admitS core tr m)).2 = true) :
-    OraclePortAdmission.Guard (take33 tr) ∧ tr.rounds.length = 40 := by
-  by_cases hg : OraclePortAdmission.Guard (take33 tr) ∧ tr.rounds.length = 40
+    AspisR1.AspisLib.OraclePortAdmission.Guard (take33 tr) ∧ tr.rounds.length = 40 := by
+  by_cases hg : AspisR1.AspisLib.OraclePortAdmission.Guard (take33 tr) ∧ tr.rounds.length = 40
   · exact hg
   · simp only [admitS, if_neg hg, eval, Bool.false_eq_true] at ha
 end admission

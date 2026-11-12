@@ -3,6 +3,7 @@ import OraclePortStoredProjectionC4
 import BinCompiledRunWordStability
 import AspisRec40Compiler
 import AspisRows40FinalStarts
+import AspisLib_QueryAccounting
 
 /-! Aspis 40-row recorded experiment: the charged experiment and its start
 count, copy of the charged part of R1's `Frozen2StartChargePrefix`
@@ -73,7 +74,7 @@ theorem starts (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
   unfold base
   rw [RawCutProverCompiler.experiment_eval,
     DecodedFirstReadUnionBound.decoderFirstReads_append]
-  have hp := DecoderQueryAccounting.starts_le_queries AspisRows40.FinalStarts.decFinal
+  have hp := AspisR1.AspisLib.DecoderQueryAccounting.starts_le_queries AspisRows40.FinalStarts.decFinal
     emptyTable (eval H (prover P)).1
   have hlen : (eval H (prover P)).1.length ≤ Q := by rw [prover_eval]; exact hq H
   exact Nat.add_le_add (hp.trans hlen) (AspisRows40.FinalStarts.verifier_starts D

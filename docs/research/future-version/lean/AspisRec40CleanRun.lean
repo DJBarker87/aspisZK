@@ -173,7 +173,8 @@ theorem decodes_r1rows (D : LiteralByteProtocol.Decoder) (P : OraclePortStoredEx
   refine ⟨own, pend, g, ?_, ?_⟩
   · rw [hT]
     unfold AspisRows40.FinalStarts.decFinal
-    rw [AspisRows40.Starts.decAspis_of_r1 _ _ _ (by rw [hdec]; simp)]
+    rw [AspisRows40.Starts.decAspis_of_r1 _ _ _
+      (by rw [show AspisR1.AspisLib.RecordedBinaryExperimentBin.dec _ _ = _ from hdec]; simp)]
     exact hdec
   · rw [hT, hTr]
     have hfa := FollowAppend.bfollow_append_of_some g _ ctail own pend _ _ hfol

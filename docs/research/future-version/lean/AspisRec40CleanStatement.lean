@@ -40,7 +40,7 @@ abbrev compiledRows40 (D : LiteralByteProtocol.Decoder) (dO : OracleDecisionFeas
 def CheckedAcceptance40 (D : LiteralByteProtocol.Decoder)
     (dO : OracleDecisionFeasibilityCore.Decision) (P : RawCutProverCompiler.Prover) (Q : Nat) : Prop :=
   ∀ H : Bytes → State,
-    ¬ RecordedBinaryExperimentBin.binaryCollision Q (eval H (AspisRec40.Decision.recorded D dO P)) →
+    ¬ AspisR1.AspisLib.RecordedBinaryExperimentBin.binaryCollision Q (eval H (AspisRec40.Decision.recorded D dO P)) →
     FS2.accepts (eval H (AspisRec40.Decision.original D dO P)) →
     Nonempty (AspisAcceptance.AspisChecks AspisOneTx.decodePairS
       (eval H (AspisRec40.Decision.recorded D dO P)).2.1.1 (compiledRows40 D dO P H))
@@ -64,7 +64,7 @@ def CleanAcceptedModel40 (D : LiteralByteProtocol.Decoder)
 /-- Copy of `Frozen2StartChargeClean.bad`. -/
 def bad40 (D : LiteralByteProtocol.Decoder) (P : OraclePortStoredExperimentC4.Prover) (Q : Nat)
     (run : RawCutProverCompiler.RunView) : Prop :=
-  RecordedBinaryExperimentBin.binaryCollision (Q+1111) run ∨
+  AspisR1.AspisLib.RecordedBinaryExperimentBin.binaryCollision (Q+1111) run ∨
     AspisRec40.HitMass.prefixHit (AspisCharge40.classifier40 AspisOneTx.decodePairS) D P run
 
 /-- Rows 33 to 39 of `Frozen2StartChargeCompletion.Decodes`, for the Aspis
