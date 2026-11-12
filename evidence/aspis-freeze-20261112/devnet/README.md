@@ -51,7 +51,7 @@ the request and the account list; in the account list only; in the request only)
 |---|---|---|
 | frzlocal1 | candidate verifier with the new Pool address, candidate client, the host's old copy of the run script | Pool initialize, two deposits and the forest checkpoint ran; the old script then stopped at its check of the earlier proof-format label. Not a program failure |
 | frzlocal2 | same programs, current run scripts, `ASPIS_spend.py` | complete: transfer settled at 1,229,162, withdrawal at 1,241,646; changed certificate rejected after 1,018,608 and 1,024,057, changed node after 1,087,555 and 1,094,263; redirect in request and accounts rejected (InvalidInstructionData) after 132,167, in the accounts only and in the request only (Custom 1095966770) after 22,276; replays rejected; closes and cleanup returned the rent |
-| frzlocal3 | the frozen artifacts of this deployment | started before the devnet run; result below when it finishes |
+| frzlocal3 | the frozen artifacts of this deployment | complete, but it finished at 05:38 UTC, after the devnet run (it waited for host slots): transfer settled at 1,230,648, withdrawal at 1,241,664; changed certificate rejected after 1,018,560 and 1,024,143, changed node after 1,088,035 and 1,094,317; the three redirect attempts and the replays rejected as in frzlocal2 |
 
 ## Predictions for the devnet run (registered before its first signature)
 
@@ -113,8 +113,8 @@ names the route by its earlier experiment label, and its `negative_checks` list 
 three redirect attempts, which are in `withdrawal-redirect-validation.json` and in the
 transaction records.
 
-The rehearsal with the frozen artifacts on a local validator (frzlocal3) was still waiting for
-host slots when the devnet run started; its result is recorded in the freeze record when it ends.
+The rehearsal with the frozen artifacts (frzlocal3) was still waiting for host slots when the
+devnet run started and finished after it; its result is in the table above.
 
 These are test transactions on a test cluster with fixture witnesses. They show that this build
 verifies and settles these two payments in one transaction each and rejects these nine altered

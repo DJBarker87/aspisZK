@@ -1,0 +1,321 @@
+{
+ "note": "per-tree config of fv_frz_emit.sh for src-cand1 (33e2d8475bc): the five worker scopes' roots, opaque items, includes and feature sets, copied from TP-C70, TP-C71, T2-C07, T3-C12, T3-C14; '@verifier'/'@program' are replaced by the script arguments",
+ "pin_dir": "pin-c7593d23fdc",
+ "shims": [
+  "AspisXPNewLib",
+  "AspisTP2NewLib",
+  "AspisTPNewLib"
+ ],
+ "order": [
+  "v",
+  "p",
+  "s",
+  "d",
+  "c"
+ ],
+ "scopes": {
+  "v": {
+   "scope": "verifier",
+   "crate": "aspis_r1_cost_probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "@verifier",
+   "overflow_checks": true,
+   "roots": [
+    "crate::verifier::candidate::fused::verify_summed_format_unobserved",
+    "crate::verifier::checkpoint_size"
+   ],
+   "opaque": [],
+   "include": [
+    "aspis_core::field::M31",
+    "aspis_core::field::CM31",
+    "aspis_core::field::QM31",
+    "aspis_core::field::wide_exact::WideExact",
+    "aspis_core::circle::SecureCirclePoint",
+    "aspis_core::field::P",
+    "aspis_core::state_only_prefix::r0::Error",
+    "aspis_core::state_only_prefix::r0::Challenges"
+   ],
+   "exclude": [],
+   "ns": "AspisTPv",
+   "adapt": "TP_adapt.py",
+   "rules": "TP_rules_release.json",
+   "other_crates": [
+    "aspis_core",
+    "aspis_statement"
+   ],
+   "crate_dirs": [
+    "crates/aspis-r1-cost-probe/src"
+   ],
+   "worker_spec": "TP-C70"
+  },
+  "p": {
+   "scope": "program",
+   "crate": "aspis_r1_cost_probe_program",
+   "manifest": "programs/r1-cost-probe/Cargo.toml",
+   "features": "@program",
+   "overflow_checks": false,
+   "roots": [
+    "crate::process_r1_cost_probe_instruction"
+   ],
+   "opaque": [
+    "crate::r1_pool_adapter::close_checkpoint",
+    "crate::r1_pool_adapter::lifecycle_init",
+    "crate::r1_pool_adapter::lifecycle_write",
+    "crate::r1_pool_adapter::lifecycle_finalize",
+    "crate::r1_pool_adapter::deployment_ids",
+    "crate::r1_pool_adapter::AUDIT_POOL_PROGRAM",
+    "crate::r1_pool_adapter::AUDIT_REGISTRY_PROGRAM"
+   ],
+   "include": [],
+   "exclude": [],
+   "ns": "AspisTPp",
+   "adapt": "TP_adapt.py",
+   "rules": "TP_rules_release.json",
+   "other_crates": [
+    "aspis_r1_cost_probe",
+    "aspis_statement",
+    "aspis_core"
+   ],
+   "crate_dirs": [
+    "programs/r1-cost-probe/src"
+   ],
+   "worker_spec": "TP-C71"
+  },
+  "s": {
+   "scope": "statement",
+   "crate": "aspis_statement",
+   "manifest": "crates/aspis-statement/Cargo.toml",
+   "features": "r0,pool-v1-kernel,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-semantic-factor-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-active-mask-basis-audit,aspis-core/future-fast-kmul,aspis-core/future-fast-prepared,aspis-core/future-fast-square,aspis-core/future-lazy-horner",
+   "overflow_checks": true,
+   "roots": [
+    "crate::pool_v1::pair_forest_semantic_terminal::r0::_::terminal_qm31",
+    "crate::pool_v1::pair_forest_semantic_terminal::r0::_::public_bytes"
+   ],
+   "opaque": [
+    "aspis_core::field::wide_exact"
+   ],
+   "include": [
+    "aspis_core::field",
+    "aspis_core::state_only_hiding",
+    "aspis_core::state_only_prefix::r0"
+   ],
+   "exclude": [],
+   "ns": "AspisTP2g",
+   "adapt": "XP_adapt.py",
+   "rules": "XP_rules_tp2.json",
+   "other_crates": [
+    "aspis_core"
+   ],
+   "crate_dirs": [
+    "crates/aspis-statement/src"
+   ],
+   "worker_spec": "T2-C07"
+  },
+  "d": {
+   "scope": "statement",
+   "crate": "aspis_statement",
+   "manifest": "crates/aspis-statement/Cargo.toml",
+   "features": "r0,pool-v1-kernel,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-semantic-factor-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-active-mask-basis-audit",
+   "overflow_checks": true,
+   "roots": [
+    "crate::pool_v1::pair_forest_terminal::decode_pool_v1_pair_forest_terminal_request_v1",
+    "crate::pool_v1::pair_forest_terminal::encode_pool_v1_pair_forest_terminal_request_v1",
+    "crate::pool_v1::pair_forest_terminal::decode_pool_v1_pair_forest_terminal_statement_v1",
+    "crate::pool_v1::pair_forest_terminal::validate_pool_v1_pair_forest_terminal_statement_v1",
+    "crate::pool_v1::pair_forest_terminal::validate_pool_v1_pair_forest_terminal_result_against_statement_v1",
+    "crate::pool_v1::pair_forest_terminal::encode_pool_v1_pair_forest_terminal_result_v1",
+    "crate::pool_v1::pair_forest_terminal::decode_pool_v1_pair_forest_terminal_result_v1",
+    "crate::pool_v1::pair_forest_terminal::_::semantic_public",
+    "crate::pool_v1::pair_forest_terminal::_::common",
+    "crate::pool_v1::pair_forest_terminal::_::transition_kind",
+    "crate::pool_v1::pair_forest_terminal::_::nullifier",
+    "crate::pool_v1::pair_forest_accounts::decode_pool_v1_pair_forest_master_v1",
+    "crate::pool_v1::pair_forest_accounts::decode_pool_v1_pair_forest_checkpoint_v1",
+    "crate::pool_v1::pair_forest_accounts::pool_v1_pair_forest_output_lane_v1",
+    "crate::pool_v1::pair_forest_accounts::validate_master",
+    "crate::pool_v1::format::validate_verifier_policy_v1",
+    "crate::pool_v1::format::decode_verifier_policy_v1",
+    "crate::pool_v1::format::decode_pool_identity_v1",
+    "crate::pool_v1::pair_terminal::decode_pool_v1_pair_verified_afterstate_v1",
+    "crate::pool_v1::pair_terminal::encode_pool_v1_pair_verified_afterstate_v1",
+    "crate::pool_v1::pair_tree_profile::decode_pool_v1_pair_live_snapshot_v1",
+    "crate::atomic_statement::decode_digest_canonical",
+    "crate::atomic_statement::encode_digest_canonical",
+    "crate::pool_v1::verifier_registry::decode_verifier_registry_v1",
+    "crate::pool_v1::verifier_registry::decode_verifier_registry_entry_v1",
+    "crate::pool_v1::verifier_registry::decode_verifier_registry_v2",
+    "crate::pool_v1::verifier_registry::decode_verifier_registry_entry_v2"
+   ],
+   "opaque": [
+    "crate::pool_v1::payment_relation::decode_pool_v1_private_transfer_public_v1",
+    "crate::pool_v1::payment_relation::decode_pool_v1_withdrawal_public_v1",
+    "crate::pool_v1::payment_relation::encode_pool_v1_private_transfer_public_v1",
+    "crate::pool_v1::payment_relation::encode_pool_v1_withdrawal_public_v1"
+   ],
+   "include": [],
+   "exclude": [],
+   "ns": "AspisTP3stmt",
+   "adapt": "XP_adapt.py",
+   "rules": "XP_rules_newlib.json",
+   "other_crates": [
+    "aspis_core"
+   ],
+   "crate_dirs": [
+    "crates/aspis-statement/src"
+   ],
+   "worker_spec": "T3-C12"
+  },
+  "c": {
+   "scope": "core",
+   "crate": "aspis_core",
+   "manifest": "crates/aspis-core/Cargo.toml",
+   "features": "r0,future-fast-kmul,future-fast-prepared,future-fast-square,future-lazy-horner",
+   "overflow_checks": true,
+   "roots": [
+    "crate::field::_::add",
+    "crate::field::_::sub",
+    "crate::field::_::neg",
+    "crate::field::_::mul",
+    "crate::field::_::double",
+    "crate::field::_::pow",
+    "crate::field::_::inv",
+    "crate::field::_::inv_with",
+    "crate::field::_::is_zero",
+    "crate::field::_::from_le_bytes",
+    "crate::field::_::to_le_bytes",
+    "crate::field::_::new",
+    "crate::field::_::from_m31",
+    "crate::field::_::square",
+    "crate::field::_::mul_m31",
+    "crate::field::_::reduce_u62",
+    "crate::field::_::reduce_u64",
+    "crate::field::_::from_cm31",
+    "crate::field::_::mul_add",
+    "crate::field::_::try_inv",
+    "crate::field::reduce_u64",
+    "crate::field::square_n",
+    "crate::field::mul_by_r",
+    "crate::field::qm31_from_karatsuba_channel_sums",
+    "crate::field::qm31_accumulate_product_channels",
+    "crate::field::qm31_sum_products_small",
+    "crate::field::qm31_sum_products2",
+    "crate::field::qm31_sum_products3",
+    "crate::field::qm31_sum_products4",
+    "crate::field::qm31_sum_products3_prepared",
+    "crate::field::qm31_pack_base4",
+    "crate::field::qm31_m31_dot",
+    "crate::field::wide_exact::_::new",
+    "crate::field::wide_exact::_::c0",
+    "crate::field::wide_exact::_::c1",
+    "crate::field::wide_exact::_::from_qm31",
+    "crate::field::wide_exact::_::add",
+    "crate::field::wide_exact::_::sub",
+    "crate::field::wide_exact::_::neg",
+    "crate::field::wide_exact::_::mul",
+    "crate::field::wide_exact::_::mul_qm31",
+    "crate::field::wide_exact::_::mul_m31",
+    "crate::field::wide_exact::_::from_limbs",
+    "crate::field::wide_exact::_::to_limbs",
+    "crate::field::wide_exact::_::from_le_bytes",
+    "crate::field::wide_exact::_::to_le_bytes",
+    "crate::field::wide_exact::canonical_qm31",
+    "crate::field::wide_exact::mul_u",
+    "crate::r0_transcript::queries_from_pairs",
+    "crate::r0::heap::filled",
+    "crate::r0::heap::uninit",
+    "crate::r0::domain::_::get",
+    "crate::r0::domain::_::new",
+    "crate::state_only_hiding::state_only_selected_mask_value",
+    "crate::state_only_prefix::r0::statement_points",
+    "crate::state_only_prefix::state_only_statement_points",
+    "crate::state_only_private_merkle::private_leaf_hash_with_digest",
+    "crate::transcript::circle_fallback_point",
+    "crate::circle::secure_circle_point_from_parameter",
+    "crate::circle::secure_ood_circle_point_from_parameter",
+    "crate::digest::Digest32"
+   ],
+   "opaque": [
+    "crate::field::_::inv",
+    "crate::r0::heap::uninit"
+   ],
+   "include": [],
+   "exclude": [
+    "crate::field::_::inv_with"
+   ],
+   "ns": "AspisTP3core",
+   "adapt": "XP_adapt.py",
+   "rules": "XP_rules_newlib.json",
+   "other_crates": [],
+   "crate_dirs": [
+    "crates/aspis-core/src"
+   ],
+   "worker_spec": "T3-C14"
+  }
+ },
+ "named_gaps": [
+  {
+   "scope": "p",
+   "match": "::close_checkpoint$",
+   "reason": "account plumbing: slice pattern over accounts, then RefCell lamport/data writes (verifier note section 6); opaque"
+  },
+  {
+   "scope": "p",
+   "match": "::lifecycle_(init|write|finalize)$",
+   "reason": "call lifecycle_accounts (does not translate); not admitted by pool_route::admitted in the deployed program; opaque"
+  },
+  {
+   "scope": "p",
+   "match": "::AUDIT_(POOL|REGISTRY)_PROGRAM$",
+   "reason": "compile-time decoding of program ids (deployment_ids); as R1 CE18; opaque"
+  },
+  {
+   "scope": "c",
+   "match": "CM31\\}::inv$",
+   "reason": "settled first-pair gate; second pair rejects (fn_def_to_fn_ptr); opaque (core note section 3)"
+  },
+  {
+   "scope": "c",
+   "match": "CM31\\}::inv_with$",
+   "row": "aspis_core::field::{aspis_core::field::CM31}::inv_with",
+   "file": "crates/aspis-core/src/field.rs",
+   "absent": "excluded in the scope, as T3-C14",
+   "reason": "settled first-pair gate; second pair rejects (arrow types); excluded (core note section 3)"
+  },
+  {
+   "scope": "c",
+   "match": "::r0::heap::uninit$",
+   "reason": "unsafe raw-pointer allocation; Raw ptr casts not supported; opaque (core note section 10)"
+  }
+ ],
+ "reshaped": {
+  "v": [
+   "::canonical_scan$",
+   "::wide_view$",
+   "::claims$",
+   "Prepared[^:]*\\}::new$",
+   "QueryGeometry[^:]*\\}::for_range$",
+   "::prepared_claim$",
+   "::low_base_p_digits$",
+   "::add_small_base_p$"
+  ],
+  "p": [
+   "::authenticate_asq8_accounts$",
+   "::decode_lane_from_pool_release$"
+  ],
+  "s": [
+   "::external_linear_lazy$",
+   "::pattern_values_windowed$",
+   "::composition_parts$"
+  ],
+  "d": [
+   "::validate_master$",
+   "::decode_pool_v1_pair_forest_master_v1$",
+   "::decode_pool_v1_pair_forest_checkpoint_v1$",
+   "::decode_pool_v1_pair_verified_afterstate_v1$",
+   "::decode_pool_v1_pair_live_snapshot_v1$"
+  ],
+  "c": [
+   "WideExact[^:]*\\}::to_le_bytes$"
+  ]
+ }
+}
