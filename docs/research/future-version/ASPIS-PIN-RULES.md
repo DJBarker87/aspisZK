@@ -29,7 +29,8 @@ In the owner's words, in order:
   compute units per payment, 0.11 percent; the paired chunk iterators of the frozen form have no
   form in the translator's library, and the indexed form adds one range check per value), put
   together with the privacy lead's request to delete its superseded build output on the build
-  host: "yes to both".
+  host: "yes to both". The owner gave the same approval for the compute item to the soundness lead
+  directly, the same day: "yes".
 
 Consequences. No proof work on Aspis starts until one commit has a clean translation of the
 verifier program, the Pool program and the prover. Code the tools reject is rewritten, in gated
