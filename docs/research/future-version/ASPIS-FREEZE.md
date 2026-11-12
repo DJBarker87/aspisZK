@@ -215,7 +215,7 @@ of the frozen tree, under the deployed build settings, second tool pair (Charon 
 | Core crate | 122 | 116 | 1 | 3 | 2 |
 | All | 666 | 649 | 2 | 9 | 6 |
 
-Both Aeneas runs with `-abort-on-error` exit 0 in every scope (host attempt `FRZE-frza`, 13 min
+Aeneas with `-abort-on-error` exits 0 in every scope (host attempt `FRZE-frza`, 13 min
 34 s, peak 3.6 GB). The rows that are not "translate and elaborate":
 
 - Translate, do not elaborate (library models missing): `compact::expand_values` (zipped chunk
