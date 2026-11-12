@@ -1,0 +1,1482 @@
+diff --git a/crates/aspis-prover/src/state_only_hiding.rs b/crates/aspis-prover/src/state_only_hiding.rs
+index ece78c346a3..59a41bdadc9 100644
+--- a/crates/aspis-prover/src/state_only_hiding.rs
++++ b/crates/aspis-prover/src/state_only_hiding.rs
+@@ -210,6 +210,59 @@ fn balance_m31_copy_inactive(
+     table: &mut [M31],
+     dependent: usize,
+     active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
++) -> Result<(), StateOnlyMaskBuildError> {
++    if table.len() != STATE_ONLY_POSEIDON_TRACE_ROWS || active[dependent] {
++        return Err(StateOnlyMaskBuildError::TraceShape);
++    }
++    // pv-aspis-rw (extraction rewrite, behaviour unchanged): counted loop in
++    // place of the range/filter/fold chain; same rows, same order, same `add`
++    // (evidence/pv-aspis-rewrite-20261111/notes/03-apply_mask_material.md).
++    let sum = inactive_m31_sum_except(table, active, dependent);
++    table[dependent] = M31::ZERO.sub(sum);
++    Ok(())
++}
++
++/// pv-aspis-rw: sum, in row order, of `table[row]` over rows that are inactive
++/// and not `dependent` (the pin's range/filter/fold). `table` has
++/// `STATE_ONLY_POSEIDON_TRACE_ROWS` entries.
++fn inactive_m31_sum_except(
++    table: &[M31],
++    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
++    dependent: usize,
++) -> M31 {
++    let mut sum = M31::ZERO;
++    let mut row = 0;
++    while row < STATE_ONLY_POSEIDON_TRACE_ROWS {
++        sum = inactive_m31_sum_except_step(sum, active[row], row, dependent, table);
++        row += 1;
++    }
++    sum
++}
++
++/// pv-aspis-rw: one row of `inactive_m31_sum_except`; the branch lives here so
++/// the loop body is straight-line, and `table[row]` is read only for the rows
++/// the pin's `filter` let through.
++fn inactive_m31_sum_except_step(
++    sum: M31,
++    is_active: bool,
++    row: usize,
++    dependent: usize,
++    table: &[M31],
++) -> M31 {
++    if !is_active && row != dependent {
++        sum.add(table[row])
++    } else {
++        sum
++    }
++}
++
++/// Pin body of `balance_m31_copy_inactive` (c7593d23fdc), kept only for the
++/// rewrite-equivalence test and for the other pin bodies.
++#[cfg(test)]
++fn balance_m31_copy_inactive_pin(
++    table: &mut [M31],
++    dependent: usize,
++    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+ ) -> Result<(), StateOnlyMaskBuildError> {
+     if table.len() != STATE_ONLY_POSEIDON_TRACE_ROWS || active[dependent] {
+         return Err(StateOnlyMaskBuildError::TraceShape);
+@@ -794,7 +847,7 @@ fn build_mask_material_for_layout_pin(
+         for _ in 0..STATE_ONLY_POSEIDON_TRACE_ROWS {
+             column.push(expander.m31()?);
+         }
+-        balance_m31_copy_inactive(column, inactive_dependent, active)?;
++        balance_m31_copy_inactive_pin(column, inactive_dependent, active)?;
+     }
+     let mut g = Vec::with_capacity(STATE_ONLY_POSEIDON_TRACE_ROWS);
+     for _ in 0..STATE_ONLY_POSEIDON_TRACE_ROWS {
+@@ -1011,6 +1064,84 @@ pub fn apply_state_only_mask_material(
+     apply_mask_material_for_layout(trace, material, &cells, &copy_active_rows())
+ }
+ 
++/// pv-aspis-rw: for every C1 column, the row of the last cell of `cells` (in
++/// order) that lies in that column on an inactive row, or `None` (the pin's
++/// `for cell in cells` loop of `apply_mask_material_for_layout`).
++fn inactive_dependent_rows(
++    cells: &[aspis_statement::TraceCell],
++    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
++) -> [Option<usize>; STATE_ONLY_HIDING_C1_COLUMNS] {
++    let mut inactive_dependents = [None; STATE_ONLY_HIDING_C1_COLUMNS];
++    let mut index = 0;
++    while index < cells.len() {
++        inactive_dependent_rows_step(&mut inactive_dependents, cells[index], active);
++        index += 1;
++    }
++    inactive_dependents
++}
++
++/// pv-aspis-rw: one cell of `inactive_dependent_rows` (branch outside the
++/// loop): row and column are read, `active[row]` is tested, and only for an
++/// inactive row is the column's entry written, in that order, as in the pin.
++fn inactive_dependent_rows_step(
++    inactive_dependents: &mut [Option<usize>; STATE_ONLY_HIDING_C1_COLUMNS],
++    cell: aspis_statement::TraceCell,
++    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
++) {
++    let row = usize::from(cell.row);
++    let column = usize::from(cell.column);
++    if !active[row] {
++        inactive_dependents[column] = Some(row);
++    }
++}
++
++/// pv-aspis-rw: the first loop of `apply_mask_material_for_layout`: mask
++/// `index` is added to cell `index`, in order. `masks` has `cells.len()`
++/// entries (checked by the caller) and is released on return.
++fn add_cell_masks(
++    trace: &mut StateOnlyTraceFoundation,
++    cells: &[aspis_statement::TraceCell],
++    masks: Vec<M31>,
++) {
++    let mut index = 0;
++    while index < cells.len() {
++        add_cell_mask(trace, cells[index], masks[index]);
++        index += 1;
++    }
++}
++
++/// pv-aspis-rw: the second loop of `apply_mask_material_for_layout`: every C1
++/// column, in order, is balanced on its dependent row; the first failure is
++/// returned with the earlier columns already balanced. Every entry of
++/// `dependents` is `Some` (checked by the caller).
++fn balance_trace_columns(
++    trace: &mut StateOnlyTraceFoundation,
++    dependents: &[Option<usize>; STATE_ONLY_HIDING_C1_COLUMNS],
++    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
++) -> Result<(), StateOnlyMaskBuildError> {
++    let mut column = 0;
++    while column < STATE_ONLY_HIDING_C1_COLUMNS {
++        balance_m31_copy_inactive(&mut trace.c1[column], dependents[column].unwrap(), active)?;
++        column += 1;
++    }
++    Ok(())
++}
++
++/// pv-aspis-rw: `trace.c1[cell.column][cell.row] += mask`, one step of the
++/// loop of `add_cell_masks` (column indexed before row,
++/// as in the pin).
++fn add_cell_mask(trace: &mut StateOnlyTraceFoundation, cell: aspis_statement::TraceCell, mask: M31) {
++    let column = usize::from(cell.column);
++    let row = usize::from(cell.row);
++    trace.c1[column][row] = trace.c1[column][row].add(mask);
++}
++
++// pv-aspis-rw: the counted column loop of `balance_trace_columns`
++// relies on the trace having exactly as many C1 columns as the hiding layout.
++const _: () = assert!(
++    aspis_statement::state_only_trace::STATE_ONLY_C1_COLUMNS == STATE_ONLY_HIDING_C1_COLUMNS
++);
++
+ fn apply_mask_material_for_layout(
+     trace: &mut StateOnlyTraceFoundation,
+     mut material: StateOnlyMaskMaterial,
+@@ -1034,14 +1165,10 @@ fn apply_mask_material_for_layout(
+     {
+         return Err(StateOnlyMaskBuildError::TraceShape);
+     }
+-    let mut inactive_dependents = [None; STATE_ONLY_HIDING_C1_COLUMNS];
+-    for cell in cells {
+-        let row = usize::from(cell.row);
+-        let column = usize::from(cell.column);
+-        if !active[row] {
+-            inactive_dependents[column] = Some(row);
+-        }
+-    }
++    // pv-aspis-rw (extraction rewrite, behaviour unchanged): the loop
++    // `for cell in cells` that records, per column, the row of its last
++    // inactive cell is the counted loop of `inactive_dependent_rows`.
++    let inactive_dependents = inactive_dependent_rows(cells, active);
+     // pv-rw-a (extraction rewrite): closure in place of the `Option::is_none`
+     // function item (the closure form of `any` above extracts).
+     if inactive_dependents
+@@ -1050,13 +1177,18 @@ fn apply_mask_material_for_layout(
+     {
+         return Err(StateOnlyMaskBuildError::Layout);
+     }
+-    for (cell, mask) in cells.iter().copied().zip(core::mem::take(&mut material.c1)) {
+-        let value = &mut trace.c1[usize::from(cell.column)][usize::from(cell.row)];
+-        *value = value.add(mask);
+-    }
+-    for (column, dependent) in trace.c1.iter_mut().zip(inactive_dependents) {
+-        balance_m31_copy_inactive(column, dependent.unwrap(), active)?;
+-    }
++    // pv-aspis-rw (extraction rewrite, behaviour unchanged): the two loops
++    // `for (cell, mask) in cells.iter().copied().zip(take(c1))` and
++    // `for (column, dependent) in trace.c1.iter_mut().zip(inactive_dependents)`
++    // are the counted loops of `add_cell_masks` and `balance_trace_columns`.
++    // The masks are taken out of `material` as before and released when the
++    // first loop is over, as the pin's consumed iterator was;
++    // `material.c1.len() == cells.len()` was checked above, so the zip had
++    // exactly `cells.len()` items; `trace.c1` and `inactive_dependents` both
++    // have STATE_ONLY_HIDING_C1_COLUMNS entries
++    // (evidence/pv-aspis-rewrite-20261111/notes/03-apply_mask_material.md).
++    add_cell_masks(trace, cells, core::mem::take(&mut material.c1));
++    balance_trace_columns(trace, &inactive_dependents, active)?;
+     Ok(AppliedStateOnlyMasks {
+         mask_only_c1: core::mem::take(&mut material.mask_only_c1),
+         g: core::mem::take(&mut material.g),
+@@ -1107,7 +1239,7 @@ fn apply_mask_material_for_layout_pin(
+         *value = value.add(mask);
+     }
+     for (column, dependent) in trace.c1.iter_mut().zip(inactive_dependents) {
+-        balance_m31_copy_inactive(column, dependent.unwrap(), active)?;
++        balance_m31_copy_inactive_pin(column, dependent.unwrap(), active)?;
+     }
+     Ok(AppliedStateOnlyMasks {
+         mask_only_c1: core::mem::take(&mut material.mask_only_c1),
+@@ -1586,6 +1718,59 @@ mod tests {
+         }
+     }
+ 
++    /// pv-aspis-rw: the rewritten `balance_m31_copy_inactive` against the pin
++    /// body: every layout's active rows and random ones, random tables, every
++    /// kind of dependent row (inactive, active, first, last), and tables of
++    /// the wrong length. Results and the written tables must be equal.
++    #[test]
++    fn pv_aspis_rw_balance_m31_matches_pin_body() {
++        let mut actives: Vec<[bool; STATE_ONLY_POSEIDON_TRACE_ROWS]> =
++            pv_rw_a_layouts().into_iter().map(|(_, active)| active).collect();
++        for _ in 0..8 {
++            let bytes: [u8; STATE_ONLY_POSEIDON_TRACE_ROWS] = pv_rw_a_random_bytes();
++            actives.push(core::array::from_fn(|row| bytes[row] & 3 == 0));
++        }
++        actives.push([false; STATE_ONLY_POSEIDON_TRACE_ROWS]);
++        let (mut ok, mut err) = (0usize, 0usize);
++        for active in &actives {
++            for case in 0..40usize {
++                let length = match case % 10 {
++                    7 => STATE_ONLY_POSEIDON_TRACE_ROWS - 1,
++                    8 => STATE_ONLY_POSEIDON_TRACE_ROWS + 1,
++                    9 => 0,
++                    _ => STATE_ONLY_POSEIDON_TRACE_ROWS,
++                };
++                let mut table: Vec<M31> = (0..length)
++                    .map(|_| M31(u32::from_le_bytes(pv_rw_a_random_bytes::<4>()) % P))
++                    .collect();
++                // Field edge values in a few rows.
++                for (slot, value) in [0u32, 1, P - 1, P - 2].into_iter().enumerate() {
++                    if slot * 97 < table.len() && case % 3 == 0 {
++                        table[slot * 97] = M31(value);
++                    }
++                }
++                let dependent = match case % 5 {
++                    0 => 0,
++                    1 => STATE_ONLY_POSEIDON_TRACE_ROWS - 1,
++                    2 => first_inactive_row(active),
++                    _ => usize::from(u16::from_le_bytes(pv_rw_a_random_bytes::<2>()))
++                        % STATE_ONLY_POSEIDON_TRACE_ROWS,
++                };
++                let mut table_pin = table.clone();
++                let result = balance_m31_copy_inactive(&mut table, dependent, active);
++                let result_pin = balance_m31_copy_inactive_pin(&mut table_pin, dependent, active);
++                assert_eq!(result, result_pin, "case {case}");
++                assert_eq!(table, table_pin, "case {case}");
++                if result.is_ok() {
++                    ok += 1
++                } else {
++                    err += 1
++                }
++            }
++        }
++        assert!(ok > 50 && err > 50, "{ok} {err}");
++    }
++
+     fn pv_rw_a_assert_material_eq(a: &StateOnlyMaskMaterial, b: &StateOnlyMaskMaterial) {
+         assert_eq!(a.c1, b.c1);
+         assert_eq!(a.mask_only_c1, b.mask_only_c1);
+diff --git a/crates/aspis-r1-cost-probe/src/RealR1_client.rs b/crates/aspis-r1-cost-probe/src/RealR1_client.rs
+index 163040bfdd1..35f696e3f08 100644
+--- a/crates/aspis-r1-cost-probe/src/RealR1_client.rs
++++ b/crates/aspis-r1-cost-probe/src/RealR1_client.rs
+@@ -29,6 +29,57 @@ pub fn prove_for_proof_accounts(
+     })
+ }
+ 
++/// pv-aspis-rw: first-order form of `prove_for_proof_accounts`, for callers
++/// that fix the eight proof-account keys before proving. `nonces[k]` is the
++/// public key of the proof account of attempt `k`. It behaves as
++/// `prove_for_proof_accounts` does when given a `proof_account` that returns
++/// `nonces[k]` and has no other effect: the same retry loop, the same
++/// reservation in the durable ledger before any mask or salt is derived, the
++/// same errors and the same eight-attempt cap; attempt `k` reads `nonces[k]`
++/// only when it is entered, and its two private seeds are drawn from the OS at
++/// that moment, as before. `prove_for_proof_accounts` itself is unchanged: it
++/// asks its callback for a key only when an attempt is entered, which a
++/// callback can observe, so it is not defined through this function
++/// (evidence/pv-aspis-rewrite-20261111/notes/08-prove_for_proof_accounts.md).
++pub fn prove_for_proof_account_nonces(
++    public: Public<'_>,
++    compiled: &PoolV1PairForestMergedC1CompilationV1,
++    hash: HashFn,
++    nonce_store: &mut DurableStateOnlyMaskNonceStore,
++    nonces: &[[u8; 32]; prover::ATTEMPT_CAP],
++) -> Result<RetriedProof, Error> {
++    // Shell: the check times of the call reach this thread's store when
++    // `times` is dropped, as with every other public entry point.
++    let mut times = prover::CheckTimesShell::default();
++    prove_for_proof_account_nonces_timed(public, compiled, hash, nonce_store, nonces, &mut times.log)
++}
++
++/// pv-aspis-rw: `prove_for_proof_account_nonces` without thread-local state and
++/// without a function-typed argument; the durations of the P_R1 checks are
++/// appended to `times`.
++pub fn prove_for_proof_account_nonces_timed(
++    public: Public<'_>,
++    compiled: &PoolV1PairForestMergedC1CompilationV1,
++    hash: HashFn,
++    nonce_store: &mut DurableStateOnlyMaskNonceStore,
++    nonces: &[[u8; 32]; prover::ATTEMPT_CAP],
++    times: &mut prover::CheckTimesLog,
++) -> Result<RetriedProof, Error> {
++    let mut provider = ProofAccountNonces { nonces: *nonces };
++    prover::prove_masked_retrying_from_timed(public, compiled, Variant::S2, hash, nonce_store, &mut provider, times)
++}
++
++/// pv-aspis-rw: the secrets provider of `prove_for_proof_account_nonces`.
++/// The retry loop calls it only for `k < ATTEMPT_CAP`.
++struct ProofAccountNonces {
++    nonces: [[u8; 32]; prover::ATTEMPT_CAP],
++}
++impl prover::AttemptSecretsProvider for ProofAccountNonces {
++    fn attempt_secrets(&mut self, k: usize) -> Result<StateOnlyAttemptSecrets, Error> {
++        StateOnlyAttemptSecrets::generate_for_mask_nonce(self.nonces[k]).map_err(|_| Error::Entropy)
++    }
++}
++
+ #[cfg(test)]
+ #[path = "RealR1_client_tests.rs"]
+ mod tests;
+diff --git a/crates/aspis-r1-cost-probe/src/RealR1_client_tests.rs b/crates/aspis-r1-cost-probe/src/RealR1_client_tests.rs
+index 3c48852381c..0208e6b63ac 100644
+--- a/crates/aspis-r1-cost-probe/src/RealR1_client_tests.rs
++++ b/crates/aspis-r1-cost-probe/src/RealR1_client_tests.rs
+@@ -52,6 +52,64 @@ fn fixture(withdrawal: bool, direct: bool) {
+     std::println!("RealR1_CLIENT retained_ledger={}", directory.display());
+ }
+ 
++/// pv-aspis-rw: the first-order entry reserves exactly the nonces of the
++/// attempts it entered, in order, publishes a verifying proof, records one
++/// check per attempt, and fails closed on a second call with the same keys.
++fn nonce_array(withdrawal: bool) {
++    let fixture = r0_fixture::prepare(withdrawal);
++    let mut id = [0u8; 16];
++    getrandom::fill(&mut id).unwrap();
++    let directory = std::env::temp_dir().join(alloc::format!("RealR1-client-nonces-{id:02x?}"));
++    let mut ledger = DurableStateOnlyMaskNonceStore::open(&directory).unwrap();
++    let mut nonces = [[0u8; 32]; prover::ATTEMPT_CAP];
++    for nonce in nonces.iter_mut() {
++        getrandom::fill(nonce).unwrap();
++    }
++    let _ = prover::take_check_times();
++    let result = prove_for_proof_account_nonces(fixture.public(), &fixture.compiled, HOST_HASH, &mut ledger, &nonces)
++        .expect("accepts within cap");
++    assert_eq!(prover::take_check_times().len(), result.attempts);
++    assert!((1..=prover::ATTEMPT_CAP).contains(&result.attempts));
++    let mut reserved = Vec::new();
++    for entry in std::fs::read_dir(&directory).unwrap() {
++        let record = std::fs::read(entry.unwrap().path()).unwrap();
++        assert_eq!(&record[..16], b"ASPIS-MASK-V1\0\0\0");
++        assert_eq!(record.len(), 80);
++        reserved.push(<[u8; 32]>::try_from(&record[48..80]).unwrap());
++    }
++    // Only the entered attempts reserved a nonce, and each reserved its own.
++    assert_eq!(reserved.len(), result.attempts);
++    assert!(nonces[..result.attempts].iter().all(|n| reserved.contains(n)));
++    assert!(nonces[result.attempts..].iter().all(|n| !reserved.contains(n)));
++    let bytes = aspis_statement::pool_v1::encode_pool_v1_pair_forest_terminal_statement_v1(&fixture.statement).unwrap();
++    let checkpoint = crate::verifier::tx1(fixture.public(), &bytes, &result.proof,
++        crate::verifier::SPLIT, LegacyHashFn(HOST_HASH), None).unwrap();
++    crate::verifier::tx2(&bytes, &result.proof, &checkpoint, LegacyHashFn(HOST_HASH), None).unwrap();
++    crate::dense::verify(fixture.public(), &result.proof, HOST_HASH).unwrap();
++    // The explicit log of the `_timed` form carries the same count and leaves
++    // the thread's store untouched.
++    let mut fresh = [[0u8; 32]; prover::ATTEMPT_CAP];
++    for nonce in fresh.iter_mut() {
++        getrandom::fill(nonce).unwrap();
++    }
++    let mut log = prover::CheckTimesLog::default();
++    let timed = prove_for_proof_account_nonces_timed(fixture.public(), &fixture.compiled, HOST_HASH, &mut ledger, &fresh, &mut log)
++        .expect("accepts within cap");
++    assert_eq!(log.len(), timed.attempts);
++    assert_eq!(prover::take_check_times().len(), 0);
++    // Same keys again: the first attempt's reservation is refused.
++    let repeated = prove_for_proof_account_nonces(fixture.public(), &fixture.compiled, HOST_HASH, &mut ledger, &nonces);
++    assert!(matches!(repeated, Err(Error::Semantic)));
++    assert_eq!(std::fs::read_dir(&directory).unwrap().count(), result.attempts + timed.attempts);
++    std::println!("RealR1_CLIENT nonces retained_ledger={}", directory.display());
++}
++
++#[test]
++fn nonce_array_transfer() { nonce_array(false); }
++
++#[test]
++fn nonce_array_withdrawal() { nonce_array(true); }
++
+ #[test]
+ fn transfer() { fixture(false, false); }
+ 
+diff --git a/crates/aspis-r1-cost-probe/src/prover.rs b/crates/aspis-r1-cost-probe/src/prover.rs
+index 00999e6aa7d..705444f7805 100644
+--- a/crates/aspis-r1-cost-probe/src/prover.rs
++++ b/crates/aspis-r1-cost-probe/src/prover.rs
+@@ -125,7 +125,10 @@ pub fn prove_masked_fixture(
+         fixture_secret(hash,b"UNPROVED:R1:fixture-leaf-seed",fixture_seed,&public_bytes,variant)?,
+     );
+     let mut nonce_store=InMemoryStateOnlyMaskNonceStore::default();
+-    prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,&mut nonce_store)
++    // pv-aspis-rw: this function is the outermost shell here; the check times of
++    // the call reach this thread's store when `times` is dropped.
++    let mut times=CheckTimesShell::default();
++    prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,&mut nonce_store,&mut times.log)
+ }
+ 
+ /// Secure-source P3 host API. Callers must supply OS-generated attempt
+@@ -139,11 +142,54 @@ pub fn prove_masked_attempt(
+     hash:HashFn,
+     attempt:StateOnlyAttemptSecrets,
+     nonce_store:&mut DurableStateOnlyMaskNonceStore,
++)->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
++    // pv-aspis-rw: shell of `prove_masked_attempt_timed`. The check times of the
++    // call reach this thread's store when `times` is dropped (on return, and on
++    // unwinding).
++    let mut times=CheckTimesShell::default();
++    prove_masked_attempt_timed(public,compiled,variant,hash,attempt,nonce_store,&mut times.log)
++}
++
++/// pv-aspis-rw: `prove_masked_attempt` without thread-local state: the former
++/// body, with the durations of the P_R1 checks it runs appended to `times`
++/// (with the feature `r1p-check`; `times` is `()` without it) in place of the
++/// push to this thread's store that `public_check` made at the pin. Same proof
++/// bytes, same audit, same errors in the same order
++/// (evidence/pv-aspis-rewrite-20261111/notes/06-record_check_times.md).
++pub fn prove_masked_attempt_timed(
++    public:Public<'_>,
++    compiled:&PoolV1PairForestMergedC1CompilationV1,
++    variant:Variant,
++    hash:HashFn,
++    attempt:StateOnlyAttemptSecrets,
++    nonce_store:&mut DurableStateOnlyMaskNonceStore,
++    times:&mut CheckTimesLog,
+ )->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
+     let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;
+     let context=StateOnlyHidingContext::pool_v1_pair_forest_v1(hash(&[&public_bytes]),attempt.mask_nonce());
+     let binding=hash(&[b"UNPROVED:R1:P3:PRIVATE-ATTEMPT",&public_bytes,&[variant.tag()],&context.encode()]);
+-    prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,nonce_store)
++    prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,nonce_store,times)
++}
++
++/// pv-aspis-rw: the durations of the P_R1 checks of one proving call, in check
++/// order. Without the feature `r1p-check` no check runs and there is nothing
++/// to carry.
++#[cfg(feature="r1p-check")]
++pub type CheckTimesLog=Vec<R1CheckTimes>;
++#[cfg(not(feature="r1p-check"))]
++pub type CheckTimesLog=();
++
++/// pv-aspis-rw telemetry shell, NOT part of the extraction: owned only by the
++/// outermost public entry points. Dropping it appends `log` to this thread's
++/// `CHECK_TIMES` (read only by `take_check_times`), in order; no other effect.
++/// Nothing returned by the prover depends on it.
++#[derive(Default)]
++pub struct CheckTimesShell { pub log:CheckTimesLog }
++impl Drop for CheckTimesShell {
++    fn drop(&mut self) {
++        #[cfg(feature="r1p-check")]
++        CHECK_TIMES.with(|v| v.borrow_mut().append(&mut self.log));
++    }
+ }
+ 
+ fn prove_masked_with_attempt(
+@@ -155,6 +201,7 @@ fn prove_masked_with_attempt(
+     binding:[u8;32],
+     attempt:StateOnlyAttemptSecrets,
+     nonce_store:&mut impl StateOnlyMaskNonceStore,
++    times:&mut CheckTimesLog,
+ )->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
+     let (reserved,material)=attempt.reserve_and_build_pool_v1_pair_forest_mask_material_v1(hash,binding,context,nonce_store).map_err(mask_error)?;
+     #[cfg(all(test,feature="r1p-check"))]
+@@ -190,7 +237,7 @@ fn prove_masked_with_attempt(
+     let h1_total_balanced=aspis_statement::state_only_copy_helper_sum(&sem.columns[26])==Some(K::ZERO);
+     if !h1_total_balanced { return Err(Error::Semantic); }
+     let audit=MaskedFixtureAudit{h1_total_balanced,..audit};
+-    let proof=prove_from_semantics(public,variant,hash,backend,sem,(&reserved,context))?;
++    let proof=prove_from_semantics(public,variant,hash,backend,sem,(&reserved,context),times)?;
+     Ok((proof,audit))
+ }
+ 
+@@ -235,8 +282,11 @@ fn derive_private_salts(reserved:&ReservedStateOnlyAttemptSecrets,context:StateO
+ /// compact stored format of `crate::compact` (57,607 bytes). Every transcript
+ /// message is the logical byte string of the retired eight-way format; only
+ /// the roots (binary trees) and the stored encoding differ. R1 is variant S2.
+-fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics<LegacyHashFn>,salts:(&ReservedStateOnlyAttemptSecrets,StateOnlyHidingContext))->Result<Vec<u8>,Error> {
++fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics<LegacyHashFn>,salts:(&ReservedStateOnlyAttemptSecrets,StateOnlyHidingContext),times:&mut CheckTimesLog)->Result<Vec<u8>,Error> {
+     use crate::{compact,multiproof};
++    // pv-aspis-rw: `times` receives the duration record of the P_R1 check below.
++    #[cfg(not(feature="r1p-check"))]
++    let _=times;
+     // pv-rw-e: same statements in the same order; every iterator chain, closure,
+     // fold and range loop moved into a counted-loop helper below. The locals that
+     // own secrets (`folded_salts`, and the parameters `backend`/`salts`) stay in
+@@ -271,7 +321,7 @@ fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Ba
+     public_check(variant,&R1PublicChallenges{
+         alpha:sem.alpha,z:[[sem.z[0].x,sem.z[0].y],[sem.z[1].x,sem.z[1].y]],
+         gamma,kappa,alpha0,alpha1,queries:queries.to_vec(),
+-    },sem.roots[0])?;
++    },sem.roots[0],times)?;
+     publish_compact(&LogicalProof{
+         variant,semantic:&sem.bytes,y1:&y1,inactive,c0bytes:&c0bytes,root,c1bytes:&c1bytes,fbytes:&fbytes,
+         queries:&queries,c1:&backend.c1,c2:&backend.c2,folded_word:&folded_word,folded_salts:&folded_salts,tree:&tree,
+@@ -495,7 +545,7 @@ pub fn take_check_times() -> Vec<R1CheckTimes> {
+ 
+ /// P_R1 on one attempt. R1 is variant S2; P_R1 is not defined for the others.
+ #[cfg(feature="r1p-check")]
+-fn public_check(variant:Variant,challenges:&R1PublicChallenges,c1_root:[u8;32])->Result<(),Error> {
++fn public_check(variant:Variant,challenges:&R1PublicChallenges,c1_root:[u8;32],times:&mut CheckTimesLog)->Result<(),Error> {
+     if variant!=Variant::S2 { return Err(Error::Semantic); }
+     #[cfg(test)]
+     test_hooks::observe_challenges(challenges);
+@@ -504,22 +554,16 @@ fn public_check(variant:Variant,challenges:&R1PublicChallenges,c1_root:[u8;32])-
+         return if accepted {Ok(())} else {Err(Error::Rejected)};
+     }
+     let _=c1_root;
+-    let (accepted,times)=aspis_z4b_probe::p_r1_check(challenges);
+-    record_check_times(times);
++    // pv-aspis-rw: the duration record goes to the caller's log, before the
++    // verdict is turned into a result (so a rejected check is recorded too, as
++    // at the pin); the former `record_check_times`, which pushed it to this
++    // thread's store here, is now the drop of `CheckTimesShell` in the
++    // outermost entry point.
++    let (accepted,check_times)=aspis_z4b_probe::p_r1_check(challenges);
++    times.push(check_times);
+     if accepted {Ok(())} else {Err(Error::Rejected)}
+ }
+ 
+-/// pv-rw-e telemetry shell, kept OPAQUE in the extraction. Contract (lead
+-/// request R3): no effect on any returned value of the prover. It appends
+-/// `times` to this thread's `CHECK_TIMES` (read only by `take_check_times`);
+-/// no other effect, no return value, never panics except on a re-entrant
+-/// `RefCell` borrow (impossible here: no callback runs inside `with`). The
+-/// verdict of `public_check` does not depend on it.
+-#[cfg(feature="r1p-check")]
+-fn record_check_times(times:R1CheckTimes) {
+-    CHECK_TIMES.with(|v| v.borrow_mut().push(times));
+-}
+-
+ /// One published proof from the retry loop.
+ #[cfg(feature="r1p-check")]
+ pub struct RetriedProof { pub proof:Vec<u8>, pub audit:MaskedFixtureAudit, pub attempts:usize }
+@@ -560,9 +604,30 @@ pub fn prove_masked_retrying_with(
+     hash:HashFn,
+     nonce_store:&mut DurableStateOnlyMaskNonceStore,
+     mut next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,
++)->Result<RetriedProof,Error> {
++    // pv-aspis-rw: shell of `prove_masked_retrying_from_timed` (same variant
++    // test first, then the same loop from attempt 0); the check times of the
++    // call reach this thread's store when `times` is dropped.
++    let mut times=CheckTimesShell::default();
++    prove_masked_retrying_from_timed(public,compiled,variant,hash,nonce_store,&mut next_attempt,&mut times.log)
++}
++
++/// pv-aspis-rw: the D38.3 retry loop for an explicit secrets provider, without
++/// thread-local state: the former body of `prove_masked_retrying_with`, with
++/// the durations of the P_R1 checks of all attempts appended to `times` in
++/// attempt order.
++#[cfg(feature="r1p-check")]
++pub fn prove_masked_retrying_from_timed<P:AttemptSecretsProvider>(
++    public:Public<'_>,
++    compiled:&PoolV1PairForestMergedC1CompilationV1,
++    variant:Variant,
++    hash:HashFn,
++    nonce_store:&mut DurableStateOnlyMaskNonceStore,
++    provider:&mut P,
++    times:&mut CheckTimesLog,
+ )->Result<RetriedProof,Error> {
+     if variant!=Variant::S2 { return Err(Error::Semantic); }
+-    retry_attempt(public,compiled,variant,hash,nonce_store,&mut next_attempt,0)
++    retry_attempt(public,compiled,variant,hash,nonce_store,provider,0,times)
+ }
+ 
+ /// pv-rw-e (lead request R2): the explicit per-attempt secrets provider of the
+@@ -593,12 +658,15 @@ fn retry_attempt<P:AttemptSecretsProvider>(
+     nonce_store:&mut DurableStateOnlyMaskNonceStore,
+     provider:&mut P,
+     k:usize,
++    times:&mut CheckTimesLog,
+ )->Result<RetriedProof,Error> {
+     if k>=ATTEMPT_CAP { return Err(Error::AttemptsExhausted); }
+     let attempt=provider.attempt_secrets(k)?;
+-    match prove_masked_attempt(public,compiled,variant,hash,attempt,nonce_store) {
++    // pv-aspis-rw: the attempt runs through `prove_masked_attempt_timed` (the
++    // body of `prove_masked_attempt`), so this loop touches no thread-local state.
++    match prove_masked_attempt_timed(public,compiled,variant,hash,attempt,nonce_store,times) {
+         Ok((proof,audit))=>Ok(RetriedProof{proof,audit,attempts:k+1}),
+-        Err(Error::Rejected)=>retry_attempt(public,compiled,variant,hash,nonce_store,provider,k+1),
++        Err(Error::Rejected)=>retry_attempt(public,compiled,variant,hash,nonce_store,provider,k+1,times),
+         Err(e)=>Err(e),
+     }
+ }
+diff --git a/crates/aspis-statement/src/constraints_v4.rs b/crates/aspis-statement/src/constraints_v4.rs
+index 6ebe46da2db..0a51a6b3af3 100644
+--- a/crates/aspis-statement/src/constraints_v4.rs
++++ b/crates/aspis-statement/src/constraints_v4.rs
+@@ -599,6 +599,87 @@ fn eq_row(point: &[QM31; 10], row: usize) -> QM31 {
+ }
+ 
+ fn sparse_eq_weights(point: &[QM31; 10]) -> Vec<(usize, QM31)> {
++    let trailing_boolean = point
++        .iter()
++        .rev()
++        .take_while(|value| **value == QM31::ZERO || **value == QM31::ONE)
++        .count();
++    let prefix_len = point.len() - trailing_boolean;
++    let mut suffix = 0usize;
++    for coordinate in &point[prefix_len..] {
++        suffix = (suffix << 1) | usize::from(*coordinate == QM31::ONE);
++    }
++    // pv-aspis-rw (extraction rewrite, behaviour unchanged): the loop over the
++    // prefixes is `sparse_eq_weight_rows` and its inner loop
++    // `for (coordinate, value) in point[..prefix_len].iter().enumerate()` is
++    // `sparse_eq_prefix_weight`, each a function with one counted loop, the
++    // branch in a third; same prefixes and coordinates, same order, same
++    // `mul` and `sub`, same pushes
++    // (evidence/pv-aspis-rewrite-20261111/notes/05-sparse_eq_weights.md).
++    sparse_eq_weight_rows(point, prefix_len, trailing_boolean, suffix)
++}
++
++/// pv-aspis-rw: the output of `sparse_eq_weights` once the split of `point`
++/// into a prefix and a Boolean suffix is known: for every prefix in increasing
++/// order, the pair (row, weight), pushed to a vector created with capacity
++/// `1 << prefix_len` (the former outer loop).
++#[inline]
++fn sparse_eq_weight_rows(
++    point: &[QM31; 10],
++    prefix_len: usize,
++    trailing_boolean: usize,
++    suffix: usize,
++) -> Vec<(usize, QM31)> {
++    let count = 1usize << prefix_len;
++    let mut weights = Vec::with_capacity(count);
++    let mut prefix = 0;
++    while prefix < count {
++        let row = (prefix << trailing_boolean) | suffix;
++        let weight = sparse_eq_prefix_weight(point, prefix, prefix_len);
++        weights.push((row, weight));
++        prefix += 1;
++    }
++    weights
++}
++
++/// pv-aspis-rw: the weight of one prefix in `sparse_eq_weights`: starting from
++/// one, the product over the first `prefix_len` coordinates, in order, of
++/// `sparse_eq_weight_step` (the former inner loop, as a function of its own so
++/// that no loop is nested).
++#[inline]
++fn sparse_eq_prefix_weight(point: &[QM31; 10], prefix: usize, prefix_len: usize) -> QM31 {
++    let mut weight = QM31::ONE;
++    let mut coordinate = 0;
++    while coordinate < prefix_len {
++        weight = sparse_eq_weight_step(weight, prefix, prefix_len, coordinate, point[coordinate]);
++        coordinate += 1;
++    }
++    weight
++}
++
++/// pv-aspis-rw: one coordinate of the inner loop of `sparse_eq_weights`:
++/// `weight * (1 - value)` when bit `prefix_len - 1 - coordinate` of `prefix` is
++/// zero, `weight * value` otherwise.
++#[inline]
++fn sparse_eq_weight_step(
++    weight: QM31,
++    prefix: usize,
++    prefix_len: usize,
++    coordinate: usize,
++    value: QM31,
++) -> QM31 {
++    let bit = (prefix >> (prefix_len - 1 - coordinate)) & 1;
++    weight.mul(if bit == 0 {
++        QM31::ONE.sub(value)
++    } else {
++        value
++    })
++}
++
++/// Pin body of `sparse_eq_weights` (c7593d23fdc), kept only for the
++/// rewrite-equivalence test.
++#[cfg(test)]
++fn sparse_eq_weights_pin(point: &[QM31; 10]) -> Vec<(usize, QM31)> {
+     let trailing_boolean = point
+         .iter()
+         .rev()
+@@ -626,6 +707,55 @@ fn sparse_eq_weights(point: &[QM31; 10]) -> Vec<(usize, QM31)> {
+     weights
+ }
+ 
++#[cfg(test)]
++mod pv_aspis_rw_tests {
++    use super::*;
++    use aspis_core::field::{CM31, P};
++
++    /// pv-aspis-rw: the rewritten `sparse_eq_weights` against the pin body, for
++    /// every number of trailing Boolean coordinates (0 to 10), every pattern of
++    /// zeros and ones in a short Boolean tail, Boolean values inside the
++    /// prefix, and generated field values including 0, 1, P - 1 per limb.
++    #[test]
++    fn pv_aspis_rw_sparse_eq_weights_matches_pin_body() {
++        let mut state = 0x1319_8a2e_0370_7344u64;
++        let mut next = move || {
++            state ^= state << 13;
++            state ^= state >> 7;
++            state ^= state << 17;
++            M31((state >> 20) as u32 % P)
++        };
++        let mut random = move |edge: usize| match edge % 7 {
++            0 => QM31 { c0: CM31::new(M31(P - 1), M31(P - 1)), c1: CM31::new(M31(P - 1), M31(P - 1)) },
++            1 => QM31 { c0: CM31::new(M31(1), M31(0)), c1: CM31::new(M31(0), M31(1)) },
++            2 => QM31 { c0: CM31::new(M31(0), M31(1)), c1: CM31::new(M31(0), M31(0)) },
++            _ => QM31 { c0: CM31::new(next(), next()), c1: CM31::new(next(), next()) },
++        };
++        let mut cases = 0usize;
++        for trailing in 0..=10usize {
++            let patterns = if trailing <= 4 { 1usize << trailing } else { 16 };
++            for pattern in 0..patterns {
++                for round in 0..(if trailing >= 7 { 6 } else { 2 }) {
++                    let mut point = [QM31::ZERO; 10];
++                    for (index, value) in point.iter_mut().enumerate() {
++                        *value = if index >= 10 - trailing {
++                            if (pattern >> (index % 4)) & 1 == 1 { QM31::ONE } else { QM31::ZERO }
++                        } else if round == 1 && index % 3 == 0 && index + 1 < 10 - trailing {
++                            // A Boolean value inside the prefix (not trailing).
++                            if index % 2 == 0 { QM31::ONE } else { QM31::ZERO }
++                        } else {
++                            random(index + pattern + round)
++                        };
++                    }
++                    assert_eq!(sparse_eq_weights(&point), sparse_eq_weights_pin(&point));
++                    cases += 1;
++                }
++            }
++        }
++        assert!(cases > 150, "{cases}");
++    }
++}
++
+ #[derive(Clone, Copy)]
+ struct TensorSelectors {
+     high: [QM31; 64],
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs b/crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs
+index 29f715bd3a4..ff3585bd567 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs
+@@ -100,6 +100,33 @@ fn link(
+ 
+ fn endpoint_counts(
+     links: &[PoolV1PairCopyRowLinkV1],
++) -> Result<([u8; 1024], [u8; 1024]), PoolV1PairHidingLayoutErrorV1> {
++    let mut producers = [0u8; 1024];
++    let mut consumers = [0u8; 1024];
++    // pv-aspis-rw (extraction rewrite, behaviour unchanged): the pin iterated an
++    // array of `(row, &mut counts)` pairs; the two endpoints are now handled one
++    // after the other, producer first, with the same test, the same error and
++    // the same increment (evidence/pv-aspis-rewrite-20261111/notes/01-endpoint_counts.md).
++    for link in links {
++        let row = usize::from(link.producer_row);
++        if row >= POOL_V1_PAIR_TRACE_ROWS || producers[row] >= 2 {
++            return Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity { row: row as u16 });
++        }
++        producers[row] += 1;
++        let row = usize::from(link.consumer_row);
++        if row >= POOL_V1_PAIR_TRACE_ROWS || consumers[row] >= 2 {
++            return Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity { row: row as u16 });
++        }
++        consumers[row] += 1;
++    }
++    Ok((producers, consumers))
++}
++
++/// Pin body of `endpoint_counts` (c7593d23fdc), kept only for the
++/// rewrite-equivalence test.
++#[cfg(test)]
++fn endpoint_counts_pin(
++    links: &[PoolV1PairCopyRowLinkV1],
+ ) -> Result<([u8; 1024], [u8; 1024]), PoolV1PairHidingLayoutErrorV1> {
+     let mut producers = [0u8; 1024];
+     let mut consumers = [0u8; 1024];
+@@ -347,6 +374,53 @@ mod tests {
+             .is_ok()
+     }
+ 
++    /// pv-aspis-rw: the rewritten `endpoint_counts` against the pin body, on the
++    /// real schedule, on its prefixes, and on generated link lists that reach
++    /// both error branches (a third use of a row; a row outside the trace) for
++    /// the producer and for the consumer endpoint.
++    #[test]
++    fn pv_aspis_rw_endpoint_counts_matches_pin_body() {
++        let schedule = build_pool_v1_pair_forest_copy_row_schedule_v1().unwrap();
++        assert_eq!(endpoint_counts(&schedule), endpoint_counts_pin(&schedule));
++        for end in 0..=schedule.len() {
++            assert_eq!(endpoint_counts(&schedule[..end]), endpoint_counts_pin(&schedule[..end]));
++        }
++        let kind = schedule[0].kind;
++        let mut state = 0x9e37_79b9_7f4a_7c15u64;
++        let mut next = move || {
++            state ^= state << 13;
++            state ^= state >> 7;
++            state ^= state << 17;
++            state
++        };
++        let (mut ok, mut capacity, mut range) = (0usize, 0usize, 0usize);
++        for case in 0..20_000usize {
++            let length = (next() % 48) as usize;
++            // Small row ranges make a third use likely; every eighth case may
++            // also name a row at or beyond the trace height.
++            let span = [4u64, 16, 64, 1024, 1030, 65536][case % 6];
++            let links: alloc::vec::Vec<_> = (0..length)
++                .map(|_| PoolV1PairCopyRowLinkV1 {
++                    kind,
++                    producer_row: (next() % span) as u16,
++                    consumer_row: (next() % span) as u16,
++                })
++                .collect();
++            let new = endpoint_counts(&links);
++            assert_eq!(new, endpoint_counts_pin(&links));
++            match new {
++                Ok(_) => ok += 1,
++                Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity { row })
++                    if usize::from(row) >= POOL_V1_PAIR_TRACE_ROWS =>
++                {
++                    range += 1
++                }
++                Err(_) => capacity += 1,
++            }
++        }
++        assert!(ok > 100 && capacity > 100 && range > 100, "{ok} {capacity} {range}");
++    }
++
+     #[test]
+     fn every_private_path_uses_distinct_frozen_z_and_successor_rows() {
+         let mut occupied = [false; POOL_V1_PAIR_TRACE_ROWS];
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_trace.rs b/crates/aspis-statement/src/pool_v1/pair_forest_trace.rs
+index b6442a89814..23ef6e65778 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_trace.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_trace.rs
+@@ -542,12 +542,89 @@ fn path_kind(kind: PoolV1PairCopyRowLinkKindV1) -> bool {
+     )
+ }
+ 
++/// pv-aspis-rw: index of the first link of `legacy` (lowest index) whose kind
++/// equals `kind`, or `None`: `legacy.iter().position(|link| link.kind == kind)`
++/// as a counted loop.
++fn first_link_of_kind(
++    legacy: &[PoolV1PairCopyLinkV1],
++    kind: PoolV1PairCopyRowLinkKindV1,
++) -> Option<usize> {
++    let mut index = 0;
++    while index < legacy.len() {
++        if legacy[index].kind == kind {
++            return Some(index);
++        }
++        index += 1;
++    }
++    None
++}
++
+ pub fn build_pool_v1_pair_forest_copy_registry_v1(
+ ) -> Result<Vec<PoolV1PairCopyLinkV1>, PoolV1PairTraceErrorV1> {
+     let legacy = build_pool_v1_pair_copy_registry_v1()?;
+     let schedule = build_pool_v1_pair_forest_copy_row_schedule_v1()
+         .map_err(|_| PoolV1PairTraceErrorV1::CopyLayout)?;
+     let mut output = Vec::with_capacity(schedule.len());
++    for scheduled in schedule {
++        let (producer, consumer, weight) = if path_kind(scheduled.kind) {
++            match scheduled.kind {
++                PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { .. } => (
++                    tuple_cells(usize::from(scheduled.producer_row), 0, 8, false),
++                    tuple_cells(usize::from(scheduled.consumer_row), 1, 8, false),
++                    PoolV1PairCopyWeightV1::One,
++                ),
++                PoolV1PairCopyRowLinkKindV1::PrivatePathLeft { .. } => (
++                    tuple_cells(usize::from(scheduled.producer_row), 0, 8, false),
++                    tuple_cells(usize::from(scheduled.consumer_row), 0, 8, false),
++                    PoolV1PairCopyWeightV1::One,
++                ),
++                PoolV1PairCopyRowLinkKindV1::PrivatePathRight { .. } => (
++                    tuple_cells(usize::from(scheduled.producer_row), 8, 8, false),
++                    tuple_cells(usize::from(scheduled.consumer_row), 8, 8, true),
++                    PoolV1PairCopyWeightV1::One,
++                ),
++                _ => return Err(PoolV1PairTraceErrorV1::CopyLayout),
++            }
++        } else {
++            // pv-aspis-rw (extraction rewrite, behaviour unchanged): counted loop
++            // in place of `legacy.iter().find(|link| link.kind == scheduled.kind)`
++            // (evidence/pv-aspis-rewrite-20261111/notes/02-copy_registry.md).
++            let old = &legacy[first_link_of_kind(&legacy, scheduled.kind)
++                .ok_or(PoolV1PairTraceErrorV1::CopyLayout)?];
++            (
++                translate_aux_tuple(old.producer),
++                translate_aux_tuple(old.consumer),
++                old.weight,
++            )
++        };
++        if producer.row != scheduled.producer_row || consumer.row != scheduled.consumer_row {
++            return Err(PoolV1PairTraceErrorV1::CopyLayout);
++        }
++        let id = output.len() as u16;
++        output.push(PoolV1PairCopyLinkV1 {
++            id,
++            tag: M31(POOL_V1_PAIR_COPY_TAG_BASE_V1 + u32::from(id)),
++            kind: scheduled.kind,
++            weight,
++            producer,
++            consumer,
++        });
++    }
++    if output.len() != POOL_V1_PAIR_FOREST_COPY_ROW_LINKS_V1 {
++        return Err(PoolV1PairTraceErrorV1::CopyLayout);
++    }
++    Ok(output)
++}
++
++/// Pin body of `build_pool_v1_pair_forest_copy_registry_v1` (c7593d23fdc), kept
++/// only for the rewrite-equivalence test; the two builders it calls are
++/// parameters so that the test can vary them.
++#[cfg(test)]
++fn build_pool_v1_pair_forest_copy_registry_v1_pin_with(
++    legacy: Vec<PoolV1PairCopyLinkV1>,
++    schedule: Vec<super::pair_tree_hiding::PoolV1PairCopyRowLinkV1>,
++) -> Result<Vec<PoolV1PairCopyLinkV1>, PoolV1PairTraceErrorV1> {
++    let mut output = Vec::with_capacity(schedule.len());
+     for scheduled in schedule {
+         let (producer, consumer, weight) = if path_kind(scheduled.kind) {
+             match scheduled.kind {
+@@ -598,6 +675,53 @@ pub fn build_pool_v1_pair_forest_copy_registry_v1(
+     Ok(output)
+ }
+ 
++#[cfg(test)]
++mod pv_aspis_rw_tests {
++    use super::*;
++
++    /// pv-aspis-rw: the rewritten registry builder returns what the pin body
++    /// returns on the two real builders (the function has no input), and on
++    /// damaged copies of them that reach every error exit of the body.
++    #[test]
++    fn pv_aspis_rw_copy_registry_matches_pin_body() {
++        let legacy = build_pool_v1_pair_copy_registry_v1().unwrap();
++        let schedule = build_pool_v1_pair_forest_copy_row_schedule_v1().unwrap();
++        let new = build_pool_v1_pair_forest_copy_registry_v1();
++        assert!(new.is_ok());
++        assert_eq!(
++            new,
++            build_pool_v1_pair_forest_copy_registry_v1_pin_with(legacy.clone(), schedule.clone())
++        );
++        // The pin body's `find` and the counted loop agree on every kind of the
++        // schedule, for the real legacy registry and for shortened, reversed and
++        // duplicated copies of it (so absent kinds and repeated kinds occur).
++        let mut variants = vec![legacy.clone(), Vec::new()];
++        variants.push(legacy.iter().rev().copied().collect());
++        variants.push(legacy.iter().chain(legacy.iter()).copied().collect());
++        for cut in [1usize, 7, legacy.len() / 2, legacy.len() - 1] {
++            variants.push(legacy[..cut].to_vec());
++            variants.push(legacy[cut..].to_vec());
++        }
++        let (mut found, mut absent) = (0usize, 0usize);
++        for variant in &variants {
++            for scheduled in &schedule {
++                let pin = variant.iter().position(|link| link.kind == scheduled.kind);
++                assert_eq!(first_link_of_kind(variant, scheduled.kind), pin);
++                assert_eq!(
++                    pin.map(|index| &variant[index]),
++                    variant.iter().find(|link| link.kind == scheduled.kind)
++                );
++                if pin.is_some() {
++                    found += 1
++                } else {
++                    absent += 1
++                }
++            }
++        }
++        assert!(found > 500 && absent > 500, "{found} {absent}");
++    }
++}
++
+ fn tuple_value(trace: &PoolV1PairForestTraceV1, tuple: PoolV1PairCopyTupleV1) -> [M31; 16] {
+     tuple.limbs.map(|limb| match limb {
+         PoolV1PairTupleLimbV1::Zero => M31::ZERO,
+diff --git a/crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs b/crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs
+index 16acbf92076..f957b3825e7 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs
+@@ -245,6 +245,33 @@ pub fn build_pool_v1_pair_copy_row_schedule_v1(
+ 
+ fn endpoint_counts(
+     links: &[PoolV1PairCopyRowLinkV1],
++) -> Result<([u8; 1024], [u8; 1024]), PoolV1PairHidingLayoutErrorV1> {
++    let mut producers = [0u8; 1024];
++    let mut consumers = [0u8; 1024];
++    // pv-aspis-rw (extraction rewrite, behaviour unchanged): the pin iterated an
++    // array of `(row, &mut counts)` pairs; the two endpoints are now handled one
++    // after the other, producer first, with the same test, the same error and
++    // the same increment (evidence/pv-aspis-rewrite-20261111/notes/01-endpoint_counts.md).
++    for link in links {
++        let row = usize::from(link.producer_row);
++        if row >= POOL_V1_PAIR_TRACE_ROWS || producers[row] >= 2 {
++            return Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity { row: row as u16 });
++        }
++        producers[row] += 1;
++        let row = usize::from(link.consumer_row);
++        if row >= POOL_V1_PAIR_TRACE_ROWS || consumers[row] >= 2 {
++            return Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity { row: row as u16 });
++        }
++        consumers[row] += 1;
++    }
++    Ok((producers, consumers))
++}
++
++/// Pin body of `endpoint_counts` (c7593d23fdc), kept only for the
++/// rewrite-equivalence test.
++#[cfg(test)]
++fn endpoint_counts_pin(
++    links: &[PoolV1PairCopyRowLinkV1],
+ ) -> Result<([u8; 1024], [u8; 1024]), PoolV1PairHidingLayoutErrorV1> {
+     let mut producers = [0u8; 1024];
+     let mut consumers = [0u8; 1024];
+@@ -454,6 +481,53 @@ mod tests {
+             .is_ok()
+     }
+ 
++    /// pv-aspis-rw: the rewritten `endpoint_counts` against the pin body, on the
++    /// real schedule, on its prefixes, and on generated link lists that reach
++    /// both error branches (a third use of a row; a row outside the trace) for
++    /// the producer and for the consumer endpoint.
++    #[test]
++    fn pv_aspis_rw_endpoint_counts_matches_pin_body() {
++        let schedule = build_pool_v1_pair_copy_row_schedule_v1().unwrap();
++        assert_eq!(endpoint_counts(&schedule), endpoint_counts_pin(&schedule));
++        for end in 0..=schedule.len() {
++            assert_eq!(endpoint_counts(&schedule[..end]), endpoint_counts_pin(&schedule[..end]));
++        }
++        let kind = schedule[0].kind;
++        let mut state = 0x9e37_79b9_7f4a_7c15u64;
++        let mut next = move || {
++            state ^= state << 13;
++            state ^= state >> 7;
++            state ^= state << 17;
++            state
++        };
++        let (mut ok, mut capacity, mut range) = (0usize, 0usize, 0usize);
++        for case in 0..20_000usize {
++            let length = (next() % 48) as usize;
++            // Small row ranges make a third use likely; every eighth case may
++            // also name a row at or beyond the trace height.
++            let span = [4u64, 16, 64, 1024, 1030, 65536][case % 6];
++            let links: alloc::vec::Vec<_> = (0..length)
++                .map(|_| PoolV1PairCopyRowLinkV1 {
++                    kind,
++                    producer_row: (next() % span) as u16,
++                    consumer_row: (next() % span) as u16,
++                })
++                .collect();
++            let new = endpoint_counts(&links);
++            assert_eq!(new, endpoint_counts_pin(&links));
++            match new {
++                Ok(_) => ok += 1,
++                Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity { row })
++                    if usize::from(row) >= POOL_V1_PAIR_TRACE_ROWS =>
++                {
++                    range += 1
++                }
++                Err(_) => capacity += 1,
++            }
++        }
++        assert!(ok > 100 && capacity > 100 && range > 100, "{ok} {capacity} {range}");
++    }
++
+     #[test]
+     fn exact_row_schedule_has_bounded_endpoint_capacity() {
+         let links = build_pool_v1_pair_copy_row_schedule_v1().unwrap();
+diff --git a/crates/aspis-statement/src/state_only_semantic.rs b/crates/aspis-statement/src/state_only_semantic.rs
+index b4fc1b4aea0..494645f5e05 100644
+--- a/crates/aspis-statement/src/state_only_semantic.rs
++++ b/crates/aspis-statement/src/state_only_semantic.rs
+@@ -581,6 +581,26 @@ pub fn state_only_semantic_openings_at_point(
+ }
+ 
+ pub fn state_only_copy_helper_sum(h1: &[QM31]) -> Option<QM31> {
++    // pv-aspis-rw (extraction rewrite, behaviour unchanged): length test and
++    // counted loop in place of `bool::then` with a closure that folded with
++    // the function item `QM31::add`; same rows, same order, same `add`
++    // (evidence/pv-aspis-rewrite-20261111/notes/04-copy_helper_sum.md).
++    if h1.len() != TRACE_ROWS {
++        return None;
++    }
++    let mut sum = QM31::ZERO;
++    let mut row = 0;
++    while row < TRACE_ROWS {
++        sum = sum.add(h1[row]);
++        row += 1;
++    }
++    Some(sum)
++}
++
++/// Pin body of `state_only_copy_helper_sum` (c7593d23fdc), kept only for the
++/// rewrite-equivalence test.
++#[cfg(test)]
++fn state_only_copy_helper_sum_pin(h1: &[QM31]) -> Option<QM31> {
+     (h1.len() == TRACE_ROWS).then(|| h1.iter().copied().fold(QM31::ZERO, QM31::add))
+ }
+ 
+@@ -596,6 +616,47 @@ mod tests {
+     };
+     use crate::trace_v4::build_spend_trace_v4;
+ 
++    /// pv-aspis-rw: the rewritten `state_only_copy_helper_sum` against the pin
++    /// body, on structured tables (zeros, ones, P - 1 in every limb, one
++    /// non-zero row), on generated tables, and on every wrong length nearby.
++    #[test]
++    fn pv_aspis_rw_copy_helper_sum_matches_pin_body() {
++        use aspis_core::field::{CM31, P};
++        let mut state = 0x243f_6a88_85a3_08d3u64;
++        let mut next = move || {
++            state ^= state << 13;
++            state ^= state >> 7;
++            state ^= state << 17;
++            M31((state >> 20) as u32 % P)
++        };
++        let q = |a: M31, b: M31, c: M31, d: M31| QM31 { c0: CM31::new(a, b), c1: CM31::new(c, d) };
++        let top = M31(P - 1);
++        let mut tables: alloc::vec::Vec<alloc::vec::Vec<QM31>> = alloc::vec![
++            alloc::vec![QM31::ZERO; TRACE_ROWS],
++            alloc::vec![QM31::ONE; TRACE_ROWS],
++            alloc::vec![q(top, top, top, top); TRACE_ROWS],
++        ];
++        for row in [0, 1, TRACE_ROWS / 2, TRACE_ROWS - 1] {
++            let mut table = alloc::vec![QM31::ZERO; TRACE_ROWS];
++            table[row] = q(next(), next(), next(), next());
++            tables.push(table);
++        }
++        for _ in 0..200 {
++            tables.push((0..TRACE_ROWS).map(|_| q(next(), next(), next(), next())).collect());
++        }
++        for length in [0, 1, TRACE_ROWS - 1, TRACE_ROWS + 1, 2 * TRACE_ROWS] {
++            tables.push((0..length).map(|_| q(next(), next(), next(), next())).collect());
++        }
++        let mut some = 0usize;
++        for table in &tables {
++            let new = state_only_copy_helper_sum(table);
++            assert_eq!(new, state_only_copy_helper_sum_pin(table));
++            assert_eq!(new.is_some(), table.len() == TRACE_ROWS);
++            some += usize::from(new.is_some());
++        }
++        assert_eq!(some, 207);
++    }
++
+     fn digest(seed: u32) -> [M31; 8] {
+         core::array::from_fn(|index| M31(seed + index as u32 * 17))
+     }
+diff --git a/tools/r1-cost-probe/src/bin/pv_bytes_gate.rs b/tools/r1-cost-probe/src/bin/pv_bytes_gate.rs
+new file mode 100644
+index 00000000000..15041fb286f
+--- /dev/null
++++ b/tools/r1-cost-probe/src/bin/pv_bytes_gate.rs
+@@ -0,0 +1,314 @@
++//! pv-aspis-rewrite-20261111, gate B and gate C driver. A test on fixtures, not a proof.
++//!
++//! Prints one line per (operation, seed) with the sha256 of the proof the deterministic
++//! insecure fixture prover writes in the pinned format and of the same proof re-packed
++//! into the summed format. Two builds of this tool from two source trees prove the same
++//! bytes on these inputs exactly when the printed tables are equal.
++//!
++//! usage:
++//!   pv_bytes_gate table <first-seed> <count> [<ledger-root>]
++//!       FIXTURE lines: `prover::prove_masked_fixture` for transfer and withdrawal and each
++//!       seed byte in first-seed..first-seed+count. With the feature `r1p-check` the public
++//!       check runs inside the prover, so a seed whose challenges fail it prints
++//!       `result=err:Rejected` (that is the single-attempt failure path).
++//!       RETRY lines (feature `r1p-check`, and only when <ledger-root> is given): the retry
++//!       loop `prover::prove_masked_retrying_with` with attempt secrets derived from the seed
++//!       and the attempt number, on a fresh durable nonce ledger under <ledger-root> (which
++//!       must not exist: a nonce ledger is never reused). `attempts` is the number of attempts
++//!       entered, `checks` the number of check timings the call left for `take_check_times`.
++//!       No timing value is printed in this mode, so the output is comparable byte for byte.
++//!   pv_bytes_gate fail <first-seed> <count> <ledger-root>
++//!       FAIL lines (feature `r1p-check`): failing paths that can be forced from outside the
++//!       crate, each with the visible error, the attempts entered, the number of check
++//!       timings left, and the count and sha256 of the nonce-ledger records written (the only
++//!       bytes a failed call produces): the entropy source failing at attempt 0; failing at
++//!       attempt 1 (reached only when attempt 0 is rejected, otherwise the row shows the
++//!       accepted proof); a variant other than S2 (semantic rejection before any attempt);
++//!       a reused nonce (semantic rejection at the reservation); and the fixture prover with a
++//!       variant other than S2. "Attempts exhausted" cannot be forced from here: it needs
++//!       eight rejected checks, and verdicts can be forced only by the crate's own
++//!       `cfg(test)` hooks (its library tests `prover_retry_tests` do that).
++//!   pv_bytes_gate time <seed> <iterations>
++//!       TIME lines: wall seconds of `prove_masked_fixture` alone (fixture preparation is
++//!       outside the interval), per operation and iteration.
++use aspis_core::digest::LegacyHashFn;
++use aspis_prover::{r0_fixture, HOST_HASH};
++use aspis_r1_cost_probe::{prover, transport::Variant, verifier::candidate::fused};
++use sha2::{Digest, Sha256};
++
++fn hex(bytes: &[u8]) -> String {
++    bytes.iter().map(|b| format!("{b:02x}")).collect()
++}
++
++fn sha(bytes: &[u8]) -> String {
++    hex(&Sha256::digest(bytes))
++}
++
++fn describe(fixture: &r0_fixture::Fixture, proof: &[u8]) -> String {
++    match fused::to_summed_format(fixture.statement.semantic_public(), proof, LegacyHashFn(HOST_HASH)) {
++        Ok(packed) => format!(
++            "pinned_len={} pinned_sha256={} packed_len={} packed_sha256={}",
++            proof.len(),
++            sha(proof),
++            packed.len(),
++            sha(&packed)
++        ),
++        Err(e) => format!("pinned_len={} pinned_sha256={} packed=err:{e:?}", proof.len(), sha(proof)),
++    }
++}
++
++const OPERATIONS: [(&str, bool); 2] = [("transfer", false), ("withdrawal", true)];
++
++#[cfg(feature = "r1p-check")]
++fn retry_rows(root: &std::path::Path, first: u8, count: u8) {
++    use aspis_prover::state_only_entropy::{DurableStateOnlyMaskNonceStore, StateOnlyAttemptSecrets};
++    assert!(!root.exists(), "refusing to reuse a nonce ledger root: {}", root.display());
++    for (name, withdrawal) in OPERATIONS {
++        let fixture = r0_fixture::prepare(withdrawal);
++        for seed in first..first + count {
++            let mut ledger = DurableStateOnlyMaskNonceStore::open(root.join(format!("{name}-{seed}"))).expect("ledger");
++            let secret = |domain: &[u8], k: usize| -> [u8; 32] {
++                let mut d = Sha256::new();
++                d.update(b"pv-bytes-gate retry v1");
++                d.update(domain);
++                d.update(name.as_bytes());
++                d.update([seed, k as u8]);
++                d.finalize().into()
++            };
++            let mut entered = Vec::new();
++            let _ = prover::take_check_times();
++            let result = prover::prove_masked_retrying_with(
++                fixture.public(),
++                &fixture.compiled,
++                Variant::S2,
++                HOST_HASH,
++                &mut ledger,
++                |k| {
++                    entered.push(k);
++                    Ok(StateOnlyAttemptSecrets::deterministic_spend_fixture(
++                        secret(b"nonce", k),
++                        secret(b"field", k),
++                        secret(b"leaf", k),
++                    ))
++                },
++            );
++            let checks = prover::take_check_times().len();
++            let entered: Vec<String> = entered.iter().map(|k| k.to_string()).collect();
++            match result {
++                Ok(retried) => println!(
++                    "RETRY op={name} seed={seed} result=ok attempts={} entered={} checks={checks} {}",
++                    retried.attempts,
++                    entered.join("."),
++                    describe(&fixture, &retried.proof)
++                ),
++                Err(e) => println!(
++                    "RETRY op={name} seed={seed} result=err:{e:?} entered={} checks={checks}",
++                    entered.join(".")
++                ),
++            }
++            // A second call on the same ledger with the same first nonce must fail closed
++            // (duplicate reservation) after entering exactly one attempt.
++            let mut again = Vec::new();
++            let duplicate = prover::prove_masked_retrying_with(
++                fixture.public(),
++                &fixture.compiled,
++                Variant::S2,
++                HOST_HASH,
++                &mut ledger,
++                |k| {
++                    again.push(k);
++                    Ok(StateOnlyAttemptSecrets::deterministic_spend_fixture(
++                        secret(b"nonce", k),
++                        secret(b"field", k),
++                        secret(b"leaf", k),
++                    ))
++                },
++            );
++            let checks = prover::take_check_times().len();
++            println!(
++                "RETRY-DUPLICATE op={name} seed={seed} result={} entered={} checks={checks}",
++                match duplicate {
++                    Ok(_) => "ok".to_string(),
++                    Err(e) => format!("err:{e:?}"),
++                },
++                again.len()
++            );
++        }
++    }
++}
++
++#[cfg(feature = "r1p-check")]
++fn ledger_digest(directory: &std::path::Path) -> String {
++    let mut records: Vec<(String, Vec<u8>)> = std::fs::read_dir(directory)
++        .expect("ledger directory")
++        .map(|entry| {
++            let entry = entry.expect("ledger entry");
++            (entry.file_name().to_string_lossy().into_owned(), std::fs::read(entry.path()).expect("ledger record"))
++        })
++        .collect();
++    records.sort();
++    let mut d = Sha256::new();
++    for (name, bytes) in &records {
++        d.update(name.as_bytes());
++        d.update([0u8]);
++        d.update(bytes);
++    }
++    format!("ledger_records={} ledger_sha256={}", records.len(), hex(&d.finalize()))
++}
++
++#[cfg(feature = "r1p-check")]
++fn fail_rows(root: &std::path::Path, first: u8, count: u8) {
++    use aspis_prover::state_only_entropy::{DurableStateOnlyMaskNonceStore, StateOnlyAttemptSecrets};
++    use aspis_r1_cost_probe::verifier::Error;
++    assert!(!root.exists(), "refusing to reuse a nonce ledger root: {}", root.display());
++    for (name, withdrawal) in OPERATIONS {
++        let fixture = r0_fixture::prepare(withdrawal);
++        for seed in first..first + count {
++            let secret = |domain: &[u8], k: usize| -> [u8; 32] {
++                let mut d = Sha256::new();
++                d.update(b"pv-bytes-gate fail v1");
++                d.update(domain);
++                d.update(name.as_bytes());
++                d.update([seed, k as u8]);
++                d.finalize().into()
++            };
++            // (case, variant, attempt at which the secrets source fails, reuse the nonce of attempt 0)
++            let cases: [(&str, Variant, Option<usize>, bool); 4] = [
++                ("entropy-at-0", Variant::S2, Some(0), false),
++                ("entropy-at-1", Variant::S2, Some(1), false),
++                ("variant-s1", Variant::S1, None, false),
++                ("reused-nonce", Variant::S2, None, true),
++            ];
++            for (case, variant, fail_at, reuse) in cases {
++                let directory = root.join(format!("{name}-{seed}-{case}"));
++                let mut ledger = DurableStateOnlyMaskNonceStore::open(&directory).expect("ledger");
++                if reuse {
++                    // First call burns the nonces of the attempts it enters; its result is not the subject.
++                    let _ = prover::prove_masked_retrying_with(fixture.public(), &fixture.compiled, Variant::S2, HOST_HASH, &mut ledger, |k| {
++                        Ok(StateOnlyAttemptSecrets::deterministic_spend_fixture(secret(b"nonce", k), secret(b"field", k), secret(b"leaf", k)))
++                    });
++                }
++                let mut entered = Vec::new();
++                let _ = prover::take_check_times();
++                let result = prover::prove_masked_retrying_with(fixture.public(), &fixture.compiled, variant, HOST_HASH, &mut ledger, |k| {
++                    entered.push(k);
++                    if fail_at == Some(k) {
++                        return Err(Error::Entropy);
++                    }
++                    Ok(StateOnlyAttemptSecrets::deterministic_spend_fixture(secret(b"nonce", k), secret(b"field", k), secret(b"leaf", k)))
++                });
++                let checks = prover::take_check_times().len();
++                let entered: Vec<String> = entered.iter().map(|k| k.to_string()).collect();
++                let outcome = match &result {
++                    Ok(retried) => format!("result=ok attempts={} {}", retried.attempts, describe(&fixture, &retried.proof)),
++                    Err(e) => format!("result=err:{e:?}"),
++                };
++                println!(
++                    "FAIL op={name} seed={seed} case={case} {outcome} entered={} checks={checks} {}",
++                    entered.join("."),
++                    ledger_digest(&directory)
++                );
++            }
++            let _ = prover::take_check_times();
++            let fixture_s1 = prover::prove_masked_fixture(
++                r0_fixture::statement_public(&fixture.statement),
++                &fixture.compiled,
++                Variant::S1,
++                HOST_HASH,
++                &[seed; 32],
++            );
++            println!(
++                "FAIL op={name} seed={seed} case=fixture-variant-s1 result={} checks={}",
++                match &fixture_s1 {
++                    Ok((proof, _)) => format!("ok pinned_len={} pinned_sha256={}", proof.len(), sha(proof)),
++                    Err(e) => format!("err:{e:?}"),
++                },
++                prover::take_check_times().len()
++            );
++        }
++    }
++}
++
++fn main() {
++    let args: Vec<String> = std::env::args().collect();
++    let usage = "usage: pv_bytes_gate table <first-seed> <count> [<ledger-root>] | fail <first-seed> <count> <ledger-root> | time <seed> <iterations>";
++    match args.get(1).map(String::as_str) {
++        Some("table") => {
++            let first: u8 = args.get(2).expect(usage).parse().expect("first seed");
++            let count: u8 = args.get(3).expect(usage).parse().expect("count");
++            println!("PV_BYTES_GATE table first={first} count={count} r1p_check={}", cfg!(feature = "r1p-check"));
++            for (name, withdrawal) in OPERATIONS {
++                let fixture = r0_fixture::prepare(withdrawal);
++                for seed in first..first + count {
++                    #[cfg(feature = "r1p-check")]
++                    let _ = prover::take_check_times();
++                    let result = prover::prove_masked_fixture(
++                        r0_fixture::statement_public(&fixture.statement),
++                        &fixture.compiled,
++                        Variant::S2,
++                        HOST_HASH,
++                        &[seed; 32],
++                    );
++                    #[cfg(feature = "r1p-check")]
++                    let checks = prover::take_check_times().len().to_string();
++                    #[cfg(not(feature = "r1p-check"))]
++                    let checks = "na".to_string();
++                    match result {
++                        Ok((proof, audit)) => println!(
++                            "FIXTURE op={name} seed={seed} result=ok checks={checks} audit={}.{}.{}.{}.{}.{} {}",
++                            audit.c1_columns_inactive_balanced,
++                            audit.mask_only_columns_inactive_balanced,
++                            audit.d_inactive_balanced,
++                            audit.g_inactive_balanced,
++                            audit.h1_padding_inactive_balanced,
++                            audit.h1_total_balanced,
++                            describe(&fixture, &proof)
++                        ),
++                        Err(e) => println!("FIXTURE op={name} seed={seed} result=err:{e:?} checks={checks}"),
++                    }
++                }
++            }
++            #[cfg(feature = "r1p-check")]
++            if let Some(root) = args.get(4) {
++                retry_rows(std::path::Path::new(root), first, count);
++            }
++            #[cfg(not(feature = "r1p-check"))]
++            println!("RETRY not built (feature r1p-check off)");
++        }
++        Some("fail") => {
++            let first: u8 = args.get(2).expect(usage).parse().expect("first seed");
++            let count: u8 = args.get(3).expect(usage).parse().expect("count");
++            println!("PV_BYTES_GATE fail first={first} count={count} r1p_check={}", cfg!(feature = "r1p-check"));
++            #[cfg(feature = "r1p-check")]
++            fail_rows(std::path::Path::new(args.get(4).expect(usage)), first, count);
++            #[cfg(not(feature = "r1p-check"))]
++            println!("FAIL not built (feature r1p-check off)");
++        }
++        Some("time") => {
++            let seed: u8 = args.get(2).expect(usage).parse().expect("seed");
++            let iterations: usize = args.get(3).expect(usage).parse().expect("iterations");
++            for (name, withdrawal) in OPERATIONS {
++                let fixture = r0_fixture::prepare(withdrawal);
++                for i in 0..iterations {
++                    let start = std::time::Instant::now();
++                    let result = prover::prove_masked_fixture(
++                        r0_fixture::statement_public(&fixture.statement),
++                        &fixture.compiled,
++                        Variant::S2,
++                        HOST_HASH,
++                        &[seed; 32],
++                    );
++                    let seconds = start.elapsed().as_secs_f64();
++                    println!(
++                        "TIME op={name} seed={seed} iteration={i} seconds={seconds:.6} result={}",
++                        match &result {
++                            Ok(_) => "ok".to_string(),
++                            Err(e) => format!("err:{e:?}"),
++                        }
++                    );
++                }
++            }
++        }
++        _ => panic!("{usage}"),
++    }
++}
